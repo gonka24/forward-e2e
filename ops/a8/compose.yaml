@@ -23,8 +23,11 @@ services:
   e2e-runner:
     platform: linux/amd64
     build:
-      context: ../..
+      context: ${E2E_RUNNER_REPO:-https://github.com/gonka24/forward-e2e.git}#${E2E_RUNNER_SHA:-}
       dockerfile: ops/a8/Dockerfile
+      args:
+        E2E_RUNNER_REPO: ${E2E_RUNNER_REPO:-https://github.com/gonka24/forward-e2e.git}
+        E2E_RUNNER_SHA: ${E2E_RUNNER_SHA:-}
     image: ${E2E_RUNNER_IMAGE:-a8-runner:local}
     entrypoint: ["/usr/local/bin/e2e-entrypoint"]
     command: ["list"]

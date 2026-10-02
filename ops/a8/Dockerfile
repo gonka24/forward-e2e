@@ -144,9 +144,21 @@ RUN cargo install cosmwasm-check --version 2.2.2 --locked
 # Prepare directories
 RUN mkdir -p /workspace /out /input/marketplace /input/gonka /input/bundles /var/lib/docker
 
-# Copy runner codebase
+# Fetch the runner itself from Git objects at the requested full SHA. Local
+# working-tree files are never copied into the image.
 WORKDIR /app
-COPY . /app
+ARG E2E_RUNNER_REPO=https://github.com/gonka24/forward-e2e.git
+ARG E2E_RUNNER_SHA
+RUN printf '%s' "$E2E_RUNNER_SHA" | grep -Eq '^[0-9a-f]{40}$' \
+    && git init . \
+    && git remote add origin "$E2E_RUNNER_REPO" \
+    && git fetch --depth=1 origin "$E2E_RUNNER_SHA" \
+    && git checkout --detach FETCH_HEAD \
+    && python3 -B -m ops.a8.e2e.runner_source \
+       --expected-commit "$E2E_RUNNER_SHA" --repo-url "$E2E_RUNNER_REPO" \
+    && rm -rf /app/.git
+LABEL org.opencontainers.image.source=$E2E_RUNNER_REPO \
+      org.opencontainers.image.revision=$E2E_RUNNER_SHA
 
 # Check all binding fixtures after Docker applies its build-context exclusions.
 # Reuse the offline packaging test so builds and checkouts share one inventory.
@@ -159,8 +171,8 @@ RUN git config --system --add safe.directory /input/marketplace \
     && git config --system --add safe.directory /app
 
 # Install the single E2E entrypoint
-COPY ops/a8/e2e-entrypoint.sh /usr/local/bin/e2e-entrypoint
-RUN chmod +x /usr/local/bin/e2e-entrypoint
+RUN cp /app/ops/a8/e2e-entrypoint.sh /usr/local/bin/e2e-entrypoint \
+    && chmod +x /usr/local/bin/e2e-entrypoint
 
 # Default runtime environment variables
 ENV A8_WORKSPACE_DIR=/workspace \

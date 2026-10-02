@@ -17,7 +17,9 @@
 #>
 [CmdletBinding()]
 param(
-    [string]$Image = $(if ($env:E2E_RUNNER_IMAGE) { $env:E2E_RUNNER_IMAGE } else { 'a8-runner:local' })
+    [string]$Image = $(if ($env:E2E_RUNNER_IMAGE) { $env:E2E_RUNNER_IMAGE } else { 'a8-runner:local' }),
+    [string]$RunnerSha = $env:E2E_RUNNER_SHA,
+    [string]$RunnerRepo = $(if ($env:E2E_RUNNER_REPO) { $env:E2E_RUNNER_REPO } else { 'https://github.com/gonka24/forward-e2e.git' })
 )
 
 $ErrorActionPreference = 'Stop'
@@ -33,6 +35,15 @@ function Fail {
     exit $Code
 }
 
+if ($RunnerSha -cnotmatch '^[0-9a-f]{40}$') {
+    Fail '-RunnerSha requires a full lowercase 40-hex commit SHA.' 2
+}
+if (-not $RunnerRepo.StartsWith('https://') -or $RunnerRepo.Contains('#')) {
+    Fail '-RunnerRepo requires an HTTPS Git URL without a revision fragment.' 2
+}
+$env:E2E_RUNNER_SHA = $RunnerSha
+$env:E2E_RUNNER_REPO = $RunnerRepo
+
 if (-not (Get-Command docker -ErrorAction SilentlyContinue)) {
     Fail 'Docker is required on the host but was not found.'
 }
@@ -47,6 +58,7 @@ if (-not $env:E2E_SECRETS_DIR) { $env:E2E_SECRETS_DIR = $RepoRoot }
 New-Item -ItemType Directory -Path $env:OUTPUT_DIR -Force | Out-Null
 
 Write-Host "Building the E2E runner image $Image ..."
+Write-Host "  runner SHA: $RunnerSha"
 & docker compose -f $ComposeFile build e2e-runner
 if ($LASTEXITCODE -ne 0) { Fail "Runner image build failed with exit code $LASTEXITCODE." $LASTEXITCODE }
 

@@ -40,6 +40,7 @@ from typing import Any, Callable, Dict, List, Mapping, Optional, Sequence, Tuple
 
 from ..catalog import CATALOG_SCHEMA_VERSION, compute_catalog_hash, resolve_e2e_selection
 from ..models import TaskPlan
+from .runner_source import read_runner_source
 from .compat import (
     AdapterMatch,
     CompatibilityAdapter,
@@ -515,6 +516,7 @@ def _runner_section(layout: RunnerLayout, image: RunnerImageIdentity) -> Dict[st
     from ..runtime import RuntimeErrorA8
 
     section = image.to_dict()
+    section.update(read_runner_source(layout.root))
     try:
         runner_source_hash = compute_runner_hash(layout.root / "ops" / "a8")
     except RuntimeErrorA8 as exc:

@@ -11,7 +11,7 @@ Clone this repository separately from the contracts repository:
 ```bash
 git clone https://github.com/gonka24/forward-e2e.git
 cd forward-e2e
-./ops/e2e/build-runner.sh
+./ops/e2e/build-runner.sh --runner-sha <RUNNER_FULL_40_HEX_SHA>
 ./ops/e2e/run-e2e.sh list
 ./ops/e2e/run-e2e.sh run \
   --gonka-repo https://github.com/gonka-ai/gonka \
@@ -22,7 +22,11 @@ cd forward-e2e
   --output ./out/e2e
 ```
 
-On Windows, use `ops/e2e/Build-Runner.ps1` and `ops/e2e/Run-E2E.ps1` with the same arguments. Remote runs require Docker with Compose; local-source runs also require Git. For a sibling contracts checkout use `--contracts-path ../forward-contracts`. The runner repository itself is not a contracts source.
+On Windows, build with `ops/e2e/Build-Runner.ps1 -RunnerSha <RUNNER_FULL_40_HEX_SHA>` and use `ops/e2e/Run-E2E.ps1` for run arguments. Remote runs require Docker with Compose; local-source runs also require Git. For a sibling contracts checkout use `--contracts-path ../forward-contracts`. The runner repository itself is not a contracts source.
+
+The image is built from the selected committed runner sources. Its baked Git
+commit and tree SHAs are recorded in every new plan, together with its immutable
+image ID and asset hashes. Runner, contracts and Gonka are pinned independently.
 
 Read the [operational guide](ops/e2e/README.md) for planning, full runs, replay, reporting and recovery, and the [verification runbook](ops/e2e/RUNBOOK-immutable-sources.md) for validation on a specific source pair. The image includes target build toolchains and uses a private inner Docker daemon for live runs.
 
@@ -55,7 +59,7 @@ Read [AGENTS.md](AGENTS.md) and the [architecture guide](ops/a8/README.md) befor
 
 ## Extraction provenance
 
-This repository was extracted from `forward-contracts` commit `d637eea5432506d60c90c1d8436c67b93802d829` after [PR #1](https://github.com/gonka24/forward-contracts/pull/1). [EXTRACTION.json](EXTRACTION.json) records each source file's original SHA-256. The original development history remains in that repository. Runner executable assets and recorded evidence retain their original bytes; repository-specific guides and CI describe the new home.
+This repository was extracted from `forward-contracts` commit `d637eea5432506d60c90c1d8436c67b93802d829` after [PR #1](https://github.com/gonka24/forward-contracts/pull/1). [EXTRACTION.json](EXTRACTION.json) records each source file's original SHA-256. The original development history remains in that repository. At extraction, runner executable assets and recorded evidence retained their original bytes; subsequent runner fixes are tracked in this repository's Git history. The extraction hashes remain a record of the original source bytes.
 
 The copy of `scripts/a9_release.py` is intentionally runner-owned and hashed into every run lock. Updating the canonical helper does not silently update this copy: import a reviewed version, update its source record, run its offline tests, rebuild the runner and create a new plan.
 

@@ -52,7 +52,7 @@ These tests are the regression net for the new model. Among other things they co
 This step compiles `ops/a8/harness/testermint` against the selected Gonka's own Testermint classes. It starts no network and no chain.
 
 ```bash
-./ops/e2e/build-runner.sh                      # builds a8-runner:local
+./ops/e2e/build-runner.sh --runner-sha <RUNNER_FULL_40_HEX_SHA>                      # builds a8-runner:local
 
 git clone https://github.com/gonka-ai/gonka /tmp/gonka-checkout
 git -C /tmp/gonka-checkout checkout --detach <GONKA_FULL_SHA>

@@ -1526,7 +1526,9 @@ def verified_release_artifacts(
     verifier = runner.run(
         [
             sys.executable,
-            str(repo / "scripts" / "a9_release.py"),
+            # Verification must use the same pinned helper as the E2E build;
+            # the contracts under test must not supply their own verifier.
+            str(HARNESS_SCRIPT_PATH.with_name("a9_release.py")),
             "verify-artifacts",
             "--manifest",
             str(manifest_path),

@@ -475,12 +475,19 @@ class E2EExecutorTests(unittest.TestCase):
         self.lock.external_tests = _external_tests_section(layout)
         self.lock.network = _network_section(layout)
         self.lock.runner.update(
+            repo_url="https://example.org/runner.git",
+            commit_sha="3" * 40,
+            tree_sha="4" * 40,
             harness_hash=hash_runner_files(layout.root, HARNESS_FILES),
             verifier_hash=hash_runner_files(layout.root, VERIFIER_FILES),
             catalog_hash=compute_catalog_hash(),
         )
+        (layout.root / "runner-source.json").write_text(json.dumps({
+            "schema_version": 1, "repo_url": "https://example.org/runner.git",
+            "commit_sha": "3" * 40, "tree_sha": "4" * 40,
+        }), encoding="utf-8")
         assert_runner_matches_lock(self.lock, layout)
-        for key in ("harness_hash", "verifier_hash", "catalog_hash"):
+        for key in ("harness_hash", "verifier_hash", "catalog_hash", "commit_sha", "tree_sha", "repo_url"):
             for value in (None, "", "0" * 64):
                 with self.subTest(key=key, value=value):
                     lock = RunLock.from_dict(self.lock.to_dict())

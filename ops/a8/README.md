@@ -142,7 +142,7 @@ repositories and is separate from unit-test discovery.
 Build the Debian Bookworm runner image. The base tag can change between builds;
 each run records and checks the exact resulting runner image ID:
 ```bash
-docker compose -f ops/a8/compose.yaml build e2e-runner
+./ops/e2e/build-runner.sh --runner-sha <RUNNER_FULL_40_HEX_SHA>
 ```
 
 ---
