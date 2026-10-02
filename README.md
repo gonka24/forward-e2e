@@ -55,7 +55,7 @@ Read [AGENTS.md](AGENTS.md) and the [architecture guide](ops/a8/README.md) befor
 
 ## Extraction provenance
 
-This repository was extracted from `forward-contracts` commit `d637eea5432506d60c90c1d8436c67b93802d829` after [PR #1](https://github.com/gonka24/forward-contracts/pull/1). [EXTRACTION.json](EXTRACTION.json) records each source file's original SHA-256. The original development history remains in that repository. Runner executable assets and recorded evidence retain their original bytes; repository-specific guides and CI describe the new home.
+This repository was extracted from `forward-contracts` commit `d637eea5432506d60c90c1d8436c67b93802d829` after [PR #1](https://github.com/gonka24/forward-contracts/pull/1). [EXTRACTION.json](EXTRACTION.json) records each source file's original SHA-256. The original development history remains in that repository. At extraction, runner executable assets and recorded evidence retained their original bytes; subsequent runner fixes are tracked in this repository's Git history. The extraction hashes remain a record of the original source bytes.
 
 The copy of `scripts/a9_release.py` is intentionally runner-owned and hashed into every run lock. Updating the canonical helper does not silently update this copy: import a reviewed version, update its source record, run its offline tests, rebuild the runner and create a new plan.
 

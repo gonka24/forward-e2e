@@ -875,6 +875,50 @@ class A8AcceptanceTests(unittest.TestCase):
         )
         self.assertFalse(any(a8.docker_resource_collisions(runner).values()))
 
+    def test_a9_verification_uses_runner_helper_when_target_helper_differs_or_is_missing(self):
+        for target_helper_present in (True, False):
+            with self.subTest(target_helper_present=target_helper_present), tempfile.TemporaryDirectory() as directory:
+                root = Path(directory)
+                contracts = root / "contracts"
+                contracts.mkdir()
+                if target_helper_present:
+                    scripts = contracts / "scripts"
+                    scripts.mkdir()
+                    (scripts / "a9_release.py").write_text(
+                        "raise SystemExit('target verifier must not run')\n",
+                        encoding="utf-8",
+                    )
+                release = root / "release"
+                release.mkdir()
+                records = []
+                for name in ("marketplace-deal", "marketplace-factory"):
+                    artifact = release / (name + ".wasm")
+                    artifact.write_bytes(name.encode("utf-8"))
+                    records.append({
+                        "name": name,
+                        "path": artifact.name,
+                        "sha256": a8.sha256_file(artifact),
+                    })
+                manifest = release / "build-manifest.json"
+                manifest.write_text(json.dumps({
+                    "marketplace_commit_sha": "a" * 40,
+                    "contracts": records,
+                }), encoding="utf-8")
+                runner = FakeRunner([
+                    a8.CommandResult(0, "verified", ""),
+                    a8.CommandResult(0, "a" * 40 + "\n", ""),
+                ])
+
+                deal, factory, _ = a8.verified_release_artifacts(contracts, manifest, runner)
+
+                self.assertEqual(runner.calls[0], ([
+                    sys.executable,
+                    str(a8.HARNESS_SCRIPT_PATH.with_name("a9_release.py")),
+                    "verify-artifacts", "--manifest", str(manifest.resolve()),
+                ], None, 120))
+                self.assertEqual(deal, release / "marketplace-deal.wasm")
+                self.assertEqual(factory, release / "marketplace-factory.wasm")
+
     def test_a9_manifest_must_match_marketplace_head_and_artifact_hashes(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
