@@ -1,0 +1,3693 @@
+{
+  "kind": "independent-rerun-review",
+  "status": "B_R7_PASS_C_72_OF_73_TIMEOUT",
+  "latest_c_coherent_snapshot_rerun": {
+    "run_id": "a8cfix3-20260910",
+    "marketplace_sha": "41489d5e599fb8e7a537312fb84ea2bedda0507a",
+    "gonka_sha": "6a09808e512f73e9809c845a93e7871f20e539b8",
+    "outcome": "PARTIAL_TIMEOUT",
+    "case_status_counts": { "PASS": 72, "FAIL": 0, "NOT_RUN": 1 },
+    "not_run_case": {
+      "name": "r7.2-retry",
+      "reason": "launcher timed out after 3900 seconds before the case was recorded"
+    },
+    "activations": ["activate: INSTALLED", "recover-before: INSTALLED", "recover-after: INSTALLED"],
+    "discarded_snapshots": 1,
+    "results": {
+      "path": "/home/runner/a8-runtime/a8cfix3-20260910/evidence/a8cfix3-20260910/results.json",
+      "sha256": "2906cc1a3cbf49a2d9fe9a466fdeef2895fd2cf4289fc6bd63dfa37c5d41711c"
+    },
+    "live_context": {
+      "path": "/home/runner/a8-runtime/a8cfix3-20260910/evidence/a8cfix3-20260910/live-context.json",
+      "sha256": "34dc52d515a8194c529babe4f1f1c74f5988f448b2fec28bc742118f6bae5c20"
+    },
+    "launcher_log": {
+      "path": "/home/runner/a8-runtime/a8cfix3-20260910/launcher.log",
+      "sha256": "fe8f1edc7e6bafaaf23dae9052b6cf29f2bb83c17f4988bbb785a6a2335133fe"
+    },
+    "junit": {
+      "status": "NOT_PUBLISHED",
+      "reason": "Gradle process was terminated by launcher timeout"
+    },
+    "cleanup": {
+      "path": "/home/runner/a8-runtime/a8cfix3-20260910/cleanup-evidence/completed.json",
+      "status": "cleaned",
+      "sha256": "66b41dffc0b9fd5582abe2ee9b77e9a2b16fa91409e7e97d7bcd602b909bd190"
+    }
+  },
+  "runs": {
+    "a8r7fix2-20260910": {
+      "context": {
+        "path": "/home/runner/a8-runtime/a8r7fix2-20260910/evidence/a8r7fix2-20260910/live-context.json",
+        "sha256": "7955ec0565a4e184cf7063d59b88082df2e248f8286fc30d4f4c7ebc99550d86"
+      },
+      "junit": {
+        "path": "/home/runner/a8-runtime/a8r7fix2-20260910/junit/TEST-MarketplaceContractAcceptanceTests.xml",
+        "sha256": "84e8b8cfbd19f6c882f46a11e7fbeeb1e5ca90fdf759395af58ac9d9040b0583"
+      },
+      "cleanup": {
+        "path": "/home/runner/a8-runtime/a8r7fix2-20260910/cleanup-evidence/completed.json",
+        "sha256": "6950e2f95db3dea840bdd1440e4503e53b80655924bb3b5709af7834e9dfeded"
+      },
+      "bank_evidence": [
+        {
+          "after": {
+            "bank_ngonka": {
+              "buyer": 664075853148800,
+              "deal": 94819671366450,
+              "fee_recipient": 0,
+              "host": 427094217705797
+            },
+            "cw20": {
+              "buyer": 100000000,
+              "deal": 0,
+              "fee_recipient": 1500000,
+              "host": 98500000
+            },
+            "foreign_cw20": {
+              "buyer": 1000000,
+              "deal": 0
+            },
+            "state": {
+              "buyer": "gonka18ad76wkdgh43st8p73ez9vn4p5wtx84tzn43k0",
+              "buyer_entitlement_ngonka": "100000000000",
+              "buyer_refund_usdt": "0",
+              "buyer_released_ngonka": "0",
+              "fee_usdt": "1500000",
+              "gnk_release_policy": {
+                "proportional": {
+                  "buyer_share_numerator": "100000000000",
+                  "share_denominator": "94819671366450"
+                }
+              },
+              "gross_usdt": "100000000",
+              "host_entitlement_ngonka": "94719671366450",
+              "host_net_usdt": "98500000",
+              "host_released_ngonka": "0",
+              "recipient_locked": true,
+              "refund_reason": null,
+              "released_total_ngonka": "0",
+              "reward_ngonka": "94819671366450",
+              "status": "releasing",
+              "total_claim_ngonka": "94819671366450",
+              "work_ngonka": "0"
+            }
+          },
+          "attempt": {
+            "code": 1108,
+            "codespace": "restrictions",
+            "events": [],
+            "gas_used": "135476",
+            "gas_wanted": "2000000",
+            "height": "244",
+            "layer": "deliver_tx",
+            "raw_log": "failed to execute message; message index: 0: user-to-user transfers are restricted during bootstrap period. Restriction ends at block 284 (current: 244, remaining: 40 blocks). Allowed transfers: gas payments, protocol interactions (inference, governance, staking), and module operations: transfer restricted during bootstrap period",
+            "tx_hash": "240D99BA6F51F33283832081C27F0CD6E105F1A18222397A7D07FBC46566B571"
+          },
+          "before": {
+            "bank_ngonka": {
+              "buyer": 664075853148800,
+              "deal": 94819671366450,
+              "fee_recipient": 0,
+              "host": 427094217705797
+            },
+            "cw20": {
+              "buyer": 100000000,
+              "deal": 0,
+              "fee_recipient": 1500000,
+              "host": 98500000
+            },
+            "foreign_cw20": {
+              "buyer": 1000000,
+              "deal": 0
+            },
+            "state": {
+              "buyer": "gonka18ad76wkdgh43st8p73ez9vn4p5wtx84tzn43k0",
+              "buyer_entitlement_ngonka": "100000000000",
+              "buyer_refund_usdt": "0",
+              "buyer_released_ngonka": "0",
+              "fee_usdt": "1500000",
+              "gnk_release_policy": {
+                "proportional": {
+                  "buyer_share_numerator": "100000000000",
+                  "share_denominator": "94819671366450"
+                }
+              },
+              "gross_usdt": "100000000",
+              "host_entitlement_ngonka": "94719671366450",
+              "host_net_usdt": "98500000",
+              "host_released_ngonka": "0",
+              "recipient_locked": true,
+              "refund_reason": null,
+              "released_total_ngonka": "0",
+              "reward_ngonka": "94819671366450",
+              "status": "releasing",
+              "total_claim_ngonka": "94819671366450",
+              "work_ngonka": "0"
+            }
+          },
+          "expected": {
+            "allowed_earlier_recipient": null,
+            "failure_category": "bank_send_restriction",
+            "live_exemption": null,
+            "outgoing_transfer_index": 1,
+            "rejected_recipient": "gonka18ad76wkdgh43st8p73ez9vn4p5wtx84tzn43k0",
+            "retry_policy": "retry once restriction_end_block is reached",
+            "state_and_tracked_balances_unchanged": true
+          },
+          "level": "native_keeper_fault",
+          "name": "native_bank_release_rollback",
+          "restriction": {
+            "current_block_height": 243,
+            "is_active": true,
+            "remaining_blocks": 41,
+            "restriction_end_block": 284
+          },
+          "restriction_proposal_id": "1"
+        },
+        {
+          "after": {
+            "bank_ngonka": {
+              "buyer": 664075853148800,
+              "deal": 94819671366450,
+              "fee_recipient": 0,
+              "host": 427094217705797
+            },
+            "cw20": {
+              "buyer": 100000000,
+              "deal": 0,
+              "fee_recipient": 1500000,
+              "host": 98500000
+            },
+            "foreign_cw20": {
+              "buyer": 1000000,
+              "deal": 0
+            },
+            "state": {
+              "buyer": "gonka18ad76wkdgh43st8p73ez9vn4p5wtx84tzn43k0",
+              "buyer_entitlement_ngonka": "100000000000",
+              "buyer_refund_usdt": "0",
+              "buyer_released_ngonka": "0",
+              "fee_usdt": "1500000",
+              "gnk_release_policy": {
+                "proportional": {
+                  "buyer_share_numerator": "100000000000",
+                  "share_denominator": "94819671366450"
+                }
+              },
+              "gross_usdt": "100000000",
+              "host_entitlement_ngonka": "94719671366450",
+              "host_net_usdt": "98500000",
+              "host_released_ngonka": "0",
+              "recipient_locked": true,
+              "refund_reason": null,
+              "released_total_ngonka": "0",
+              "reward_ngonka": "94819671366450",
+              "status": "releasing",
+              "total_claim_ngonka": "94819671366450",
+              "work_ngonka": "0"
+            }
+          },
+          "attempt": {
+            "code": 1108,
+            "codespace": "restrictions",
+            "events": [],
+            "gas_used": "164171",
+            "gas_wanted": "2000000",
+            "height": "254",
+            "layer": "deliver_tx",
+            "raw_log": "failed to execute message; message index: 0: user-to-user transfers are restricted during bootstrap period. Restriction ends at block 284 (current: 254, remaining: 30 blocks). Allowed transfers: gas payments, protocol interactions (inference, governance, staking), and module operations: transfer restricted during bootstrap period",
+            "tx_hash": "77DF9DAF2DB477CC6A242BB130A39C5DE46630F9791FB3C77255787E80C3BE39"
+          },
+          "before": {
+            "bank_ngonka": {
+              "buyer": 664075853148800,
+              "deal": 94819671366450,
+              "fee_recipient": 0,
+              "host": 427094217705797
+            },
+            "cw20": {
+              "buyer": 100000000,
+              "deal": 0,
+              "fee_recipient": 1500000,
+              "host": 98500000
+            },
+            "foreign_cw20": {
+              "buyer": 1000000,
+              "deal": 0
+            },
+            "state": {
+              "buyer": "gonka18ad76wkdgh43st8p73ez9vn4p5wtx84tzn43k0",
+              "buyer_entitlement_ngonka": "100000000000",
+              "buyer_refund_usdt": "0",
+              "buyer_released_ngonka": "0",
+              "fee_usdt": "1500000",
+              "gnk_release_policy": {
+                "proportional": {
+                  "buyer_share_numerator": "100000000000",
+                  "share_denominator": "94819671366450"
+                }
+              },
+              "gross_usdt": "100000000",
+              "host_entitlement_ngonka": "94719671366450",
+              "host_net_usdt": "98500000",
+              "host_released_ngonka": "0",
+              "recipient_locked": true,
+              "refund_reason": null,
+              "released_total_ngonka": "0",
+              "reward_ngonka": "94819671366450",
+              "status": "releasing",
+              "total_claim_ngonka": "94819671366450",
+              "work_ngonka": "0"
+            }
+          },
+          "expected": {
+            "allowed_earlier_recipient": "gonka18ad76wkdgh43st8p73ez9vn4p5wtx84tzn43k0",
+            "failure_category": "bank_send_restriction",
+            "live_exemption": {
+              "exemption_id": "a8-r7-1-buyer-first",
+              "expiry_block": "284",
+              "from_address": "gonka1cnuw3f076wgdyahssdkd0g3nr96ckq8cwa2mh029fn5mgf2fmcmsctg4n4",
+              "justification": "A8 R7.1 test-only selected Bank send #1",
+              "max_amount": "100000000000",
+              "to_address": "gonka18ad76wkdgh43st8p73ez9vn4p5wtx84tzn43k0",
+              "usage_limit": "1"
+            },
+            "outgoing_transfer_index": 2,
+            "rejected_recipient": "gonka1y5g0k257rwpgk3ycqeyrguxfffsjlyltyl6ld7",
+            "retry_policy": "retry once restriction_end_block is reached",
+            "state_and_tracked_balances_unchanged": true
+          },
+          "level": "native_keeper_fault",
+          "name": "native_bank_release_rollback",
+          "restriction": {
+            "current_block_height": 253,
+            "is_active": true,
+            "remaining_blocks": 31,
+            "restriction_end_block": 284
+          },
+          "restriction_proposal_id": "2"
+        },
+        {
+          "expected": {
+            "double_payout": false,
+            "exact_release_oracle": true,
+            "fault_off_before_retry": true,
+            "outgoing_transfer_index": 2,
+            "rejected_recipient": "gonka1y5g0k257rwpgk3ycqeyrguxfffsjlyltyl6ld7"
+          },
+          "fault": {
+            "after": {
+              "bank_ngonka": {
+                "buyer": 664075853148800,
+                "deal": 94819671366450,
+                "fee_recipient": 0,
+                "host": 427094217705797
+              },
+              "cw20": {
+                "buyer": 100000000,
+                "deal": 0,
+                "fee_recipient": 1500000,
+                "host": 98500000
+              },
+              "foreign_cw20": {
+                "buyer": 1000000,
+                "deal": 0
+              },
+              "state": {
+                "buyer": "gonka18ad76wkdgh43st8p73ez9vn4p5wtx84tzn43k0",
+                "buyer_entitlement_ngonka": "100000000000",
+                "buyer_refund_usdt": "0",
+                "buyer_released_ngonka": "0",
+                "fee_usdt": "1500000",
+                "gnk_release_policy": {
+                  "proportional": {
+                    "buyer_share_numerator": "100000000000",
+                    "share_denominator": "94819671366450"
+                  }
+                },
+                "gross_usdt": "100000000",
+                "host_entitlement_ngonka": "94719671366450",
+                "host_net_usdt": "98500000",
+                "host_released_ngonka": "0",
+                "recipient_locked": true,
+                "refund_reason": null,
+                "released_total_ngonka": "0",
+                "reward_ngonka": "94819671366450",
+                "status": "releasing",
+                "total_claim_ngonka": "94819671366450",
+                "work_ngonka": "0"
+              }
+            },
+            "attempt": {
+              "code": 1108,
+              "codespace": "restrictions",
+              "events": [],
+              "gas_used": "164171",
+              "gas_wanted": "2000000",
+              "height": "254",
+              "layer": "deliver_tx",
+              "raw_log": "failed to execute message; message index: 0: user-to-user transfers are restricted during bootstrap period. Restriction ends at block 284 (current: 254, remaining: 30 blocks). Allowed transfers: gas payments, protocol interactions (inference, governance, staking), and module operations: transfer restricted during bootstrap period",
+              "tx_hash": "77DF9DAF2DB477CC6A242BB130A39C5DE46630F9791FB3C77255787E80C3BE39"
+            },
+            "before": {
+              "bank_ngonka": {
+                "buyer": 664075853148800,
+                "deal": 94819671366450,
+                "fee_recipient": 0,
+                "host": 427094217705797
+              },
+              "cw20": {
+                "buyer": 100000000,
+                "deal": 0,
+                "fee_recipient": 1500000,
+                "host": 98500000
+              },
+              "foreign_cw20": {
+                "buyer": 1000000,
+                "deal": 0
+              },
+              "state": {
+                "buyer": "gonka18ad76wkdgh43st8p73ez9vn4p5wtx84tzn43k0",
+                "buyer_entitlement_ngonka": "100000000000",
+                "buyer_refund_usdt": "0",
+                "buyer_released_ngonka": "0",
+                "fee_usdt": "1500000",
+                "gnk_release_policy": {
+                  "proportional": {
+                    "buyer_share_numerator": "100000000000",
+                    "share_denominator": "94819671366450"
+                  }
+                },
+                "gross_usdt": "100000000",
+                "host_entitlement_ngonka": "94719671366450",
+                "host_net_usdt": "98500000",
+                "host_released_ngonka": "0",
+                "recipient_locked": true,
+                "refund_reason": null,
+                "released_total_ngonka": "0",
+                "reward_ngonka": "94819671366450",
+                "status": "releasing",
+                "total_claim_ngonka": "94819671366450",
+                "work_ngonka": "0"
+              }
+            },
+            "expected": {
+              "allowed_earlier_recipient": "gonka18ad76wkdgh43st8p73ez9vn4p5wtx84tzn43k0",
+              "failure_category": "bank_send_restriction",
+              "live_exemption": {
+                "exemption_id": "a8-r7-1-buyer-first",
+                "expiry_block": "284",
+                "from_address": "gonka1cnuw3f076wgdyahssdkd0g3nr96ckq8cwa2mh029fn5mgf2fmcmsctg4n4",
+                "justification": "A8 R7.1 test-only selected Bank send #1",
+                "max_amount": "100000000000",
+                "to_address": "gonka18ad76wkdgh43st8p73ez9vn4p5wtx84tzn43k0",
+                "usage_limit": "1"
+              },
+              "outgoing_transfer_index": 2,
+              "rejected_recipient": "gonka1y5g0k257rwpgk3ycqeyrguxfffsjlyltyl6ld7",
+              "retry_policy": "retry once restriction_end_block is reached",
+              "state_and_tracked_balances_unchanged": true
+            },
+            "level": "native_keeper_fault",
+            "name": "native_bank_release_rollback",
+            "restriction": {
+              "current_block_height": 253,
+              "is_active": true,
+              "remaining_blocks": 31,
+              "restriction_end_block": 284
+            },
+            "restriction_proposal_id": "2"
+          },
+          "level": "native_keeper_fault",
+          "name": "native_bank_release_retry",
+          "repeat": {
+            "after": {
+              "bank_ngonka": {
+                "buyer": 853545162951688,
+                "deal": 0,
+                "fee_recipient": 0,
+                "host": 711183198875135
+              },
+              "cw20": {
+                "buyer": 100000000,
+                "deal": 0,
+                "fee_recipient": 1500000,
+                "host": 98500000
+              },
+              "foreign_cw20": {
+                "buyer": 1000000,
+                "deal": 0
+              },
+              "state": {
+                "buyer": "gonka18ad76wkdgh43st8p73ez9vn4p5wtx84tzn43k0",
+                "buyer_entitlement_ngonka": "100000000000",
+                "buyer_refund_usdt": "0",
+                "buyer_released_ngonka": "100000000000",
+                "fee_usdt": "1500000",
+                "gnk_release_policy": {
+                  "proportional": {
+                    "buyer_share_numerator": "100000000000",
+                    "share_denominator": "94819671366450"
+                  }
+                },
+                "gross_usdt": "100000000",
+                "host_entitlement_ngonka": "94719671366450",
+                "host_net_usdt": "98500000",
+                "host_released_ngonka": "94719671366450",
+                "recipient_locked": true,
+                "refund_reason": null,
+                "released_total_ngonka": "94819671366450",
+                "reward_ngonka": "94819671366450",
+                "status": "completed",
+                "total_claim_ngonka": "94819671366450",
+                "work_ngonka": "0"
+              }
+            },
+            "attempt": {
+              "code": 5,
+              "codespace": "wasm",
+              "events": [],
+              "gas_used": "115168",
+              "gas_wanted": "2000000",
+              "height": "287",
+              "layer": "deliver_tx",
+              "raw_log": "failed to execute message; message index: 0: no additional GNK is currently available for release: execute wasm contract failed",
+              "tx_hash": "59E27C6552B235B266D34AB164DE7C3F8B110651ABA1434559FC2B950F3DBDB2"
+            },
+            "before": {
+              "bank_ngonka": {
+                "buyer": 853545162951688,
+                "deal": 0,
+                "fee_recipient": 0,
+                "host": 711183198875135
+              },
+              "cw20": {
+                "buyer": 100000000,
+                "deal": 0,
+                "fee_recipient": 1500000,
+                "host": 98500000
+              },
+              "foreign_cw20": {
+                "buyer": 1000000,
+                "deal": 0
+              },
+              "state": {
+                "buyer": "gonka18ad76wkdgh43st8p73ez9vn4p5wtx84tzn43k0",
+                "buyer_entitlement_ngonka": "100000000000",
+                "buyer_refund_usdt": "0",
+                "buyer_released_ngonka": "100000000000",
+                "fee_usdt": "1500000",
+                "gnk_release_policy": {
+                  "proportional": {
+                    "buyer_share_numerator": "100000000000",
+                    "share_denominator": "94819671366450"
+                  }
+                },
+                "gross_usdt": "100000000",
+                "host_entitlement_ngonka": "94719671366450",
+                "host_net_usdt": "98500000",
+                "host_released_ngonka": "94719671366450",
+                "recipient_locked": true,
+                "refund_reason": null,
+                "released_total_ngonka": "94819671366450",
+                "reward_ngonka": "94819671366450",
+                "status": "completed",
+                "total_claim_ngonka": "94819671366450",
+                "work_ngonka": "0"
+              }
+            },
+            "caller": "gonka1xkffuxwqmv9p78dxpyznnpqel6yxjuyqs02u7d",
+            "caller_ngonka_delta": 0,
+            "deal": "gonka1cnuw3f076wgdyahssdkd0g3nr96ckq8cwa2mh029fn5mgf2fmcmsctg4n4",
+            "expected": {
+              "arbitrary_error_accepted": false,
+              "repeat_payout": 0,
+              "selected_scenario_deal": "gonka1cnuw3f076wgdyahssdkd0g3nr96ckq8cwa2mh029fn5mgf2fmcmsctg4n4",
+              "terminal_status": "completed"
+            },
+            "level": "native_keeper_fault",
+            "name": "scenario_release_repeat",
+            "terminal_rejection": {
+              "code": 5,
+              "codespace": "wasm",
+              "contract_error": "NothingToRelease",
+              "height": 287,
+              "layer": "deliver_tx",
+              "matched_contract_error": "no additional GNK is currently available for release",
+              "tx_hash": "59E27C6552B235B266D34AB164DE7C3F8B110651ABA1434559FC2B950F3DBDB2"
+            }
+          },
+          "restriction_after_fault": {
+            "current_block_height": 285,
+            "is_active": false,
+            "remaining_blocks": 0,
+            "restriction_end_block": 284
+          },
+          "successful_retry": {
+            "actual": {
+              "address_delta": 94819671366450,
+              "buyer_delta": 100000000000,
+              "coincident_recipients": false,
+              "host_delta": 94719671366450
+            },
+            "bank_after": {
+              "buyer": 853545162951688,
+              "deal": 0,
+              "host": 711183198875135
+            },
+            "bank_before": {
+              "buyer": 853445162951688,
+              "deal": 94819671366450,
+              "host": 616463527508685
+            },
+            "caller": "gonka19ltlryzjykd60kwk5pp4hmp7hkwfrdkahkpgw3",
+            "caller_native_fee_delta": 0,
+            "epoch_bracket": {
+              "after_height": 286,
+              "before_height": 285,
+              "epoch": 11,
+              "same_epoch": true,
+              "tx_height": 286
+            },
+            "expected": {
+              "buyer_delta": 100000000000,
+              "buyer_released": 100000000000,
+              "host_delta": 94719671366450,
+              "host_released": 94719671366450,
+              "released_total": 94819671366450
+            },
+            "foreign_cw20_after": 0,
+            "foreign_cw20_before": 0,
+            "name": "release",
+            "state_after": {
+              "buyer": "gonka18ad76wkdgh43st8p73ez9vn4p5wtx84tzn43k0",
+              "buyer_entitlement_ngonka": "100000000000",
+              "buyer_refund_usdt": "0",
+              "buyer_released_ngonka": "100000000000",
+              "fee_usdt": "1500000",
+              "gnk_release_policy": {
+                "proportional": {
+                  "buyer_share_numerator": "100000000000",
+                  "share_denominator": "94819671366450"
+                }
+              },
+              "gross_usdt": "100000000",
+              "host_entitlement_ngonka": "94719671366450",
+              "host_net_usdt": "98500000",
+              "host_released_ngonka": "94719671366450",
+              "recipient_locked": true,
+              "refund_reason": null,
+              "released_total_ngonka": "94819671366450",
+              "reward_ngonka": "94819671366450",
+              "status": "completed",
+              "total_claim_ngonka": "94819671366450",
+              "work_ngonka": "0"
+            },
+            "state_before": {
+              "buyer": "gonka18ad76wkdgh43st8p73ez9vn4p5wtx84tzn43k0",
+              "buyer_entitlement_ngonka": "100000000000",
+              "buyer_refund_usdt": "0",
+              "buyer_released_ngonka": "0",
+              "fee_usdt": "1500000",
+              "gnk_release_policy": {
+                "proportional": {
+                  "buyer_share_numerator": "100000000000",
+                  "share_denominator": "94819671366450"
+                }
+              },
+              "gross_usdt": "100000000",
+              "host_entitlement_ngonka": "94719671366450",
+              "host_net_usdt": "98500000",
+              "host_released_ngonka": "0",
+              "recipient_locked": true,
+              "refund_reason": null,
+              "released_total_ngonka": "0",
+              "reward_ngonka": "94819671366450",
+              "status": "releasing",
+              "total_claim_ngonka": "94819671366450",
+              "work_ngonka": "0"
+            },
+            "tx": {
+              "code": 0,
+              "events": [
+                {
+                  "attributes": [
+                    {
+                      "index": true,
+                      "key": "_contract_address",
+                      "value": "gonka1cnuw3f076wgdyahssdkd0g3nr96ckq8cwa2mh029fn5mgf2fmcmsctg4n4"
+                    },
+                    {
+                      "index": true,
+                      "key": "msg_index",
+                      "value": "0"
+                    }
+                  ],
+                  "type": "execute"
+                },
+                {
+                  "attributes": [
+                    {
+                      "index": true,
+                      "key": "_contract_address",
+                      "value": "gonka1cnuw3f076wgdyahssdkd0g3nr96ckq8cwa2mh029fn5mgf2fmcmsctg4n4"
+                    },
+                    {
+                      "index": true,
+                      "key": "deal",
+                      "value": "gonka1cnuw3f076wgdyahssdkd0g3nr96ckq8cwa2mh029fn5mgf2fmcmsctg4n4"
+                    },
+                    {
+                      "index": true,
+                      "key": "host",
+                      "value": "gonka1y5g0k257rwpgk3ycqeyrguxfffsjlyltyl6ld7"
+                    },
+                    {
+                      "index": true,
+                      "key": "target_epoch",
+                      "value": "5"
+                    },
+                    {
+                      "index": true,
+                      "key": "released_total_ngonka",
+                      "value": "94819671366450"
+                    },
+                    {
+                      "index": true,
+                      "key": "buyer_released_ngonka",
+                      "value": "100000000000"
+                    },
+                    {
+                      "index": true,
+                      "key": "host_released_ngonka",
+                      "value": "94719671366450"
+                    },
+                    {
+                      "index": true,
+                      "key": "buyer_delta_ngonka",
+                      "value": "100000000000"
+                    },
+                    {
+                      "index": true,
+                      "key": "host_delta_ngonka",
+                      "value": "94719671366450"
+                    },
+                    {
+                      "index": true,
+                      "key": "buyer_share_numerator",
+                      "value": "100000000000"
+                    },
+                    {
+                      "index": true,
+                      "key": "host_share_numerator",
+                      "value": "94719671366450"
+                    },
+                    {
+                      "index": true,
+                      "key": "share_denominator",
+                      "value": "94819671366450"
+                    },
+                    {
+                      "index": true,
+                      "key": "entry_point",
+                      "value": "release_unlocked_gnk"
+                    },
+                    {
+                      "index": true,
+                      "key": "available_balance_ngonka",
+                      "value": "94819671366450"
+                    },
+                    {
+                      "index": true,
+                      "key": "buyer",
+                      "value": "gonka18ad76wkdgh43st8p73ez9vn4p5wtx84tzn43k0"
+                    },
+                    {
+                      "index": true,
+                      "key": "msg_index",
+                      "value": "0"
+                    }
+                  ],
+                  "type": "wasm-gnk_released"
+                },
+                {
+                  "attributes": [
+                    {
+                      "index": true,
+                      "key": "_contract_address",
+                      "value": "gonka1cnuw3f076wgdyahssdkd0g3nr96ckq8cwa2mh029fn5mgf2fmcmsctg4n4"
+                    },
+                    {
+                      "index": true,
+                      "key": "deal",
+                      "value": "gonka1cnuw3f076wgdyahssdkd0g3nr96ckq8cwa2mh029fn5mgf2fmcmsctg4n4"
+                    },
+                    {
+                      "index": true,
+                      "key": "host",
+                      "value": "gonka1y5g0k257rwpgk3ycqeyrguxfffsjlyltyl6ld7"
+                    },
+                    {
+                      "index": true,
+                      "key": "target_epoch",
+                      "value": "5"
+                    },
+                    {
+                      "index": true,
+                      "key": "total_claim_ngonka",
+                      "value": "94819671366450"
+                    },
+                    {
+                      "index": true,
+                      "key": "msg_index",
+                      "value": "0"
+                    }
+                  ],
+                  "type": "wasm-deal_completed"
+                },
+                {
+                  "attributes": [
+                    {
+                      "index": true,
+                      "key": "recipient",
+                      "value": "gonka18ad76wkdgh43st8p73ez9vn4p5wtx84tzn43k0"
+                    },
+                    {
+                      "index": true,
+                      "key": "sender",
+                      "value": "gonka1cnuw3f076wgdyahssdkd0g3nr96ckq8cwa2mh029fn5mgf2fmcmsctg4n4"
+                    },
+                    {
+                      "index": true,
+                      "key": "amount",
+                      "value": "100000000000ngonka"
+                    },
+                    {
+                      "index": true,
+                      "key": "msg_index",
+                      "value": "0"
+                    }
+                  ],
+                  "type": "transfer"
+                },
+                {
+                  "attributes": [
+                    {
+                      "index": true,
+                      "key": "recipient",
+                      "value": "gonka1y5g0k257rwpgk3ycqeyrguxfffsjlyltyl6ld7"
+                    },
+                    {
+                      "index": true,
+                      "key": "sender",
+                      "value": "gonka1cnuw3f076wgdyahssdkd0g3nr96ckq8cwa2mh029fn5mgf2fmcmsctg4n4"
+                    },
+                    {
+                      "index": true,
+                      "key": "amount",
+                      "value": "94719671366450ngonka"
+                    },
+                    {
+                      "index": true,
+                      "key": "msg_index",
+                      "value": "0"
+                    }
+                  ],
+                  "type": "transfer"
+                }
+              ],
+              "gas_used": "166232",
+              "gas_wanted": "786285",
+              "height": "286",
+              "tx_hash": "3FBB56913DA5C6734B7245D30E21F488ACDDF7785DD666615F209F0853774BBB"
+            }
+          }
+        }
+      ]
+    },
+    "a8cfix2-20260910": {
+      "context": {
+        "path": "/home/runner/a8-runtime/a8cfix2-20260910/evidence/a8cfix2-20260910/live-context.json",
+        "sha256": "1984183390c0abda48d6eb4695fd38205ef3645fed9d4f10b15b6b136470f741"
+      },
+      "junit": {
+        "path": "/home/runner/a8-runtime/a8cfix2-20260910/junit/TEST-MarketplaceContractAcceptanceTests.xml",
+        "sha256": "4e8420694f9486736eef155937ff5a416d489acd695de0acee046f8d7caf7773"
+      },
+      "cleanup": {
+        "path": "/home/runner/a8-runtime/a8cfix2-20260910/cleanup-evidence/completed.json",
+        "sha256": "512de54460f95597cce7690e309f2e43c6613215b7791c984f7ed47c5a3a744c"
+      },
+      "bank_evidence": [
+        {
+          "after": {
+            "bank_ngonka": {
+              "buyer": 1000000,
+              "deal": 94864721408887,
+              "fee_recipient": 0,
+              "host": 284864678570668
+            },
+            "cw20": {
+              "buyer": 830000000,
+              "deal": 0,
+              "fee_recipient": 1500000,
+              "host": 0
+            },
+            "foreign_cw20": {
+              "buyer": 1000000,
+              "deal": 0
+            },
+            "state": {
+              "buyer": "gonka1x2nmgyc4xlu4xx7kpdadrjplvhsqmjwqn4rl97",
+              "buyer_entitlement_ngonka": "0",
+              "buyer_refund_usdt": "10000000",
+              "buyer_released_ngonka": "0",
+              "fee_usdt": "0",
+              "gnk_release_policy": "host_only",
+              "gross_usdt": "0",
+              "host_entitlement_ngonka": "0",
+              "host_net_usdt": "0",
+              "host_released_ngonka": "0",
+              "recipient_locked": true,
+              "refund_reason": "network_unconfirmed",
+              "released_total_ngonka": "0",
+              "reward_ngonka": "0",
+              "status": "refunded",
+              "total_claim_ngonka": "0",
+              "work_ngonka": "0"
+            }
+          },
+          "attempt": {
+            "code": 1108,
+            "codespace": "restrictions",
+            "events": [],
+            "gas_used": "129843",
+            "gas_wanted": "2000000",
+            "height": "675",
+            "layer": "deliver_tx",
+            "raw_log": "failed to execute message; message index: 0: user-to-user transfers are restricted during bootstrap period. Restriction ends at block 713 (current: 675, remaining: 38 blocks). Allowed transfers: gas payments, protocol interactions (inference, governance, staking), and module operations: transfer restricted during bootstrap period",
+            "tx_hash": "5762BF0CF328260DB5880A7CAEB0FDF0CFB8B8165FEEF8D1AF64DAFE10778F2E"
+          },
+          "before": {
+            "bank_ngonka": {
+              "buyer": 1000000,
+              "deal": 94864721408887,
+              "fee_recipient": 0,
+              "host": 284864678570668
+            },
+            "cw20": {
+              "buyer": 830000000,
+              "deal": 0,
+              "fee_recipient": 1500000,
+              "host": 0
+            },
+            "foreign_cw20": {
+              "buyer": 1000000,
+              "deal": 0
+            },
+            "state": {
+              "buyer": "gonka1x2nmgyc4xlu4xx7kpdadrjplvhsqmjwqn4rl97",
+              "buyer_entitlement_ngonka": "0",
+              "buyer_refund_usdt": "10000000",
+              "buyer_released_ngonka": "0",
+              "fee_usdt": "0",
+              "gnk_release_policy": "host_only",
+              "gross_usdt": "0",
+              "host_entitlement_ngonka": "0",
+              "host_net_usdt": "0",
+              "host_released_ngonka": "0",
+              "recipient_locked": true,
+              "refund_reason": "network_unconfirmed",
+              "released_total_ngonka": "0",
+              "reward_ngonka": "0",
+              "status": "refunded",
+              "total_claim_ngonka": "0",
+              "work_ngonka": "0"
+            }
+          },
+          "expected": {
+            "allowed_earlier_recipient": null,
+            "failure_category": "bank_send_restriction",
+            "live_exemption": null,
+            "outgoing_transfer_index": 1,
+            "rejected_recipient": "gonka1a4d604hmyhj34z035spugwlwmdx6s0k0mxv8x6",
+            "retry_policy": "retry once restriction_end_block is reached",
+            "state_and_tracked_balances_unchanged": true
+          },
+          "level": "native_keeper_fault",
+          "name": "native_bank_release_rollback",
+          "restriction": {
+            "current_block_height": 674,
+            "is_active": true,
+            "remaining_blocks": 39,
+            "restriction_end_block": 713
+          },
+          "restriction_proposal_id": "1"
+        },
+        {
+          "expected": {
+            "double_payout": false,
+            "exact_release_oracle": true,
+            "fault_off_before_retry": true,
+            "outgoing_transfer_index": 1,
+            "rejected_recipient": "gonka1a4d604hmyhj34z035spugwlwmdx6s0k0mxv8x6"
+          },
+          "fault": {
+            "after": {
+              "bank_ngonka": {
+                "buyer": 1000000,
+                "deal": 94864721408887,
+                "fee_recipient": 0,
+                "host": 284864678570668
+              },
+              "cw20": {
+                "buyer": 830000000,
+                "deal": 0,
+                "fee_recipient": 1500000,
+                "host": 0
+              },
+              "foreign_cw20": {
+                "buyer": 1000000,
+                "deal": 0
+              },
+              "state": {
+                "buyer": "gonka1x2nmgyc4xlu4xx7kpdadrjplvhsqmjwqn4rl97",
+                "buyer_entitlement_ngonka": "0",
+                "buyer_refund_usdt": "10000000",
+                "buyer_released_ngonka": "0",
+                "fee_usdt": "0",
+                "gnk_release_policy": "host_only",
+                "gross_usdt": "0",
+                "host_entitlement_ngonka": "0",
+                "host_net_usdt": "0",
+                "host_released_ngonka": "0",
+                "recipient_locked": true,
+                "refund_reason": "network_unconfirmed",
+                "released_total_ngonka": "0",
+                "reward_ngonka": "0",
+                "status": "refunded",
+                "total_claim_ngonka": "0",
+                "work_ngonka": "0"
+              }
+            },
+            "attempt": {
+              "code": 1108,
+              "codespace": "restrictions",
+              "events": [],
+              "gas_used": "129843",
+              "gas_wanted": "2000000",
+              "height": "675",
+              "layer": "deliver_tx",
+              "raw_log": "failed to execute message; message index: 0: user-to-user transfers are restricted during bootstrap period. Restriction ends at block 713 (current: 675, remaining: 38 blocks). Allowed transfers: gas payments, protocol interactions (inference, governance, staking), and module operations: transfer restricted during bootstrap period",
+              "tx_hash": "5762BF0CF328260DB5880A7CAEB0FDF0CFB8B8165FEEF8D1AF64DAFE10778F2E"
+            },
+            "before": {
+              "bank_ngonka": {
+                "buyer": 1000000,
+                "deal": 94864721408887,
+                "fee_recipient": 0,
+                "host": 284864678570668
+              },
+              "cw20": {
+                "buyer": 830000000,
+                "deal": 0,
+                "fee_recipient": 1500000,
+                "host": 0
+              },
+              "foreign_cw20": {
+                "buyer": 1000000,
+                "deal": 0
+              },
+              "state": {
+                "buyer": "gonka1x2nmgyc4xlu4xx7kpdadrjplvhsqmjwqn4rl97",
+                "buyer_entitlement_ngonka": "0",
+                "buyer_refund_usdt": "10000000",
+                "buyer_released_ngonka": "0",
+                "fee_usdt": "0",
+                "gnk_release_policy": "host_only",
+                "gross_usdt": "0",
+                "host_entitlement_ngonka": "0",
+                "host_net_usdt": "0",
+                "host_released_ngonka": "0",
+                "recipient_locked": true,
+                "refund_reason": "network_unconfirmed",
+                "released_total_ngonka": "0",
+                "reward_ngonka": "0",
+                "status": "refunded",
+                "total_claim_ngonka": "0",
+                "work_ngonka": "0"
+              }
+            },
+            "expected": {
+              "allowed_earlier_recipient": null,
+              "failure_category": "bank_send_restriction",
+              "live_exemption": null,
+              "outgoing_transfer_index": 1,
+              "rejected_recipient": "gonka1a4d604hmyhj34z035spugwlwmdx6s0k0mxv8x6",
+              "retry_policy": "retry once restriction_end_block is reached",
+              "state_and_tracked_balances_unchanged": true
+            },
+            "level": "native_keeper_fault",
+            "name": "native_bank_release_rollback",
+            "restriction": {
+              "current_block_height": 674,
+              "is_active": true,
+              "remaining_blocks": 39,
+              "restriction_end_block": 713
+            },
+            "restriction_proposal_id": "1"
+          },
+          "level": "native_keeper_fault",
+          "name": "native_bank_release_retry",
+          "repeat": {
+            "after": {
+              "bank_ngonka": {
+                "buyer": 1000000,
+                "deal": 0,
+                "fee_recipient": 0,
+                "host": 379729399979555
+              },
+              "cw20": {
+                "buyer": 830000000,
+                "deal": 0,
+                "fee_recipient": 1500000,
+                "host": 0
+              },
+              "foreign_cw20": {
+                "buyer": 1000000,
+                "deal": 0
+              },
+              "state": {
+                "buyer": "gonka1x2nmgyc4xlu4xx7kpdadrjplvhsqmjwqn4rl97",
+                "buyer_entitlement_ngonka": "0",
+                "buyer_refund_usdt": "10000000",
+                "buyer_released_ngonka": "0",
+                "fee_usdt": "0",
+                "gnk_release_policy": "host_only",
+                "gross_usdt": "0",
+                "host_entitlement_ngonka": "0",
+                "host_net_usdt": "0",
+                "host_released_ngonka": "94864721408887",
+                "recipient_locked": true,
+                "refund_reason": "network_unconfirmed",
+                "released_total_ngonka": "94864721408887",
+                "reward_ngonka": "0",
+                "status": "refunded",
+                "total_claim_ngonka": "0",
+                "work_ngonka": "0"
+              }
+            },
+            "attempt": {
+              "code": 5,
+              "codespace": "wasm",
+              "events": [],
+              "gas_used": "114709",
+              "gas_wanted": "2000000",
+              "height": "716",
+              "layer": "deliver_tx",
+              "raw_log": "failed to execute message; message index: 0: no additional GNK is currently available for release: execute wasm contract failed",
+              "tx_hash": "A16693645A92E4B972E45CC788B9E3759D824BC9039A52134FF789B54CE4C4CB"
+            },
+            "before": {
+              "bank_ngonka": {
+                "buyer": 1000000,
+                "deal": 0,
+                "fee_recipient": 0,
+                "host": 379729399979555
+              },
+              "cw20": {
+                "buyer": 830000000,
+                "deal": 0,
+                "fee_recipient": 1500000,
+                "host": 0
+              },
+              "foreign_cw20": {
+                "buyer": 1000000,
+                "deal": 0
+              },
+              "state": {
+                "buyer": "gonka1x2nmgyc4xlu4xx7kpdadrjplvhsqmjwqn4rl97",
+                "buyer_entitlement_ngonka": "0",
+                "buyer_refund_usdt": "10000000",
+                "buyer_released_ngonka": "0",
+                "fee_usdt": "0",
+                "gnk_release_policy": "host_only",
+                "gross_usdt": "0",
+                "host_entitlement_ngonka": "0",
+                "host_net_usdt": "0",
+                "host_released_ngonka": "94864721408887",
+                "recipient_locked": true,
+                "refund_reason": "network_unconfirmed",
+                "released_total_ngonka": "94864721408887",
+                "reward_ngonka": "0",
+                "status": "refunded",
+                "total_claim_ngonka": "0",
+                "work_ngonka": "0"
+              }
+            },
+            "caller": "gonka1eah53dzlzf8n5calz7xfhrq22gd9c79nkjjjz5",
+            "caller_ngonka_delta": 0,
+            "deal": "gonka19jq6mj84cnt9p7sagjxqf8hxtczwc8wlpuwe4sh62w45aheseues9e4ann",
+            "expected": {
+              "arbitrary_error_accepted": false,
+              "repeat_payout": 0,
+              "selected_scenario_deal": "gonka19jq6mj84cnt9p7sagjxqf8hxtczwc8wlpuwe4sh62w45aheseues9e4ann",
+              "terminal_status": "refunded"
+            },
+            "level": "native_keeper_fault",
+            "name": "scenario_release_repeat",
+            "terminal_rejection": {
+              "code": 5,
+              "codespace": "wasm",
+              "contract_error": "NothingToRelease",
+              "height": 716,
+              "layer": "deliver_tx",
+              "matched_contract_error": "no additional GNK is currently available for release",
+              "tx_hash": "A16693645A92E4B972E45CC788B9E3759D824BC9039A52134FF789B54CE4C4CB"
+            }
+          },
+          "restriction_after_fault": {
+            "current_block_height": 714,
+            "is_active": false,
+            "remaining_blocks": 0,
+            "restriction_end_block": 713
+          },
+          "successful_retry": {
+            "actual": {
+              "address_delta": 94864721408887,
+              "buyer_delta": 0,
+              "coincident_recipients": false,
+              "host_delta": 94864721408887
+            },
+            "bank_after": {
+              "buyer": 1000000,
+              "deal": 0,
+              "host": 379729399979555
+            },
+            "bank_before": {
+              "buyer": 1000000,
+              "deal": 94864721408887,
+              "host": 284864678570668
+            },
+            "caller": "gonka1xynmkgl4u9tl5gm3lvcvekulpx4klt5xsnp3jk",
+            "caller_native_fee_delta": 0,
+            "epoch_bracket": {
+              "after_height": 715,
+              "before_height": 714,
+              "epoch": 9,
+              "same_epoch": true,
+              "tx_height": 715
+            },
+            "expected": {
+              "buyer_delta": 0,
+              "buyer_released": 0,
+              "host_delta": 94864721408887,
+              "host_released": 94864721408887,
+              "released_total": 94864721408887
+            },
+            "foreign_cw20_after": 0,
+            "foreign_cw20_before": 0,
+            "name": "release",
+            "state_after": {
+              "buyer": "gonka1x2nmgyc4xlu4xx7kpdadrjplvhsqmjwqn4rl97",
+              "buyer_entitlement_ngonka": "0",
+              "buyer_refund_usdt": "10000000",
+              "buyer_released_ngonka": "0",
+              "fee_usdt": "0",
+              "gnk_release_policy": "host_only",
+              "gross_usdt": "0",
+              "host_entitlement_ngonka": "0",
+              "host_net_usdt": "0",
+              "host_released_ngonka": "94864721408887",
+              "recipient_locked": true,
+              "refund_reason": "network_unconfirmed",
+              "released_total_ngonka": "94864721408887",
+              "reward_ngonka": "0",
+              "status": "refunded",
+              "total_claim_ngonka": "0",
+              "work_ngonka": "0"
+            },
+            "state_before": {
+              "buyer": "gonka1x2nmgyc4xlu4xx7kpdadrjplvhsqmjwqn4rl97",
+              "buyer_entitlement_ngonka": "0",
+              "buyer_refund_usdt": "10000000",
+              "buyer_released_ngonka": "0",
+              "fee_usdt": "0",
+              "gnk_release_policy": "host_only",
+              "gross_usdt": "0",
+              "host_entitlement_ngonka": "0",
+              "host_net_usdt": "0",
+              "host_released_ngonka": "0",
+              "recipient_locked": true,
+              "refund_reason": "network_unconfirmed",
+              "released_total_ngonka": "0",
+              "reward_ngonka": "0",
+              "status": "refunded",
+              "total_claim_ngonka": "0",
+              "work_ngonka": "0"
+            },
+            "tx": {
+              "code": 0,
+              "events": [
+                {
+                  "attributes": [
+                    {
+                      "index": true,
+                      "key": "_contract_address",
+                      "value": "gonka19jq6mj84cnt9p7sagjxqf8hxtczwc8wlpuwe4sh62w45aheseues9e4ann"
+                    },
+                    {
+                      "index": true,
+                      "key": "msg_index",
+                      "value": "0"
+                    }
+                  ],
+                  "type": "execute"
+                },
+                {
+                  "attributes": [
+                    {
+                      "index": true,
+                      "key": "_contract_address",
+                      "value": "gonka19jq6mj84cnt9p7sagjxqf8hxtczwc8wlpuwe4sh62w45aheseues9e4ann"
+                    },
+                    {
+                      "index": true,
+                      "key": "deal",
+                      "value": "gonka19jq6mj84cnt9p7sagjxqf8hxtczwc8wlpuwe4sh62w45aheseues9e4ann"
+                    },
+                    {
+                      "index": true,
+                      "key": "host",
+                      "value": "gonka1a4d604hmyhj34z035spugwlwmdx6s0k0mxv8x6"
+                    },
+                    {
+                      "index": true,
+                      "key": "target_epoch",
+                      "value": "4"
+                    },
+                    {
+                      "index": true,
+                      "key": "released_total_ngonka",
+                      "value": "94864721408887"
+                    },
+                    {
+                      "index": true,
+                      "key": "buyer_released_ngonka",
+                      "value": "0"
+                    },
+                    {
+                      "index": true,
+                      "key": "host_released_ngonka",
+                      "value": "94864721408887"
+                    },
+                    {
+                      "index": true,
+                      "key": "buyer_delta_ngonka",
+                      "value": "0"
+                    },
+                    {
+                      "index": true,
+                      "key": "host_delta_ngonka",
+                      "value": "94864721408887"
+                    },
+                    {
+                      "index": true,
+                      "key": "buyer_share_numerator",
+                      "value": "0"
+                    },
+                    {
+                      "index": true,
+                      "key": "host_share_numerator",
+                      "value": "1"
+                    },
+                    {
+                      "index": true,
+                      "key": "share_denominator",
+                      "value": "1"
+                    },
+                    {
+                      "index": true,
+                      "key": "entry_point",
+                      "value": "release_unlocked_gnk"
+                    },
+                    {
+                      "index": true,
+                      "key": "available_balance_ngonka",
+                      "value": "94864721408887"
+                    },
+                    {
+                      "index": true,
+                      "key": "buyer",
+                      "value": "gonka1x2nmgyc4xlu4xx7kpdadrjplvhsqmjwqn4rl97"
+                    },
+                    {
+                      "index": true,
+                      "key": "msg_index",
+                      "value": "0"
+                    }
+                  ],
+                  "type": "wasm-gnk_released"
+                },
+                {
+                  "attributes": [
+                    {
+                      "index": true,
+                      "key": "recipient",
+                      "value": "gonka1a4d604hmyhj34z035spugwlwmdx6s0k0mxv8x6"
+                    },
+                    {
+                      "index": true,
+                      "key": "sender",
+                      "value": "gonka19jq6mj84cnt9p7sagjxqf8hxtczwc8wlpuwe4sh62w45aheseues9e4ann"
+                    },
+                    {
+                      "index": true,
+                      "key": "amount",
+                      "value": "94864721408887ngonka"
+                    },
+                    {
+                      "index": true,
+                      "key": "msg_index",
+                      "value": "0"
+                    }
+                  ],
+                  "type": "transfer"
+                }
+              ],
+              "gas_used": "137661",
+              "gas_wanted": "643430",
+              "height": "715",
+              "tx_hash": "07B9251218EB43A97A59F919A73AF2C4C3064DE8A519441B18C1334897FDBD81"
+            }
+          }
+        }
+      ],
+      "cases": {
+        "r3-duplicate_routing-lock": {
+          "status": "PASS",
+          "file": "/home/runner/a8-runtime/a8cfix2-20260910/evidence/a8cfix2-20260910/package-c/tx-r3-duplicate_routing-lock-lock-0004.json",
+          "sha256": "f84ba790f6ea663670dd12eeef613ffcba2b6205da8248900ce463faa23efe0d",
+          "transaction": {
+            "code": 5,
+            "codespace": "wasm",
+            "events": [],
+            "gas_used": "100878",
+            "gas_wanted": "2000000",
+            "height": "409",
+            "layer": "deliver_tx",
+            "raw_log": "failed to execute message; message index: 0: claim recipient is configured more than once for epoch 4: execute wasm contract failed",
+            "tx_hash": "5986861FD356EF62B9B52ECAE5B542F269446289BB112C4E38AA1F71AE6FBDCC"
+          },
+          "epoch_bracket": {
+            "after_height": 409,
+            "before_height": 407,
+            "epoch": 5,
+            "same_epoch": true,
+            "tx_height": 409
+          }
+        },
+        "r3-duplicate_routing-lock-healthy": {
+          "status": "PASS",
+          "file": "/home/runner/a8-runtime/a8cfix2-20260910/evidence/a8cfix2-20260910/package-c/tx-r3-duplicate_routing-lock-lock-0045.json",
+          "sha256": "d6528d0820c491e01d1d9d792468cc0373c875765094760dc44d7c6e334fbaed",
+          "transaction": {
+            "code": 0,
+            "codespace": "",
+            "events": [],
+            "gas_used": "118100",
+            "gas_wanted": "2000000",
+            "height": "599",
+            "layer": "deliver_tx",
+            "raw_log": "",
+            "tx_hash": "80E417A15123026789083642149FDF499A641BC1FEB0CC32B6D4066E6730D35C"
+          },
+          "epoch_bracket": {
+            "after_height": 599,
+            "before_height": 598,
+            "epoch": 7,
+            "same_epoch": true,
+            "tx_height": 599
+          }
+        },
+        "r3-duplicate_routing-refund": {
+          "status": "PASS",
+          "file": "/home/runner/a8-runtime/a8cfix2-20260910/evidence/a8cfix2-20260910/package-c/tx-r3-duplicate_routing-refund-refund-0005.json",
+          "sha256": "75ab1dd700f5edda032fb73c0ada17d3d02945cb033a43ea1b097ddafc09b927",
+          "transaction": {
+            "code": 5,
+            "codespace": "wasm",
+            "events": [],
+            "gas_used": "100901",
+            "gas_wanted": "2000000",
+            "height": "412",
+            "layer": "deliver_tx",
+            "raw_log": "failed to execute message; message index: 0: claim recipient is configured more than once for epoch 4: execute wasm contract failed",
+            "tx_hash": "028BC0611294B3A1AF63C096055C49C66F78F320AA6E04793689922EAE190E75"
+          },
+          "epoch_bracket": {
+            "after_height": 412,
+            "before_height": 410,
+            "epoch": 5,
+            "same_epoch": true,
+            "tx_height": 412
+          }
+        },
+        "r3-duplicate_routing-refund-healthy": {
+          "status": "PASS",
+          "file": "/home/runner/a8-runtime/a8cfix2-20260910/evidence/a8cfix2-20260910/package-c/tx-r3-duplicate_routing-refund-refund-0046.json",
+          "sha256": "9827662b8d5c7a46bd1fd622faf78699ac598e28425970bf12c24b686ca4a8fc",
+          "transaction": {
+            "code": 5,
+            "codespace": "wasm",
+            "events": [],
+            "gas_used": "101533",
+            "gas_wanted": "2000000",
+            "height": "602",
+            "layer": "deliver_tx",
+            "raw_log": "failed to execute message; message index: 0: claim recipient for epoch 4 still routes exactly to this Deal: execute wasm contract failed",
+            "tx_hash": "EBF4C3A2D8876AD911920B550A7A7172DA542EF664997DAA3E2AF1646BA50220"
+          },
+          "epoch_bracket": {
+            "after_height": 602,
+            "before_height": 601,
+            "epoch": 7,
+            "same_epoch": true,
+            "tx_height": 602
+          }
+        },
+        "r3-epoch-lock": {
+          "status": "PASS",
+          "file": "/home/runner/a8-runtime/a8cfix2-20260910/evidence/a8cfix2-20260910/package-c/tx-r3-epoch-lock-lock-0006.json",
+          "sha256": "6625add14253b48e532112db4e1e15de346b19f0c8d9005bc7c6e98c871f652f",
+          "transaction": {
+            "code": 5,
+            "codespace": "wasm",
+            "events": [],
+            "gas_used": "99802",
+            "gas_wanted": "2000000",
+            "height": "414",
+            "layer": "deliver_tx",
+            "raw_log": "failed to execute message; message index: 0: Gonka query failed for /inference.inference.Query/GetCurrentEpoch: execute wasm contract failed",
+            "tx_hash": "1DADE8C7CB08E8AA463051B292D073EEB94AD26DEDBF1C8E707B7797DB144678"
+          },
+          "epoch_bracket": {
+            "after_height": 414,
+            "before_height": 413,
+            "epoch": 5,
+            "same_epoch": true,
+            "tx_height": 414
+          }
+        },
+        "r3-epoch-lock-healthy": {
+          "status": "FAIL",
+          "error": "snapshot crossed a vesting epoch; no coherent balance proof"
+        },
+        "r3-epoch-refund": {
+          "status": "PASS",
+          "file": "/home/runner/a8-runtime/a8cfix2-20260910/evidence/a8cfix2-20260910/package-c/tx-r3-epoch-refund-refund-0027.json",
+          "sha256": "01725e70ea6c74368847deff75a0aff8fffcc34fae3ad1e8b6f9ec9aad6a8920",
+          "transaction": {
+            "code": 5,
+            "codespace": "wasm",
+            "events": [],
+            "gas_used": "99819",
+            "gas_wanted": "2000000",
+            "height": "533",
+            "layer": "deliver_tx",
+            "raw_log": "failed to execute message; message index: 0: Gonka query failed for /inference.inference.Query/GetCurrentEpoch: execute wasm contract failed",
+            "tx_hash": "1EFD8ADED27D5156E9C47784AC646A3CDA07FB663B681A8D23E0052A1401AF3A"
+          },
+          "epoch_bracket": {
+            "after_height": 533,
+            "before_height": 532,
+            "epoch": 7,
+            "same_epoch": true,
+            "tx_height": 533
+          }
+        },
+        "r3-epoch-refund-healthy": {
+          "status": "PASS",
+          "file": "/home/runner/a8-runtime/a8cfix2-20260910/evidence/a8cfix2-20260910/package-c/tx-r3-epoch-refund-refund-0048.json",
+          "sha256": "d6282ab2355d36c78ef57eac4d2129f31479110da2d655f0a8dc7f297eeab0cb",
+          "transaction": {
+            "code": 0,
+            "codespace": "",
+            "events": [],
+            "gas_used": "200262",
+            "gas_wanted": "2000000",
+            "height": "608",
+            "layer": "deliver_tx",
+            "raw_log": "",
+            "tx_hash": "10826815C360A130EC219D0DA4662086E4EC803789BF51A93A704A06BA48240C"
+          },
+          "epoch_bracket": {
+            "after_height": 608,
+            "before_height": 607,
+            "epoch": 8,
+            "same_epoch": true,
+            "tx_height": 608
+          }
+        },
+        "r3-handler_error-lock": {
+          "status": "PASS",
+          "file": "/home/runner/a8-runtime/a8cfix2-20260910/evidence/a8cfix2-20260910/package-c/tx-r3-handler_error-lock-lock-0000.json",
+          "sha256": "143208042aec4f4b502b31465ce67b9d50d47b0d073a9b5f94dca68b245dd306",
+          "transaction": {
+            "code": 5,
+            "codespace": "wasm",
+            "events": [],
+            "gas_used": "100884",
+            "gas_wanted": "2000000",
+            "height": "398",
+            "layer": "deliver_tx",
+            "raw_log": "failed to execute message; message index: 0: Gonka query failed for /inference.inference.Query/ListClaimRecipients: execute wasm contract failed",
+            "tx_hash": "B72952EDF7735C12E1A0CA776ACCE49EFE4FB9B73CB2A02222B9A078B06CF162"
+          },
+          "epoch_bracket": {
+            "after_height": 398,
+            "before_height": 396,
+            "epoch": 5,
+            "same_epoch": true,
+            "tx_height": 398
+          }
+        },
+        "r3-handler_error-lock-healthy": {
+          "status": "PASS",
+          "file": "/home/runner/a8-runtime/a8cfix2-20260910/evidence/a8cfix2-20260910/package-c/tx-r3-handler_error-lock-lock-0041.json",
+          "sha256": "d2dd888d34758d66e762ca0ac80241cbf2ae5a27538bc3a6ba74927ad14ad42b",
+          "transaction": {
+            "code": 0,
+            "codespace": "",
+            "events": [],
+            "gas_used": "118112",
+            "gas_wanted": "2000000",
+            "height": "587",
+            "layer": "deliver_tx",
+            "raw_log": "",
+            "tx_hash": "AE67806594FCB20526DB86FEA1C6EA9387ABD376A7DD7692E3B4A6AF420F469C"
+          },
+          "epoch_bracket": {
+            "after_height": 587,
+            "before_height": 586,
+            "epoch": 7,
+            "same_epoch": true,
+            "tx_height": 587
+          }
+        },
+        "r3-handler_error-refund": {
+          "status": "PASS",
+          "file": "/home/runner/a8-runtime/a8cfix2-20260910/evidence/a8cfix2-20260910/package-c/tx-r3-handler_error-refund-refund-0001.json",
+          "sha256": "8bd6a9783411fa180f5a3b5cad5ae6293a3c26c648c2d9dfb5c6f287cca421e4",
+          "transaction": {
+            "code": 5,
+            "codespace": "wasm",
+            "events": [],
+            "gas_used": "100905",
+            "gas_wanted": "2000000",
+            "height": "400",
+            "layer": "deliver_tx",
+            "raw_log": "failed to execute message; message index: 0: Gonka query failed for /inference.inference.Query/ListClaimRecipients: execute wasm contract failed",
+            "tx_hash": "BCB3D19ABF974C4479C6CE4E353E5FC80CAC3E1681E5CD19A87DAEC1721EA610"
+          },
+          "epoch_bracket": {
+            "after_height": 400,
+            "before_height": 399,
+            "epoch": 5,
+            "same_epoch": true,
+            "tx_height": 400
+          }
+        },
+        "r3-handler_error-refund-healthy": {
+          "status": "PASS",
+          "file": "/home/runner/a8-runtime/a8cfix2-20260910/evidence/a8cfix2-20260910/package-c/tx-r3-handler_error-refund-refund-0042.json",
+          "sha256": "c584c9fa97cb3e22812bc68cf1fe4323c5bda7358afc3fcb1d7a9cc0607540e9",
+          "transaction": {
+            "code": 5,
+            "codespace": "wasm",
+            "events": [],
+            "gas_used": "101545",
+            "gas_wanted": "2000000",
+            "height": "590",
+            "layer": "deliver_tx",
+            "raw_log": "failed to execute message; message index: 0: claim recipient for epoch 4 still routes exactly to this Deal: execute wasm contract failed",
+            "tx_hash": "BE25EB0FC4FDBE80B922C8828DD49CC1B2010920D0DA131EB6A8520CFD141908"
+          },
+          "epoch_bracket": {
+            "after_height": 590,
+            "before_height": 589,
+            "epoch": 7,
+            "same_epoch": true,
+            "tx_height": 590
+          }
+        },
+        "r3-malformed_protobuf-lock": {
+          "status": "PASS",
+          "file": "/home/runner/a8-runtime/a8cfix2-20260910/evidence/a8cfix2-20260910/package-c/tx-r3-malformed_protobuf-lock-lock-0002.json",
+          "sha256": "94a36fd64bab0cf5626dceeb2667d04b9b67e867042d827815acc3fb23d2714f",
+          "transaction": {
+            "code": 5,
+            "codespace": "wasm",
+            "events": [],
+            "gas_used": "100876",
+            "gas_wanted": "2000000",
+            "height": "403",
+            "layer": "deliver_tx",
+            "raw_log": "failed to execute message; message index: 0: failed to decode protobuf response for /inference.inference.Query/ListClaimRecipients: execute wasm contract failed",
+            "tx_hash": "B3FDF97328CFCF90329C2CCA03977A264E1E237063AB1BCF2138D62F5867B014"
+          },
+          "epoch_bracket": {
+            "after_height": 403,
+            "before_height": 401,
+            "epoch": 5,
+            "same_epoch": true,
+            "tx_height": 403
+          }
+        },
+        "r3-malformed_protobuf-lock-healthy": {
+          "status": "PASS",
+          "file": "/home/runner/a8-runtime/a8cfix2-20260910/evidence/a8cfix2-20260910/package-c/tx-r3-malformed_protobuf-lock-lock-0043.json",
+          "sha256": "2d6aa5bb74d32b29a67f91e96fb199e48ef65a630d14f76929891caab9f43108",
+          "transaction": {
+            "code": 0,
+            "codespace": "",
+            "events": [],
+            "gas_used": "118100",
+            "gas_wanted": "2000000",
+            "height": "593",
+            "layer": "deliver_tx",
+            "raw_log": "",
+            "tx_hash": "4277A990A2F4CD6A27E82EA5D62C3BDAF55F4784A11CE0875C3828115F0A6B40"
+          },
+          "epoch_bracket": {
+            "after_height": 593,
+            "before_height": 592,
+            "epoch": 7,
+            "same_epoch": true,
+            "tx_height": 593
+          }
+        },
+        "r3-malformed_protobuf-refund": {
+          "status": "PASS",
+          "file": "/home/runner/a8-runtime/a8cfix2-20260910/evidence/a8cfix2-20260910/package-c/tx-r3-malformed_protobuf-refund-refund-0003.json",
+          "sha256": "90e465db6651641791ddf8480efd3bc0b0af6da53810d43801f6abbf76b5b94f",
+          "transaction": {
+            "code": 5,
+            "codespace": "wasm",
+            "events": [],
+            "gas_used": "100923",
+            "gas_wanted": "2000000",
+            "height": "406",
+            "layer": "deliver_tx",
+            "raw_log": "failed to execute message; message index: 0: failed to decode protobuf response for /inference.inference.Query/ListClaimRecipients: execute wasm contract failed",
+            "tx_hash": "7DF620F1E087F4947B05167D9DE4B0932AAA1FD99EFFF4058F3745559A3713D4"
+          },
+          "epoch_bracket": {
+            "after_height": 406,
+            "before_height": 404,
+            "epoch": 5,
+            "same_epoch": true,
+            "tx_height": 406
+          }
+        },
+        "r3-malformed_protobuf-refund-healthy": {
+          "status": "PASS",
+          "file": "/home/runner/a8-runtime/a8cfix2-20260910/evidence/a8cfix2-20260910/package-c/tx-r3-malformed_protobuf-refund-refund-0044.json",
+          "sha256": "50dd95ad8944758df631f2c21d96dbe21974d00b5bc9108a6b69f75c1cbf1b6f",
+          "transaction": {
+            "code": 5,
+            "codespace": "wasm",
+            "events": [],
+            "gas_used": "101548",
+            "gas_wanted": "2000000",
+            "height": "596",
+            "layer": "deliver_tx",
+            "raw_log": "failed to execute message; message index: 0: claim recipient for epoch 4 still routes exactly to this Deal: execute wasm contract failed",
+            "tx_hash": "1C663FB18700272E9DEA36B0EA288797C0A696A69FDCC9ADD227B3F469EDD898"
+          },
+          "epoch_bracket": {
+            "after_height": 596,
+            "before_height": 595,
+            "epoch": 7,
+            "same_epoch": true,
+            "tx_height": 596
+          }
+        },
+        "r4-handler_error-e2": {
+          "status": "PASS",
+          "file": "/home/runner/a8-runtime/a8cfix2-20260910/evidence/a8cfix2-20260910/package-c/tx-r4-handler_error-refund-0012.json",
+          "sha256": "162d6880d564fbe6db2262adcf365bcc2268996e73162fa20e224236b1b01ecb",
+          "transaction": {
+            "code": 5,
+            "codespace": "wasm",
+            "events": [],
+            "gas_used": "100905",
+            "gas_wanted": "2000000",
+            "height": "485",
+            "layer": "deliver_tx",
+            "raw_log": "failed to execute message; message index: 0: Gonka query failed for /inference.inference.Query/EpochPerformanceSummaryByParticipant: execute wasm contract failed",
+            "tx_hash": "3C5743BF1886042594969694191B60023E830CC58BF094BA7F4C117EE127092B"
+          },
+          "epoch_bracket": {
+            "after_height": 485,
+            "before_height": 483,
+            "epoch": 6,
+            "same_epoch": true,
+            "tx_height": 485
+          }
+        },
+        "r4-handler_error-e3": {
+          "status": "PASS",
+          "file": "/home/runner/a8-runtime/a8cfix2-20260910/evidence/a8cfix2-20260910/package-c/tx-r4-handler_error-refund-0031.json",
+          "sha256": "8a21694fe4c3d5ed55f5e06c8b0ccf3813c8d64b6878e19800f9e68359d474fa",
+          "transaction": {
+            "code": 0,
+            "codespace": "",
+            "events": [],
+            "gas_used": "199168",
+            "gas_wanted": "2000000",
+            "height": "545",
+            "layer": "deliver_tx",
+            "raw_log": "",
+            "tx_hash": "4AA08CC118CE1B565C727135E97267DDA0C34494A53DB496D7A6C5C3B7821EA5"
+          },
+          "epoch_bracket": {
+            "after_height": 545,
+            "before_height": 543,
+            "epoch": 7,
+            "same_epoch": true,
+            "tx_height": 545
+          }
+        },
+        "r4-handler_error-probe": {
+          "status": "PASS",
+          "file": "/home/runner/a8-runtime/a8cfix2-20260910/evidence/a8cfix2-20260910/package-c/tx-r4-handler_error-settle_claim-0011.json",
+          "sha256": "dce96a18379fb624a2a309c03949269299e83a5cd2fee24841091b59bfe50cf2",
+          "transaction": {
+            "code": 5,
+            "codespace": "wasm",
+            "events": [],
+            "gas_used": "99929",
+            "gas_wanted": "2000000",
+            "height": "482",
+            "layer": "deliver_tx",
+            "raw_log": "failed to execute message; message index: 0: Gonka query failed for /inference.inference.Query/EpochPerformanceSummaryByParticipant: execute wasm contract failed",
+            "tx_hash": "2D86FECA20343A74F9DFE99C3A5F18D45198AD019B07B7CB96CCBA6B56E4555B"
+          },
+          "epoch_bracket": {
+            "after_height": 482,
+            "before_height": 481,
+            "epoch": 6,
+            "same_epoch": true,
+            "tx_height": 482
+          }
+        },
+        "r4-handler_error-terminal-refund": {
+          "status": "PASS",
+          "file": "/home/runner/a8-runtime/a8cfix2-20260910/evidence/a8cfix2-20260910/package-c/tx-r4-handler_error-refund-0049.json",
+          "sha256": "2e057a5256ac3a5c8da8b83c1d63c06f244c8f25512e737f734ef02747312cdb",
+          "transaction": {
+            "code": 5,
+            "codespace": "wasm",
+            "events": [],
+            "gas_used": "99925",
+            "gas_wanted": "2000000",
+            "height": "611",
+            "layer": "deliver_tx",
+            "raw_log": "failed to execute message; message index: 0: cannot refund Deal in state Refunded; expected Funded for routing failure or Locked for claim expiry: execute wasm contract failed",
+            "tx_hash": "06FCFD5F946518A6D8DAA5ACFF07401EEB22E4D570BCA07F8416FB647D2685D5"
+          },
+          "epoch_bracket": {
+            "after_height": 611,
+            "before_height": 610,
+            "epoch": 8,
+            "same_epoch": true,
+            "tx_height": 611
+          }
+        },
+        "r4-handler_error-terminal-settle_claim": {
+          "status": "PASS",
+          "file": "/home/runner/a8-runtime/a8cfix2-20260910/evidence/a8cfix2-20260910/package-c/tx-r4-handler_error-settle_claim-0050.json",
+          "sha256": "c0fd007db5328263251fa71b0028d9968454b3cf380360be6a5b484f408363b4",
+          "transaction": {
+            "code": 5,
+            "codespace": "wasm",
+            "events": [],
+            "gas_used": "99943",
+            "gas_wanted": "2000000",
+            "height": "614",
+            "layer": "deliver_tx",
+            "raw_log": "failed to execute message; message index: 0: cannot settle claim in state Refunded; expected Locked: execute wasm contract failed",
+            "tx_hash": "8B4F29079FE4E1BA8BC9C0AED40D6A50EC6BA97A5E232E82CED2A0F27324D55B"
+          },
+          "epoch_bracket": {
+            "after_height": 614,
+            "before_height": 612,
+            "epoch": 8,
+            "same_epoch": true,
+            "tx_height": 614
+          }
+        },
+        "r4-invalid_participant_address-e2": {
+          "status": "PASS",
+          "file": "/home/runner/a8-runtime/a8cfix2-20260910/evidence/a8cfix2-20260910/package-c/tx-r4-invalid_participant_address-refund-0024.json",
+          "sha256": "4336904103d8a83a24afb9964234f5ef86f4e6796194280562848ce20e012b4f",
+          "transaction": {
+            "code": 5,
+            "codespace": "wasm",
+            "events": [],
+            "gas_used": "100986",
+            "gas_wanted": "2000000",
+            "height": "520",
+            "layer": "deliver_tx",
+            "raw_log": "failed to execute message; message index: 0: Gonka response for /inference.inference.Query/EpochPerformanceSummaryByParticipant contains an invalid participant_id address: execute wasm contract failed",
+            "tx_hash": "5C2F3BCDC755A574863B155D07976CFCB78627CD1CF8AA8A6E6B4A70520C61D3"
+          },
+          "epoch_bracket": {
+            "after_height": 520,
+            "before_height": 519,
+            "epoch": 6,
+            "same_epoch": true,
+            "tx_height": 520
+          }
+        },
+        "r4-invalid_participant_address-e3": {
+          "status": "PASS",
+          "file": "/home/runner/a8-runtime/a8cfix2-20260910/evidence/a8cfix2-20260910/package-c/tx-r4-invalid_participant_address-refund-0037.json",
+          "sha256": "6476587d56202718c090d2df1ff0a7bb4cca699647d0e6bf1d5641451db15689",
+          "transaction": {
+            "code": 0,
+            "codespace": "",
+            "events": [],
+            "gas_used": "199192",
+            "gas_wanted": "2000000",
+            "height": "563",
+            "layer": "deliver_tx",
+            "raw_log": "",
+            "tx_hash": "01E96EE4D52C71DF995EE49F635C7546923D5FD9CC45B72CECDE4DEBFA895300"
+          },
+          "epoch_bracket": {
+            "after_height": 563,
+            "before_height": 562,
+            "epoch": 7,
+            "same_epoch": true,
+            "tx_height": 563
+          }
+        },
+        "r4-invalid_participant_address-probe": {
+          "status": "PASS",
+          "file": "/home/runner/a8-runtime/a8cfix2-20260910/evidence/a8cfix2-20260910/package-c/tx-r4-invalid_participant_address-settle_claim-0023.json",
+          "sha256": "5606de919634fea6c08cb3c8b016b6d41277da06067f951c7a94b62c048777ae",
+          "transaction": {
+            "code": 5,
+            "codespace": "wasm",
+            "events": [],
+            "gas_used": "100010",
+            "gas_wanted": "2000000",
+            "height": "517",
+            "layer": "deliver_tx",
+            "raw_log": "failed to execute message; message index: 0: Gonka response for /inference.inference.Query/EpochPerformanceSummaryByParticipant contains an invalid participant_id address: execute wasm contract failed",
+            "tx_hash": "B9DD4A902698D44C80EF93B82229D15756ED2896F4E36A81CDC24A232B1378C8"
+          },
+          "epoch_bracket": {
+            "after_height": 517,
+            "before_height": 516,
+            "epoch": 6,
+            "same_epoch": true,
+            "tx_height": 517
+          }
+        },
+        "r4-invalid_participant_address-terminal-refund": {
+          "status": "PASS",
+          "file": "/home/runner/a8-runtime/a8cfix2-20260910/evidence/a8cfix2-20260910/package-c/tx-r4-invalid_participant_address-refund-0061.json",
+          "sha256": "513fe91d264e554e8d70aefabf68e2a6de3ae05209af1c66c01caa07e8b200b3",
+          "transaction": {
+            "code": 5,
+            "codespace": "wasm",
+            "events": [],
+            "gas_used": "99927",
+            "gas_wanted": "2000000",
+            "height": "647",
+            "layer": "deliver_tx",
+            "raw_log": "failed to execute message; message index: 0: cannot refund Deal in state Refunded; expected Funded for routing failure or Locked for claim expiry: execute wasm contract failed",
+            "tx_hash": "8413DAFB8A5EB6A08CEB1B596E57563B1DF2EBF7E3FEA9BF9C8B7A2E1887F5B2"
+          },
+          "epoch_bracket": {
+            "after_height": 647,
+            "before_height": 645,
+            "epoch": 8,
+            "same_epoch": true,
+            "tx_height": 647
+          }
+        },
+        "r4-invalid_participant_address-terminal-settle_claim": {
+          "status": "PASS",
+          "file": "/home/runner/a8-runtime/a8cfix2-20260910/evidence/a8cfix2-20260910/package-c/tx-r4-invalid_participant_address-settle_claim-0062.json",
+          "sha256": "90e0f98c64be8c8d9377842644cac47c1a5f86f8b71ed2c36343fc640816b2f9",
+          "transaction": {
+            "code": 5,
+            "codespace": "wasm",
+            "events": [],
+            "gas_used": "99955",
+            "gas_wanted": "2000000",
+            "height": "650",
+            "layer": "deliver_tx",
+            "raw_log": "failed to execute message; message index: 0: cannot settle claim in state Refunded; expected Locked: execute wasm contract failed",
+            "tx_hash": "1F728EC212C77B77E7594895789E4E2BC25BA7752EEE01B1A31AB0B97267094C"
+          },
+          "epoch_bracket": {
+            "after_height": 650,
+            "before_height": 648,
+            "epoch": 8,
+            "same_epoch": true,
+            "tx_height": 650
+          }
+        },
+        "r4-malformed_protobuf-e2": {
+          "status": "PASS",
+          "file": "/home/runner/a8-runtime/a8cfix2-20260910/evidence/a8cfix2-20260910/package-c/tx-r4-malformed_protobuf-refund-0014.json",
+          "sha256": "b0eb4d20be415efbfb7253879900c0c368fe5aa2f75289f9d5b1528f201eaecf",
+          "transaction": {
+            "code": 5,
+            "codespace": "wasm",
+            "events": [],
+            "gas_used": "100923",
+            "gas_wanted": "2000000",
+            "height": "491",
+            "layer": "deliver_tx",
+            "raw_log": "failed to execute message; message index: 0: failed to decode protobuf response for /inference.inference.Query/EpochPerformanceSummaryByParticipant: execute wasm contract failed",
+            "tx_hash": "AEFDC6CD8EF5EB553EF8D761B291053510E71C5AC5EA28929DE45F55160BC2B4"
+          },
+          "epoch_bracket": {
+            "after_height": 491,
+            "before_height": 489,
+            "epoch": 6,
+            "same_epoch": true,
+            "tx_height": 491
+          }
+        },
+        "r4-malformed_protobuf-e3": {
+          "status": "PASS",
+          "file": "/home/runner/a8-runtime/a8cfix2-20260910/evidence/a8cfix2-20260910/package-c/tx-r4-malformed_protobuf-refund-0032.json",
+          "sha256": "de8f02039b2eab42a12021cb11bf2f6f59ac32ef65c1535a7cee68b004cd0418",
+          "transaction": {
+            "code": 0,
+            "codespace": "",
+            "events": [],
+            "gas_used": "199158",
+            "gas_wanted": "2000000",
+            "height": "548",
+            "layer": "deliver_tx",
+            "raw_log": "",
+            "tx_hash": "744B2BE5B6AC36B83ECFC2E6EA8E65FA04DBABF52860B630B856F69992F5ACE1"
+          },
+          "epoch_bracket": {
+            "after_height": 548,
+            "before_height": 547,
+            "epoch": 7,
+            "same_epoch": true,
+            "tx_height": 548
+          }
+        },
+        "r4-malformed_protobuf-probe": {
+          "status": "PASS",
+          "file": "/home/runner/a8-runtime/a8cfix2-20260910/evidence/a8cfix2-20260910/package-c/tx-r4-malformed_protobuf-settle_claim-0013.json",
+          "sha256": "5ebb10029a79c9211e1f07b40038d45369ba58b7bd4711af5c33b3c1487de759",
+          "transaction": {
+            "code": 5,
+            "codespace": "wasm",
+            "events": [],
+            "gas_used": "99947",
+            "gas_wanted": "2000000",
+            "height": "488",
+            "layer": "deliver_tx",
+            "raw_log": "failed to execute message; message index: 0: failed to decode protobuf response for /inference.inference.Query/EpochPerformanceSummaryByParticipant: execute wasm contract failed",
+            "tx_hash": "52A9856910D6A0760417A9C611FCC6C3AA6FE64DD026AB00A9A3ED206ADEBA6C"
+          },
+          "epoch_bracket": {
+            "after_height": 488,
+            "before_height": 486,
+            "epoch": 6,
+            "same_epoch": true,
+            "tx_height": 488
+          }
+        },
+        "r4-malformed_protobuf-terminal-refund": {
+          "status": "PASS",
+          "file": "/home/runner/a8-runtime/a8cfix2-20260910/evidence/a8cfix2-20260910/package-c/tx-r4-malformed_protobuf-refund-0051.json",
+          "sha256": "b766271b9f96598ef36c24a1156c6cfa9f74fcceef2262a5c6341099ff3ef8e0",
+          "transaction": {
+            "code": 5,
+            "codespace": "wasm",
+            "events": [],
+            "gas_used": "99925",
+            "gas_wanted": "2000000",
+            "height": "617",
+            "layer": "deliver_tx",
+            "raw_log": "failed to execute message; message index: 0: cannot refund Deal in state Refunded; expected Funded for routing failure or Locked for claim expiry: execute wasm contract failed",
+            "tx_hash": "38CFE5F3537D1FA5F5C7BCD6530159FD45AE1F291629208253BB4A8444E754EB"
+          },
+          "epoch_bracket": {
+            "after_height": 617,
+            "before_height": 616,
+            "epoch": 8,
+            "same_epoch": true,
+            "tx_height": 617
+          }
+        },
+        "r4-malformed_protobuf-terminal-settle_claim": {
+          "status": "PASS",
+          "file": "/home/runner/a8-runtime/a8cfix2-20260910/evidence/a8cfix2-20260910/package-c/tx-r4-malformed_protobuf-settle_claim-0052.json",
+          "sha256": "a0d45fcdaf96cfa6f9f0f0350dd08ced3fff52179ae3c79affd4db15bdacc718",
+          "transaction": {
+            "code": 5,
+            "codespace": "wasm",
+            "events": [],
+            "gas_used": "99943",
+            "gas_wanted": "2000000",
+            "height": "620",
+            "layer": "deliver_tx",
+            "raw_log": "failed to execute message; message index: 0: cannot settle claim in state Refunded; expected Locked: execute wasm contract failed",
+            "tx_hash": "30AEEC5F36E7258B63D9DCABDBE59B426A1AB7102CF05DE4DF0D92F88D14673C"
+          },
+          "epoch_bracket": {
+            "after_height": 620,
+            "before_height": 619,
+            "epoch": 8,
+            "same_epoch": true,
+            "tx_height": 620
+          }
+        },
+        "r4-missing_nested_summary-e2": {
+          "status": "PASS",
+          "file": "/home/runner/a8-runtime/a8cfix2-20260910/evidence/a8cfix2-20260910/package-c/tx-r4-missing_nested_summary-refund-0018.json",
+          "sha256": "f362c4ecd8b4a92b85ef7cd7e98b8350cbb3862cb831f11c548d237393cac6ee",
+          "transaction": {
+            "code": 5,
+            "codespace": "wasm",
+            "events": [],
+            "gas_used": "100960",
+            "gas_wanted": "2000000",
+            "height": "502",
+            "layer": "deliver_tx",
+            "raw_log": "failed to execute message; message index: 0: Gonka response for /inference.inference.Query/EpochPerformanceSummaryByParticipant is missing required field epoch_performance_summary: execute wasm contract failed",
+            "tx_hash": "98FB931001BBE5C6179DDA09054E7A48ACA22FC66C8D5CFE31D835AECCE05BF8"
+          },
+          "epoch_bracket": {
+            "after_height": 502,
+            "before_height": 500,
+            "epoch": 6,
+            "same_epoch": true,
+            "tx_height": 502
+          }
+        },
+        "r4-missing_nested_summary-e3": {
+          "status": "PASS",
+          "file": "/home/runner/a8-runtime/a8cfix2-20260910/evidence/a8cfix2-20260910/package-c/tx-r4-missing_nested_summary-refund-0034.json",
+          "sha256": "896691edfd2c7fe56dbed5e715cea64a0d49db1b099360e90999bf19e701d087",
+          "transaction": {
+            "code": 0,
+            "codespace": "",
+            "events": [],
+            "gas_used": "199156",
+            "gas_wanted": "2000000",
+            "height": "554",
+            "layer": "deliver_tx",
+            "raw_log": "",
+            "tx_hash": "5E8CD3B4E3244CA94FF94345B47EADC641E874ACE1DB514001C9AE258B41B158"
+          },
+          "epoch_bracket": {
+            "after_height": 554,
+            "before_height": 552,
+            "epoch": 7,
+            "same_epoch": true,
+            "tx_height": 554
+          }
+        },
+        "r4-missing_nested_summary-probe": {
+          "status": "PASS",
+          "file": "/home/runner/a8-runtime/a8cfix2-20260910/evidence/a8cfix2-20260910/package-c/tx-r4-missing_nested_summary-settle_claim-0017.json",
+          "sha256": "1ec5c13c4f06eaecc1473ce680e7b1863f6afb03415fc7cb800b2445947c1cb0",
+          "transaction": {
+            "code": 5,
+            "codespace": "wasm",
+            "events": [],
+            "gas_used": "99974",
+            "gas_wanted": "2000000",
+            "height": "499",
+            "layer": "deliver_tx",
+            "raw_log": "failed to execute message; message index: 0: Gonka response for /inference.inference.Query/EpochPerformanceSummaryByParticipant is missing required field epoch_performance_summary: execute wasm contract failed",
+            "tx_hash": "7CCEE6CC4E9BB76679FA4A12AD40D91613F7D354E227EE8EE2D4AF23978731B1"
+          },
+          "epoch_bracket": {
+            "after_height": 499,
+            "before_height": 498,
+            "epoch": 6,
+            "same_epoch": true,
+            "tx_height": 499
+          }
+        },
+        "r4-missing_nested_summary-terminal-refund": {
+          "status": "PASS",
+          "file": "/home/runner/a8-runtime/a8cfix2-20260910/evidence/a8cfix2-20260910/package-c/tx-r4-missing_nested_summary-refund-0055.json",
+          "sha256": "e8f749250d59f10bb99950f3a8a4718cd112b7451cdebaf8e90a84379869f182",
+          "transaction": {
+            "code": 5,
+            "codespace": "wasm",
+            "events": [],
+            "gas_used": "99925",
+            "gas_wanted": "2000000",
+            "height": "629",
+            "layer": "deliver_tx",
+            "raw_log": "failed to execute message; message index: 0: cannot refund Deal in state Refunded; expected Funded for routing failure or Locked for claim expiry: execute wasm contract failed",
+            "tx_hash": "933584AE9261056ECF3F82A82AB039DDCF2E9260832B81A5F2B1EC1871612019"
+          },
+          "epoch_bracket": {
+            "after_height": 629,
+            "before_height": 628,
+            "epoch": 8,
+            "same_epoch": true,
+            "tx_height": 629
+          }
+        },
+        "r4-missing_nested_summary-terminal-settle_claim": {
+          "status": "PASS",
+          "file": "/home/runner/a8-runtime/a8cfix2-20260910/evidence/a8cfix2-20260910/package-c/tx-r4-missing_nested_summary-settle_claim-0056.json",
+          "sha256": "0b35a82617bedb8ffb26868735f1fdc020720cb3d940d227dbf4f586f0747ffb",
+          "transaction": {
+            "code": 5,
+            "codespace": "wasm",
+            "events": [],
+            "gas_used": "99943",
+            "gas_wanted": "2000000",
+            "height": "632",
+            "layer": "deliver_tx",
+            "raw_log": "failed to execute message; message index: 0: cannot settle claim in state Refunded; expected Locked: execute wasm contract failed",
+            "tx_hash": "AD0F6D50B7FB3B04BE69EFBC4B6E1486B709E871A36613E4C0DCF3918E8473B3"
+          },
+          "epoch_bracket": {
+            "after_height": 632,
+            "before_height": 630,
+            "epoch": 8,
+            "same_epoch": true,
+            "tx_height": 632
+          }
+        },
+        "r4-oversized_response-e2": {
+          "status": "PASS",
+          "file": "/home/runner/a8-runtime/a8cfix2-20260910/evidence/a8cfix2-20260910/package-c/tx-r4-oversized_response-refund-0016.json",
+          "sha256": "05da2a48039a7cddd574a4b4b54cd6669b131fd950dff8aaceb3ae032dfd79e0",
+          "transaction": {
+            "code": 5,
+            "codespace": "wasm",
+            "events": [],
+            "gas_used": "105316",
+            "gas_wanted": "2000000",
+            "height": "497",
+            "layer": "deliver_tx",
+            "raw_log": "failed to execute message; message index: 0: Gonka response for /inference.inference.Query/EpochPerformanceSummaryByParticipant is too large: 32769 bytes, maximum 32768: execute wasm contract failed",
+            "tx_hash": "C602D1427C83F7A063CC6026A9D09EC285173068CF61207774907ED8F386C1B2"
+          },
+          "epoch_bracket": {
+            "after_height": 497,
+            "before_height": 495,
+            "epoch": 6,
+            "same_epoch": true,
+            "tx_height": 497
+          }
+        },
+        "r4-oversized_response-e3": {
+          "status": "PASS",
+          "file": "/home/runner/a8-runtime/a8cfix2-20260910/evidence/a8cfix2-20260910/package-c/tx-r4-oversized_response-refund-0033.json",
+          "sha256": "b6f41d5993bb0926642a0a44b90d749d80d81435861ae50d96c895693a15dcd9",
+          "transaction": {
+            "code": 0,
+            "codespace": "",
+            "events": [],
+            "gas_used": "203534",
+            "gas_wanted": "2000000",
+            "height": "551",
+            "layer": "deliver_tx",
+            "raw_log": "",
+            "tx_hash": "A20E33EA625CF08F825B4FA8FD23DEF6D7F47C8D29EF00AA1B6FD1C4BEF1B092"
+          },
+          "epoch_bracket": {
+            "after_height": 551,
+            "before_height": 550,
+            "epoch": 7,
+            "same_epoch": true,
+            "tx_height": 551
+          }
+        },
+        "r4-oversized_response-probe": {
+          "status": "PASS",
+          "file": "/home/runner/a8-runtime/a8cfix2-20260910/evidence/a8cfix2-20260910/package-c/tx-r4-oversized_response-settle_claim-0015.json",
+          "sha256": "fe68f979cec662b2e8b1ec7b0c887445ed08496bf12fbac54319cd8a14eabfaa",
+          "transaction": {
+            "code": 5,
+            "codespace": "wasm",
+            "events": [],
+            "gas_used": "104340",
+            "gas_wanted": "2000000",
+            "height": "494",
+            "layer": "deliver_tx",
+            "raw_log": "failed to execute message; message index: 0: Gonka response for /inference.inference.Query/EpochPerformanceSummaryByParticipant is too large: 32769 bytes, maximum 32768: execute wasm contract failed",
+            "tx_hash": "64865D90EB0B7670C54597AA533E6AA6B9DF5B17E05FE49B5A770B06528B6500"
+          },
+          "epoch_bracket": {
+            "after_height": 494,
+            "before_height": 492,
+            "epoch": 6,
+            "same_epoch": true,
+            "tx_height": 494
+          }
+        },
+        "r4-oversized_response-terminal-refund": {
+          "status": "PASS",
+          "file": "/home/runner/a8-runtime/a8cfix2-20260910/evidence/a8cfix2-20260910/package-c/tx-r4-oversized_response-refund-0053.json",
+          "sha256": "c843b5c8908516261c7199961ac3d568038bb39958bbb407c8fd1edf4ac0bb8f",
+          "transaction": {
+            "code": 5,
+            "codespace": "wasm",
+            "events": [],
+            "gas_used": "99925",
+            "gas_wanted": "2000000",
+            "height": "623",
+            "layer": "deliver_tx",
+            "raw_log": "failed to execute message; message index: 0: cannot refund Deal in state Refunded; expected Funded for routing failure or Locked for claim expiry: execute wasm contract failed",
+            "tx_hash": "98F0F46C2A355A0B83F21D7CC2E14CBA2EE9B0A049FC3A681F50C34DD2BBF9F8"
+          },
+          "epoch_bracket": {
+            "after_height": 623,
+            "before_height": 622,
+            "epoch": 8,
+            "same_epoch": true,
+            "tx_height": 623
+          }
+        },
+        "r4-oversized_response-terminal-settle_claim": {
+          "status": "PASS",
+          "file": "/home/runner/a8-runtime/a8cfix2-20260910/evidence/a8cfix2-20260910/package-c/tx-r4-oversized_response-settle_claim-0054.json",
+          "sha256": "697436b343bbdb0fec6455ad0ed8518022240b58afa0695128d85e01aaee2d29",
+          "transaction": {
+            "code": 5,
+            "codespace": "wasm",
+            "events": [],
+            "gas_used": "99943",
+            "gas_wanted": "2000000",
+            "height": "626",
+            "layer": "deliver_tx",
+            "raw_log": "failed to execute message; message index: 0: cannot settle claim in state Refunded; expected Locked: execute wasm contract failed",
+            "tx_hash": "F7A32FA4874EBF6BB8FB645DF7EF202552B5FC7D54964AC23A040AB11FBCFCF7"
+          },
+          "epoch_bracket": {
+            "after_height": 626,
+            "before_height": 625,
+            "epoch": 8,
+            "same_epoch": true,
+            "tx_height": 626
+          }
+        },
+        "r4-unsupported_request-e2": {
+          "status": "PASS",
+          "file": "/home/runner/a8-runtime/a8cfix2-20260910/evidence/a8cfix2-20260910/package-c/tx-r4-unsupported_request-refund-0026.json",
+          "sha256": "98c62eda91990b438f83b8d1fa533513266cc777f4d30af911691f27e25be08b",
+          "transaction": {
+            "code": 5,
+            "codespace": "wasm",
+            "events": [],
+            "gas_used": "100950",
+            "gas_wanted": "2000000",
+            "height": "526",
+            "layer": "deliver_tx",
+            "raw_log": "failed to execute message; message index: 0: Gonka does not support the required query route /inference.inference.Query/EpochPerformanceSummaryByParticipant: execute wasm contract failed",
+            "tx_hash": "77525396FE0B760EA2E4645236D6EB176F99208A5843819A2D67A1FF3C00E62C"
+          },
+          "epoch_bracket": {
+            "after_height": 526,
+            "before_height": 525,
+            "epoch": 6,
+            "same_epoch": true,
+            "tx_height": 526
+          }
+        },
+        "r4-unsupported_request-e3": {
+          "status": "PASS",
+          "file": "/home/runner/a8-runtime/a8cfix2-20260910/evidence/a8cfix2-20260910/package-c/tx-r4-unsupported_request-refund-0038.json",
+          "sha256": "4ce996d803f9967210fe8317e247de85058a660047289c5667ecdcf38e5db944",
+          "transaction": {
+            "code": 0,
+            "codespace": "",
+            "events": [],
+            "gas_used": "199174",
+            "gas_wanted": "2000000",
+            "height": "566",
+            "layer": "deliver_tx",
+            "raw_log": "",
+            "tx_hash": "5DCF72088C10FFB1DDB6FF7B14D2A732775D0B39CECD3E422AE5C9FCDF416C03"
+          },
+          "epoch_bracket": {
+            "after_height": 566,
+            "before_height": 564,
+            "epoch": 7,
+            "same_epoch": true,
+            "tx_height": 566
+          }
+        },
+        "r4-unsupported_request-probe": {
+          "status": "PASS",
+          "file": "/home/runner/a8-runtime/a8cfix2-20260910/evidence/a8cfix2-20260910/package-c/tx-r4-unsupported_request-settle_claim-0025.json",
+          "sha256": "10b7d31a132f9bb469a27e7614deedc196667be8c42e2339172226911855ed54",
+          "transaction": {
+            "code": 5,
+            "codespace": "wasm",
+            "events": [],
+            "gas_used": "99974",
+            "gas_wanted": "2000000",
+            "height": "523",
+            "layer": "deliver_tx",
+            "raw_log": "failed to execute message; message index: 0: Gonka does not support the required query route /inference.inference.Query/EpochPerformanceSummaryByParticipant: execute wasm contract failed",
+            "tx_hash": "38A4535E03A106EB3ABE8E4AA476CE5D94B10409B5735B3298387A94C95513E5"
+          },
+          "epoch_bracket": {
+            "after_height": 523,
+            "before_height": 522,
+            "epoch": 6,
+            "same_epoch": true,
+            "tx_height": 523
+          }
+        },
+        "r4-unsupported_request-terminal-refund": {
+          "status": "PASS",
+          "file": "/home/runner/a8-runtime/a8cfix2-20260910/evidence/a8cfix2-20260910/package-c/tx-r4-unsupported_request-refund-0063.json",
+          "sha256": "cfa310314b63a4d0ebb597d1465bde1bb86df8e68017a8d8045530624425f006",
+          "transaction": {
+            "code": 5,
+            "codespace": "wasm",
+            "events": [],
+            "gas_used": "99937",
+            "gas_wanted": "2000000",
+            "height": "653",
+            "layer": "deliver_tx",
+            "raw_log": "failed to execute message; message index: 0: cannot refund Deal in state Refunded; expected Funded for routing failure or Locked for claim expiry: execute wasm contract failed",
+            "tx_hash": "A28A90DEF7485DBEBBB39E1353F112F65162E581902048D84F6EF4D7C8FA136C"
+          },
+          "epoch_bracket": {
+            "after_height": 653,
+            "before_height": 651,
+            "epoch": 8,
+            "same_epoch": true,
+            "tx_height": 653
+          }
+        },
+        "r4-unsupported_request-terminal-settle_claim": {
+          "status": "PASS",
+          "file": "/home/runner/a8-runtime/a8cfix2-20260910/evidence/a8cfix2-20260910/package-c/tx-r4-unsupported_request-settle_claim-0064.json",
+          "sha256": "1b05e962d1653830b0ed0a8aa845bb1ea18d6a085baf41d1e58abd74691366be",
+          "transaction": {
+            "code": 5,
+            "codespace": "wasm",
+            "events": [],
+            "gas_used": "99955",
+            "gas_wanted": "2000000",
+            "height": "656",
+            "layer": "deliver_tx",
+            "raw_log": "failed to execute message; message index: 0: cannot settle claim in state Refunded; expected Locked: execute wasm contract failed",
+            "tx_hash": "60F0DEC5014F82DE151A43FF82FFB3705B9BCBA8778AA29BF9B170279E37B829"
+          },
+          "epoch_bracket": {
+            "after_height": 656,
+            "before_height": 654,
+            "epoch": 8,
+            "same_epoch": true,
+            "tx_height": 656
+          }
+        },
+        "r4-wrong_epoch-e2": {
+          "status": "PASS",
+          "file": "/home/runner/a8-runtime/a8cfix2-20260910/evidence/a8cfix2-20260910/package-c/tx-r4-wrong_epoch-refund-0022.json",
+          "sha256": "b98194597561ee6ba377bc2dd4f52a8b91efbb4fa90eb51dca53ebebb757b337",
+          "transaction": {
+            "code": 5,
+            "codespace": "wasm",
+            "events": [],
+            "gas_used": "100944",
+            "gas_wanted": "2000000",
+            "height": "514",
+            "layer": "deliver_tx",
+            "raw_log": "failed to execute message; message index: 0: Gonka response for /inference.inference.Query/EpochPerformanceSummaryByParticipant has mismatched epoch_index: execute wasm contract failed",
+            "tx_hash": "2225EBA8EE2A7D9B260A6B1F15AC3249D7288A4A7A9CB5ADD464C5A9612C1686"
+          },
+          "epoch_bracket": {
+            "after_height": 514,
+            "before_height": 513,
+            "epoch": 6,
+            "same_epoch": true,
+            "tx_height": 514
+          }
+        },
+        "r4-wrong_epoch-e3": {
+          "status": "PASS",
+          "file": "/home/runner/a8-runtime/a8cfix2-20260910/evidence/a8cfix2-20260910/package-c/tx-r4-wrong_epoch-refund-0036.json",
+          "sha256": "ac77fde85e3b1c78df5f1f2d8659920b28db696394f59e250cdfc9f14c67564b",
+          "transaction": {
+            "code": 0,
+            "codespace": "",
+            "events": [],
+            "gas_used": "199179",
+            "gas_wanted": "2000000",
+            "height": "560",
+            "layer": "deliver_tx",
+            "raw_log": "",
+            "tx_hash": "58D5604A292C6546D207067886CED5F6AECD2227519AC7AADDF4DD5EA5176EE6"
+          },
+          "epoch_bracket": {
+            "after_height": 560,
+            "before_height": 559,
+            "epoch": 7,
+            "same_epoch": true,
+            "tx_height": 560
+          }
+        },
+        "r4-wrong_epoch-probe": {
+          "status": "PASS",
+          "file": "/home/runner/a8-runtime/a8cfix2-20260910/evidence/a8cfix2-20260910/package-c/tx-r4-wrong_epoch-settle_claim-0021.json",
+          "sha256": "636fe5ceae634be4608e9e380d600c3ebc75c00338118c63328f641ae76e6f6b",
+          "transaction": {
+            "code": 5,
+            "codespace": "wasm",
+            "events": [],
+            "gas_used": "99968",
+            "gas_wanted": "2000000",
+            "height": "511",
+            "layer": "deliver_tx",
+            "raw_log": "failed to execute message; message index: 0: Gonka response for /inference.inference.Query/EpochPerformanceSummaryByParticipant has mismatched epoch_index: execute wasm contract failed",
+            "tx_hash": "6F5CA141726F2126070BDDE4C64E7764A8EB006CF929BED8968A80B9F2CE8418"
+          },
+          "epoch_bracket": {
+            "after_height": 511,
+            "before_height": 510,
+            "epoch": 6,
+            "same_epoch": true,
+            "tx_height": 511
+          }
+        },
+        "r4-wrong_epoch-terminal-refund": {
+          "status": "PASS",
+          "file": "/home/runner/a8-runtime/a8cfix2-20260910/evidence/a8cfix2-20260910/package-c/tx-r4-wrong_epoch-refund-0059.json",
+          "sha256": "ee39a9792d94c28cc7291270266c9a104a7d09927bc8da0abf98181ff393f8ce",
+          "transaction": {
+            "code": 5,
+            "codespace": "wasm",
+            "events": [],
+            "gas_used": "99915",
+            "gas_wanted": "2000000",
+            "height": "641",
+            "layer": "deliver_tx",
+            "raw_log": "failed to execute message; message index: 0: cannot refund Deal in state Refunded; expected Funded for routing failure or Locked for claim expiry: execute wasm contract failed",
+            "tx_hash": "9AF628053C3B37AA26C850D8D255CC201D158320771E6AB1530718E279C5CC9A"
+          },
+          "epoch_bracket": {
+            "after_height": 641,
+            "before_height": 639,
+            "epoch": 8,
+            "same_epoch": true,
+            "tx_height": 641
+          }
+        },
+        "r4-wrong_epoch-terminal-settle_claim": {
+          "status": "PASS",
+          "file": "/home/runner/a8-runtime/a8cfix2-20260910/evidence/a8cfix2-20260910/package-c/tx-r4-wrong_epoch-settle_claim-0060.json",
+          "sha256": "fccd8459f3ebc5b43dcd9fc6f013d0d503caf70546c7708d9f981d4721e5cfe6",
+          "transaction": {
+            "code": 5,
+            "codespace": "wasm",
+            "events": [],
+            "gas_used": "99933",
+            "gas_wanted": "2000000",
+            "height": "644",
+            "layer": "deliver_tx",
+            "raw_log": "failed to execute message; message index: 0: cannot settle claim in state Refunded; expected Locked: execute wasm contract failed",
+            "tx_hash": "FFB80D895BCC86576A15DB579268CE03A3F5A58D29E374A60D00CA95F8B1914F"
+          },
+          "epoch_bracket": {
+            "after_height": 644,
+            "before_height": 642,
+            "epoch": 8,
+            "same_epoch": true,
+            "tx_height": 644
+          }
+        },
+        "r4-wrong_host-e2": {
+          "status": "PASS",
+          "file": "/home/runner/a8-runtime/a8cfix2-20260910/evidence/a8cfix2-20260910/package-c/tx-r4-wrong_host-refund-0020.json",
+          "sha256": "e8c798418fff9d5baedd6f02ebf7cf8e46d8c637cd1f0c77ad7d4ad1497f84e1",
+          "transaction": {
+            "code": 5,
+            "codespace": "wasm",
+            "events": [],
+            "gas_used": "100961",
+            "gas_wanted": "2000000",
+            "height": "508",
+            "layer": "deliver_tx",
+            "raw_log": "failed to execute message; message index: 0: Gonka response for /inference.inference.Query/EpochPerformanceSummaryByParticipant has mismatched participant_id: execute wasm contract failed",
+            "tx_hash": "4E88FBB876E87007540D79AB9632B3CE1F86783662CA6F164070F7A9C235B396"
+          },
+          "epoch_bracket": {
+            "after_height": 508,
+            "before_height": 507,
+            "epoch": 6,
+            "same_epoch": true,
+            "tx_height": 508
+          }
+        },
+        "r4-wrong_host-e3": {
+          "status": "PASS",
+          "file": "/home/runner/a8-runtime/a8cfix2-20260910/evidence/a8cfix2-20260910/package-c/tx-r4-wrong_host-refund-0035.json",
+          "sha256": "53cf514f971a9b38884dc496e545cfdb4900a329e83beab59cd36556a979eecb",
+          "transaction": {
+            "code": 0,
+            "codespace": "",
+            "events": [],
+            "gas_used": "199192",
+            "gas_wanted": "2000000",
+            "height": "557",
+            "layer": "deliver_tx",
+            "raw_log": "",
+            "tx_hash": "5CB276C5EF124FD07C481CA914E0AFDD95EA9E6D54528876CD9512C8351005B1"
+          },
+          "epoch_bracket": {
+            "after_height": 557,
+            "before_height": 556,
+            "epoch": 7,
+            "same_epoch": true,
+            "tx_height": 557
+          }
+        },
+        "r4-wrong_host-probe": {
+          "status": "PASS",
+          "file": "/home/runner/a8-runtime/a8cfix2-20260910/evidence/a8cfix2-20260910/package-c/tx-r4-wrong_host-settle_claim-0019.json",
+          "sha256": "82b1547baa6be4c5761e0656f5dd43a59decefcdcd989b8400658128f8f82824",
+          "transaction": {
+            "code": 5,
+            "codespace": "wasm",
+            "events": [],
+            "gas_used": "99985",
+            "gas_wanted": "2000000",
+            "height": "505",
+            "layer": "deliver_tx",
+            "raw_log": "failed to execute message; message index: 0: Gonka response for /inference.inference.Query/EpochPerformanceSummaryByParticipant has mismatched participant_id: execute wasm contract failed",
+            "tx_hash": "8D8770657B508860441B2518F4EC63032ED0D00F4854EBB12DAEDF077F2BDAB6"
+          },
+          "epoch_bracket": {
+            "after_height": 505,
+            "before_height": 504,
+            "epoch": 6,
+            "same_epoch": true,
+            "tx_height": 505
+          }
+        },
+        "r4-wrong_host-terminal-refund": {
+          "status": "PASS",
+          "file": "/home/runner/a8-runtime/a8cfix2-20260910/evidence/a8cfix2-20260910/package-c/tx-r4-wrong_host-refund-0057.json",
+          "sha256": "4a9de7a7b3f7d45577ab2d74c54a62da116c0e9dde2f458bf3c4f8d47ad6b612",
+          "transaction": {
+            "code": 5,
+            "codespace": "wasm",
+            "events": [],
+            "gas_used": "99925",
+            "gas_wanted": "2000000",
+            "height": "635",
+            "layer": "deliver_tx",
+            "raw_log": "failed to execute message; message index: 0: cannot refund Deal in state Refunded; expected Funded for routing failure or Locked for claim expiry: execute wasm contract failed",
+            "tx_hash": "57AC5E0CF4FA1BD7357D10AB2102BDEC4CCC8CB7C13124E343C043FBB91B489A"
+          },
+          "epoch_bracket": {
+            "after_height": 635,
+            "before_height": 633,
+            "epoch": 8,
+            "same_epoch": true,
+            "tx_height": 635
+          }
+        },
+        "r4-wrong_host-terminal-settle_claim": {
+          "status": "PASS",
+          "file": "/home/runner/a8-runtime/a8cfix2-20260910/evidence/a8cfix2-20260910/package-c/tx-r4-wrong_host-settle_claim-0058.json",
+          "sha256": "77a10b5b9d14ef2888898345d1d9f8fb46cc7faeef02f84da9c772cf6e0b2dc8",
+          "transaction": {
+            "code": 5,
+            "codespace": "wasm",
+            "events": [],
+            "gas_used": "99943",
+            "gas_wanted": "2000000",
+            "height": "638",
+            "layer": "deliver_tx",
+            "raw_log": "failed to execute message; message index: 0: cannot settle claim in state Refunded; expected Locked: execute wasm contract failed",
+            "tx_hash": "C402D3EBC231174BB7C9B7CB7944878849926B30CB6A57C0BC6666EED16DBD28"
+          },
+          "epoch_bracket": {
+            "after_height": 638,
+            "before_height": 636,
+            "epoch": 8,
+            "same_epoch": true,
+            "tx_height": 638
+          }
+        },
+        "r5-cancel-e2": {
+          "status": "PASS",
+          "file": "/home/runner/a8-runtime/a8cfix2-20260910/evidence/a8cfix2-20260910/package-c/tx-r5-cancel-refund-0010.json",
+          "sha256": "207d3d333ec79650f826eabdd1dedc14832d4517b89c9392608943d8a5720d66",
+          "transaction": {
+            "code": 5,
+            "codespace": "wasm",
+            "events": [],
+            "gas_used": "100908",
+            "gas_wanted": "2000000",
+            "height": "469",
+            "layer": "deliver_tx",
+            "raw_log": "failed to execute message; message index: 0: Gonka query failed for /inference.inference.Query/EpochPerformanceSummaryByParticipant: execute wasm contract failed",
+            "tx_hash": "C900258B91D8A07C4EA3C35FC10E371CB8C3D751EE28051EF5F33024ED35737D"
+          },
+          "epoch_bracket": {
+            "after_height": 469,
+            "before_height": 468,
+            "epoch": 6,
+            "same_epoch": true,
+            "tx_height": 469
+          }
+        },
+        "r5-cancel-e3": {
+          "status": "PASS",
+          "file": "/home/runner/a8-runtime/a8cfix2-20260910/evidence/a8cfix2-20260910/package-c/tx-r5-cancel-refund-0040.json",
+          "sha256": "afad05c578f2b04db9cc87cfe5de1076e3b98490dba360afea5eebceb61910d0",
+          "transaction": {
+            "code": 0,
+            "codespace": "",
+            "events": [],
+            "gas_used": "199161",
+            "gas_wanted": "2000000",
+            "height": "574",
+            "layer": "deliver_tx",
+            "raw_log": "",
+            "tx_hash": "9AE3A65DD3AF04DD316A8FF68B2C765359479318C313C6151E741279BB6BC930"
+          },
+          "epoch_bracket": {
+            "after_height": 574,
+            "before_height": 573,
+            "epoch": 7,
+            "same_epoch": true,
+            "tx_height": 574
+          }
+        },
+        "r5-cancel-ledger": {
+          "status": "PASS"
+        },
+        "r5-cancel-native": {
+          "status": "PASS"
+        },
+        "r5-cancel-probe": {
+          "status": "PASS",
+          "file": "/home/runner/a8-runtime/a8cfix2-20260910/evidence/a8cfix2-20260910/package-c/tx-r5-cancel-settle_claim-0009.json",
+          "sha256": "902d6c6b48bbb8e24c95b6b35034331ddaa46b876ba74c6ac7922509a0653df8",
+          "transaction": {
+            "code": 5,
+            "codespace": "wasm",
+            "events": [],
+            "gas_used": "99932",
+            "gas_wanted": "2000000",
+            "height": "466",
+            "layer": "deliver_tx",
+            "raw_log": "failed to execute message; message index: 0: Gonka query failed for /inference.inference.Query/EpochPerformanceSummaryByParticipant: execute wasm contract failed",
+            "tx_hash": "A65E2FA68C992A38FE1EDE30D09C228C3EDFFEC9A04B746EE3222DDB361DA7B6"
+          },
+          "epoch_bracket": {
+            "after_height": 466,
+            "before_height": 465,
+            "epoch": 6,
+            "same_epoch": true,
+            "tx_height": 466
+          }
+        },
+        "r5-cancel-terminal-refund": {
+          "status": "PASS",
+          "file": "/home/runner/a8-runtime/a8cfix2-20260910/evidence/a8cfix2-20260910/package-c/tx-r5-cancel-refund-0065.json",
+          "sha256": "da7eddb3a3cb8927d0c50954d11d7e5556d33d9b7d2c0afb3165c6fb24ad9058",
+          "transaction": {
+            "code": 5,
+            "codespace": "wasm",
+            "events": [],
+            "gas_used": "99928",
+            "gas_wanted": "2000000",
+            "height": "659",
+            "layer": "deliver_tx",
+            "raw_log": "failed to execute message; message index: 0: cannot refund Deal in state Refunded; expected Funded for routing failure or Locked for claim expiry: execute wasm contract failed",
+            "tx_hash": "A8C33B925589AA7910ACE2A8FCA24ADEAE7A62BE59AD64D6107CCD522C3120F4"
+          },
+          "epoch_bracket": {
+            "after_height": 659,
+            "before_height": 657,
+            "epoch": 8,
+            "same_epoch": true,
+            "tx_height": 659
+          }
+        },
+        "r5-cancel-terminal-settle_claim": {
+          "status": "PASS",
+          "file": "/home/runner/a8-runtime/a8cfix2-20260910/evidence/a8cfix2-20260910/package-c/tx-r5-cancel-settle_claim-0066.json",
+          "sha256": "442745bcb34795d2e79c522ab15d286c773ae637521f8c0e2917402dd4a806f8",
+          "transaction": {
+            "code": 5,
+            "codespace": "wasm",
+            "events": [],
+            "gas_used": "99946",
+            "gas_wanted": "2000000",
+            "height": "662",
+            "layer": "deliver_tx",
+            "raw_log": "failed to execute message; message index: 0: cannot settle claim in state Refunded; expected Locked: execute wasm contract failed",
+            "tx_hash": "32F6938DE0B4619EC08762D103D8B9E0C050D0EBDA3D5B54D7BCD9D214FD192A"
+          },
+          "epoch_bracket": {
+            "after_height": 662,
+            "before_height": 660,
+            "epoch": 8,
+            "same_epoch": true,
+            "tx_height": 662
+          }
+        },
+        "r5-recover-e2": {
+          "status": "PASS",
+          "file": "/home/runner/a8-runtime/a8cfix2-20260910/evidence/a8cfix2-20260910/package-c/tx-r5-recover-refund-0008.json",
+          "sha256": "fbd2b49c6571254fd243ba6934cd3944cbb208ec1447f470462047fa936f41e1",
+          "transaction": {
+            "code": 5,
+            "codespace": "wasm",
+            "events": [],
+            "gas_used": "100912",
+            "gas_wanted": "2000000",
+            "height": "463",
+            "layer": "deliver_tx",
+            "raw_log": "failed to execute message; message index: 0: Gonka query failed for /inference.inference.Query/EpochPerformanceSummaryByParticipant: execute wasm contract failed",
+            "tx_hash": "8415045B052A6F872E9AC8950C71A410B93D2426253FA864036B225FB76F6FDC"
+          },
+          "epoch_bracket": {
+            "after_height": 463,
+            "before_height": 462,
+            "epoch": 6,
+            "same_epoch": true,
+            "tx_height": 463
+          }
+        },
+        "r5-recover-ledger": {
+          "status": "PASS"
+        },
+        "r5-recover-native": {
+          "status": "PASS"
+        },
+        "r5-recover-probe": {
+          "status": "PASS",
+          "file": "/home/runner/a8-runtime/a8cfix2-20260910/evidence/a8cfix2-20260910/package-c/tx-r5-recover-settle_claim-0007.json",
+          "sha256": "f9a05f336f2ff520add2e48bb37b63f5127e82169e0b39fdb4880dcf93764ff5",
+          "transaction": {
+            "code": 5,
+            "codespace": "wasm",
+            "events": [],
+            "gas_used": "99936",
+            "gas_wanted": "2000000",
+            "height": "460",
+            "layer": "deliver_tx",
+            "raw_log": "failed to execute message; message index: 0: Gonka query failed for /inference.inference.Query/EpochPerformanceSummaryByParticipant: execute wasm contract failed",
+            "tx_hash": "6569D15D51370A436B6126B26EB09FE1F0AF17546FE0FE5634440E67F6D4BEA9"
+          },
+          "epoch_bracket": {
+            "after_height": 460,
+            "before_height": 459,
+            "epoch": 6,
+            "same_epoch": true,
+            "tx_height": 460
+          }
+        },
+        "r5-recover-refund": {
+          "status": "PASS",
+          "file": "/home/runner/a8-runtime/a8cfix2-20260910/evidence/a8cfix2-20260910/package-c/tx-r5-recover-refund-0028.json",
+          "sha256": "ac13e54028859cbc9271eb70b98d31d81099ada32bd753cf662244f18bdd18bf",
+          "transaction": {
+            "code": 5,
+            "codespace": "wasm",
+            "events": [],
+            "gas_used": "102163",
+            "gas_wanted": "2000000",
+            "height": "536",
+            "layer": "deliver_tx",
+            "raw_log": "failed to execute message; message index: 0: native claim for target epoch 4 is already confirmed: execute wasm contract failed",
+            "tx_hash": "A5B03BE6337260A5A6194E5AD9495F6698F09ADD8240C960BCD8AB94639316AD"
+          },
+          "epoch_bracket": {
+            "after_height": 536,
+            "before_height": 535,
+            "epoch": 7,
+            "same_epoch": true,
+            "tx_height": 536
+          }
+        },
+        "r5-recover-repeat": {
+          "status": "PASS",
+          "file": "/home/runner/a8-runtime/a8cfix2-20260910/evidence/a8cfix2-20260910/package-c/tx-r5-recover-settle_claim-0030.json",
+          "sha256": "7b38ee9aacdb5d8bd004368549a388a05f93b9e7665e716fc0218dc8cb1130ad",
+          "transaction": {
+            "code": 5,
+            "codespace": "wasm",
+            "events": [],
+            "gas_used": "100372",
+            "gas_wanted": "2000000",
+            "height": "542",
+            "layer": "deliver_tx",
+            "raw_log": "failed to execute message; message index: 0: cannot settle claim in state Releasing; expected Locked: execute wasm contract failed",
+            "tx_hash": "4D7CCDEC19D090ADE090260B4C42777AFE6D6F5B3DFFD35CE4CA3354196A2FD7"
+          },
+          "epoch_bracket": {
+            "after_height": 542,
+            "before_height": 540,
+            "epoch": 7,
+            "same_epoch": true,
+            "tx_height": 542
+          }
+        },
+        "r5-recover-settle": {
+          "status": "PASS",
+          "file": "/home/runner/a8-runtime/a8cfix2-20260910/evidence/a8cfix2-20260910/package-c/tx-r5-recover-settle_claim-0029.json",
+          "sha256": "9c040366fde10b970d38b7b6490802d0ddc3d4a29a63095b11d484258fbab1f3",
+          "transaction": {
+            "code": 0,
+            "codespace": "",
+            "events": [],
+            "gas_used": "284828",
+            "gas_wanted": "2000000",
+            "height": "539",
+            "layer": "deliver_tx",
+            "raw_log": "",
+            "tx_hash": "86935061999DE634B98F9B84B956B57E06CFC8296CAD9EAB89D83AFCCC2219F3"
+          },
+          "epoch_bracket": {
+            "after_height": 539,
+            "before_height": 537,
+            "epoch": 7,
+            "same_epoch": true,
+            "tx_height": 539
+          }
+        },
+        "r6.3": {
+          "status": "PASS"
+        },
+        "r7.2-fault": {
+          "status": "PASS"
+        },
+        "r7.2-retry": {
+          "status": "PASS"
+        }
+      },
+      "cw20_rollback": {
+        "evidence": {
+          "clear": {
+            "code": 0,
+            "codespace": "",
+            "data": "122E0A2C2F636F736D7761736D2E7761736D2E76312E4D736745786563757465436F6E7472616374526573706F6E7365",
+            "events": [
+              {
+                "attributes": [
+                  {
+                    "index": true,
+                    "key": "fee",
+                    "value": ""
+                  },
+                  {
+                    "index": true,
+                    "key": "fee_payer",
+                    "value": "gonka1xynmkgl4u9tl5gm3lvcvekulpx4klt5xsnp3jk"
+                  }
+                ],
+                "type": "tx"
+              },
+              {
+                "attributes": [
+                  {
+                    "index": true,
+                    "key": "signature",
+                    "value": "XpuX6EAZvI5GB0Mo4RGAPf8A3IfCmh6Qy8adFipgY7xLC7RFhMPfPJ5LcyknZpbv7lm7CxXxmv3GT2fXACs9bw=="
+                  }
+                ],
+                "type": "tx"
+              },
+              {
+                "attributes": [
+                  {
+                    "index": true,
+                    "key": "action",
+                    "value": "/cosmwasm.wasm.v1.MsgExecuteContract"
+                  },
+                  {
+                    "index": true,
+                    "key": "sender",
+                    "value": "gonka1xynmkgl4u9tl5gm3lvcvekulpx4klt5xsnp3jk"
+                  },
+                  {
+                    "index": true,
+                    "key": "module",
+                    "value": "wasm"
+                  },
+                  {
+                    "index": true,
+                    "key": "msg_index",
+                    "value": "0"
+                  }
+                ],
+                "type": "message"
+              },
+              {
+                "attributes": [
+                  {
+                    "index": true,
+                    "key": "_contract_address",
+                    "value": "gonka1hrpna9v7vs3stzyd4z3xf00676kf78zpe2u5ksvljswn2vnjp3ys6w65a0"
+                  },
+                  {
+                    "index": true,
+                    "key": "msg_index",
+                    "value": "0"
+                  }
+                ],
+                "type": "execute"
+              },
+              {
+                "attributes": [
+                  {
+                    "index": true,
+                    "key": "_contract_address",
+                    "value": "gonka1hrpna9v7vs3stzyd4z3xf00676kf78zpe2u5ksvljswn2vnjp3ys6w65a0"
+                  },
+                  {
+                    "index": true,
+                    "key": "action",
+                    "value": "configure_transfer_failure"
+                  },
+                  {
+                    "index": true,
+                    "key": "rejected_recipient",
+                    "value": "none"
+                  },
+                  {
+                    "index": true,
+                    "key": "msg_index",
+                    "value": "0"
+                  }
+                ],
+                "type": "wasm"
+              }
+            ],
+            "gas_used": "102557",
+            "gas_wanted": "467905",
+            "height": "572",
+            "info": "",
+            "logs": [],
+            "raw_log": "",
+            "timestamp": "2026-09-10T12:49:02Z",
+            "tx": {
+              "@type": "/cosmos.tx.v1beta1.Tx",
+              "auth_info": {
+                "fee": {
+                  "amount": [],
+                  "gas_limit": "467905",
+                  "granter": "",
+                  "payer": ""
+                },
+                "signer_infos": [
+                  {
+                    "mode_info": {
+                      "single": {
+                        "mode": "SIGN_MODE_DIRECT"
+                      }
+                    },
+                    "public_key": {
+                      "@type": "/cosmos.crypto.secp256k1.PubKey",
+                      "key": "AkQHWd4AcEGoQEM3UCfQ+QDa6iuhDmysYZIKbrMQNwoR"
+                    },
+                    "sequence": "0"
+                  }
+                ],
+                "tip": null
+              },
+              "body": {
+                "extension_options": [],
+                "memo": "",
+                "messages": [
+                  {
+                    "@type": "/cosmwasm.wasm.v1.MsgExecuteContract",
+                    "contract": "gonka1hrpna9v7vs3stzyd4z3xf00676kf78zpe2u5ksvljswn2vnjp3ys6w65a0",
+                    "funds": [],
+                    "msg": {
+                      "configure_transfer_failure": {
+                        "rejected_recipient": null
+                      }
+                    },
+                    "sender": "gonka1xynmkgl4u9tl5gm3lvcvekulpx4klt5xsnp3jk"
+                  }
+                ],
+                "non_critical_extension_options": [],
+                "timeout_height": "0",
+                "timeout_timestamp": "2026-09-10T12:50:02.258035321Z",
+                "unordered": true
+              },
+              "signatures": [
+                "XpuX6EAZvI5GB0Mo4RGAPf8A3IfCmh6Qy8adFipgY7xLC7RFhMPfPJ5LcyknZpbv7lm7CxXxmv3GT2fXACs9bw=="
+              ]
+            },
+            "txhash": "380F28F43840CD6020CC28ECB7C753329A7A11F5CD9DE657A6D8927969099996"
+          },
+          "rollback": {
+            "after": {
+              "bank_ngonka": {
+                "buyer": 1000000,
+                "deal": 94864721408887,
+                "fee_recipient": 0,
+                "host": 284864678570668
+              },
+              "config": {
+                "buyer_budget_micro_usdt": "10000000",
+                "deal_address": "gonka19jq6mj84cnt9p7sagjxqf8hxtczwc8wlpuwe4sh62w45aheseues9e4ann",
+                "factory": "gonka1xr3rq8yvd7qplsw5yx90ftsr2zdhg4e9z60h5duusgxpv72hud3sj9nv9r",
+                "fee_bps": 150,
+                "fee_recipient": "gonka1e2k5e6lsucxcwu3mfthaj9g8nlszmly3kf0f8a",
+                "funded_capacity_ngonka": "10000000000",
+                "host": "gonka1a4d604hmyhj34z035spugwlwmdx6s0k0mxv8x6",
+                "pinned_gonka_sha": "379bebced638aeb5e6077bfd51c986f898443832",
+                "price_micro_usdt_per_gnk": "1000000",
+                "settlement_cw20": "gonka1hrpna9v7vs3stzyd4z3xf00676kf78zpe2u5ksvljswn2vnjp3ys6w65a0",
+                "target_epoch": 4
+              },
+              "cw20": {
+                "buyer": 810000000,
+                "deal": 10000000,
+                "fee_recipient": 1500000,
+                "host": 0
+              },
+              "foreign_cw20": {
+                "buyer": 1000000,
+                "deal": 0
+              },
+              "native": {
+                "buyer": {
+                  "portfolio": 1000000,
+                  "schedule": {
+                    "vesting_schedule": {
+                      "epoch_amounts": null,
+                      "participant_address": "gonka1x2nmgyc4xlu4xx7kpdadrjplvhsqmjwqn4rl97"
+                    }
+                  },
+                  "total": {
+                    "total_amount": null
+                  }
+                },
+                "deal": {
+                  "portfolio": 94864721408887,
+                  "schedule": {
+                    "vesting_schedule": {
+                      "epoch_amounts": null,
+                      "participant_address": "gonka19jq6mj84cnt9p7sagjxqf8hxtczwc8wlpuwe4sh62w45aheseues9e4ann"
+                    }
+                  },
+                  "total": {
+                    "total_amount": null
+                  }
+                },
+                "fee_recipient": {
+                  "portfolio": 0,
+                  "schedule": {
+                    "vesting_schedule": {
+                      "epoch_amounts": null,
+                      "participant_address": "gonka1e2k5e6lsucxcwu3mfthaj9g8nlszmly3kf0f8a"
+                    }
+                  },
+                  "total": {
+                    "total_amount": null
+                  }
+                },
+                "host": {
+                  "portfolio": 284864678570668,
+                  "schedule": {
+                    "vesting_schedule": {
+                      "epoch_amounts": null,
+                      "participant_address": "gonka1a4d604hmyhj34z035spugwlwmdx6s0k0mxv8x6"
+                    }
+                  },
+                  "total": {
+                    "total_amount": null
+                  }
+                }
+              },
+              "observation": {
+                "epoch": 7,
+                "height": 570
+              },
+              "state": {
+                "buyer": "gonka1x2nmgyc4xlu4xx7kpdadrjplvhsqmjwqn4rl97",
+                "buyer_entitlement_ngonka": "0",
+                "buyer_refund_usdt": "0",
+                "buyer_released_ngonka": "0",
+                "fee_usdt": "0",
+                "gnk_release_policy": "unset",
+                "gross_usdt": "0",
+                "host_entitlement_ngonka": "0",
+                "host_net_usdt": "0",
+                "host_released_ngonka": "0",
+                "recipient_locked": true,
+                "refund_reason": null,
+                "released_total_ngonka": "0",
+                "reward_ngonka": "0",
+                "status": "locked",
+                "total_claim_ngonka": "0",
+                "work_ngonka": "0"
+              }
+            },
+            "before": {
+              "bank_ngonka": {
+                "buyer": 1000000,
+                "deal": 94864721408887,
+                "fee_recipient": 0,
+                "host": 284864678570668
+              },
+              "config": {
+                "buyer_budget_micro_usdt": "10000000",
+                "deal_address": "gonka19jq6mj84cnt9p7sagjxqf8hxtczwc8wlpuwe4sh62w45aheseues9e4ann",
+                "factory": "gonka1xr3rq8yvd7qplsw5yx90ftsr2zdhg4e9z60h5duusgxpv72hud3sj9nv9r",
+                "fee_bps": 150,
+                "fee_recipient": "gonka1e2k5e6lsucxcwu3mfthaj9g8nlszmly3kf0f8a",
+                "funded_capacity_ngonka": "10000000000",
+                "host": "gonka1a4d604hmyhj34z035spugwlwmdx6s0k0mxv8x6",
+                "pinned_gonka_sha": "379bebced638aeb5e6077bfd51c986f898443832",
+                "price_micro_usdt_per_gnk": "1000000",
+                "settlement_cw20": "gonka1hrpna9v7vs3stzyd4z3xf00676kf78zpe2u5ksvljswn2vnjp3ys6w65a0",
+                "target_epoch": 4
+              },
+              "cw20": {
+                "buyer": 810000000,
+                "deal": 10000000,
+                "fee_recipient": 1500000,
+                "host": 0
+              },
+              "foreign_cw20": {
+                "buyer": 1000000,
+                "deal": 0
+              },
+              "native": {
+                "buyer": {
+                  "portfolio": 1000000,
+                  "schedule": {
+                    "vesting_schedule": {
+                      "epoch_amounts": null,
+                      "participant_address": "gonka1x2nmgyc4xlu4xx7kpdadrjplvhsqmjwqn4rl97"
+                    }
+                  },
+                  "total": {
+                    "total_amount": null
+                  }
+                },
+                "deal": {
+                  "portfolio": 94864721408887,
+                  "schedule": {
+                    "vesting_schedule": {
+                      "epoch_amounts": null,
+                      "participant_address": "gonka19jq6mj84cnt9p7sagjxqf8hxtczwc8wlpuwe4sh62w45aheseues9e4ann"
+                    }
+                  },
+                  "total": {
+                    "total_amount": null
+                  }
+                },
+                "fee_recipient": {
+                  "portfolio": 0,
+                  "schedule": {
+                    "vesting_schedule": {
+                      "epoch_amounts": null,
+                      "participant_address": "gonka1e2k5e6lsucxcwu3mfthaj9g8nlszmly3kf0f8a"
+                    }
+                  },
+                  "total": {
+                    "total_amount": null
+                  }
+                },
+                "host": {
+                  "portfolio": 284864678570668,
+                  "schedule": {
+                    "vesting_schedule": {
+                      "epoch_amounts": null,
+                      "participant_address": "gonka1a4d604hmyhj34z035spugwlwmdx6s0k0mxv8x6"
+                    }
+                  },
+                  "total": {
+                    "total_amount": null
+                  }
+                }
+              },
+              "observation": {
+                "epoch": 7,
+                "height": 568
+              },
+              "state": {
+                "buyer": "gonka1x2nmgyc4xlu4xx7kpdadrjplvhsqmjwqn4rl97",
+                "buyer_entitlement_ngonka": "0",
+                "buyer_refund_usdt": "0",
+                "buyer_released_ngonka": "0",
+                "fee_usdt": "0",
+                "gnk_release_policy": "unset",
+                "gross_usdt": "0",
+                "host_entitlement_ngonka": "0",
+                "host_net_usdt": "0",
+                "host_released_ngonka": "0",
+                "recipient_locked": true,
+                "refund_reason": null,
+                "released_total_ngonka": "0",
+                "reward_ngonka": "0",
+                "status": "locked",
+                "total_claim_ngonka": "0",
+                "work_ngonka": "0"
+              }
+            },
+            "caller": "gonka1xynmkgl4u9tl5gm3lvcvekulpx4klt5xsnp3jk",
+            "caller_fee_delta": 0,
+            "epoch_bracket": {
+              "after_height": 570,
+              "before_height": 568,
+              "epoch": 7,
+              "same_epoch": true,
+              "tx_height": 570
+            },
+            "file": "/home/runner/a8-runtime/a8cfix2-20260910/evidence/a8cfix2-20260910/package-c/tx-r5-cancel-refund-0039.json",
+            "sha256": "c2a361316b5fcb041e0fbd9a54b0b2308ff8596fe8d0f92b52f8afe3e4c6d689",
+            "transaction": {
+              "code": 5,
+              "codespace": "wasm",
+              "events": [],
+              "gas_used": "186151",
+              "gas_wanted": "2000000",
+              "height": "570",
+              "layer": "deliver_tx",
+              "raw_log": "failed to execute message; message index: 0: Generic error: a8 injected CW20 transfer failure for gonka1x2nmgyc4xlu4xx7kpdadrjplvhsqmjwqn4rl97: execute wasm contract failed",
+              "tx_hash": "B28A9B7456FEEAC68681884D619C6679E3EDF11D8539BEC20F37A22EABD5A95C"
+            }
+          },
+          "setup": {
+            "code": 0,
+            "codespace": "",
+            "data": "122E0A2C2F636F736D7761736D2E7761736D2E76312E4D736745786563757465436F6E7472616374526573706F6E7365",
+            "events": [
+              {
+                "attributes": [
+                  {
+                    "index": true,
+                    "key": "fee",
+                    "value": ""
+                  },
+                  {
+                    "index": true,
+                    "key": "fee_payer",
+                    "value": "gonka1xynmkgl4u9tl5gm3lvcvekulpx4klt5xsnp3jk"
+                  }
+                ],
+                "type": "tx"
+              },
+              {
+                "attributes": [
+                  {
+                    "index": true,
+                    "key": "signature",
+                    "value": "6xqHz9kXdFV6DYFw/bs1U+pT6A2JSJ0VoJy7PTGJ/rIO4c1ACqv7a8TtjoaWtLpyczT/X4URalD51Lpdc5UMKQ=="
+                  }
+                ],
+                "type": "tx"
+              },
+              {
+                "attributes": [
+                  {
+                    "index": true,
+                    "key": "action",
+                    "value": "/cosmwasm.wasm.v1.MsgExecuteContract"
+                  },
+                  {
+                    "index": true,
+                    "key": "sender",
+                    "value": "gonka1xynmkgl4u9tl5gm3lvcvekulpx4klt5xsnp3jk"
+                  },
+                  {
+                    "index": true,
+                    "key": "module",
+                    "value": "wasm"
+                  },
+                  {
+                    "index": true,
+                    "key": "msg_index",
+                    "value": "0"
+                  }
+                ],
+                "type": "message"
+              },
+              {
+                "attributes": [
+                  {
+                    "index": true,
+                    "key": "_contract_address",
+                    "value": "gonka1hrpna9v7vs3stzyd4z3xf00676kf78zpe2u5ksvljswn2vnjp3ys6w65a0"
+                  },
+                  {
+                    "index": true,
+                    "key": "msg_index",
+                    "value": "0"
+                  }
+                ],
+                "type": "execute"
+              },
+              {
+                "attributes": [
+                  {
+                    "index": true,
+                    "key": "_contract_address",
+                    "value": "gonka1hrpna9v7vs3stzyd4z3xf00676kf78zpe2u5ksvljswn2vnjp3ys6w65a0"
+                  },
+                  {
+                    "index": true,
+                    "key": "action",
+                    "value": "configure_transfer_failure"
+                  },
+                  {
+                    "index": true,
+                    "key": "rejected_recipient",
+                    "value": "gonka1x2nmgyc4xlu4xx7kpdadrjplvhsqmjwqn4rl97"
+                  },
+                  {
+                    "index": true,
+                    "key": "msg_index",
+                    "value": "0"
+                  }
+                ],
+                "type": "wasm"
+              }
+            ],
+            "gas_used": "104187",
+            "gas_wanted": "476055",
+            "height": "568",
+            "info": "",
+            "logs": [],
+            "raw_log": "",
+            "timestamp": "2026-09-10T12:48:43Z",
+            "tx": {
+              "@type": "/cosmos.tx.v1beta1.Tx",
+              "auth_info": {
+                "fee": {
+                  "amount": [],
+                  "gas_limit": "476055",
+                  "granter": "",
+                  "payer": ""
+                },
+                "signer_infos": [
+                  {
+                    "mode_info": {
+                      "single": {
+                        "mode": "SIGN_MODE_DIRECT"
+                      }
+                    },
+                    "public_key": {
+                      "@type": "/cosmos.crypto.secp256k1.PubKey",
+                      "key": "AkQHWd4AcEGoQEM3UCfQ+QDa6iuhDmysYZIKbrMQNwoR"
+                    },
+                    "sequence": "0"
+                  }
+                ],
+                "tip": null
+              },
+              "body": {
+                "extension_options": [],
+                "memo": "",
+                "messages": [
+                  {
+                    "@type": "/cosmwasm.wasm.v1.MsgExecuteContract",
+                    "contract": "gonka1hrpna9v7vs3stzyd4z3xf00676kf78zpe2u5ksvljswn2vnjp3ys6w65a0",
+                    "funds": [],
+                    "msg": {
+                      "configure_transfer_failure": {
+                        "rejected_recipient": "gonka1x2nmgyc4xlu4xx7kpdadrjplvhsqmjwqn4rl97"
+                      }
+                    },
+                    "sender": "gonka1xynmkgl4u9tl5gm3lvcvekulpx4klt5xsnp3jk"
+                  }
+                ],
+                "non_critical_extension_options": [],
+                "timeout_height": "0",
+                "timeout_timestamp": "2026-09-10T12:49:44.405949826Z",
+                "unordered": true
+              },
+              "signatures": [
+                "6xqHz9kXdFV6DYFw/bs1U+pT6A2JSJ0VoJy7PTGJ/rIO4c1ACqv7a8TtjoaWtLpyczT/X4URalD51Lpdc5UMKQ=="
+              ]
+            },
+            "txhash": "A40F896A893BB5D551D4F752AD16B00DBC758666FD546300009B94FB24846A6E"
+          }
+        },
+        "status": "PASS"
+      }
+    }
+  },
+  "previous_healthy_lock": {
+    "evidence": {
+      "after": {
+        "bank_ngonka": {
+          "buyer": 1000000,
+          "deal": 0,
+          "fee_recipient": 0,
+          "host": 0
+        },
+        "config": {
+          "buyer_budget_micro_usdt": "10000000",
+          "deal_address": "gonka1m4ns69zvkk2zv0946mw298tlky5ckvu08rtxggtg29p784kc5sxql0qawn",
+          "factory": "gonka1xr3rq8yvd7qplsw5yx90ftsr2zdhg4e9z60h5duusgxpv72hud3sj9nv9r",
+          "fee_bps": 150,
+          "fee_recipient": "gonka1hedrwfevlkxsutf3mg6ymlcpq954h9fm8xxg33",
+          "funded_capacity_ngonka": "10000000000",
+          "host": "gonka1e4vkx30a9uc64zp3ce99fj3t5scetfmfg3ffte",
+          "pinned_gonka_sha": "379bebced638aeb5e6077bfd51c986f898443832",
+          "price_micro_usdt_per_gnk": "1000000",
+          "settlement_cw20": "gonka1hrpna9v7vs3stzyd4z3xf00676kf78zpe2u5ksvljswn2vnjp3ys6w65a0",
+          "target_epoch": 4
+        },
+        "cw20": {
+          "buyer": 730000000,
+          "deal": 10000000,
+          "fee_recipient": 0,
+          "host": 0
+        },
+        "foreign_cw20": {
+          "buyer": 1000000,
+          "deal": 0
+        },
+        "native": {
+          "buyer": {
+            "portfolio": 1000000,
+            "schedule": {
+              "vesting_schedule": {
+                "epoch_amounts": null,
+                "participant_address": "gonka15jr8wryvngkpra92a4lfcfg7akmp7qcjdhfnsy"
+              }
+            },
+            "total": {
+              "total_amount": null
+            }
+          },
+          "deal": {
+            "portfolio": 0,
+            "schedule": {
+              "vesting_schedule": {
+                "epoch_amounts": null,
+                "participant_address": "gonka1m4ns69zvkk2zv0946mw298tlky5ckvu08rtxggtg29p784kc5sxql0qawn"
+              }
+            },
+            "total": {
+              "total_amount": null
+            }
+          },
+          "fee_recipient": {
+            "portfolio": 0,
+            "schedule": {
+              "vesting_schedule": {
+                "epoch_amounts": null,
+                "participant_address": "gonka1hedrwfevlkxsutf3mg6ymlcpq954h9fm8xxg33"
+              }
+            },
+            "total": {
+              "total_amount": null
+            }
+          },
+          "host": {
+            "portfolio": 0,
+            "schedule": {
+              "vesting_schedule": {
+                "epoch_amounts": null,
+                "participant_address": "gonka1e4vkx30a9uc64zp3ce99fj3t5scetfmfg3ffte"
+              }
+            },
+            "total": {
+              "total_amount": null
+            }
+          }
+        },
+        "observation": {
+          "epoch": 7,
+          "height": 560
+        },
+        "state": {
+          "buyer": "gonka15jr8wryvngkpra92a4lfcfg7akmp7qcjdhfnsy",
+          "buyer_entitlement_ngonka": "0",
+          "buyer_refund_usdt": "0",
+          "buyer_released_ngonka": "0",
+          "fee_usdt": "0",
+          "gnk_release_policy": "unset",
+          "gross_usdt": "0",
+          "host_entitlement_ngonka": "0",
+          "host_net_usdt": "0",
+          "host_released_ngonka": "0",
+          "recipient_locked": true,
+          "refund_reason": null,
+          "released_total_ngonka": "0",
+          "reward_ngonka": "0",
+          "status": "locked",
+          "total_claim_ngonka": "0",
+          "work_ngonka": "0"
+        }
+      },
+      "before": {
+        "bank_ngonka": {
+          "buyer": 1000000,
+          "deal": 0,
+          "fee_recipient": 0,
+          "host": 0
+        },
+        "config": {
+          "buyer_budget_micro_usdt": "10000000",
+          "deal_address": "gonka1m4ns69zvkk2zv0946mw298tlky5ckvu08rtxggtg29p784kc5sxql0qawn",
+          "factory": "gonka1xr3rq8yvd7qplsw5yx90ftsr2zdhg4e9z60h5duusgxpv72hud3sj9nv9r",
+          "fee_bps": 150,
+          "fee_recipient": "gonka1hedrwfevlkxsutf3mg6ymlcpq954h9fm8xxg33",
+          "funded_capacity_ngonka": "10000000000",
+          "host": "gonka1e4vkx30a9uc64zp3ce99fj3t5scetfmfg3ffte",
+          "pinned_gonka_sha": "379bebced638aeb5e6077bfd51c986f898443832",
+          "price_micro_usdt_per_gnk": "1000000",
+          "settlement_cw20": "gonka1hrpna9v7vs3stzyd4z3xf00676kf78zpe2u5ksvljswn2vnjp3ys6w65a0",
+          "target_epoch": 4
+        },
+        "cw20": {
+          "buyer": 730000000,
+          "deal": 10000000,
+          "fee_recipient": 0,
+          "host": 0
+        },
+        "foreign_cw20": {
+          "buyer": 1000000,
+          "deal": 0
+        },
+        "native": {
+          "buyer": {
+            "portfolio": 1000000,
+            "schedule": {
+              "vesting_schedule": {
+                "epoch_amounts": null,
+                "participant_address": "gonka15jr8wryvngkpra92a4lfcfg7akmp7qcjdhfnsy"
+              }
+            },
+            "total": {
+              "total_amount": null
+            }
+          },
+          "deal": {
+            "portfolio": 0,
+            "schedule": {
+              "vesting_schedule": {
+                "epoch_amounts": null,
+                "participant_address": "gonka1m4ns69zvkk2zv0946mw298tlky5ckvu08rtxggtg29p784kc5sxql0qawn"
+              }
+            },
+            "total": {
+              "total_amount": null
+            }
+          },
+          "fee_recipient": {
+            "portfolio": 0,
+            "schedule": {
+              "vesting_schedule": {
+                "epoch_amounts": null,
+                "participant_address": "gonka1hedrwfevlkxsutf3mg6ymlcpq954h9fm8xxg33"
+              }
+            },
+            "total": {
+              "total_amount": null
+            }
+          },
+          "host": {
+            "portfolio": 0,
+            "schedule": {
+              "vesting_schedule": {
+                "epoch_amounts": null,
+                "participant_address": "gonka1e4vkx30a9uc64zp3ce99fj3t5scetfmfg3ffte"
+              }
+            },
+            "total": {
+              "total_amount": null
+            }
+          }
+        },
+        "observation": {
+          "epoch": 7,
+          "height": 558
+        },
+        "state": {
+          "buyer": "gonka15jr8wryvngkpra92a4lfcfg7akmp7qcjdhfnsy",
+          "buyer_entitlement_ngonka": "0",
+          "buyer_refund_usdt": "0",
+          "buyer_released_ngonka": "0",
+          "fee_usdt": "0",
+          "gnk_release_policy": "unset",
+          "gross_usdt": "0",
+          "host_entitlement_ngonka": "0",
+          "host_net_usdt": "0",
+          "host_released_ngonka": "0",
+          "recipient_locked": false,
+          "refund_reason": null,
+          "released_total_ngonka": "0",
+          "reward_ngonka": "0",
+          "status": "funded",
+          "total_claim_ngonka": "0",
+          "work_ngonka": "0"
+        }
+      },
+      "caller": "gonka16ujkk6e0qnke8rpcl959wvtufdgyewjxnxghqc",
+      "caller_fee_delta": 0,
+      "epoch_bracket": {
+        "after_height": 560,
+        "before_height": 558,
+        "epoch": 7,
+        "same_epoch": true,
+        "tx_height": 560
+      },
+      "file": "/home/runner/a8-runtime/a8cfix-20260910/evidence/a8cfix-20260910/package-c/tx-r3-epoch-lock-lock-0033.json",
+      "sha256": "f2c9bd68b2d3455ab3aa3f6d803356edee99b8a5a7959035a09919c31eeab255",
+      "transaction": {
+        "code": 0,
+        "codespace": "",
+        "events": [],
+        "gas_used": "118100",
+        "gas_wanted": "2000000",
+        "height": "560",
+        "layer": "deliver_tx",
+        "raw_log": "",
+        "tx_hash": "F296A190D7A9AA5DBDDD382B792020B026983364997E2C66AAF249195B49F945"
+      }
+    },
+    "status": "PASS"
+  }
+}

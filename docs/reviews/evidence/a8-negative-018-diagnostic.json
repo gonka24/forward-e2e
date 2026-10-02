@@ -1,0 +1,32 @@
+{
+  "schema_version": "1.0.0",
+  "kind": "gonka-marketplace-a8-live-diagnostic",
+  "run_id": "a8-negative-018",
+  "status": "not_run_setup_failure",
+  "source": {
+    "marketplace_commit": "5447b42",
+    "gonka_commit": "fb74974d",
+    "manifest": "artifacts/a8-evidence/a8-release-5447b42/build-manifest.json"
+  },
+  "failure": {
+    "classification": "duplicate_host_epoch_setup",
+    "phase": "create-deal",
+    "message": "offer already exists for host gonka15vujgrdduezn5qgwcva5gtpxmc4pu0j0rvamrt and epoch 5",
+    "cause": "bootstrap occupies the default join1/E pair; claim-expiry preparation reused that pair",
+    "contract_scenarios_counted": false
+  },
+  "evidence": {
+    "live_context": "artifacts/a8-evidence/a8-negative-018/live-context.json",
+    "live_context_sha256": "5efa547b3c0a91e75ad47c595fe049777e327656e5d08c0d742e67254d65d4b4",
+    "testermint_log": "artifacts/a8-evidence/a8-negative-018/testermint.log",
+    "testermint_log_sha256": "7bf7fab1169c2d03d0d053f43d8598cdd75e20e89b198236ac96a9461fbd4a27"
+  },
+  "acceptance": {
+    "scenarios": [
+      {"name": "gas-claimed", "status": "not_run", "reason": "setup aborted before scenario preparation completed"},
+      {"name": "no-sale", "status": "not_run", "reason": "setup aborted before scenario preparation completed"},
+      {"name": "claim-expiry", "status": "not_run", "reason": "duplicate host/epoch prevented creation"},
+      {"name": "all_remaining", "status": "not_run", "reason": "setup aborted"}
+    ]
+  }
+}

@@ -1,0 +1,935 @@
+{
+  "schema": "a8.testermint-required-api/1",
+  "upstream_reference_sha": "c33c9eaa5bc40c53b564159b5e1534bbfdab8a08",
+  "symbols": [
+    {
+      "id": "getRepoRoot.GONKA_REPO_ROOT",
+      "kind": "fun",
+      "name": "getRepoRoot",
+      "pattern": "^fun\\s+getRepoRoot\\(\\)\\s*:\\s*String\\s*\\{\\s*\\n(?:\\s*//.*\\n)*\\s*System\\.getenv\\(\"GONKA_REPO_ROOT\"\\)",
+      "description": "getRepoRoot() must honour GONKA_REPO_ROOT first; the runner points it at <W>/network-root so Testermint never reads or writes the Gonka source snapshot."
+    },
+    {
+      "id": "DockerGroup.workingDirectory.repoRoot",
+      "kind": "property",
+      "name": "workingDirectory",
+      "owner": "DockerGroup",
+      "pattern": "^\\s*workingDirectory\\s*=\\s*repoRoot\\s*,",
+      "description": "createDockerGroup runs compose with workingDirectory = getRepoRoot()."
+    },
+    {
+      "id": "LOCAL_TEST_NET_DIR",
+      "kind": "val",
+      "name": "LOCAL_TEST_NET_DIR",
+      "pattern": "^const\\s+val\\s+LOCAL_TEST_NET_DIR\\s*=\\s*\"local-test-net\"",
+      "description": "Additional compose names are resolved under <repoRoot>/local-test-net."
+    },
+    {
+      "id": "ApplicationConfig.additionalDockerFilesByKeyName",
+      "kind": "property",
+      "name": "additionalDockerFilesByKeyName",
+      "owner": "ApplicationConfig",
+      "pattern": "^\\s*(?:override\\s+)?va[lr]\\s+additionalDockerFilesByKeyName\\s*:\\s*Map<String,\\s*List<String>>",
+      "description": "Per-pair extra compose files (a8-ownership.yml, a8-nats.yml, a8-b3-genesis.yml)."
+    },
+    {
+      "id": "DockerGroup.composeFiles.additional",
+      "kind": "property",
+      "name": "composeFiles",
+      "owner": "DockerGroup",
+      "pattern": "config\\.additionalDockerFilesByKeyName\\[pairName\\][^\\n]*\\n\\s*baseFiles\\s*\\+\\s*additionalFiles\\.map\\s*\\{\\s*\"\\$LOCAL_TEST_NET_DIR/\\$it\"\\s*\\}",
+      "description": "DockerGroup appends additionalDockerFilesByKeyName[pair] as local-test-net/<name> to its compose files."
+    },
+    {
+      "id": "GENESIS_KEY_NAME",
+      "kind": "val",
+      "name": "GENESIS_KEY_NAME",
+      "pattern": "^const\\s+val\\s+GENESIS_KEY_NAME\\s*=\\s*\"genesis\"",
+      "description": "Genesis pair key used in additionalDockerFilesByKeyName."
+    },
+    {
+      "id": "createDockerGroup.joinKeyName",
+      "kind": "fun",
+      "name": "createDockerGroup",
+      "pattern": "val\\s+keyName\\s*=\\s*if\\s*\\(iteration\\s*==\\s*0\\)\\s*GENESIS_KEY_NAME\\s+else\\s+\"join\\$joinIter\"",
+      "description": "Join pairs are named join1, join2 (keys used in additionalDockerFilesByKeyName)."
+    },
+    {
+      "id": "TestermintContainers.getApi.name",
+      "kind": "fun",
+      "name": "getApi",
+      "owner": "TestermintContainers",
+      "pattern": "fun\\s+getApi\\(name:\\s*String\\)[^\\n]*\"\\$name-api\"",
+      "description": "API container is named <pair>-api; the container controller stops/starts it by that name then by ID."
+    },
+    {
+      "id": "compose.api.container_name",
+      "kind": "compose",
+      "name": "container_name",
+      "pattern": "^\\s*container_name:\\s*\\$\\{KEY_NAME\\}-api\\s*$",
+      "description": "Compose names the API container ${KEY_NAME}-api.",
+      "file": "local-test-net/docker-compose-base.yml"
+    },
+    {
+      "id": "compose.api.admin_port",
+      "kind": "compose",
+      "name": "ADMIN_SERVER_PORT",
+      "pattern": "^\\s*-\\s*\"\\$\\{ADMIN_SERVER_PORT\\}:9200\"\\s*$",
+      "description": "Admin port is a fixed host mapping, so the readiness URL survives docker stop/start.",
+      "file": "local-test-net/docker-compose-base.yml"
+    },
+    {
+      "id": "initCluster",
+      "kind": "fun",
+      "name": "initCluster",
+      "pattern": "^fun\\s+initCluster\\(\\s*\\n\\s*joinCount:\\s*Int\\s*=\\s*2,\\s*\\n\\s*config:\\s*ApplicationConfig[^\\n]*\\n\\s*reboot:\\s*Boolean",
+      "description": "initCluster(config = ..., reboot = true) with default joinCount = 2."
+    },
+    {
+      "id": "inferenceConfig",
+      "kind": "val",
+      "name": "inferenceConfig",
+      "pattern": "^val\\s+inferenceConfig\\s*=\\s*ApplicationConfig\\(",
+      "description": "Base ApplicationConfig copied by fastMarketplaceConfig."
+    },
+    {
+      "id": "ApplicationConfig",
+      "kind": "class",
+      "name": "ApplicationConfig",
+      "pattern": "^\\s*(?:public\\s+)?data\\s+class\\s+ApplicationConfig\\s*\\(",
+      "description": "ApplicationConfig.copy(genesisSpec, additionalDockerFilesByKeyName)."
+    },
+    {
+      "id": "ApplicationConfig.genesisSpec",
+      "kind": "property",
+      "name": "genesisSpec",
+      "owner": "ApplicationConfig",
+      "pattern": "^\\s*(?:override\\s+)?va[lr]\\s+genesisSpec\\s*:\\s*Spec<AppState>\\?",
+      "description": "Genesis spec merged with the fast Marketplace spec."
+    },
+    {
+      "id": "ApplicationConfig.denom",
+      "kind": "property",
+      "name": "denom",
+      "owner": "ApplicationConfig",
+      "pattern": "^\\s*(?:override\\s+)?va[lr]\\s+denom\\s*:\\s*String",
+      "description": "Native denom."
+    },
+    {
+      "id": "ApplicationConfig.execName",
+      "kind": "property",
+      "name": "execName",
+      "owner": "ApplicationConfig",
+      "pattern": "^\\s*(?:override\\s+)?va[lr]\\s+execName\\s*:\\s*String",
+      "description": "CLI binary used for the B3 key import."
+    },
+    {
+      "id": "ApplicationConfig.keychainParams",
+      "kind": "property",
+      "name": "keychainParams",
+      "owner": "ApplicationConfig",
+      "pattern": "^\\s*(?:override\\s+)?va[lr]\\s+keychainParams\\s*:\\s*List<String>",
+      "description": "Keyring flags for the B3 key import."
+    },
+    {
+      "id": "LocalCluster",
+      "kind": "class",
+      "name": "LocalCluster",
+      "pattern": "^\\s*(?:public\\s+)?data\\s+class\\s+LocalCluster\\s*\\(",
+      "description": "Cluster returned by initCluster."
+    },
+    {
+      "id": "LocalCluster.joinPairs",
+      "kind": "property",
+      "name": "joinPairs",
+      "owner": "LocalCluster",
+      "pattern": "^\\s*(?:override\\s+)?va[lr]\\s+joinPairs\\s*:\\s*List<LocalInferencePair>",
+      "description": "Join pairs (join1 = joinPairs[0], join2 = joinPairs[1])."
+    },
+    {
+      "id": "LocalCluster.allPairs",
+      "kind": "property",
+      "name": "allPairs",
+      "owner": "LocalCluster",
+      "pattern": "^\\s*val\\s+allPairs\\s*=\\s*listOf\\(genesis\\)\\s*\\+\\s*joinPairs",
+      "description": "All pairs."
+    },
+    {
+      "id": "LocalInferencePair",
+      "kind": "class",
+      "name": "LocalInferencePair",
+      "pattern": "^\\s*(?:public\\s+)?data\\s+class\\s+LocalInferencePair\\s*\\(",
+      "description": "Pair type used by every scenario."
+    },
+    {
+      "id": "LocalInferencePair.node",
+      "kind": "property",
+      "name": "node",
+      "owner": "LocalInferencePair",
+      "pattern": "^\\s*(?:override\\s+)?va[lr]\\s+node\\s*:\\s*ApplicationCLI",
+      "description": "Chain CLI."
+    },
+    {
+      "id": "LocalInferencePair.api",
+      "kind": "property",
+      "name": "api",
+      "owner": "LocalInferencePair",
+      "pattern": "^\\s*(?:override\\s+)?va[lr]\\s+api\\s*:\\s*ApplicationAPI",
+      "description": "dAPI client."
+    },
+    {
+      "id": "LocalInferencePair.name",
+      "kind": "property",
+      "name": "name",
+      "owner": "LocalInferencePair",
+      "pattern": "^\\s*(?:override\\s+)?va[lr]\\s+name\\s*:\\s*String",
+      "description": "Pair name; API container = <name>-api."
+    },
+    {
+      "id": "LocalInferencePair.config",
+      "kind": "property",
+      "name": "config",
+      "owner": "LocalInferencePair",
+      "pattern": "^\\s*override\\s+val\\s+config:\\s*ApplicationConfig",
+      "description": "Pair config (denom, execName, keychainParams)."
+    },
+    {
+      "id": "LocalInferencePair.waitForMlNodesToLoad",
+      "kind": "fun",
+      "name": "waitForMlNodesToLoad",
+      "owner": "LocalInferencePair",
+      "pattern": "^\\s*(?:(?:public|internal|inline|suspend)\\s+)*fun\\s+(?:<[^>]+>\\s+)?waitForMlNodesToLoad\\s*\\(",
+      "description": "ML node readiness after initCluster."
+    },
+    {
+      "id": "LocalInferencePair.getEpochData",
+      "kind": "fun",
+      "name": "getEpochData",
+      "owner": "LocalInferencePair",
+      "pattern": "^\\s*(?:(?:public|internal|inline|suspend)\\s+)*fun\\s+(?:<[^>]+>\\s+)?getEpochData\\s*\\(",
+      "description": "Current epoch index."
+    },
+    {
+      "id": "LocalInferencePair.waitForNextEpoch",
+      "kind": "fun",
+      "name": "waitForNextEpoch",
+      "owner": "LocalInferencePair",
+      "pattern": "^\\s*(?:(?:public|internal|inline|suspend)\\s+)*fun\\s+(?:<[^>]+>\\s+)?waitForNextEpoch\\s*\\(",
+      "description": "Epoch stepping."
+    },
+    {
+      "id": "LocalInferencePair.waitForStage",
+      "kind": "fun",
+      "name": "waitForStage",
+      "owner": "LocalInferencePair",
+      "pattern": "^\\s*(?:(?:public|internal|inline|suspend)\\s+)*fun\\s+(?:<[^>]+>\\s+)?waitForStage\\s*\\(",
+      "description": "Stage synchronisation (CLAIM_REWARDS, END_OF_POC_VALIDATION)."
+    },
+    {
+      "id": "LocalInferencePair.markNeedsReboot",
+      "kind": "fun",
+      "name": "markNeedsReboot",
+      "owner": "LocalInferencePair",
+      "pattern": "^\\s*(?:(?:public|internal|inline|suspend)\\s+)*fun\\s+(?:<[^>]+>\\s+)?markNeedsReboot\\s*\\(",
+      "description": "Forces a fresh cluster for the next test."
+    },
+    {
+      "id": "LocalInferencePair.runProposal",
+      "kind": "fun",
+      "name": "runProposal",
+      "owner": "LocalInferencePair",
+      "pattern": "^\\s*(?:(?:public|internal|inline|suspend)\\s+)*fun\\s+(?:<[^>]+>\\s+)?runProposal\\s*\\(",
+      "description": "Governance proposals (MsgTransferWithVesting, UpdateRestrictionsParams)."
+    },
+    {
+      "id": "LocalInferencePair.submitTransaction.args",
+      "kind": "fun",
+      "name": "submitTransaction",
+      "owner": "LocalInferencePair",
+      "pattern": "^\\s*fun\\s+submitTransaction\\(args:\\s*List<String>",
+      "description": "Bank send for governance funding."
+    },
+    {
+      "id": "LocalInferencePair.waitForStage.offset",
+      "kind": "fun",
+      "name": "waitForStage",
+      "owner": "LocalInferencePair",
+      "pattern": "fun\\s+waitForStage\\(stage:\\s*EpochStage,\\s*offset:\\s*Int",
+      "description": "waitForStage(stage, offset = n)."
+    },
+    {
+      "id": "LocalInferencePair.runProposal.signature",
+      "kind": "fun",
+      "name": "runProposal",
+      "owner": "LocalInferencePair",
+      "pattern": "fun\\s+runProposal\\(cluster:\\s*LocalCluster,\\s*proposal:\\s*GovernanceMessage[^\\n]*\\)\\s*:\\s*String",
+      "description": "runProposal returns the proposal id as String."
+    },
+    {
+      "id": "ApplicationCLI.waitForNextBlock",
+      "kind": "fun",
+      "name": "waitForNextBlock",
+      "owner": "ApplicationCLI",
+      "pattern": "^\\s*(?:(?:public|internal|inline|suspend)\\s+)*fun\\s+(?:<[^>]+>\\s+)?waitForNextBlock\\s*\\(",
+      "description": "Block stepping."
+    },
+    {
+      "id": "ApplicationCLI.getModuleAccount",
+      "kind": "fun",
+      "name": "getModuleAccount",
+      "owner": "ApplicationCLI",
+      "pattern": "^\\s*(?:(?:public|internal|inline|suspend)\\s+)*fun\\s+(?:<[^>]+>\\s+)?getModuleAccount\\s*\\(",
+      "description": "gov module address."
+    },
+    {
+      "id": "ApplicationCLI.getColdAddress",
+      "kind": "fun",
+      "name": "getColdAddress",
+      "owner": "ApplicationCLI",
+      "pattern": "^\\s*(?:(?:public|internal|inline|suspend)\\s+)*fun\\s+(?:<[^>]+>\\s+)?getColdAddress\\s*\\(",
+      "description": "Genesis cold address."
+    },
+    {
+      "id": "ApplicationCLI.queryRestrictionsStatus",
+      "kind": "fun",
+      "name": "queryRestrictionsStatus",
+      "owner": "ApplicationCLI",
+      "pattern": "^\\s*(?:(?:public|internal|inline|suspend)\\s+)*fun\\s+(?:<[^>]+>\\s+)?queryRestrictionsStatus\\s*\\(",
+      "description": "Transfer restriction status."
+    },
+    {
+      "id": "ApplicationCLI.waitForMinimumBlock",
+      "kind": "fun",
+      "name": "waitForMinimumBlock",
+      "owner": "ApplicationCLI",
+      "pattern": "^\\s*(?:(?:public|internal|inline|suspend)\\s+)*fun\\s+(?:<[^>]+>\\s+)?waitForMinimumBlock\\s*\\(",
+      "description": "Restriction expiry wait."
+    },
+    {
+      "id": "ApplicationCLI.getBalance",
+      "kind": "fun",
+      "name": "getBalance",
+      "owner": "ApplicationCLI",
+      "pattern": "^\\s*(?:(?:public|internal|inline|suspend)\\s+)*fun\\s+(?:<[^>]+>\\s+)?getBalance\\s*\\(",
+      "description": "B3 foreign balance check."
+    },
+    {
+      "id": "ApplicationCLI.createKey",
+      "kind": "fun",
+      "name": "createKey",
+      "owner": "ApplicationCLI",
+      "pattern": "^\\s*(?:(?:public|internal|inline|suspend)\\s+)*fun\\s+(?:<[^>]+>\\s+)?createKey\\s*\\(",
+      "description": "Inactive participant keys."
+    },
+    {
+      "id": "ApplicationCLI.getSelfBalance",
+      "kind": "fun",
+      "name": "getSelfBalance",
+      "owner": "ApplicationCLI",
+      "pattern": "^\\s*(?:(?:public|internal|inline|suspend)\\s+)*fun\\s+(?:<[^>]+>\\s+)?getSelfBalance\\s*\\(",
+      "description": "Genesis spendable balance."
+    },
+    {
+      "id": "ApplicationCLI.exec",
+      "kind": "fun",
+      "name": "exec",
+      "owner": "ApplicationCLI",
+      "pattern": "^\\s*(?:(?:public|internal|inline|suspend)\\s+)*fun\\s+(?:<[^>]+>\\s+)?exec\\s*\\(",
+      "description": "B3 key import with stdin."
+    },
+    {
+      "id": "ApplicationCLI.getBalance.denom",
+      "kind": "fun",
+      "name": "getBalance",
+      "owner": "ApplicationCLI",
+      "pattern": "fun\\s+getBalance\\(address:\\s*String,\\s*denom:\\s*String\\)\\s*:\\s*BalanceResponse",
+      "description": "getBalance(address, denom).balance.amount."
+    },
+    {
+      "id": "ApplicationCLI.exec.stdin",
+      "kind": "fun",
+      "name": "exec",
+      "owner": "ApplicationCLI",
+      "pattern": "fun\\s+exec\\(args:\\s*List<String>,\\s*stdin:\\s*String\\?\\)",
+      "description": "exec(args, stdin = ...)."
+    },
+    {
+      "id": "ApplicationAPI.urls",
+      "kind": "property",
+      "name": "urls",
+      "owner": "ApplicationAPI",
+      "pattern": "^\\s*(?:override\\s+)?va[lr]\\s+urls\\s*:\\s*Map<String,\\s*String>",
+      "description": "Admin URL used as container readiness URL."
+    },
+    {
+      "id": "SERVER_TYPE_ADMIN",
+      "kind": "val",
+      "name": "SERVER_TYPE_ADMIN",
+      "pattern": "^const\\s+val\\s+SERVER_TYPE_ADMIN\\s*=\\s*\"admin\"",
+      "description": "Key of the admin URL in ApplicationAPI.urls."
+    },
+    {
+      "id": "ApplicationAPI.getConfig",
+      "kind": "fun",
+      "name": "getConfig",
+      "owner": "ApplicationAPI",
+      "pattern": "fun\\s+getConfig\\(\\)\\s*:\\s*ApiConfig[^\\n]*\\n\\s*val\\s+url\\s*=\\s*urlFor\\(SERVER_TYPE_ADMIN\\)\\s*\\n\\s*get\\(url,\\s*\"admin/v1/config\"\\)",
+      "description": "Reward seed source and the admin/v1/config readiness endpoint."
+    },
+    {
+      "id": "ApplicationAPI.addUnfundedInferenceParticipant",
+      "kind": "fun",
+      "name": "addUnfundedInferenceParticipant",
+      "owner": "ApplicationAPI",
+      "pattern": "^\\s*(?:(?:public|internal|inline|suspend)\\s+)*fun\\s+(?:<[^>]+>\\s+)?addUnfundedInferenceParticipant\\s*\\(",
+      "description": "Inactive Host registration."
+    },
+    {
+      "id": "EpochStage.CLAIM_REWARDS",
+      "kind": "property",
+      "name": "CLAIM_REWARDS",
+      "owner": "EpochStage",
+      "pattern": "^\\s*CLAIM_REWARDS\\b",
+      "description": "Enum entry."
+    },
+    {
+      "id": "EpochStage.END_OF_POC_VALIDATION",
+      "kind": "property",
+      "name": "END_OF_POC_VALIDATION",
+      "owner": "EpochStage",
+      "pattern": "^\\s*END_OF_POC_VALIDATION\\s*,",
+      "description": "Enum entry."
+    },
+    {
+      "id": "EpochStage",
+      "kind": "class",
+      "name": "EpochStage",
+      "pattern": "^enum\\s+class\\s+EpochStage\\b",
+      "description": "Epoch stage enum."
+    },
+    {
+      "id": "data.Coin",
+      "kind": "class",
+      "name": "Coin",
+      "pattern": "^\\s*(?:public\\s+)?data\\s+class\\s+Coin\\s*\\(",
+      "description": "com.productscience.data.Coin used by the scenarios."
+    },
+    {
+      "id": "data.AppState",
+      "kind": "class",
+      "name": "AppState",
+      "pattern": "^\\s*(?:public\\s+)?data\\s+class\\s+AppState\\s*\\(",
+      "description": "com.productscience.data.AppState used by the scenarios."
+    },
+    {
+      "id": "data.InferenceState",
+      "kind": "class",
+      "name": "InferenceState",
+      "pattern": "^\\s*(?:public\\s+)?data\\s+class\\s+InferenceState\\s*\\(",
+      "description": "com.productscience.data.InferenceState used by the scenarios."
+    },
+    {
+      "id": "data.InferenceParams",
+      "kind": "class",
+      "name": "InferenceParams",
+      "pattern": "^\\s*(?:public\\s+)?data\\s+class\\s+InferenceParams\\s*\\(",
+      "description": "com.productscience.data.InferenceParams used by the scenarios."
+    },
+    {
+      "id": "data.BitcoinRewardParams",
+      "kind": "class",
+      "name": "BitcoinRewardParams",
+      "pattern": "^\\s*(?:public\\s+)?data\\s+class\\s+BitcoinRewardParams\\s*\\(",
+      "description": "com.productscience.data.BitcoinRewardParams used by the scenarios."
+    },
+    {
+      "id": "data.EpochParams",
+      "kind": "class",
+      "name": "EpochParams",
+      "pattern": "^\\s*(?:public\\s+)?data\\s+class\\s+EpochParams\\s*\\(",
+      "description": "com.productscience.data.EpochParams used by the scenarios."
+    },
+    {
+      "id": "data.GovState",
+      "kind": "class",
+      "name": "GovState",
+      "pattern": "^\\s*(?:public\\s+)?data\\s+class\\s+GovState\\s*\\(",
+      "description": "com.productscience.data.GovState used by the scenarios."
+    },
+    {
+      "id": "data.GovParams",
+      "kind": "class",
+      "name": "GovParams",
+      "pattern": "^\\s*(?:public\\s+)?data\\s+class\\s+GovParams\\s*\\(",
+      "description": "com.productscience.data.GovParams used by the scenarios."
+    },
+    {
+      "id": "data.RestrictionsState",
+      "kind": "class",
+      "name": "RestrictionsState",
+      "pattern": "^\\s*(?:public\\s+)?data\\s+class\\s+RestrictionsState\\s*\\(",
+      "description": "com.productscience.data.RestrictionsState used by the scenarios."
+    },
+    {
+      "id": "data.RestrictionsParams",
+      "kind": "class",
+      "name": "RestrictionsParams",
+      "pattern": "^\\s*(?:public\\s+)?data\\s+class\\s+RestrictionsParams\\s*\\(",
+      "description": "com.productscience.data.RestrictionsParams used by the scenarios."
+    },
+    {
+      "id": "data.TokenomicsParams",
+      "kind": "class",
+      "name": "TokenomicsParams",
+      "pattern": "^\\s*(?:public\\s+)?data\\s+class\\s+TokenomicsParams\\s*\\(",
+      "description": "com.productscience.data.TokenomicsParams used by the scenarios."
+    },
+    {
+      "id": "data.MsgTransferWithVesting",
+      "kind": "class",
+      "name": "MsgTransferWithVesting",
+      "pattern": "^\\s*(?:public\\s+)?data\\s+class\\s+MsgTransferWithVesting\\s*\\(",
+      "description": "com.productscience.data.MsgTransferWithVesting used by the scenarios."
+    },
+    {
+      "id": "data.UpdateRestrictionsParams",
+      "kind": "class",
+      "name": "UpdateRestrictionsParams",
+      "pattern": "^\\s*(?:public\\s+)?data\\s+class\\s+UpdateRestrictionsParams\\s*\\(",
+      "description": "com.productscience.data.UpdateRestrictionsParams used by the scenarios."
+    },
+    {
+      "id": "data.UnfundedInferenceParticipant",
+      "kind": "class",
+      "name": "UnfundedInferenceParticipant",
+      "pattern": "^\\s*(?:public\\s+)?data\\s+class\\s+UnfundedInferenceParticipant\\s*\\(",
+      "description": "com.productscience.data.UnfundedInferenceParticipant used by the scenarios."
+    },
+    {
+      "id": "data.EmergencyTransferExemption",
+      "kind": "class",
+      "name": "EmergencyTransferExemption",
+      "pattern": "^\\s*(?:public\\s+)?data\\s+class\\s+EmergencyTransferExemption\\s*\\(",
+      "description": "com.productscience.data.EmergencyTransferExemption used by the scenarios."
+    },
+    {
+      "id": "data.TxResponse",
+      "kind": "class",
+      "name": "TxResponse",
+      "pattern": "^\\s*(?:public\\s+)?data\\s+class\\s+TxResponse\\s*\\(",
+      "description": "com.productscience.data.TxResponse used by the scenarios."
+    },
+    {
+      "id": "data.ApiConfig",
+      "kind": "class",
+      "name": "ApiConfig",
+      "pattern": "^\\s*(?:public\\s+)?data\\s+class\\s+ApiConfig\\s*\\(",
+      "description": "com.productscience.data.ApiConfig used by the scenarios."
+    },
+    {
+      "id": "data.SeedInfo",
+      "kind": "class",
+      "name": "SeedInfo",
+      "pattern": "^\\s*(?:public\\s+)?data\\s+class\\s+SeedInfo\\s*\\(",
+      "description": "com.productscience.data.SeedInfo used by the scenarios."
+    },
+    {
+      "id": "data.EpochResponse",
+      "kind": "class",
+      "name": "EpochResponse",
+      "pattern": "^\\s*(?:public\\s+)?data\\s+class\\s+EpochResponse\\s*\\(",
+      "description": "com.productscience.data.EpochResponse used by the scenarios."
+    },
+    {
+      "id": "data.LatestEpochDto",
+      "kind": "class",
+      "name": "LatestEpochDto",
+      "pattern": "^\\s*(?:public\\s+)?data\\s+class\\s+LatestEpochDto\\s*\\(",
+      "description": "com.productscience.data.LatestEpochDto used by the scenarios."
+    },
+    {
+      "id": "data.Validator",
+      "kind": "class",
+      "name": "Validator",
+      "pattern": "^\\s*(?:public\\s+)?data\\s+class\\s+Validator\\s*\\(",
+      "description": "com.productscience.data.Validator used by the scenarios."
+    },
+    {
+      "id": "data.AccountWrapper",
+      "kind": "class",
+      "name": "AccountWrapper",
+      "pattern": "^\\s*(?:public\\s+)?data\\s+class\\s+AccountWrapper\\s*\\(",
+      "description": "com.productscience.data.AccountWrapper used by the scenarios."
+    },
+    {
+      "id": "data.BalanceResponse",
+      "kind": "class",
+      "name": "BalanceResponse",
+      "pattern": "^\\s*(?:public\\s+)?data\\s+class\\s+BalanceResponse\\s*\\(",
+      "description": "com.productscience.data.BalanceResponse used by the scenarios."
+    },
+    {
+      "id": "data.TransferRestrictionStatusDto",
+      "kind": "class",
+      "name": "TransferRestrictionStatusDto",
+      "pattern": "^\\s*(?:public\\s+)?data\\s+class\\s+TransferRestrictionStatusDto\\s*\\(",
+      "description": "com.productscience.data.TransferRestrictionStatusDto used by the scenarios."
+    },
+    {
+      "id": "data.AppState.inference",
+      "kind": "property",
+      "name": "inference",
+      "owner": "AppState",
+      "pattern": "^\\s*(?:@SerializedName\\(\"[^\"]*\"\\)\\s*)?va[lr]\\s+inference\\s*:\\s*InferenceState",
+      "description": "AppState.inference"
+    },
+    {
+      "id": "data.AppState.restrictions",
+      "kind": "property",
+      "name": "restrictions",
+      "owner": "AppState",
+      "pattern": "^\\s*(?:@SerializedName\\(\"[^\"]*\"\\)\\s*)?va[lr]\\s+restrictions\\s*:\\s*RestrictionsState",
+      "description": "AppState.restrictions"
+    },
+    {
+      "id": "data.AppState.gov",
+      "kind": "property",
+      "name": "gov",
+      "owner": "AppState",
+      "pattern": "^\\s*(?:@SerializedName\\(\"[^\"]*\"\\)\\s*)?va[lr]\\s+gov\\s*:\\s*GovState",
+      "description": "AppState.gov"
+    },
+    {
+      "id": "data.InferenceState.params",
+      "kind": "property",
+      "name": "params",
+      "owner": "InferenceState",
+      "pattern": "^\\s*(?:@SerializedName\\(\"[^\"]*\"\\)\\s*)?va[lr]\\s+params\\s*:\\s*InferenceParams",
+      "description": "InferenceState.params"
+    },
+    {
+      "id": "data.InferenceParams.bitcoinRewardParams",
+      "kind": "property",
+      "name": "bitcoinRewardParams",
+      "owner": "InferenceParams",
+      "pattern": "^\\s*(?:@SerializedName\\(\"[^\"]*\"\\)\\s*)?va[lr]\\s+bitcoinRewardParams\\s*:\\s*BitcoinRewardParams",
+      "description": "InferenceParams.bitcoinRewardParams"
+    },
+    {
+      "id": "data.InferenceParams.tokenomicsParams",
+      "kind": "property",
+      "name": "tokenomicsParams",
+      "owner": "InferenceParams",
+      "pattern": "^\\s*(?:@SerializedName\\(\"[^\"]*\"\\)\\s*)?va[lr]\\s+tokenomicsParams\\s*:\\s*TokenomicsParams",
+      "description": "InferenceParams.tokenomicsParams"
+    },
+    {
+      "id": "data.InferenceParams.epochParams",
+      "kind": "property",
+      "name": "epochParams",
+      "owner": "InferenceParams",
+      "pattern": "^\\s*(?:@SerializedName\\(\"[^\"]*\"\\)\\s*)?va[lr]\\s+epochParams\\s*:\\s*EpochParams",
+      "description": "InferenceParams.epochParams"
+    },
+    {
+      "id": "data.BitcoinRewardParams.initialEpochReward",
+      "kind": "property",
+      "name": "initialEpochReward",
+      "owner": "BitcoinRewardParams",
+      "pattern": "^\\s*(?:@SerializedName\\(\"[^\"]*\"\\)\\s*)?va[lr]\\s+initialEpochReward\\s*:\\s*Long",
+      "description": "BitcoinRewardParams.initialEpochReward"
+    },
+    {
+      "id": "data.TokenomicsParams.workVestingPeriod",
+      "kind": "property",
+      "name": "workVestingPeriod",
+      "owner": "TokenomicsParams",
+      "pattern": "^\\s*(?:@SerializedName\\(\"[^\"]*\"\\)\\s*)?va[lr]\\s+workVestingPeriod\\s*:\\s*Long\\?",
+      "description": "TokenomicsParams.workVestingPeriod"
+    },
+    {
+      "id": "data.TokenomicsParams.rewardVestingPeriod",
+      "kind": "property",
+      "name": "rewardVestingPeriod",
+      "owner": "TokenomicsParams",
+      "pattern": "^\\s*(?:@SerializedName\\(\"[^\"]*\"\\)\\s*)?va[lr]\\s+rewardVestingPeriod\\s*:\\s*Long\\?",
+      "description": "TokenomicsParams.rewardVestingPeriod"
+    },
+    {
+      "id": "data.EpochParams.epochLength",
+      "kind": "property",
+      "name": "epochLength",
+      "owner": "EpochParams",
+      "pattern": "^\\s*(?:@SerializedName\\(\"[^\"]*\"\\)\\s*)?va[lr]\\s+epochLength\\s*:\\s*Long",
+      "description": "EpochParams.epochLength"
+    },
+    {
+      "id": "data.RestrictionsState.params",
+      "kind": "property",
+      "name": "params",
+      "owner": "RestrictionsState",
+      "pattern": "^\\s*(?:@SerializedName\\(\"[^\"]*\"\\)\\s*)?va[lr]\\s+params\\s*:\\s*RestrictionsParams",
+      "description": "RestrictionsState.params"
+    },
+    {
+      "id": "data.RestrictionsParams.restrictionEndBlock",
+      "kind": "property",
+      "name": "restrictionEndBlock",
+      "owner": "RestrictionsParams",
+      "pattern": "^\\s*(?:@SerializedName\\(\"[^\"]*\"\\)\\s*)?va[lr]\\s+restrictionEndBlock\\s*:\\s*Long",
+      "description": "RestrictionsParams.restrictionEndBlock"
+    },
+    {
+      "id": "data.RestrictionsParams.emergencyTransferExemptions",
+      "kind": "property",
+      "name": "emergencyTransferExemptions",
+      "owner": "RestrictionsParams",
+      "pattern": "^\\s*(?:@SerializedName\\(\"[^\"]*\"\\)\\s*)?va[lr]\\s+emergencyTransferExemptions\\s*:\\s*List<EmergencyTransferExemption>",
+      "description": "RestrictionsParams.emergencyTransferExemptions"
+    },
+    {
+      "id": "data.RestrictionsParams.exemptionUsageTracking",
+      "kind": "property",
+      "name": "exemptionUsageTracking",
+      "owner": "RestrictionsParams",
+      "pattern": "^\\s*(?:@SerializedName\\(\"[^\"]*\"\\)\\s*)?va[lr]\\s+exemptionUsageTracking\\s*:\\s*List<",
+      "description": "RestrictionsParams.exemptionUsageTracking"
+    },
+    {
+      "id": "data.GovState.params",
+      "kind": "property",
+      "name": "params",
+      "owner": "GovState",
+      "pattern": "^\\s*(?:@SerializedName\\(\"[^\"]*\"\\)\\s*)?va[lr]\\s+params\\s*:\\s*GovParams",
+      "description": "GovState.params"
+    },
+    {
+      "id": "data.GovParams.expeditedVotingPeriod",
+      "kind": "property",
+      "name": "expeditedVotingPeriod",
+      "owner": "GovParams",
+      "pattern": "^\\s*(?:@SerializedName\\(\"[^\"]*\"\\)\\s*)?va[lr]\\s+expeditedVotingPeriod\\s*:\\s*Duration",
+      "description": "GovParams.expeditedVotingPeriod"
+    },
+    {
+      "id": "data.MsgTransferWithVesting.vestingEpochs",
+      "kind": "property",
+      "name": "vestingEpochs",
+      "owner": "MsgTransferWithVesting",
+      "pattern": "^\\s*(?:@SerializedName\\(\"[^\"]*\"\\)\\s*)?va[lr]\\s+vestingEpochs\\s*:\\s*Long",
+      "description": "MsgTransferWithVesting.vestingEpochs"
+    },
+    {
+      "id": "data.MsgTransferWithVesting.recipient",
+      "kind": "property",
+      "name": "recipient",
+      "owner": "MsgTransferWithVesting",
+      "pattern": "^\\s*(?:@SerializedName\\(\"[^\"]*\"\\)\\s*)?va[lr]\\s+recipient\\s*:\\s*String",
+      "description": "MsgTransferWithVesting.recipient"
+    },
+    {
+      "id": "data.UpdateRestrictionsParams.params",
+      "kind": "property",
+      "name": "params",
+      "owner": "UpdateRestrictionsParams",
+      "pattern": "^\\s*(?:@SerializedName\\(\"[^\"]*\"\\)\\s*)?va[lr]\\s+params\\s*:\\s*RestrictionsParams",
+      "description": "UpdateRestrictionsParams.params"
+    },
+    {
+      "id": "data.EmergencyTransferExemption.exemptionId",
+      "kind": "property",
+      "name": "exemptionId",
+      "owner": "EmergencyTransferExemption",
+      "pattern": "^\\s*(?:@SerializedName\\(\"[^\"]*\"\\)\\s*)?va[lr]\\s+exemptionId\\s*:\\s*String",
+      "description": "EmergencyTransferExemption.exemptionId"
+    },
+    {
+      "id": "data.EmergencyTransferExemption.toAddress",
+      "kind": "property",
+      "name": "toAddress",
+      "owner": "EmergencyTransferExemption",
+      "pattern": "^\\s*(?:@SerializedName\\(\"[^\"]*\"\\)\\s*)?va[lr]\\s+toAddress\\s*:\\s*String",
+      "description": "EmergencyTransferExemption.toAddress"
+    },
+    {
+      "id": "data.EmergencyTransferExemption.usageLimit",
+      "kind": "property",
+      "name": "usageLimit",
+      "owner": "EmergencyTransferExemption",
+      "pattern": "^\\s*(?:@SerializedName\\(\"[^\"]*\"\\)\\s*)?va[lr]\\s+usageLimit\\s*:",
+      "description": "EmergencyTransferExemption.usageLimit"
+    },
+    {
+      "id": "data.EmergencyTransferExemption.expiryBlock",
+      "kind": "property",
+      "name": "expiryBlock",
+      "owner": "EmergencyTransferExemption",
+      "pattern": "^\\s*(?:@SerializedName\\(\"[^\"]*\"\\)\\s*)?va[lr]\\s+expiryBlock\\s*:",
+      "description": "EmergencyTransferExemption.expiryBlock"
+    },
+    {
+      "id": "data.EmergencyTransferExemption.justification",
+      "kind": "property",
+      "name": "justification",
+      "owner": "EmergencyTransferExemption",
+      "pattern": "^\\s*(?:@SerializedName\\(\"[^\"]*\"\\)\\s*)?va[lr]\\s+justification\\s*:\\s*String",
+      "description": "EmergencyTransferExemption.justification"
+    },
+    {
+      "id": "data.EmergencyTransferExemption.maxAmount",
+      "kind": "property",
+      "name": "maxAmount",
+      "owner": "EmergencyTransferExemption",
+      "pattern": "^\\s*(?:@SerializedName\\(\"[^\"]*\"\\)\\s*)?va[lr]\\s+maxAmount\\s*:",
+      "description": "EmergencyTransferExemption.maxAmount"
+    },
+    {
+      "id": "data.TxResponse.txhash",
+      "kind": "property",
+      "name": "txhash",
+      "owner": "TxResponse",
+      "pattern": "^\\s*(?:@SerializedName\\(\"[^\"]*\"\\)\\s*)?va[lr]\\s+txhash\\s*:\\s*String",
+      "description": "TxResponse.txhash"
+    },
+    {
+      "id": "data.TxResponse.code",
+      "kind": "property",
+      "name": "code",
+      "owner": "TxResponse",
+      "pattern": "^\\s*(?:@SerializedName\\(\"[^\"]*\"\\)\\s*)?va[lr]\\s+code\\s*:\\s*Int",
+      "description": "TxResponse.code"
+    },
+    {
+      "id": "data.TxResponse.rawLog",
+      "kind": "property",
+      "name": "rawLog",
+      "owner": "TxResponse",
+      "pattern": "^\\s*(?:@SerializedName\\(\"[^\"]*\"\\)\\s*)?va[lr]\\s+rawLog\\s*:\\s*String",
+      "description": "TxResponse.rawLog"
+    },
+    {
+      "id": "data.ApiConfig.currentSeed",
+      "kind": "property",
+      "name": "currentSeed",
+      "owner": "ApiConfig",
+      "pattern": "^\\s*(?:@SerializedName\\(\"[^\"]*\"\\)\\s*)?va[lr]\\s+currentSeed\\s*:\\s*SeedInfo",
+      "description": "ApiConfig.currentSeed"
+    },
+    {
+      "id": "data.SeedInfo.seed",
+      "kind": "property",
+      "name": "seed",
+      "owner": "SeedInfo",
+      "pattern": "^\\s*(?:@SerializedName\\(\"[^\"]*\"\\)\\s*)?va[lr]\\s+seed\\s*:\\s*Long",
+      "description": "SeedInfo.seed"
+    },
+    {
+      "id": "data.SeedInfo.epochIndex",
+      "kind": "property",
+      "name": "epochIndex",
+      "owner": "SeedInfo",
+      "pattern": "^\\s*(?:@SerializedName\\(\"[^\"]*\"\\)\\s*)?va[lr]\\s+epochIndex\\s*:\\s*Long",
+      "description": "SeedInfo.epochIndex"
+    },
+    {
+      "id": "data.EpochResponse.latestEpoch",
+      "kind": "property",
+      "name": "latestEpoch",
+      "owner": "EpochResponse",
+      "pattern": "^\\s*(?:@SerializedName\\(\"[^\"]*\"\\)\\s*)?va[lr]\\s+latestEpoch\\s*:\\s*LatestEpochDto",
+      "description": "EpochResponse.latestEpoch"
+    },
+    {
+      "id": "data.LatestEpochDto.index",
+      "kind": "property",
+      "name": "index",
+      "owner": "LatestEpochDto",
+      "pattern": "^\\s*(?:@SerializedName\\(\"[^\"]*\"\\)\\s*)?va[lr]\\s+index\\s*:\\s*Long",
+      "description": "LatestEpochDto.index"
+    },
+    {
+      "id": "data.Validator.pubkey",
+      "kind": "property",
+      "name": "pubkey",
+      "owner": "Validator",
+      "pattern": "^\\s*(?:@SerializedName\\(\"[^\"]*\"\\)\\s*)?va[lr]\\s+pubkey\\s*:\\s*Pubkey2",
+      "description": "Validator.pubkey"
+    },
+    {
+      "id": "data.Validator.address",
+      "kind": "property",
+      "name": "address",
+      "owner": "Validator",
+      "pattern": "^\\s*(?:@SerializedName\\(\"[^\"]*\"\\)\\s*)?va[lr]\\s+address\\s*:\\s*String",
+      "description": "Validator.address"
+    },
+    {
+      "id": "data.TransferRestrictionStatusDto.isActive",
+      "kind": "property",
+      "name": "isActive",
+      "owner": "TransferRestrictionStatusDto",
+      "pattern": "^\\s*(?:@SerializedName\\(\"[^\"]*\"\\)\\s*)?va[lr]\\s+isActive\\s*:\\s*Boolean",
+      "description": "TransferRestrictionStatusDto.isActive"
+    },
+    {
+      "id": "data.TransferRestrictionStatusDto.currentBlockHeight",
+      "kind": "property",
+      "name": "currentBlockHeight",
+      "owner": "TransferRestrictionStatusDto",
+      "pattern": "^\\s*(?:@SerializedName\\(\"[^\"]*\"\\)\\s*)?va[lr]\\s+currentBlockHeight\\s*:\\s*Long",
+      "description": "TransferRestrictionStatusDto.currentBlockHeight"
+    },
+    {
+      "id": "spec",
+      "kind": "fun",
+      "name": "spec",
+      "pattern": "^inline\\s+fun\\s+<reified\\s+T\\s*:\\s*Any>\\s+spec\\(",
+      "description": "Genesis spec builder."
+    },
+    {
+      "id": "Spec.merge",
+      "kind": "fun",
+      "name": "merge",
+      "owner": "Spec",
+      "pattern": "^\\s*(?:(?:public|internal|inline|suspend)\\s+)*fun\\s+(?:<[^>]+>\\s+)?merge\\s*\\(",
+      "description": "Spec.merge for the fast Marketplace genesis."
+    },
+    {
+      "id": "logSection",
+      "kind": "fun",
+      "name": "logSection",
+      "pattern": "^fun\\s+logSection\\(name:\\s*String\\)",
+      "description": "Section logging."
+    },
+    {
+      "id": "logContext",
+      "kind": "fun",
+      "name": "logContext",
+      "pattern": "^fun\\s+<T>\\s+logContext\\(",
+      "description": "Used by upstream TestermintTest.kt."
+    },
+    {
+      "id": "TestFilesWriter.currentTest",
+      "kind": "property",
+      "name": "currentTest",
+      "owner": "TestFilesWriter",
+      "pattern": "va[lr]\\s+currentTest\\b",
+      "description": "Used by upstream TestermintTest.kt."
+    },
+    {
+      "id": "dumpInferenceDockerLogsForArtifact",
+      "kind": "fun",
+      "name": "dumpInferenceDockerLogsForArtifact",
+      "pattern": "^\\s*(?:(?:public|internal|inline|suspend)\\s+)*fun\\s+(?:<[^>]+>\\s+)?dumpInferenceDockerLogsForArtifact\\s*\\(",
+      "description": "Used by upstream TestermintTest.kt on failure."
+    },
+    {
+      "id": "TestermintTest",
+      "kind": "class",
+      "name": "TestermintTest",
+      "pattern": "^open\\s+class\\s+TestermintTest\\b",
+      "description": "Base class of MarketplaceContractAcceptanceTests (upstream test source, copied read-only).",
+      "file": "testermint/src/test/kotlin/TestermintTest.kt"
+    }
+  ]
+}

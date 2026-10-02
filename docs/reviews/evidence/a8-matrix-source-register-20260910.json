@@ -1,0 +1,1844 @@
+{
+  "a8-abc-reviewed-20260910.json": {
+    "sha256": "e585162fa08f6decd53c1a5cc8dfc4ac9b4f76c8d6374857aef25107b8754688",
+    "source": {},
+    "run_id": null,
+    "raw_evidence": {},
+    "runs": {
+      "a8abc-a-20260909b": {
+        "source": {
+          "a9_contract_sha256": {
+            "deal": "2caa08099be647a9c3d5fa9868ec6faee30ae7c2a9136cc4891cd75ccd55c0e5",
+            "factory": "8366a874619c03e54ed36edf6b0ebbde4001afcf6c1b02ed40f9762350e6d82b"
+          },
+          "a9_manifest_sha256": "b2944e4d33c5954b7d987971a12ed6049a67f7bb14403c60fb2a2f674a80303a",
+          "gonka_sha": "29a58fcf64b87967cb874b6169ce2c61e1f269b1",
+          "gonka_test_harness_sha": "b9c6ec54242109ef8a5ce7e4bdac1b992f78f2dc",
+          "marketplace_commit_sha": "a6bbc6f9c6736c4e81fd7c8409385843db19b620",
+          "protobuf_sha": "379bebced638aeb5e6077bfd51c986f898443832",
+          "runtime": {
+            "cosmos_sdk": "v0.53.3-ps19-observability",
+            "go": "go version go1.24.2 linux/amd64",
+            "gonka_source_sha": "29a58fcf64b87967cb874b6169ce2c61e1f269b1",
+            "wasmd": "v0.54.2",
+            "wasmvm": "v2.2.4"
+          },
+          "test_contract_sha256": {
+            "caller": "1680a8c107c4ba0df77aa2652657d8790b33e5b35459a1a2095f8011f0228d99",
+            "cw20": "9e2cc208027e5ceb8cffdfb36546720559ccd50cdd8b4c2c48d80aec75e5843b"
+          }
+        },
+        "references": {
+          "context": {
+            "path": "/home/runner/a8-runtime/a8abc-a-20260909b/evidence/a8abc-a-20260909b/live-context.json",
+            "sha256": "035bbb7f6cf62499676e081d3e44f4909e68439c10c2e02df3a20088246831f1"
+          },
+          "junit": {
+            "path": "/home/runner/a8-runtime/a8abc-a-20260909b/junit/TEST-MarketplaceContractAcceptanceTests.xml",
+            "sha256": "383dae015eb0a25e75ad178f701e078da7907d6c28bf151af031f0cd0daa7232"
+          },
+          "cleanup": {
+            "path": "/home/runner/a8-runtime/a8abc-a-20260909b/cleanup-evidence/completed.json",
+            "sha256": "7610e9839975cecac1eb100f6c07a3f8cd1cbf3c523fd7a0f306f93ab6571854"
+          },
+          "ownership": {
+            "path": "/home/runner/a8-runtime/a8abc-a-20260909b/cleanup-evidence/ownership.json",
+            "sha256": "8d1b171ef0c09e0a7011e0925815baf175b874ce7a3805575ff828c0f18126a2"
+          },
+          "a9_manifest": {
+            "path": "/home/runner/a8-runtime/a8abc-a-20260909b/evidence/a8abc-a-20260909b/a9-release/build-manifest.json",
+            "sha256": "b2944e4d33c5954b7d987971a12ed6049a67f7bb14403c60fb2a2f674a80303a"
+          }
+        },
+        "context": null
+      },
+      "a8abc-b6-20260909": {
+        "source": {
+          "a9_contract_sha256": {
+            "deal": "2caa08099be647a9c3d5fa9868ec6faee30ae7c2a9136cc4891cd75ccd55c0e5",
+            "factory": "8366a874619c03e54ed36edf6b0ebbde4001afcf6c1b02ed40f9762350e6d82b"
+          },
+          "a9_manifest_sha256": "3e59e75650eae4423a6af4ca223639d6500c305558e695d4c3304c9fc5c2b3f2",
+          "gonka_sha": "29a58fcf64b87967cb874b6169ce2c61e1f269b1",
+          "gonka_test_harness_sha": "b9c6ec54242109ef8a5ce7e4bdac1b992f78f2dc",
+          "marketplace_commit_sha": "a6bbc6f9c6736c4e81fd7c8409385843db19b620",
+          "protobuf_sha": "379bebced638aeb5e6077bfd51c986f898443832",
+          "runtime": {
+            "cosmos_sdk": "v0.53.3-ps19-observability",
+            "go": "go version go1.24.2 linux/amd64",
+            "gonka_source_sha": "29a58fcf64b87967cb874b6169ce2c61e1f269b1",
+            "wasmd": "v0.54.2",
+            "wasmvm": "v2.2.4"
+          },
+          "test_contract_sha256": {
+            "caller": "1680a8c107c4ba0df77aa2652657d8790b33e5b35459a1a2095f8011f0228d99",
+            "cw20": "9e2cc208027e5ceb8cffdfb36546720559ccd50cdd8b4c2c48d80aec75e5843b"
+          }
+        },
+        "references": {
+          "context": {
+            "path": "/home/runner/a8-runtime/a8abc-b6-20260909/evidence/a8abc-b6-20260909/live-context.json",
+            "sha256": "91781a56ef10113c57efdbb756f62f921411ee6245aba73a48a9fd7a3ac86be8"
+          },
+          "junit": {
+            "path": "/home/runner/a8-runtime/a8abc-b6-20260909/junit/TEST-MarketplaceContractAcceptanceTests.xml",
+            "sha256": "c404c9e669c766146a690170af1aca14d8401010c8495db20634534dbb89f724"
+          },
+          "cleanup": {
+            "path": "/home/runner/a8-runtime/a8abc-b6-20260909/cleanup-evidence/completed.json",
+            "sha256": "4ca76b6c66654b52cbdddbb741ac36bedabce892fef7e1c4cf345e65d74cde58"
+          },
+          "ownership": {
+            "path": "/home/runner/a8-runtime/a8abc-b6-20260909/cleanup-evidence/ownership.json",
+            "sha256": "64b726eca2bf2cff4fd3e442a0aedb27c459e1228ac04a2836f735690bdc0dc9"
+          },
+          "a9_manifest": {
+            "path": "/home/runner/a8-runtime/a8abc-b6-20260909/evidence/a8abc-b6-20260909/a9-release/build-manifest.json",
+            "sha256": "3e59e75650eae4423a6af4ca223639d6500c305558e695d4c3304c9fc5c2b3f2"
+          }
+        },
+        "context": null
+      },
+      "a8abc-b7-20260910": {
+        "source": {
+          "a9_contract_sha256": {
+            "deal": "2caa08099be647a9c3d5fa9868ec6faee30ae7c2a9136cc4891cd75ccd55c0e5",
+            "factory": "8366a874619c03e54ed36edf6b0ebbde4001afcf6c1b02ed40f9762350e6d82b"
+          },
+          "a9_manifest_sha256": "fccb8fee7d095d8588c21528a08e5854a01458857ad8425338e95bfe058c96f6",
+          "gonka_sha": "29a58fcf64b87967cb874b6169ce2c61e1f269b1",
+          "gonka_test_harness_sha": "b9c6ec54242109ef8a5ce7e4bdac1b992f78f2dc",
+          "marketplace_commit_sha": "a6bbc6f9c6736c4e81fd7c8409385843db19b620",
+          "protobuf_sha": "379bebced638aeb5e6077bfd51c986f898443832",
+          "runtime": {
+            "cosmos_sdk": "v0.53.3-ps19-observability",
+            "go": "go version go1.24.2 linux/amd64",
+            "gonka_source_sha": "29a58fcf64b87967cb874b6169ce2c61e1f269b1",
+            "wasmd": "v0.54.2",
+            "wasmvm": "v2.2.4"
+          },
+          "test_contract_sha256": {
+            "caller": "1680a8c107c4ba0df77aa2652657d8790b33e5b35459a1a2095f8011f0228d99",
+            "cw20": "9e2cc208027e5ceb8cffdfb36546720559ccd50cdd8b4c2c48d80aec75e5843b"
+          }
+        },
+        "references": {
+          "context": {
+            "path": "/home/runner/a8-runtime/a8abc-b7-20260910/evidence/a8abc-b7-20260910/live-context.json",
+            "sha256": "9d2b2d557a1d01200babb0f5e93a62c2f71bb1aefd70a3b7219ae271990d3529"
+          },
+          "junit": {
+            "path": "/home/runner/a8-runtime/a8abc-b7-20260910/junit/TEST-MarketplaceContractAcceptanceTests.xml",
+            "sha256": "4c7474cce24cb69dd7648b65a8e12a881da1a06a5c2b3a8905849e8df0d2f436"
+          },
+          "cleanup": {
+            "path": "/home/runner/a8-runtime/a8abc-b7-20260910/cleanup-evidence/completed.json",
+            "sha256": "795bafd1738a5bbde8f0a9c97bc51cbcdcad7c71faae1432907190a24959a317"
+          },
+          "ownership": {
+            "path": "/home/runner/a8-runtime/a8abc-b7-20260910/cleanup-evidence/ownership.json",
+            "sha256": "21dd02c748a2c9c2cd22d9945b8d46205e3c7663ed04f93b355bab6b540b67a9"
+          },
+          "a9_manifest": {
+            "path": "/home/runner/a8-runtime/a8abc-b7-20260910/evidence/a8abc-b7-20260910/a9-release/build-manifest.json",
+            "sha256": "fccb8fee7d095d8588c21528a08e5854a01458857ad8425338e95bfe058c96f6"
+          }
+        },
+        "context": null
+      },
+      "a8abc-c-20260910": {
+        "source": {
+          "a9_contract_sha256": {
+            "deal": "2caa08099be647a9c3d5fa9868ec6faee30ae7c2a9136cc4891cd75ccd55c0e5",
+            "factory": "8366a874619c03e54ed36edf6b0ebbde4001afcf6c1b02ed40f9762350e6d82b"
+          },
+          "a9_manifest_sha256": "54617ba0f9cd188de9a645991a7a6747cadb1219b496abfbb6606b336e97ab0f",
+          "gonka_sha": "29a58fcf64b87967cb874b6169ce2c61e1f269b1",
+          "gonka_test_harness_sha": "b9c6ec54242109ef8a5ce7e4bdac1b992f78f2dc",
+          "marketplace_commit_sha": "a6bbc6f9c6736c4e81fd7c8409385843db19b620",
+          "protobuf_sha": "379bebced638aeb5e6077bfd51c986f898443832",
+          "runtime": {
+            "cosmos_sdk": "v0.53.3-ps19-observability",
+            "go": "go version go1.24.2 linux/amd64",
+            "gonka_source_sha": "29a58fcf64b87967cb874b6169ce2c61e1f269b1",
+            "wasmd": "v0.54.2",
+            "wasmvm": "v2.2.4"
+          },
+          "test_contract_sha256": {
+            "caller": "1680a8c107c4ba0df77aa2652657d8790b33e5b35459a1a2095f8011f0228d99",
+            "cw20": "9e2cc208027e5ceb8cffdfb36546720559ccd50cdd8b4c2c48d80aec75e5843b"
+          }
+        },
+        "references": {
+          "context": {
+            "path": "/home/runner/a8-runtime/a8abc-c-20260910/evidence/a8abc-c-20260910/live-context.json",
+            "sha256": "f7792412eba4ab36433d8ddde2d79ec01ee4e671bca92e08b81d8f8692fc05b0"
+          },
+          "junit": {
+            "path": "/home/runner/a8-runtime/a8abc-c-20260910/junit/TEST-MarketplaceContractAcceptanceTests.xml",
+            "sha256": "7748842c26d467614976b89237ed16651d7e02ca0965e787678bd6640ad8b750"
+          },
+          "cleanup": {
+            "path": "/home/runner/a8-runtime/a8abc-c-20260910/cleanup-evidence/completed.json",
+            "sha256": "75a4b5d290daf1a5e7708e382d24c2b82d0c2bb7b064209b88950948e5831fee"
+          },
+          "ownership": {
+            "path": "/home/runner/a8-runtime/a8abc-c-20260910/cleanup-evidence/ownership.json",
+            "sha256": "7607e419a46a4aeede766a7fe03d8de7771ab279501c95491e31c656940d8d4b"
+          },
+          "a9_manifest": {
+            "path": "/home/runner/a8-runtime/a8abc-c-20260910/evidence/a8abc-c-20260910/a9-release/build-manifest.json",
+            "sha256": "54617ba0f9cd188de9a645991a7a6747cadb1219b496abfbb6606b336e97ab0f"
+          },
+          "package_results": {
+            "path": "/home/runner/a8-runtime/a8abc-c-20260910/evidence/a8abc-c-20260910/package-c/results.json",
+            "sha256": "dd8793d68a1e1ffc2782412c79b0d482063a1009505273121718b515541585d0"
+          },
+          "runtime_build": {
+            "path": "/home/runner/a8-runtime/a8abc-c-20260910/evidence/a8abc-c-20260910/c-runtime-build.json",
+            "sha256": "577c9c4f48ff480b52ef0d699373269d1f70d73fa95c41953f12376594c719c0"
+          }
+        },
+        "context": null
+      }
+    }
+  },
+  "a8-b2-late-donation-completed-005.json": {
+    "sha256": "887343ec9ebbf521fcc50a2bb49ce5597bb920e399bb930241c50f96afd4e7fe",
+    "source": {
+      "marketplace_commit_sha": "fc41c03fc2e47563a6434d18c29d133bec1c0bca",
+      "gonka_test_harness_sha": "bbde35c87757d7519962d67424f16b5613f1fc36",
+      "pinned_gonka_source_sha": "29a58fcf64b87967cb874b6169ce2c61e1f269b1",
+      "toolchain": {
+        "cosmwasm_check": "2.2.2",
+        "rust": "1.81.0",
+        "java": "21"
+      }
+    },
+    "run_id": "b2-late-005",
+    "raw_evidence": {
+      "root": "/home/runner/a8-runtime/b2-late-005",
+      "live_context": {
+        "sha256": "8cd0d9e8c0c5dfd97635194d1473934d09e33d1abeef7e929351307d0479b7ad",
+        "bytes": 101792
+      },
+      "junit_xml": {
+        "sha256": "da0ecbb4bc5230e5f61cdd975a22d5c594ca92e842820dead49b3d4a6c497ef8",
+        "bytes": 13324550
+      },
+      "a9_manifest": {
+        "sha256": "2da1a86f11711b7e310e3eb1e417743fda7d02105256ee11231e3433cc779d88",
+        "bytes": 7454
+      },
+      "cleanup_completed": {
+        "sha256": "6fe147810048d9ab960cd71ff604058d50e548e9bd12d572107fbdfc1ff4ba9c"
+      }
+    }
+  },
+  "a8-b3-foreign-native-004.json": {
+    "sha256": "aeeb470952ade13b3de26b3b5fc134f9d044ba4fb4d89165287f5e7d3269ffc3",
+    "source": {
+      "marketplace_commit_sha": "f4c75f3eae273dd01b1939e9415f8a18a9fd4a2f",
+      "gonka_test_harness_sha": "ac40c42599a6ca562664542f3313fffc66522f91",
+      "pinned_gonka_source_sha": "29a58fcf64b87967cb874b6169ce2c61e1f269b1",
+      "protobuf_sha": "379bebced638aeb5e6077bfd51c986f898443832",
+      "toolchain": {
+        "cosmwasm_check": "2.2.2",
+        "rust": "1.81.0"
+      },
+      "wasm_sha256": {
+        "marketplace_deal": "2caa08099be647a9c3d5fa9868ec6faee30ae7c2a9136cc4891cd75ccd55c0e5",
+        "marketplace_factory": "8366a874619c03e54ed36edf6b0ebbde4001afcf6c1b02ed40f9762350e6d82b"
+      }
+    },
+    "run_id": "b3-native-004",
+    "raw_evidence": {
+      "root": "/home/runner/a8-runtime/b3-native-004",
+      "live_context": {
+        "sha256": "c12709b1ec60f6be1b078164dd4dc19ac42463d03e0f9e87b74096a24914ee53",
+        "bytes": 56975
+      },
+      "junit_xml": {
+        "sha256": "6225252cdec50deebf0ea7d7886ce0ab463520f33225154f28cf2d3bcc660f06",
+        "bytes": 12008844
+      },
+      "a9_manifest": {
+        "sha256": "c4fdffc195f92494d07223f2a031866ccf64f1c6f814f64f9a92df60d9d18792",
+        "bytes": 7462
+      },
+      "toolchain_preflight": {
+        "sha256": "8e9ab58b455b537da9c965fdb0f06a19de91cc2faf808a7badb16d0b51157314",
+        "bytes": 80
+      }
+    }
+  },
+  "a8-c-final-review-20260910.json": {
+    "sha256": "f4d07d1d6a8ac2796df2afa2cb09581969b2591515fc397d108a5673494daa37",
+    "source": {},
+    "run_id": "a8cfix3-20260910",
+    "raw_evidence": {
+      "context": {
+        "path": "/home/runner/a8-runtime/a8cfix3-20260910/evidence/a8cfix3-20260910/live-context.json",
+        "sha256": "34dc52d515a8194c529babe4f1f1c74f5988f448b2fec28bc742118f6bae5c20"
+      },
+      "results": {
+        "path": "/home/runner/a8-runtime/a8cfix3-20260910/evidence/a8cfix3-20260910/package-c/results.json",
+        "sha256": "2906cc1a3cbf49a2d9fe9a466fdeef2895fd2cf4289fc6bd63dfa37c5d41711c"
+      },
+      "cleanup": {
+        "path": "/home/runner/a8-runtime/a8cfix3-20260910/cleanup-evidence/completed.json",
+        "sha256": "66b41dffc0b9fd5582abe2ee9b77e9a2b16fa91409e7e97d7bcd602b909bd190"
+      },
+      "launcher": {
+        "path": "/home/runner/a8-runtime/a8cfix3-20260910/launcher.log",
+        "sha256": "fe8f1edc7e6bafaaf23dae9052b6cf29f2bb83c17f4988bbb785a6a2335133fe"
+      }
+    }
+  },
+  "a8-claim-expiry-positive-043.json": {
+    "sha256": "efef0d746f3dab96b44fcf8b7ba3f8ae554de370d920daea6ed243c5c5ad2fd6",
+    "source": {
+      "marketplace_harness_sha": "4bfcb3e8e655240152c7eee6140b2846d5459bf0",
+      "gonka_test_harness_sha": "e9eb8f6a7b7e2a3478cc00daae358a1374f60eea",
+      "gonka_runtime_sha": "29a58fcf64b87967cb874b6169ce2c61e1f269b1",
+      "protobuf_sha": "379bebced638aeb5e6077bfd51c986f898443832",
+      "runtime": {
+        "cosmos_sdk": "v0.53.3-ps19-observability",
+        "go": "go version go1.24.2 linux/amd64",
+        "wasmd": "v0.54.2",
+        "wasmvm": "v2.2.4"
+      },
+      "artifacts": {
+        "deal_sha256": "2caa08099be647a9c3d5fa9868ec6faee30ae7c2a9136cc4891cd75ccd55c0e5",
+        "factory_sha256": "8366a874619c03e54ed36edf6b0ebbde4001afcf6c1b02ed40f9762350e6d82b",
+        "a9_manifest_sha256": "760fbb68df2b1f3b81001abefd3d0f90b95f17853909f32c1835070b220aba1d"
+      }
+    },
+    "run_id": "a8-claim-expiry-positive-043",
+    "raw_evidence": {
+      "live_context": {
+        "path": "artifacts/a8-evidence/a8-claim-expiry-positive-043/live-context.json",
+        "sha256": "a6c024866f01f1c21b8a71181c425c816059ac9a6ee931f74e6defddcaab742e",
+        "bytes": 60372
+      },
+      "testermint_log": {
+        "path": "artifacts/a8-evidence/a8-claim-expiry-positive-043/testermint.log",
+        "sha256": "4b26e20d2764eb29af642accbf0d6bc46e86d248ce0660a1fe73df53ff948b1a",
+        "bytes": 5877
+      },
+      "junit_xml": {
+        "path": "../a8-gonka-d1-run43/testermint/build/test-results/test/TEST-MarketplaceContractAcceptanceTests.xml",
+        "sha256": "70063f09e5e23289f18207b921405c193ac63af615ddff69179d452b3b03ef4f",
+        "bytes": 11639124
+      }
+    }
+  },
+  "a8-claim-expiry-zero-044.json": {
+    "sha256": "6b50474a2735354a5829a5507954e2d0482f21b1cc612b7254cc368437342fe5",
+    "source": {
+      "marketplace_commit_sha": "482edc1b995d9241b0421839f638e30aca90cdd2",
+      "gonka_test_harness_sha": "bd47f66a07baf31ea180834e3a64bdb83c01bb97",
+      "gonka_native_sha": "29a58fcf64b87967cb874b6169ce2c61e1f269b1",
+      "protobuf_sha": "379bebced638aeb5e6077bfd51c986f898443832",
+      "runtime": {
+        "go": "go1.24.2 linux/amd64",
+        "cosmos_sdk": "v0.53.3-ps19-observability",
+        "wasmd": "v0.54.2",
+        "wasmvm": "v2.2.4"
+      },
+      "wasm_sha256": {
+        "deal": "2caa08099be647a9c3d5fa9868ec6faee30ae7c2a9136cc4891cd75ccd55c0e5",
+        "factory": "8366a874619c03e54ed36edf6b0ebbde4001afcf6c1b02ed40f9762350e6d82b",
+        "cw20_test": "930fc535aa5fa0ec6fb036ed458e4ab0759f36b4306461a3539fa6f631011b68",
+        "caller_test": "af6ddcc305a3292e6e99cfafadc38ea0f0def7892f4f9fc37a0a5c3f55baa147"
+      }
+    },
+    "run_id": "a8-claim-expiry-zero-044",
+    "raw_evidence": {
+      "live_context": {
+        "path": "artifacts/a8-evidence/a8-claim-expiry-zero-044/live-context.json",
+        "sha256": "79DA237908F6397F40EDCC86AAF55A11FBCDA9E01DE39E3CA0DFF5A90F1AF19C"
+      },
+      "testermint_log": {
+        "path": "artifacts/a8-evidence/a8-claim-expiry-zero-044/testermint.log",
+        "sha256": "217C70A0E74EA24FDBFB9B1B20FB25D70B23A7B96E0DAD8233F166538311BD92"
+      },
+      "junit": {
+        "path": "artifacts/a8-evidence/a8-claim-expiry-zero-044/TEST-MarketplaceContractAcceptanceTests.xml",
+        "sha256": "BB82E606B16E5C1301D6EF941C6ABD9CBC071825113EFC701DEEAF05A313FCD9",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "testcase": "marketplace zero unclaimed summary refunds only at claim expiry()"
+      }
+    }
+  },
+  "a8-final-reruns-review-20260910.json": {
+    "sha256": "8f04de93863aa29e4043d70cb7d94853f68a46c2a4da08c1c9221ac8ee7e1cac",
+    "source": {},
+    "run_id": null,
+    "raw_evidence": {},
+    "runs": {
+      "a8r7fix2-20260910": {
+        "source": null,
+        "references": {},
+        "context": {
+          "path": "/home/runner/a8-runtime/a8r7fix2-20260910/evidence/a8r7fix2-20260910/live-context.json",
+          "sha256": "7955ec0565a4e184cf7063d59b88082df2e248f8286fc30d4f4c7ebc99550d86"
+        }
+      },
+      "a8cfix2-20260910": {
+        "source": null,
+        "references": {},
+        "context": {
+          "path": "/home/runner/a8-runtime/a8cfix2-20260910/evidence/a8cfix2-20260910/live-context.json",
+          "sha256": "1984183390c0abda48d6eb4695fd38205ef3645fed9d4f10b15b6b136470f741"
+        }
+      }
+    }
+  },
+  "a8-funded-012-settlement-oracle.json": {
+    "sha256": "7835b819608d2f4527aa6b5b9f6ea5606bdbb1e8295fa3d0fa81436c7acda307",
+    "source": {
+      "marketplace_oracle_commit": "e369b48bd2640c79161f9566cc507c51307e813c",
+      "gonka_runtime_sha": "29a58fcf64b87967cb874b6169ce2c61e1f269b1",
+      "gonka_test_harness_sha": "9f32e0274a3e22ddb567ea024820cc2522a250db",
+      "protobuf_sha": "379bebced638aeb5e6077bfd51c986f898443832",
+      "wasmd": "v0.54.2",
+      "wasmvm": "v2.2.4"
+    },
+    "run_id": "a8-funded-012",
+    "raw_evidence": "artifacts/a8-evidence/a8-funded-012/live-context.json"
+  },
+  "a8-negative-017-diagnostic.json": {
+    "sha256": "c6327b313288a23af62ea2aaaa1995c6dd0e07c63187575160b44fd395052024",
+    "source": {
+      "marketplace_commit_sha": "83076ee",
+      "gonka_harness_commit_sha": "d7cd261e3bbf293dccd398301fcb3fd9d297cd07",
+      "gonka_runtime_source_sha": "29a58fcf64b87967cb874b6169ce2c61e1f269b1",
+      "protobuf_source_sha": "379bebced638aeb5e6077bfd51c986f898443832",
+      "post_failure_oracle_fix_commit_sha": "5ee849d"
+    },
+    "run_id": "a8-negative-017",
+    "raw_evidence": {
+      "live_context": {
+        "path": "artifacts/a8-evidence/a8-negative-017/live-context.json",
+        "at_failure_sha256": "0421cdacfa59812e3684f8efeb6b004949d0226d578f74eed2ad23c1fb9665a0"
+      },
+      "testermint_log": {
+        "path": "artifacts/a8-evidence/a8-negative-017/testermint.log",
+        "sha256": "06f9cf90e9f459d3c49133c4a93c4248228c3484a1ea949e4a08d82bd5b50cba"
+      }
+    }
+  },
+  "a8-network-unconfirmed-stable-e1-002.json": {
+    "sha256": "5ff71e6c779616ad11785ae022c8d31c69956701dd80a806711257e07ca6ec2f",
+    "source": {
+      "marketplace_commit_sha": "bddf1dbf5e32afb987fa5df430bc885ad28687f3",
+      "gonka_test_harness_sha": "470aa440b2846cd5b9398c579c6214690531ef2b",
+      "pinned_gonka_source_sha": "29a58fcf64b87967cb874b6169ce2c61e1f269b1",
+      "protobuf_sha": "379bebced638aeb5e6077bfd51c986f898443832",
+      "a9_manifest_sha256": "8d09a4aedd481e39c2259d65d09401bade051bce961e17cff449d70a8f4e0337",
+      "deal_wasm_sha256": "2caa08099be647a9c3d5fa9868ec6faee30ae7c2a9136cc4891cd75ccd55c0e5",
+      "factory_wasm_sha256": "8366a874619c03e54ed36edf6b0ebbde4001afcf6c1b02ed40f9762350e6d82b",
+      "runtime": {
+        "cosmos_sdk": "v0.53.3-ps19-observability",
+        "wasmd": "v0.54.2",
+        "wasmvm": "v2.2.4"
+      }
+    },
+    "run_id": "stable-e1-002",
+    "raw_evidence": {
+      "root": "/home/runner/a8-runtime/stable-e1-002",
+      "identity": "/home/runner/a8-runtime/stable-e1-002/identity.json",
+      "mount_probe": "/home/runner/a8-runtime/stable-e1-002/mount-probe.json",
+      "launcher_log": {
+        "path": "/home/runner/a8-runtime/stable-e1-002/launcher.log",
+        "sha256": "97bee8c560fb2b751b2196a4e8a26cf6af28d51d749ec02e10ec657ef15a46dd"
+      },
+      "live_context": {
+        "path": "/home/runner/a8-runtime/stable-e1-002/evidence/stable-e1-002/live-context.json",
+        "sha256": "699bc9d503eb4ca78215626e2566fc373b89c9420fad1e4474950e2b70a48d8d"
+      },
+      "testermint_log": {
+        "path": "/home/runner/a8-runtime/stable-e1-002/evidence/stable-e1-002/testermint.log",
+        "sha256": "94a968e0af553002f19cd5d4c3ae44c8df636cab3c933caf0a8f3b893b10db53"
+      },
+      "junit": {
+        "path": "/home/runner/a8-runtime/stable-e1-002/junit/TEST-MarketplaceContractAcceptanceTests.xml",
+        "sha256": "67ce080f225126f78cc51a996222cf9d8582c46b0871fa85d7dbed13d5fde06c"
+      },
+      "result": {
+        "path": "/home/runner/a8-runtime/stable-e1-002/result.json",
+        "sha256": "d85d46dc675b2d5b2c7562171490fe87dfa80151443b2d548120cf5356180cef"
+      }
+    }
+  },
+  "c1-lock-e-plus-4-003.json": {
+    "sha256": "d21edebbebacac84a713ae411f131c4daf3aa9af01e7b401f250c8291eb0c3a6",
+    "source": {
+      "marketplace_commit": "0b608151bb68dabf3606bba588f99f0e2b627a6c",
+      "gonka_harness_commit": "f3a533493d744fface8135953cf9b7b7cc1a422c",
+      "gonka_runtime": "29a58fcf64b87967cb874b6169ce2c61e1f269b1",
+      "a9_manifest_sha256": "52ef8c3a912c535e47fb997f3afe63258323d4fcdca411c09d9b980b1017aabe",
+      "deal_wasm_sha256": "2caa08099be647a9c3d5fa9868ec6faee30ae7c2a9136cc4891cd75ccd55c0e5",
+      "factory_wasm_sha256": "8366a874619c03e54ed36edf6b0ebbde4001afcf6c1b02ed40f9762350e6d82b"
+    },
+    "run_id": "e4-lock-003",
+    "raw_evidence": {
+      "path": "/home/runner/a8-runtime/e4-lock-003/evidence/e4-lock-003/live-context.json",
+      "sha256": "da0e40519ab3126c99c89551a68367782744c38a4ca2270a62cc13d0f5fcedc1"
+    }
+  },
+  "c1-lock-e-plus-5-002.json": {
+    "sha256": "320ed01ff83c819555468c1062eb94f632fc1239382aec42bd6e8f9477d7e043",
+    "source": {
+      "marketplace_commit": "dfcbf2eb7ac2a3bf86bb2d62959200e71dc48975",
+      "gonka_harness_commit": "52554bd218dbe15e4c852c8e7975f242c4c2d38c",
+      "gonka_runtime": "29a58fcf64b87967cb874b6169ce2c61e1f269b1",
+      "a9_manifest_sha256": "652e1fb8ef0a120dab63e1d6180ffc24dd97c9b84736f96eafb2821f383adcf0",
+      "deal_wasm_sha256": "2caa08099be647a9c3d5fa9868ec6faee30ae7c2a9136cc4891cd75ccd55c0e5",
+      "factory_wasm_sha256": "8366a874619c03e54ed36edf6b0ebbde4001afcf6c1b02ed40f9762350e6d82b"
+    },
+    "run_id": "e5-lock-002",
+    "raw_evidence": {
+      "path": "/home/runner/a8-runtime/e5-lock-002/evidence/e5-lock-002/live-context.json",
+      "sha256": "9bad881e3cad87d2836e6b78bc65ea6a568a55d55d83009a30cefdbf94826fc9"
+    }
+  },
+  "a8-c1-exact-e-gap-20260910.json": {
+    "sha256": "1274142c55fa1fa1600eb4eba4a66e88333db0ab62b42634a8006b9d7b6c8adf",
+    "source": {
+      "marketplace_commit_sha": "bf8e31837d177433379d15eb121a1e7ef458c9a5",
+      "gonka_test_harness_sha": "6a09808e512f73e9809c845a93e7871f20e539b8",
+      "available_receipts": [
+        "c1-lock-e-plus-4-003.json",
+        "c1-lock-e-plus-5-002.json"
+      ],
+      "analysis_goal": "native_exact_e_inclusion_gap",
+      "runtime": {
+        "cosmos_sdk": "v0.53.3-ps19-observability",
+        "wasmd": "v0.54.2",
+        "wasmvm": "v2.2.4",
+        "go": "go version go1.24.2 linux/amd64"
+      }
+    },
+    "run_id": "c1-exact-e-gap-20260910",
+    "raw_evidence": {
+      "path": "docs/reviews/evidence/a8-c1-exact-e-gap-20260910.json",
+      "sha256": "1274142C55FA1FA1600EB4EBA4A66E88333DB0AB62B42634A8006B9D7B6C8ADF"
+    }
+  },
+  "a8-r4-vm-boundary-local-test-20260910.json": {
+    "sha256": "29eb0e3f1ef326208bd58c2cc5e9a5857cab8af57b09feb8dbf00ffe52708a46",
+    "source": {
+      "marketplace_commit_sha": "bf8e31837d177433379d15eb121a1e7ef458c9a5",
+      "gonka_test_harness_sha": "6a09808e512f73e9809c845a93e7871f20e539b8",
+      "runtime": {
+        "cosmos_sdk": "v0.53.3-ps19-observability",
+        "wasmd": "v0.54.2",
+        "wasmvm": "v2.2.4",
+        "go": "go version go1.24.2 linux/amd64"
+      }
+    },
+    "run_id": "r4-vm-boundary-local-test-20260910",
+    "raw_evidence": {
+      "path": "docs/reviews/evidence/a8-r4-vm-boundary-local-test-20260910.json",
+      "sha256": "42DF9D3E4B10405B82BFBA0CE2F40220EBE5ADE18098492C9072BC4B73655990"
+    }
+  },
+  "g3-terminal-release-repeat-002.json": {
+    "sha256": "6bbf3a726ea8a47c60ea3f78adacd6fd51e666ca8ec328a36802b7f70c300893",
+    "source": {
+      "marketplace_commit_sha": "df90bea47bfff39748585e2a4f453631cb94a771",
+      "gonka_test_harness_sha": "db0e40f8a2109636cf08c6c7b1070d8d396d0a4c",
+      "pinned_gonka_source_sha": "29a58fcf64b87967cb874b6169ce2c61e1f269b1",
+      "protobuf_sha": "379bebced638aeb5e6077bfd51c986f898443832",
+      "runtime": {
+        "cosmos_sdk": "v0.53.3-ps19-observability",
+        "wasmd": "v0.54.2",
+        "wasmvm": "v2.2.4",
+        "go": "go version go1.24.2 linux/amd64"
+      },
+      "toolchain_preflight": {
+        "cosmwasm_check": "2.2.2",
+        "verified_output": "Contract checking 2.2.2"
+      },
+      "a9_manifest_sha256": "726dec3897bb6017d7bc3fdf947064f7a8954be2d4735f253e7ec328b6dffc4d",
+      "wasm_sha256": {
+        "marketplace_deal": "2caa08099be647a9c3d5fa9868ec6faee30ae7c2a9136cc4891cd75ccd55c0e5",
+        "marketplace_factory": "8366a874619c03e54ed36edf6b0ebbde4001afcf6c1b02ed40f9762350e6d82b",
+        "a8_caller": "1680a8c107c4ba0df77aa2652657d8790b33e5b35459a1a2095f8011f0228d99",
+        "a8_cw20": "9e2cc208027e5ceb8cffdfb36546720559ccd50cdd8b4c2c48d80aec75e5843b"
+      }
+    },
+    "run_id": "g3-terminal-002",
+    "raw_evidence": {
+      "g3-terminal-001": {
+        "root": "/home/runner/a8-runtime/g3-terminal-001",
+        "live_context": {
+          "sha256": "13a1bb6673626e1b078d81d82ba7f081e76e992fcb0c03698bab3e01e2440779",
+          "bytes": 52905
+        },
+        "testermint_log": {
+          "sha256": "78ddcbb68f34d49f79c17686e50871103fa3903a90f0f4e681af7f4db1f650ca",
+          "bytes": 6202
+        },
+        "junit_xml": {
+          "sha256": "e68283f7799c870a089d5ac827085a8fe27efd51af1739584c7e9dc5eaf72011",
+          "bytes": 11730692
+        }
+      },
+      "g3-terminal-002": {
+        "root": "/home/runner/a8-runtime/g3-terminal-002",
+        "live_context": {
+          "sha256": "3469ec137100d4d1fed4943567ea194c36a64a166a32bc5525c7eb25c9be9c90",
+          "bytes": 70281
+        },
+        "testermint_log": {
+          "sha256": "a7a230a8e3abd9288efcef4e85ed0706e7bd42043e8745c2c5922162dcc0bf48",
+          "bytes": 6202
+        },
+        "junit_xml": {
+          "sha256": "6c6615292a9164bab4985620e5894e93aa35c23d08c3819452de7cb0e069ca3b",
+          "bytes": 13450999
+        },
+        "a9_manifest": {
+          "sha256": "726dec3897bb6017d7bc3fdf947064f7a8954be2d4735f253e7ec328b6dffc4d",
+          "bytes": 7470
+        },
+        "toolchain_preflight": {
+          "sha256": "8e9ab58b455b537da9c965fdb0f06a19de91cc2faf808a7badb16d0b51157314",
+          "bytes": 80
+        },
+        "identity": {
+          "sha256": "eab53f5fc765edb0a1181ed93a4e246e5c4d8816ec797ea9d071f9aeef95e5d8",
+          "bytes": 160
+        },
+        "result": {
+          "sha256": "78cfd2cede9a75e6ef356eac6e1e16a87e15df016bd0477b50b9bfe6a468cd5a",
+          "bytes": 88
+        },
+        "cleanup_ownership": {
+          "sha256": "dfeb9a545eb9cf66741330d25937c45c98808322313f1544a59499866a1e6b63",
+          "bytes": 188895
+        },
+        "cleanup_completed": {
+          "sha256": "7707093af23c08ebf2f90eec80f83beb57bfd56ed637a94cb9640a0b51488376",
+          "bytes": 55
+        }
+      }
+    }
+  },
+  "resolved-83076ee": "83076ee75586022532f7891c1995e7763d7dec2e",
+  "resolved-41489d5": "41489d5e599fb8e7a537312fb84ea2bedda0507a",
+  "resolved-a6bbc6f": "a6bbc6f9c6736c4e81fd7c8409385843db19b620",
+  "resolved-0a33f7d": "0a33f7d4b9b8d78db94611838ff2d2baaf5c528a",
+  "run17-raw-review": {
+    "path": "/home/runner/a8-runtime/a8-negative-017/evidence/live-context.json",
+    "sha256": "6adf1c6d5d7b59f3721846820ba8b46575659670f8bfa81c2c8e61c271e2250a",
+    "routing_and_R6_2": {
+      "routing-missing": {
+        "after": {
+          "bank_ngonka": {
+            "buyer": 189954885715490,
+            "deal": 0,
+            "fee_recipient": 0,
+            "host": 379731299979555
+          },
+          "cw20": {
+            "buyer": 70000000,
+            "deal": 0,
+            "fee_recipient": 1500000,
+            "host": 0
+          },
+          "foreign_cw20": {
+            "buyer": 1000000,
+            "deal": 0
+          },
+          "state": {
+            "buyer": "gonka1kg9j8qdy8epztrjftydpdt42ahrqg2m30l8nny",
+            "buyer_entitlement_ngonka": "0",
+            "buyer_refund_usdt": "10000000",
+            "buyer_released_ngonka": "0",
+            "fee_usdt": "0",
+            "gnk_release_policy": "host_only",
+            "gross_usdt": "0",
+            "host_entitlement_ngonka": "0",
+            "host_net_usdt": "0",
+            "host_released_ngonka": "0",
+            "recipient_locked": false,
+            "refund_reason": "routing_missing",
+            "released_total_ngonka": "0",
+            "reward_ngonka": "0",
+            "status": "refunded",
+            "total_claim_ngonka": "0",
+            "work_ngonka": "0"
+          }
+        },
+        "before": {
+          "bank_ngonka": {
+            "buyer": 189954885715490,
+            "deal": 0,
+            "fee_recipient": 0,
+            "host": 379731299979555
+          },
+          "cw20": {
+            "buyer": 60000000,
+            "deal": 10000000,
+            "fee_recipient": 1500000,
+            "host": 0
+          },
+          "foreign_cw20": {
+            "buyer": 1000000,
+            "deal": 0
+          },
+          "state": {
+            "buyer": "gonka1kg9j8qdy8epztrjftydpdt42ahrqg2m30l8nny",
+            "buyer_entitlement_ngonka": "0",
+            "buyer_refund_usdt": "0",
+            "buyer_released_ngonka": "0",
+            "fee_usdt": "0",
+            "gnk_release_policy": "unset",
+            "gross_usdt": "0",
+            "host_entitlement_ngonka": "0",
+            "host_net_usdt": "0",
+            "host_released_ngonka": "0",
+            "recipient_locked": false,
+            "refund_reason": null,
+            "released_total_ngonka": "0",
+            "reward_ngonka": "0",
+            "status": "funded",
+            "total_claim_ngonka": "0",
+            "work_ngonka": "0"
+          }
+        },
+        "competing_settlement": {
+          "code": 5,
+          "codespace": "wasm",
+          "events": [],
+          "gas_used": "99931",
+          "gas_wanted": "2000000",
+          "height": "184",
+          "layer": "deliver_tx",
+          "raw_log": "failed to execute message; message index: 0: cannot settle claim in state Refunded; expected Locked: execute wasm contract failed",
+          "tx_hash": "89682951F35689A5A3DC3393F78816FA0A4A8BC9A8BE0247C7401FEAFFDD106F"
+        },
+        "cw20_fault_rollback": null,
+        "expected": {
+          "buyer_refund": 10000000,
+          "fee_usdt": 0,
+          "host_usdt": 0,
+          "native_transfers": 0,
+          "status": "refunded"
+        },
+        "name": "refund_committed",
+        "reason": "routing_missing",
+        "terminal_repeat": {
+          "code": 5,
+          "codespace": "wasm",
+          "events": [],
+          "gas_used": "99913",
+          "gas_wanted": "2000000",
+          "height": "183",
+          "layer": "deliver_tx",
+          "raw_log": "failed to execute message; message index: 0: cannot refund Deal in state Refunded; expected Funded for routing failure or Locked for claim expiry: execute wasm contract failed",
+          "tx_hash": "B3249ADF5B734C2D76DB2C06C89C33553DC66F0A98264F79AE434323F2C06715"
+        },
+        "tx": {
+          "code": 0,
+          "events": [
+            {
+              "attributes": [
+                {
+                  "index": true,
+                  "key": "_contract_address",
+                  "value": "gonka14rse3e7rkc3qt7drmlulwlkrlzqvh7hv277zv05kyfuwl74udx5sq3unhd"
+                },
+                {
+                  "index": true,
+                  "key": "msg_index",
+                  "value": "0"
+                }
+              ],
+              "type": "execute"
+            },
+            {
+              "attributes": [
+                {
+                  "index": true,
+                  "key": "_contract_address",
+                  "value": "gonka14rse3e7rkc3qt7drmlulwlkrlzqvh7hv277zv05kyfuwl74udx5sq3unhd"
+                },
+                {
+                  "index": true,
+                  "key": "deal",
+                  "value": "gonka14rse3e7rkc3qt7drmlulwlkrlzqvh7hv277zv05kyfuwl74udx5sq3unhd"
+                },
+                {
+                  "index": true,
+                  "key": "host",
+                  "value": "gonka1nmhe43mnfmfsqlas0f5zw9mtu637t4m0lkujpj"
+                },
+                {
+                  "index": true,
+                  "key": "target_epoch",
+                  "value": "6"
+                },
+                {
+                  "index": true,
+                  "key": "buyer",
+                  "value": "gonka1kg9j8qdy8epztrjftydpdt42ahrqg2m30l8nny"
+                },
+                {
+                  "index": true,
+                  "key": "reason",
+                  "value": "routing_missing"
+                },
+                {
+                  "index": true,
+                  "key": "status",
+                  "value": "refunded"
+                },
+                {
+                  "index": true,
+                  "key": "amount_micro_usdt",
+                  "value": "10000000"
+                },
+                {
+                  "index": true,
+                  "key": "msg_index",
+                  "value": "0"
+                }
+              ],
+              "type": "wasm-deal_refunded"
+            },
+            {
+              "attributes": [
+                {
+                  "index": true,
+                  "key": "_contract_address",
+                  "value": "gonka14rse3e7rkc3qt7drmlulwlkrlzqvh7hv277zv05kyfuwl74udx5sq3unhd"
+                },
+                {
+                  "index": true,
+                  "key": "deal",
+                  "value": "gonka14rse3e7rkc3qt7drmlulwlkrlzqvh7hv277zv05kyfuwl74udx5sq3unhd"
+                },
+                {
+                  "index": true,
+                  "key": "host",
+                  "value": "gonka1nmhe43mnfmfsqlas0f5zw9mtu637t4m0lkujpj"
+                },
+                {
+                  "index": true,
+                  "key": "target_epoch",
+                  "value": "6"
+                },
+                {
+                  "index": true,
+                  "key": "recipient",
+                  "value": "gonka1kg9j8qdy8epztrjftydpdt42ahrqg2m30l8nny"
+                },
+                {
+                  "index": true,
+                  "key": "reason",
+                  "value": "routing_missing"
+                },
+                {
+                  "index": true,
+                  "key": "amount_micro_usdt",
+                  "value": "10000000"
+                },
+                {
+                  "index": true,
+                  "key": "msg_index",
+                  "value": "0"
+                }
+              ],
+              "type": "wasm-usdt_refunded"
+            },
+            {
+              "attributes": [
+                {
+                  "index": true,
+                  "key": "_contract_address",
+                  "value": "gonka1hrpna9v7vs3stzyd4z3xf00676kf78zpe2u5ksvljswn2vnjp3ys6w65a0"
+                },
+                {
+                  "index": true,
+                  "key": "msg_index",
+                  "value": "0"
+                }
+              ],
+              "type": "execute"
+            },
+            {
+              "attributes": [
+                {
+                  "index": true,
+                  "key": "_contract_address",
+                  "value": "gonka1hrpna9v7vs3stzyd4z3xf00676kf78zpe2u5ksvljswn2vnjp3ys6w65a0"
+                },
+                {
+                  "index": true,
+                  "key": "action",
+                  "value": "transfer"
+                },
+                {
+                  "index": true,
+                  "key": "amount",
+                  "value": "10000000"
+                },
+                {
+                  "index": true,
+                  "key": "from",
+                  "value": "gonka14rse3e7rkc3qt7drmlulwlkrlzqvh7hv277zv05kyfuwl74udx5sq3unhd"
+                },
+                {
+                  "index": true,
+                  "key": "to",
+                  "value": "gonka1kg9j8qdy8epztrjftydpdt42ahrqg2m30l8nny"
+                },
+                {
+                  "index": true,
+                  "key": "msg_index",
+                  "value": "0"
+                }
+              ],
+              "type": "wasm"
+            }
+          ],
+          "gas_used": "199848",
+          "gas_wanted": "954345",
+          "height": "182",
+          "tx_hash": "8F2AC685A6C5A4002E8EFD52DDA88A96A1FE43BB2CC56F97A1FFC8F02208EC2B"
+        }
+      },
+      "routing-mismatch": {
+        "after": {
+          "bank_ngonka": {
+            "buyer": 189954885715490,
+            "deal": 0,
+            "fee_recipient": 0,
+            "host": 237411682143079
+          },
+          "cw20": {
+            "buyer": 60000000,
+            "deal": 0,
+            "fee_recipient": 0,
+            "host": 0
+          },
+          "foreign_cw20": {
+            "buyer": 1000000,
+            "deal": 0
+          },
+          "state": {
+            "buyer": "gonka1kg9j8qdy8epztrjftydpdt42ahrqg2m30l8nny",
+            "buyer_entitlement_ngonka": "0",
+            "buyer_refund_usdt": "10000000",
+            "buyer_released_ngonka": "0",
+            "fee_usdt": "0",
+            "gnk_release_policy": "host_only",
+            "gross_usdt": "0",
+            "host_entitlement_ngonka": "0",
+            "host_net_usdt": "0",
+            "host_released_ngonka": "0",
+            "recipient_locked": false,
+            "refund_reason": "routing_mismatch",
+            "released_total_ngonka": "0",
+            "reward_ngonka": "0",
+            "status": "refunded",
+            "total_claim_ngonka": "0",
+            "work_ngonka": "0"
+          }
+        },
+        "before": {
+          "bank_ngonka": {
+            "buyer": 189954885715490,
+            "deal": 0,
+            "fee_recipient": 0,
+            "host": 237411682143079
+          },
+          "cw20": {
+            "buyer": 50000000,
+            "deal": 10000000,
+            "fee_recipient": 0,
+            "host": 0
+          },
+          "foreign_cw20": {
+            "buyer": 1000000,
+            "deal": 0
+          },
+          "state": {
+            "buyer": "gonka1kg9j8qdy8epztrjftydpdt42ahrqg2m30l8nny",
+            "buyer_entitlement_ngonka": "0",
+            "buyer_refund_usdt": "0",
+            "buyer_released_ngonka": "0",
+            "fee_usdt": "0",
+            "gnk_release_policy": "unset",
+            "gross_usdt": "0",
+            "host_entitlement_ngonka": "0",
+            "host_net_usdt": "0",
+            "host_released_ngonka": "0",
+            "recipient_locked": false,
+            "refund_reason": null,
+            "released_total_ngonka": "0",
+            "reward_ngonka": "0",
+            "status": "funded",
+            "total_claim_ngonka": "0",
+            "work_ngonka": "0"
+          }
+        },
+        "competing_settlement": {
+          "code": 5,
+          "codespace": "wasm",
+          "events": [],
+          "gas_used": "99935",
+          "gas_wanted": "2000000",
+          "height": "140",
+          "layer": "deliver_tx",
+          "raw_log": "failed to execute message; message index: 0: cannot settle claim in state Refunded; expected Locked: execute wasm contract failed",
+          "tx_hash": "CA9D0438DCA0B596C4C48F677738979383C45B2B03108AF1B4363B9166691E14"
+        },
+        "cw20_fault_rollback": {
+          "after": {
+            "bank_ngonka": {
+              "buyer": 189954885715490,
+              "deal": 0,
+              "fee_recipient": 0,
+              "host": 237411682143079
+            },
+            "cw20": {
+              "buyer": 50000000,
+              "deal": 10000000,
+              "fee_recipient": 0,
+              "host": 0
+            },
+            "foreign_cw20": {
+              "buyer": 1000000,
+              "deal": 0
+            },
+            "state": {
+              "buyer": "gonka1kg9j8qdy8epztrjftydpdt42ahrqg2m30l8nny",
+              "buyer_entitlement_ngonka": "0",
+              "buyer_refund_usdt": "0",
+              "buyer_released_ngonka": "0",
+              "fee_usdt": "0",
+              "gnk_release_policy": "unset",
+              "gross_usdt": "0",
+              "host_entitlement_ngonka": "0",
+              "host_net_usdt": "0",
+              "host_released_ngonka": "0",
+              "recipient_locked": false,
+              "refund_reason": null,
+              "released_total_ngonka": "0",
+              "reward_ngonka": "0",
+              "status": "funded",
+              "total_claim_ngonka": "0",
+              "work_ngonka": "0"
+            }
+          },
+          "assertion": "Deal state and all tracked CW20/GNK balances are unchanged",
+          "attempt": {
+            "code": 5,
+            "codespace": "wasm",
+            "events": [],
+            "gas_used": "187096",
+            "gas_wanted": "2000000",
+            "height": "136",
+            "layer": "deliver_tx",
+            "raw_log": "failed to execute message; message index: 0: Generic error: a8 injected CW20 transfer failure for gonka1kg9j8qdy8epztrjftydpdt42ahrqg2m30l8nny: execute wasm contract failed",
+            "tx_hash": "3DE3C7F937A75583F6632A738A4BFC6F0DDD4C6774C90AC894F065714F4F96BB"
+          },
+          "before": {
+            "bank_ngonka": {
+              "buyer": 189954885715490,
+              "deal": 0,
+              "fee_recipient": 0,
+              "host": 237411682143079
+            },
+            "cw20": {
+              "buyer": 50000000,
+              "deal": 10000000,
+              "fee_recipient": 0,
+              "host": 0
+            },
+            "foreign_cw20": {
+              "buyer": 1000000,
+              "deal": 0
+            },
+            "state": {
+              "buyer": "gonka1kg9j8qdy8epztrjftydpdt42ahrqg2m30l8nny",
+              "buyer_entitlement_ngonka": "0",
+              "buyer_refund_usdt": "0",
+              "buyer_released_ngonka": "0",
+              "fee_usdt": "0",
+              "gnk_release_policy": "unset",
+              "gross_usdt": "0",
+              "host_entitlement_ngonka": "0",
+              "host_net_usdt": "0",
+              "host_released_ngonka": "0",
+              "recipient_locked": false,
+              "refund_reason": null,
+              "released_total_ngonka": "0",
+              "reward_ngonka": "0",
+              "status": "funded",
+              "total_claim_ngonka": "0",
+              "work_ngonka": "0"
+            }
+          },
+          "clear_tx": {
+            "code": 0,
+            "events": [
+              {
+                "attributes": [
+                  {
+                    "index": true,
+                    "key": "_contract_address",
+                    "value": "gonka1hrpna9v7vs3stzyd4z3xf00676kf78zpe2u5ksvljswn2vnjp3ys6w65a0"
+                  },
+                  {
+                    "index": true,
+                    "key": "msg_index",
+                    "value": "0"
+                  }
+                ],
+                "type": "execute"
+              },
+              {
+                "attributes": [
+                  {
+                    "index": true,
+                    "key": "_contract_address",
+                    "value": "gonka1hrpna9v7vs3stzyd4z3xf00676kf78zpe2u5ksvljswn2vnjp3ys6w65a0"
+                  },
+                  {
+                    "index": true,
+                    "key": "action",
+                    "value": "configure_transfer_failure"
+                  },
+                  {
+                    "index": true,
+                    "key": "rejected_recipient",
+                    "value": "none"
+                  },
+                  {
+                    "index": true,
+                    "key": "msg_index",
+                    "value": "0"
+                  }
+                ],
+                "type": "wasm"
+              }
+            ],
+            "gas_used": "102561",
+            "gas_wanted": "467925",
+            "height": "137",
+            "tx_hash": "794474D8DB8884744C01C398802C0A91D09E25B1D31F66AF51D2717C6C589969"
+          },
+          "fault": {
+            "contract": "gonka1hrpna9v7vs3stzyd4z3xf00676kf78zpe2u5ksvljswn2vnjp3ys6w65a0",
+            "outgoing_transfer_index": 1,
+            "rejected_recipient": "gonka1kg9j8qdy8epztrjftydpdt42ahrqg2m30l8nny"
+          },
+          "level": "native_fault_injection",
+          "setup_tx": {
+            "code": 0,
+            "events": [
+              {
+                "attributes": [
+                  {
+                    "index": true,
+                    "key": "_contract_address",
+                    "value": "gonka1hrpna9v7vs3stzyd4z3xf00676kf78zpe2u5ksvljswn2vnjp3ys6w65a0"
+                  },
+                  {
+                    "index": true,
+                    "key": "msg_index",
+                    "value": "0"
+                  }
+                ],
+                "type": "execute"
+              },
+              {
+                "attributes": [
+                  {
+                    "index": true,
+                    "key": "_contract_address",
+                    "value": "gonka1hrpna9v7vs3stzyd4z3xf00676kf78zpe2u5ksvljswn2vnjp3ys6w65a0"
+                  },
+                  {
+                    "index": true,
+                    "key": "action",
+                    "value": "configure_transfer_failure"
+                  },
+                  {
+                    "index": true,
+                    "key": "rejected_recipient",
+                    "value": "gonka1kg9j8qdy8epztrjftydpdt42ahrqg2m30l8nny"
+                  },
+                  {
+                    "index": true,
+                    "key": "msg_index",
+                    "value": "0"
+                  }
+                ],
+                "type": "wasm"
+              }
+            ],
+            "gas_used": "104181",
+            "gas_wanted": "476025",
+            "height": "135",
+            "tx_hash": "944B404FD70A5457C5C341005322DBD308344DEE7724A29B18705CCF8B96138B"
+          }
+        },
+        "expected": {
+          "buyer_refund": 10000000,
+          "fee_usdt": 0,
+          "host_usdt": 0,
+          "native_transfers": 0,
+          "status": "refunded"
+        },
+        "name": "refund_committed",
+        "reason": "routing_mismatch",
+        "terminal_repeat": {
+          "code": 5,
+          "codespace": "wasm",
+          "events": [],
+          "gas_used": "99917",
+          "gas_wanted": "2000000",
+          "height": "139",
+          "layer": "deliver_tx",
+          "raw_log": "failed to execute message; message index: 0: cannot refund Deal in state Refunded; expected Funded for routing failure or Locked for claim expiry: execute wasm contract failed",
+          "tx_hash": "2FFC9B434367E788BA250E4DAB0A5D36A252739DA0FFEB7DEDFAAFE927AE9BAD"
+        },
+        "tx": {
+          "code": 0,
+          "events": [
+            {
+              "attributes": [
+                {
+                  "index": true,
+                  "key": "_contract_address",
+                  "value": "gonka1t3f4zxve6725sf4glrnlar8uku78j0nyfl0ppzgfju9ft9phvqwqye3449"
+                },
+                {
+                  "index": true,
+                  "key": "msg_index",
+                  "value": "0"
+                }
+              ],
+              "type": "execute"
+            },
+            {
+              "attributes": [
+                {
+                  "index": true,
+                  "key": "_contract_address",
+                  "value": "gonka1t3f4zxve6725sf4glrnlar8uku78j0nyfl0ppzgfju9ft9phvqwqye3449"
+                },
+                {
+                  "index": true,
+                  "key": "deal",
+                  "value": "gonka1t3f4zxve6725sf4glrnlar8uku78j0nyfl0ppzgfju9ft9phvqwqye3449"
+                },
+                {
+                  "index": true,
+                  "key": "host",
+                  "value": "gonka1nmhe43mnfmfsqlas0f5zw9mtu637t4m0lkujpj"
+                },
+                {
+                  "index": true,
+                  "key": "target_epoch",
+                  "value": "5"
+                },
+                {
+                  "index": true,
+                  "key": "buyer",
+                  "value": "gonka1kg9j8qdy8epztrjftydpdt42ahrqg2m30l8nny"
+                },
+                {
+                  "index": true,
+                  "key": "reason",
+                  "value": "routing_mismatch"
+                },
+                {
+                  "index": true,
+                  "key": "status",
+                  "value": "refunded"
+                },
+                {
+                  "index": true,
+                  "key": "amount_micro_usdt",
+                  "value": "10000000"
+                },
+                {
+                  "index": true,
+                  "key": "observed_recipient",
+                  "value": "gonka1kg9j8qdy8epztrjftydpdt42ahrqg2m30l8nny"
+                },
+                {
+                  "index": true,
+                  "key": "msg_index",
+                  "value": "0"
+                }
+              ],
+              "type": "wasm-deal_refunded"
+            },
+            {
+              "attributes": [
+                {
+                  "index": true,
+                  "key": "_contract_address",
+                  "value": "gonka1t3f4zxve6725sf4glrnlar8uku78j0nyfl0ppzgfju9ft9phvqwqye3449"
+                },
+                {
+                  "index": true,
+                  "key": "deal",
+                  "value": "gonka1t3f4zxve6725sf4glrnlar8uku78j0nyfl0ppzgfju9ft9phvqwqye3449"
+                },
+                {
+                  "index": true,
+                  "key": "host",
+                  "value": "gonka1nmhe43mnfmfsqlas0f5zw9mtu637t4m0lkujpj"
+                },
+                {
+                  "index": true,
+                  "key": "target_epoch",
+                  "value": "5"
+                },
+                {
+                  "index": true,
+                  "key": "recipient",
+                  "value": "gonka1kg9j8qdy8epztrjftydpdt42ahrqg2m30l8nny"
+                },
+                {
+                  "index": true,
+                  "key": "reason",
+                  "value": "routing_mismatch"
+                },
+                {
+                  "index": true,
+                  "key": "amount_micro_usdt",
+                  "value": "10000000"
+                },
+                {
+                  "index": true,
+                  "key": "msg_index",
+                  "value": "0"
+                }
+              ],
+              "type": "wasm-usdt_refunded"
+            },
+            {
+              "attributes": [
+                {
+                  "index": true,
+                  "key": "_contract_address",
+                  "value": "gonka1hrpna9v7vs3stzyd4z3xf00676kf78zpe2u5ksvljswn2vnjp3ys6w65a0"
+                },
+                {
+                  "index": true,
+                  "key": "msg_index",
+                  "value": "0"
+                }
+              ],
+              "type": "execute"
+            },
+            {
+              "attributes": [
+                {
+                  "index": true,
+                  "key": "_contract_address",
+                  "value": "gonka1hrpna9v7vs3stzyd4z3xf00676kf78zpe2u5ksvljswn2vnjp3ys6w65a0"
+                },
+                {
+                  "index": true,
+                  "key": "action",
+                  "value": "transfer"
+                },
+                {
+                  "index": true,
+                  "key": "amount",
+                  "value": "10000000"
+                },
+                {
+                  "index": true,
+                  "key": "from",
+                  "value": "gonka1t3f4zxve6725sf4glrnlar8uku78j0nyfl0ppzgfju9ft9phvqwqye3449"
+                },
+                {
+                  "index": true,
+                  "key": "to",
+                  "value": "gonka1kg9j8qdy8epztrjftydpdt42ahrqg2m30l8nny"
+                },
+                {
+                  "index": true,
+                  "key": "msg_index",
+                  "value": "0"
+                }
+              ],
+              "type": "wasm"
+            }
+          ],
+          "gas_used": "200063",
+          "gas_wanted": "955425",
+          "height": "138",
+          "tx_hash": "7E8FAB786BA86ABC17D915FD4EFD8E13182811121EE8A022288F35800EF384C5"
+        }
+      }
+    },
+    "gas": {
+      "attempts": [
+        {
+          "cumulative_fee_payer_deltas_ngonka": {
+            "host": 0
+          },
+          "gas_limit": 50000,
+          "mode": "direct",
+          "tx": {
+            "code": 11,
+            "codespace": "sdk",
+            "events": [],
+            "gas_used": "94510",
+            "gas_wanted": "50000",
+            "height": "319",
+            "layer": "deliver_tx",
+            "raw_log": "out of gas in location: Loading CosmWasm module: execute; gasWanted: 50000, gasUsed: 94510: out of gas",
+            "tx_hash": "F4E2172B7F9FDF19E6D31F76659C1DF2327FB4F33206A8562DF6020D56815619"
+          }
+        },
+        {
+          "cumulative_fee_payer_deltas_ngonka": {
+            "host": 0
+          },
+          "gas_limit": 100000,
+          "mode": "direct",
+          "tx": {
+            "code": 11,
+            "codespace": "sdk",
+            "events": [],
+            "gas_used": "100701",
+            "gas_wanted": "100000",
+            "height": "320",
+            "layer": "deliver_tx",
+            "raw_log": "out of gas in location: wasm contract; gasWanted: 100000, gasUsed: 100701: out of gas",
+            "tx_hash": "D337587D47BAA6C2737A86CB08510DD25B1269BE3E61B2CAF06B6B146337CF85"
+          }
+        },
+        {
+          "cumulative_fee_payer_deltas_ngonka": {
+            "host": 0
+          },
+          "gas_limit": 150000,
+          "mode": "direct",
+          "tx": {
+            "code": 5,
+            "codespace": "wasm",
+            "events": [],
+            "gas_used": "102153",
+            "gas_wanted": "150000",
+            "height": "321",
+            "layer": "deliver_tx",
+            "raw_log": "failed to execute message; message index: 0: native claim for target epoch 7 is already confirmed: execute wasm contract failed",
+            "tx_hash": "574625883D505D372E57BF0BF576FD51B23841206FF8C52142BD7137FB43ABE4"
+          }
+        },
+        {
+          "cumulative_fee_payer_deltas_ngonka": {
+            "host": 0
+          },
+          "gas_limit": 250000,
+          "mode": "direct",
+          "tx": {
+            "code": 5,
+            "codespace": "wasm",
+            "events": [],
+            "gas_used": "102143",
+            "gas_wanted": "250000",
+            "height": "322",
+            "layer": "deliver_tx",
+            "raw_log": "failed to execute message; message index: 0: native claim for target epoch 7 is already confirmed: execute wasm contract failed",
+            "tx_hash": "9198A3B7DD8147234B5EB63DE1122FB9EE2E7B0E5E1567AC452199A8994E3479"
+          }
+        },
+        {
+          "cumulative_fee_payer_deltas_ngonka": {
+            "host": 0
+          },
+          "gas_limit": 500000,
+          "mode": "direct",
+          "tx": {
+            "code": 5,
+            "codespace": "wasm",
+            "events": [],
+            "gas_used": "102153",
+            "gas_wanted": "500000",
+            "height": "324",
+            "layer": "deliver_tx",
+            "raw_log": "failed to execute message; message index: 0: native claim for target epoch 7 is already confirmed: execute wasm contract failed",
+            "tx_hash": "B67A271D1F8B927C0D820081669DA54CA205679AD490D55B6117A7E91208AE08"
+          }
+        },
+        {
+          "cumulative_fee_payer_deltas_ngonka": {
+            "host": 0
+          },
+          "gas_limit": 1000000,
+          "mode": "direct",
+          "tx": {
+            "code": 5,
+            "codespace": "wasm",
+            "events": [],
+            "gas_used": "102153",
+            "gas_wanted": "1000000",
+            "height": "325",
+            "layer": "deliver_tx",
+            "raw_log": "failed to execute message; message index: 0: native claim for target epoch 7 is already confirmed: execute wasm contract failed",
+            "tx_hash": "E4053BD7CBB7AF786DFA4ECC83E4A52A0ACB57A5326A8CA3B53AEB8237FB4633"
+          }
+        },
+        {
+          "actual_reason": {
+            "layer": "deliver_tx",
+            "matched_contract_error": "native claim for target epoch",
+            "reason": "claimed",
+            "state_status": "locked"
+          },
+          "cumulative_fee_payer_deltas_ngonka": {
+            "host": 0
+          },
+          "gas_limit": 2000000,
+          "mode": "direct_sufficient",
+          "tx": {
+            "code": 5,
+            "codespace": "wasm",
+            "events": [],
+            "gas_used": "102153",
+            "gas_wanted": "2000000",
+            "height": "327",
+            "layer": "deliver_tx",
+            "raw_log": "failed to execute message; message index: 0: native claim for target epoch 7 is already confirmed: execute wasm contract failed",
+            "tx_hash": "AE01BF7AA95B6501B67DC1F3AB5A82448CDD8EF70ADF7B3118C0EFBC9F6129EF"
+          }
+        },
+        {
+          "cumulative_fee_payer_deltas_ngonka": {
+            "host": 0
+          },
+          "gas_limit": 2000000,
+          "mode": "caller_forward",
+          "tx": {
+            "code": 5,
+            "codespace": "wasm",
+            "events": [],
+            "gas_used": "167898",
+            "gas_wanted": "2000000",
+            "height": "328",
+            "layer": "deliver_tx",
+            "raw_log": "failed to execute message; message index: 0: native claim for target epoch 7 is already confirmed: execute wasm contract failed",
+            "tx_hash": "E6E365B4A89204DE6AC47953D7CC7D8DBDBE15C398679FFA3ED80C058F497850"
+          }
+        },
+        {
+          "cumulative_fee_payer_deltas_ngonka": {
+            "host": 212770786428170
+          },
+          "gas_limit": 50000,
+          "mode": "submessage_reply",
+          "outer_tx": {
+            "code": 0,
+            "codespace": "",
+            "events": [],
+            "gas_used": "159884",
+            "gas_wanted": "2000000",
+            "height": "330",
+            "layer": "deliver_tx",
+            "raw_log": "",
+            "tx_hash": "53FC53CC63E7A693B2DC117CBBA6DAAD4323A1E16B53B44BF5D99B77612BC9F6"
+          },
+          "reply": {
+            "error": "codespace: sdk, code: 11",
+            "success": false
+          }
+        },
+        {
+          "cumulative_fee_payer_deltas_ngonka": {
+            "host": 212770786428170
+          },
+          "gas_limit": 100000,
+          "mode": "submessage_reply",
+          "outer_tx": {
+            "code": 0,
+            "codespace": "",
+            "events": [],
+            "gas_used": "183954",
+            "gas_wanted": "2000000",
+            "height": "332",
+            "layer": "deliver_tx",
+            "raw_log": "",
+            "tx_hash": "87C7C00BA7CDA1F18F74D97E466E8D6D6F9FF9D8AD2D16052A501FC4D7BDF85C"
+          },
+          "reply": {
+            "error": "native claim for target epoch 7 is already confirmed: execute wasm contract failed",
+            "success": false
+          }
+        },
+        {
+          "cumulative_fee_payer_deltas_ngonka": {
+            "host": 212770786428170
+          },
+          "gas_limit": 150000,
+          "mode": "submessage_reply",
+          "outer_tx": {
+            "code": 0,
+            "codespace": "",
+            "events": [],
+            "gas_used": "183954",
+            "gas_wanted": "2000000",
+            "height": "334",
+            "layer": "deliver_tx",
+            "raw_log": "",
+            "tx_hash": "7E595D2B687B76A19B2A1F7EE33C8F51B0BECC60C5402DDCDC5D52D7C0D70695"
+          },
+          "reply": {
+            "error": "native claim for target epoch 7 is already confirmed: execute wasm contract failed",
+            "success": false
+          }
+        },
+        {
+          "cumulative_fee_payer_deltas_ngonka": {
+            "host": 212770786428170
+          },
+          "gas_limit": 250000,
+          "mode": "submessage_reply",
+          "outer_tx": {
+            "code": 0,
+            "codespace": "",
+            "events": [],
+            "gas_used": "183954",
+            "gas_wanted": "2000000",
+            "height": "335",
+            "layer": "deliver_tx",
+            "raw_log": "",
+            "tx_hash": "7568712C93BD125511A13F81A7CD76D91D5B0B627B977CAE5E4E65412F7FAB08"
+          },
+          "reply": {
+            "error": "native claim for target epoch 7 is already confirmed: execute wasm contract failed",
+            "success": false
+          }
+        },
+        {
+          "cumulative_fee_payer_deltas_ngonka": {
+            "host": 212770786428170
+          },
+          "gas_limit": 500000,
+          "mode": "submessage_reply",
+          "outer_tx": {
+            "code": 0,
+            "codespace": "",
+            "events": [],
+            "gas_used": "183955",
+            "gas_wanted": "2000000",
+            "height": "336",
+            "layer": "deliver_tx",
+            "raw_log": "",
+            "tx_hash": "313AA39EB83BAD0BE5AF8F70EC8CD4F1F2CB97BA44052B037D82BAA66AB7B446"
+          },
+          "reply": {
+            "error": "native claim for target epoch 7 is already confirmed: execute wasm contract failed",
+            "success": false
+          }
+        },
+        {
+          "cumulative_fee_payer_deltas_ngonka": {
+            "host": 212770786428170
+          },
+          "gas_limit": 1000000,
+          "mode": "submessage_reply",
+          "outer_tx": {
+            "code": 0,
+            "codespace": "",
+            "events": [],
+            "gas_used": "183967",
+            "gas_wanted": "2000000",
+            "height": "338",
+            "layer": "deliver_tx",
+            "raw_log": "",
+            "tx_hash": "D8474B8968EC9E246FFCAA266413C2529A6286C980F6B9DC638F172B36E5C425"
+          },
+          "reply": {
+            "error": "native claim for target epoch 7 is already confirmed: execute wasm contract failed",
+            "success": false
+          }
+        }
+      ],
+      "baseline": {
+        "bank_ngonka": {
+          "buyer": 190054884715836,
+          "deal": 142094453178724,
+          "fee_recipient": 0,
+          "host": 734653858260896
+        },
+        "cw20": {
+          "buyer": 70000000,
+          "deal": 10000000,
+          "fee_recipient": 1500000,
+          "host": 0
+        },
+        "foreign_cw20": {
+          "buyer": 999993,
+          "deal": 0
+        },
+        "state": {
+          "buyer": "gonka1kg9j8qdy8epztrjftydpdt42ahrqg2m30l8nny",
+          "buyer_entitlement_ngonka": "0",
+          "buyer_refund_usdt": "0",
+          "buyer_released_ngonka": "0",
+          "fee_usdt": "0",
+          "gnk_release_policy": "unset",
+          "gross_usdt": "0",
+          "host_entitlement_ngonka": "0",
+          "host_net_usdt": "0",
+          "host_released_ngonka": "0",
+          "recipient_locked": true,
+          "refund_reason": null,
+          "released_total_ngonka": "0",
+          "reward_ngonka": "0",
+          "status": "locked",
+          "total_claim_ngonka": "0",
+          "work_ngonka": "0"
+        }
+      },
+      "final": {
+        "bank_ngonka": {
+          "buyer": 190054884715836,
+          "deal": 142094453178724,
+          "fee_recipient": 0,
+          "host": 947424644689066
+        },
+        "cw20": {
+          "buyer": 70000000,
+          "deal": 10000000,
+          "fee_recipient": 1500000,
+          "host": 0
+        },
+        "foreign_cw20": {
+          "buyer": 999993,
+          "deal": 0
+        },
+        "state": {
+          "buyer": "gonka1kg9j8qdy8epztrjftydpdt42ahrqg2m30l8nny",
+          "buyer_entitlement_ngonka": "0",
+          "buyer_refund_usdt": "0",
+          "buyer_released_ngonka": "0",
+          "fee_usdt": "0",
+          "gnk_release_policy": "unset",
+          "gross_usdt": "0",
+          "host_entitlement_ngonka": "0",
+          "host_net_usdt": "0",
+          "host_released_ngonka": "0",
+          "recipient_locked": true,
+          "refund_reason": null,
+          "released_total_ngonka": "0",
+          "reward_ngonka": "0",
+          "status": "locked",
+          "total_claim_ngonka": "0",
+          "work_ngonka": "0"
+        }
+      },
+      "gas_limits": [
+        50000,
+        100000,
+        150000,
+        250000,
+        500000,
+        1000000
+      ],
+      "level": "live_network",
+      "name": "claimed_refund_gas_sweep",
+      "out_of_gas": {
+        "observations": [
+          {
+            "gas_limit": 50000,
+            "mode": "direct",
+            "tx": {
+              "code": 11,
+              "codespace": "sdk",
+              "events": [],
+              "gas_used": "94510",
+              "gas_wanted": "50000",
+              "height": "319",
+              "layer": "deliver_tx",
+              "raw_log": "out of gas in location: Loading CosmWasm module: execute; gasWanted: 50000, gasUsed: 94510: out of gas",
+              "tx_hash": "F4E2172B7F9FDF19E6D31F76659C1DF2327FB4F33206A8562DF6020D56815619"
+            }
+          },
+          {
+            "gas_limit": 100000,
+            "mode": "direct",
+            "tx": {
+              "code": 11,
+              "codespace": "sdk",
+              "events": [],
+              "gas_used": "100701",
+              "gas_wanted": "100000",
+              "height": "320",
+              "layer": "deliver_tx",
+              "raw_log": "out of gas in location: wasm contract; gasWanted: 100000, gasUsed: 100701: out of gas",
+              "tx_hash": "D337587D47BAA6C2737A86CB08510DD25B1269BE3E61B2CAF06B6B146337CF85"
+            }
+          }
+        ],
+        "reached": true
+      },
+      "outer_gas": 2000000,
+      "preconditions": {
+        "claimed": true,
+        "current_epoch": 12,
+        "current_epoch_at_least_e_plus_3": true,
+        "fee_payer": "gonka1nmhe43mnfmfsqlas0f5zw9mtu637t4m0lkujpj",
+        "fee_payer_roles": [
+          "host"
+        ],
+        "minimum_epoch": 10,
+        "positive_claim": true,
+        "reward_ngonka": 142094453178724,
+        "summary": {
+          "epochPerformanceSummary": {
+            "claimed": true,
+            "epoch_index": "7",
+            "participant_id": "gonka1nmhe43mnfmfsqlas0f5zw9mtu637t4m0lkujpj",
+            "rewarded_coins": "142094453178724"
+          }
+        },
+        "summary_identity_valid": true,
+        "target_epoch": 7,
+        "total_claim_ngonka": 142094453178724,
+        "work_ngonka": 0
+      },
+      "sufficient_gas": 2000000,
+      "sufficient_gas_contract_rejection": {
+        "actual_reason": {
+          "layer": "deliver_tx",
+          "matched_contract_error": "native claim for target epoch",
+          "reason": "claimed",
+          "state_status": "locked"
+        },
+        "attempt": {
+          "code": 5,
+          "codespace": "wasm",
+          "events": [],
+          "gas_used": "102153",
+          "gas_wanted": "2000000",
+          "height": "327",
+          "layer": "deliver_tx",
+          "raw_log": "failed to execute message; message index: 0: native claim for target epoch 7 is already confirmed: execute wasm contract failed",
+          "tx_hash": "AE01BF7AA95B6501B67DC1F3AB5A82448CDD8EF70ADF7B3118C0EFBC9F6129EF"
+        },
+        "reached": true
+      }
+    }
+  }
+}

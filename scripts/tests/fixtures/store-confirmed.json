@@ -1,0 +1,21 @@
+{
+  "tx_response": {
+    "height": "43",
+    "txhash": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+    "code": 0,
+    "raw_log": "",
+    "logs": [
+      {
+        "msg_index": 0,
+        "events": [
+          {
+            "type": "store_code",
+            "attributes": [
+              {"key": "code_id", "value": "17"}
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

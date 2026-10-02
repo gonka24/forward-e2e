@@ -1,0 +1,12 @@
+{
+  "scenario": "C1/E+4 Lock",
+  "result": "PASS",
+  "run_id": "e4-lock-003",
+  "raw_evidence": {"path": "/home/runner/a8-runtime/e4-lock-003/evidence/e4-lock-003/live-context.json", "sha256": "da0e40519ab3126c99c89551a68367782744c38a4ca2270a62cc13d0f5fcedc1"},
+  "tx": {"hash": "6AC125B6733A6DBFF3EFA965848F3C6ACD4693152D84C0FA210AABCE2D003CB4", "height": 234, "code": 0},
+  "epoch_proof": {"target_epoch": 5, "expected_epoch": 9, "before_height": 233, "included_height": 234, "after_height": 234, "same_epoch": true},
+  "recipient": {"host_epoch": 5, "exact_rows": 1, "deal": "gonka1ltd0maxmte3xf4zshta9j5djrq9cl692ctsp9u5q0p9wss0f5lmsa2r502"},
+  "state": {"before": "funded", "after": "locked", "recipient_locked": true},
+  "assertions": ["distinct Host/Buyer/fee roles", "caller differs from Host", "config and accounting unchanged", "no CW20 or Deal-involving native transfer"],
+  "provenance": {"marketplace_commit": "0b608151bb68dabf3606bba588f99f0e2b627a6c", "gonka_harness_commit": "f3a533493d744fface8135953cf9b7b7cc1a422c", "gonka_runtime": "29a58fcf64b87967cb874b6169ce2c61e1f269b1", "a9_manifest_sha256": "52ef8c3a912c535e47fb997f3afe63258323d4fcdca411c09d9b980b1017aabe", "deal_wasm_sha256": "2caa08099be647a9c3d5fa9868ec6faee30ae7c2a9136cc4891cd75ccd55c0e5", "factory_wasm_sha256": "8366a874619c03e54ed36edf6b0ebbde4001afcf6c1b02ed40f9762350e6d82b"}
+}

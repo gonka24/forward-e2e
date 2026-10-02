@@ -1,0 +1,229 @@
+{
+  "schema_version": "1.0.0",
+  "kind": "gonka-marketplace-zero-unclaimed-d1-live-acceptance",
+  "run_id": "a8-claim-expiry-zero-044",
+  "result": "PASS",
+  "live_attempt": "1 of 2 allowed; second attempt not used",
+  "scope": "D1-zero only under a special isolated test-network genesis; this is not a claim that zero reward is reachable with current production subsidy parameters",
+  "raw_evidence": {
+    "live_context": {
+      "path": "artifacts/a8-evidence/a8-claim-expiry-zero-044/live-context.json",
+      "sha256": "79DA237908F6397F40EDCC86AAF55A11FBCDA9E01DE39E3CA0DFF5A90F1AF19C"
+    },
+    "testermint_log": {
+      "path": "artifacts/a8-evidence/a8-claim-expiry-zero-044/testermint.log",
+      "sha256": "217C70A0E74EA24FDBFB9B1B20FB25D70B23A7B96E0DAD8233F166538311BD92"
+    },
+    "junit": {
+      "path": "artifacts/a8-evidence/a8-claim-expiry-zero-044/TEST-MarketplaceContractAcceptanceTests.xml",
+      "sha256": "BB82E606B16E5C1301D6EF941C6ABD9CBC071825113EFC701DEEAF05A313FCD9",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "testcase": "marketplace zero unclaimed summary refunds only at claim expiry()"
+    }
+  },
+  "source": {
+    "marketplace_commit_sha": "482edc1b995d9241b0421839f638e30aca90cdd2",
+    "gonka_test_harness_sha": "bd47f66a07baf31ea180834e3a64bdb83c01bb97",
+    "gonka_native_sha": "29a58fcf64b87967cb874b6169ce2c61e1f269b1",
+    "protobuf_sha": "379bebced638aeb5e6077bfd51c986f898443832",
+    "runtime": {
+      "go": "go1.24.2 linux/amd64",
+      "cosmos_sdk": "v0.53.3-ps19-observability",
+      "wasmd": "v0.54.2",
+      "wasmvm": "v2.2.4"
+    },
+    "wasm_sha256": {
+      "deal": "2caa08099be647a9c3d5fa9868ec6faee30ae7c2a9136cc4891cd75ccd55c0e5",
+      "factory": "8366a874619c03e54ed36edf6b0ebbde4001afcf6c1b02ed40f9762350e6d82b",
+      "cw20_test": "930fc535aa5fa0ec6fb036ed458e4ab0759f36b4306461a3539fa6f631011b68",
+      "caller_test": "af6ddcc305a3292e6e99cfafadc38ea0f0def7892f4f9fc37a0a5c3f55baa147"
+    }
+  },
+  "special_native_test_configuration": {
+    "changed_genesis_parameters": {
+      "inference.params.bitcoin_reward_params.initial_epoch_reward": 0
+    },
+    "unchanged_test_meaning": "Host remained ACTIVE and had target-E PoC weight=10 and confirmation_weight=10; only the special network subsidy was zero and no workload was submitted",
+    "normal_validation": {
+      "pre_live_native_genesis_validate": "PASS; see a8-claim-expiry-zero-param-validation.json",
+      "live_chain_started": true,
+      "on_chain_params_query_matched_zero": true,
+      "protobuf_initial_epoch_reward_field_omitted": true,
+      "omitted_uint_decoded_as_zero": true
+    },
+    "target_epoch_group": {
+      "epoch_index": 5,
+      "host_status": "ACTIVE",
+      "host_weight": 10,
+      "host_confirmation_weight": 10,
+      "total_weight": 30
+    }
+  },
+  "identity": {
+    "target_epoch": 5,
+    "host": "gonka1whd0lkatryxque3dh8v2uujrn05dk6c0ckcugk",
+    "buyer": "gonka1ywgw8jc4cf5ufqx9mtw0pu0nyfdjwgcd0uglyy",
+    "fee_recipient": "gonka1vefv6xkst8ryl7nj047xkawq2qf3027afn6sqg",
+    "deal": "gonka1ltd0maxmte3xf4zshta9j5djrq9cl692ctsp9u5q0p9wss0f5lmsa2r502",
+    "cw20": "gonka1hrpna9v7vs3stzyd4z3xf00676kf78zpe2u5ksvljswn2vnjp3ys6w65a0",
+    "exact_native_recipient": true
+  },
+  "preparation": {
+    "offer": {
+      "tx_hash": "CD7D53687FE56C73BE7B77377F45B486E16D66C9A49E3ED0763E07813B46A09F",
+      "height": 76,
+      "code": 0
+    },
+    "recipient": {
+      "tx_hash": "6971F15B2DF6F31AB6447E4ACFC69A2DD1944144D79063C69190EF31C7D6863C",
+      "height": 77,
+      "code": 0
+    },
+    "fund": {
+      "tx_hash": "81659E0DF7CF475D420A25D0CD6A713D64B9BB539DB3C19A9D707578728117B2",
+      "height": 78,
+      "code": 0,
+      "deposit_micro_usdt": 10000000,
+      "buyer_before": 100000000,
+      "buyer_after": 90000000,
+      "deal_before": 0,
+      "deal_after": 10000000,
+      "state": "funded"
+    },
+    "lock": {
+      "tx_hash": "C02E3138F9146ECD72074C0FE9CA4567AC13D02E77C3D57DED6DED44B8C684B3",
+      "height": 133,
+      "code": 0,
+      "actual_epoch": 5,
+      "state": "locked",
+      "recipient_locked": true
+    }
+  },
+  "native_summary": {
+    "raw_at_e_plus_1": {
+      "epoch_index": "5",
+      "participant_id": "gonka1whd0lkatryxque3dh8v2uujrn05dk6c0ckcugk"
+    },
+    "raw_at_e_plus_2": {
+      "epoch_index": "5",
+      "participant_id": "gonka1whd0lkatryxque3dh8v2uujrn05dk6c0ckcugk"
+    },
+    "protobuf_zero_value_decoding": {
+      "earned_coins": 0,
+      "rewarded_coins": 0,
+      "claimed": false,
+      "fields_omitted_in_raw_json": [
+        "earned_coins",
+        "rewarded_coins",
+        "claimed"
+      ]
+    },
+    "identity_exact": true,
+    "existing_not_missing": true,
+    "same_summary_remained_unclaimed_through_e_plus_2": true
+  },
+  "e_plus_1": {
+    "observed_epoch": 6,
+    "summary_observation_height": 158,
+    "refund": {
+      "tx_hash": "6E581B0AD30E34DC52F0C96C493C2B1E99F703AA14A88A3447F82AE2C1EB7934",
+      "height": 159,
+      "code": 5,
+      "codespace": "wasm",
+      "reason": "too_early",
+      "raw_log": "claim-expiry window has not opened: current epoch 6, target epoch 5, first allowed epoch 7"
+    },
+    "epoch_bracket": {
+      "before_height": 158,
+      "tx_height": 159,
+      "after_height": 159,
+      "epoch": 6,
+      "same_epoch": true
+    },
+    "rollback": {
+      "state_before": "locked",
+      "state_after": "locked",
+      "deal_cw20_before": 10000000,
+      "deal_cw20_after": 10000000,
+      "buyer_cw20_before": 90000000,
+      "buyer_cw20_after": 90000000,
+      "host_cw20_before": 0,
+      "host_cw20_after": 0,
+      "fee_cw20_before": 0,
+      "fee_cw20_after": 0,
+      "events": []
+    }
+  },
+  "e_plus_2": {
+    "observed_epoch": 7,
+    "summary_observation_height": 183,
+    "refund": {
+      "tx_hash": "D35BC118502F45A8B842A4ACAE5D9CF4B9EB7E158E42474BA51315D702AA88FC",
+      "height": 184,
+      "code": 0,
+      "reason": "claim_expiry",
+      "events": {
+        "deal_refunded": true,
+        "usdt_refunded": true,
+        "amount_micro_usdt": 10000000,
+        "recipient_is_buyer": true
+      }
+    },
+    "epoch_bracket": {
+      "before_height": 183,
+      "tx_height": 184,
+      "after_height": 184,
+      "epoch": 7,
+      "same_epoch": true
+    },
+    "balances_and_state": {
+      "buyer_cw20_before": 90000000,
+      "buyer_cw20_after": 100000000,
+      "buyer_received_full_deposit": true,
+      "host_cw20_before": 0,
+      "host_cw20_after": 0,
+      "fee_cw20_before": 0,
+      "fee_cw20_after": 0,
+      "deal_cw20_before": 10000000,
+      "deal_cw20_after": 0,
+      "status_before": "locked",
+      "status_after": "refunded",
+      "buyer_refund_usdt": 10000000,
+      "gross_usdt": 0,
+      "host_net_usdt": 0,
+      "fee_usdt": 0,
+      "gnk_release_policy": "host_only"
+    }
+  },
+  "acceptance": {
+    "funded_and_locked_exact_host_epoch_deal": true,
+    "native_exact_zero_unclaimed_summary": true,
+    "e_plus_1_too_early_and_full_rollback": true,
+    "e_plus_2_claim_expiry_refund": true,
+    "buyer_received_100_percent": true,
+    "host_received_zero_deposit": true,
+    "fee_recipient_received_zero_deposit": true,
+    "deal_cw20_balance_zero": true,
+    "state_refunded": true,
+    "host_only_gnk_release_policy": true,
+    "result": "PASS"
+  },
+  "cleanup": {
+    "diagnostics_captured_before_cleanup": true,
+    "owned_resources_verified": true,
+    "verified_ownership": {
+      "containers": "19 exact containers; compose projects genesis/join1/join2/testdns; working_dir matched a8-gonka-worktree",
+      "volumes": "genesis_postgres-data, join1_postgres-data, join2_postgres-data; compose labels matched and no consumers remained after container removal",
+      "network": "chain-public contained only the verified Testermint containers and was empty before removal",
+      "prod_local": "absolute path was exactly a8-gonka-worktree/prod-local"
+    },
+    "completed": true,
+    "removed_containers": true,
+    "removed_postgres_volumes": true,
+    "removed_chain_public": true,
+    "removed_prod_local": true,
+    "foreign_resources_touched": false
+  }
+}

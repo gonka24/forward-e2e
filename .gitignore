@@ -1,0 +1,34 @@
+/target/
+/ops/a8/harness/wasm-probe/p0-probe/target/
+/tools/proto-gen/target/
+__pycache__/
+*.pyc
+
+# Release Wasm files are reproducible build outputs, not source files.
+/artifacts/*
+!/artifacts/.gitignore
+
+.env
+*.rs.bk
+.DS_Store
+
+# IDE and editors
+.idea/
+.vscode/*
+!.vscode/settings.json
+*.swp
+*.swo
+*~
+
+# Python and test caches
+.pytest_cache/
+.coverage
+htmlcov/
+
+#ai
+*.local.md
+
+# A8 Acceptance bundles and local outputs
+.a8-bundles/
+.e2e-bridge*/
+out/

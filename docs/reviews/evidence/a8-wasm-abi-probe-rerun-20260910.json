@@ -1,0 +1,122 @@
+{
+  "level": "compiled-Wasm query_chain ABI; synthetic host",
+  "wasm_sha256": "76480bf002eca59c4cce9d3288cf3cc76f47bfafde4cc67863d60e43cce46b7f",
+  "node": "v24.13.0",
+  "status": "PASS",
+  "cases": [
+    {
+      "name": "malformed-envelope",
+      "status": "PASS",
+      "envelope": "{",
+      "observed": {
+        "error": {
+          "invalid_response": {
+            "error": "Error parsing into type cosmwasm_std::results::system_result::SystemResult<cosmwasm_std::results::contract_result::ContractResult<cosmwasm_std::binary::Binary>>: EOF while parsing a JSON value.",
+            "response": "ew=="
+          }
+        }
+      },
+      "query_chain_calls": 1
+    },
+    {
+      "name": "invalid-envelope-shape",
+      "status": "PASS",
+      "envelope": "{\"unexpected\":true}",
+      "observed": {
+        "error": {
+          "invalid_response": {
+            "error": "Error parsing into type cosmwasm_std::results::system_result::SystemResult<cosmwasm_std::results::contract_result::ContractResult<cosmwasm_std::binary::Binary>>: unknown variant `unexpected`, expected `ok` or `error`",
+            "response": "eyJ1bmV4cGVjdGVkIjp0cnVlfQ=="
+          }
+        }
+      },
+      "query_chain_calls": 1
+    },
+    {
+      "name": "invalid_request",
+      "status": "PASS",
+      "envelope": "{\"error\":{\"invalid_request\":{\"error\":\"bad request\",\"request\":\"e30=\"}}}",
+      "observed": {
+        "error": {
+          "invalid_request": {
+            "error": "bad request",
+            "request": "e30="
+          }
+        }
+      },
+      "query_chain_calls": 1
+    },
+    {
+      "name": "unknown",
+      "status": "PASS",
+      "envelope": "{\"error\":{\"unknown\":{}}}",
+      "observed": {
+        "error": {
+          "unknown": {}
+        }
+      },
+      "query_chain_calls": 1
+    },
+    {
+      "name": "no_such_contract",
+      "status": "PASS",
+      "envelope": "{\"error\":{\"no_such_contract\":{\"addr\":\"missing\"}}}",
+      "observed": {
+        "error": {
+          "no_such_contract": {
+            "addr": "missing"
+          }
+        }
+      },
+      "query_chain_calls": 1
+    },
+    {
+      "name": "no_such_code",
+      "status": "PASS",
+      "envelope": "{\"error\":{\"no_such_code\":{\"code_id\":7}}}",
+      "observed": {
+        "error": {
+          "no_such_code": {
+            "code_id": 7
+          }
+        }
+      },
+      "query_chain_calls": 1
+    },
+    {
+      "name": "unsupported_request",
+      "status": "PASS",
+      "envelope": "{\"error\":{\"unsupported_request\":{\"kind\":\"grpc\"}}}",
+      "observed": {
+        "error": {
+          "unsupported_request": {
+            "kind": "grpc"
+          }
+        }
+      },
+      "query_chain_calls": 1
+    },
+    {
+      "name": "contract-error-control",
+      "status": "PASS",
+      "envelope": "{\"ok\":{\"error\":\"keeper failure\"}}",
+      "observed": {
+        "ok": {
+          "error": "keeper failure"
+        }
+      },
+      "query_chain_calls": 1
+    },
+    {
+      "name": "success-control",
+      "status": "PASS",
+      "envelope": "{\"ok\":{\"ok\":\"AQI=\"}}",
+      "observed": {
+        "ok": {
+          "ok": "AQI="
+        }
+      },
+      "query_chain_calls": 1
+    }
+  ]
+}

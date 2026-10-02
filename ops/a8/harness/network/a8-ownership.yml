@@ -1,0 +1,30 @@
+# Runner-generated compose overlay (A8 immutable-source runner).
+#
+# Copied by scripts/a8_external_harness.py:prepare_network_root to
+# <W>/network-root/local-test-net/a8-ownership.yml and passed by the external
+# Kotlin harness through upstream's additionalDockerFilesByKeyName for every
+# pair (genesis, join1, join2). Upstream compose files are not modified.
+#
+# Why: ops/a8/harness/container_control.py only stops/starts a container that
+# carries this run's ownership label, and runtime cleanup only removes what the
+# run provably owns. Every service of the pair's base compose set is labelled so
+# ownership is evidence, not an inference from container names.
+services:
+  chain-node:
+    labels:
+      io.gonka.a8.run-id: "${A8_RUN_ID}"
+  api:
+    labels:
+      io.gonka.a8.run-id: "${A8_RUN_ID}"
+  edge-api:
+    labels:
+      io.gonka.a8.run-id: "${A8_RUN_ID}"
+  proxy:
+    labels:
+      io.gonka.a8.run-id: "${A8_RUN_ID}"
+  mock-server:
+    labels:
+      io.gonka.a8.run-id: "${A8_RUN_ID}"
+  postgres:
+    labels:
+      io.gonka.a8.run-id: "${A8_RUN_ID}"

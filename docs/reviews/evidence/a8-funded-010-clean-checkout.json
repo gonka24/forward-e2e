@@ -1,0 +1,56 @@
+{
+  "schema_version": 1,
+  "kind": "gonka_forward_marketplace_clean_checkout_reproduction",
+  "run_id": "a8-funded-010",
+  "result": "pass",
+  "checkout": {
+    "remote": "https://github.com/anikiyevichm/gonka.git",
+    "pull_request": "https://github.com/anikiyevichm/gonka/pull/2",
+    "branch": "test/a8-marketplace-harness",
+    "head": "9f32e0274a3e22ddb567ea024820cc2522a250db",
+    "base": "forward-marketplace-blockchain-prep",
+    "changed_files_from_pinned_runtime": [
+      "testermint/src/test/kotlin/MarketplaceContractAcceptanceTests.kt"
+    ]
+  },
+  "source": {
+    "marketplace_commit_sha": "af2e619dbe091c974a8c5a820e4d0266b5cc479b",
+    "gonka_runtime_sha": "29a58fcf64b87967cb874b6169ce2c61e1f269b1",
+    "gonka_test_harness_sha": "9f32e0274a3e22ddb567ea024820cc2522a250db",
+    "a9_manifest_sha256": "e6db952e7bd5d06b99a3db7fea496a7c4a0a8aeb1e6f094a209d5afea3e9b981",
+    "deal_sha256": "2caa08099be647a9c3d5fa9868ec6faee30ae7c2a9136cc4891cd75ccd55c0e5",
+    "factory_sha256": "8366a874619c03e54ed36edf6b0ebbde4001afcf6c1b02ed40f9762350e6d82b"
+  },
+  "runtime": {
+    "gonka_source_sha": "29a58fcf64b87967cb874b6169ce2c61e1f269b1",
+    "wasmd": "v0.54.2",
+    "wasmvm": "v2.2.4",
+    "cosmos_sdk": "v0.53.3-ps19-observability",
+    "go": "go version go1.24.2 linux/amd64"
+  },
+  "phases": [
+    "lock",
+    "claim_settle",
+    "release",
+    "release",
+    "late_completed_donation_release"
+  ],
+  "release_checks": [
+    {
+      "expected": {"buyer_delta": 50000000000, "host_delta": 47359835683225, "released_total": 47409835683225},
+      "actual": {"buyer_delta": 50000000000, "host_delta": 47359835683225, "released_total": 47409835683225}
+    },
+    {
+      "expected": {"buyer_delta": 50000000000, "host_delta": 47359835683225, "released_total": 94819671366450},
+      "actual": {"buyer_delta": 50000000000, "host_delta": 47359835683225, "released_total": 94819671366450}
+    },
+    {
+      "expected": {"buyer_delta": 1054, "host_delta": 998946, "released_total": 94819672366450},
+      "actual": {"buyer_delta": 1054, "host_delta": 998946, "released_total": 94819672366450}
+    }
+  ],
+  "final_state": {
+    "status": "completed",
+    "deal_balance_ngonka": 0
+  }
+}

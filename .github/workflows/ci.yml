@@ -1,0 +1,42 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  python-offline-runner:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - name: Set up Python 3.11
+        uses: actions/setup-python@0a5c61591373683505ea898e09a3ea4f39ef2b9c # v5.0.0
+        with:
+          python-version: "3.11"
+      - name: Run release helper and acceptance harness tests
+        run: python3 -B -m unittest discover -s scripts/tests -p 'test_*.py' -v
+      - name: Run suite and E2E runner tests
+        run: python3 -B -m unittest discover -s ops/a8/tests -p 'test_*.py' -v
+      - name: Verify local Git source acquisition
+        run: python3 -B -m unittest discover -s ops/a8/integration_tests -p 'test_*.py' -v
+      - name: Validate Docker Compose configuration
+        run: docker compose -f ops/a8/compose.yaml config --quiet
+
+  windows-host-wrapper:
+    runs-on: windows-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - name: Set up Python 3.11
+        uses: actions/setup-python@0a5c61591373683505ea898e09a3ea4f39ef2b9c # v5.0.0
+        with:
+          python-version: "3.11"
+      - name: Check Windows host-wrapper behavior
+        run: python -B -m unittest discover -s ops/a8/tests -p test_e2e_host_wrappers.py -v

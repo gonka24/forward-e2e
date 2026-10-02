@@ -1,0 +1,24 @@
+{
+  "schema_version": "1.0.0",
+  "kind": "gonka-marketplace-a8-live-diagnostic",
+  "runs": [
+    {
+      "run_id": "a8-negative-019",
+      "status": "not_run_infrastructure_failure",
+      "failure": "NoSuchFileException: prod-local/mock-server/genesis/mappings during Testermint init before contract setup",
+      "testermint_log_sha256": "33fca90a73c96e181fafae8c1f2534f9caac98d95afe8381f5cbe9f52544e23f"
+    },
+    {
+      "run_id": "a8-negative-020",
+      "status": "not_run_infrastructure_failure",
+      "failure": "Same deterministic Testermint init failure after reboot cleanup; no A8 scenario reached",
+      "testermint_log_sha256": "33fca90a73c96e181fafae8c1f2534f9caac98d95afe8381f5cbe9f52544e23f"
+    }
+  ],
+  "source": {
+    "marketplace_commit": "25d113c",
+    "gonka_commit": "45f273b8",
+    "manifest": "a8-release-25d113c/build-manifest.json"
+  },
+  "acceptance": "Both runs are NOT RUN for contract scenarios; failure is infrastructure setup, not PASS/FAIL evidence for Refund, claim-expiry, gas, or release."
+}

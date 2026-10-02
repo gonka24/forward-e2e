@@ -1,0 +1,30 @@
+Gonka Protobuf Bindings (gonka-proto)
+Copyright (c) 2026 Gonka Forward Marketplace Contributors
+
+This product contains vendored third-party Protocol Buffer definitions:
+
+1. Google APIs and Protocol Buffers
+   - Files: proto/vendor/google/**
+   - Copyright 2008-2026 Google LLC
+   - Licensed under Apache License, Version 2.0 and BSD 3-Clause License.
+
+2. GoGo Protobuf
+   - Files: proto/vendor/gogoproto/**
+   - Copyright (c) 2013, The GoGo Authors. All rights reserved.
+   - The vendored gogo.proto header contains the BSD 2-Clause terms; retain that header.
+
+3. Cosmos SDK and Cosmos Proto
+   - Files: proto/vendor/cosmos/**, proto/vendor/cosmos_proto/**, proto/vendor/amino/**
+   - Copyright (c) 2016-2026 Interchain Foundation and Cosmos contributors
+   - Licensed under the Apache License, Version 2.0.
+
+4. Gonka Blockchain Protocol
+   - Files: proto/vendor/inference/**
+   - Pinned from https://github.com/gonka-ai/gonka (commit 379bebced638aeb5e6077bfd51c986f898443832)
+   - Copyright held by Product Science, Inc., as stated in the upstream license.
+   - The original upstream terms apply; see LICENSE.md at the pinned commit:
+     https://github.com/gonka-ai/gonka/blob/379bebced638aeb5e6077bfd51c986f898443832/LICENSE.md
+     A copy is included at ../../licenses/Gonka-pinned.txt.
+
+Generated bindings derived from these definitions retain applicable upstream
+terms. The project's BUSL license does not replace those terms.

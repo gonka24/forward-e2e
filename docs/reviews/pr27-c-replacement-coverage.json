@@ -1,0 +1,669 @@
+{
+  "baseline_contracts_sha": "d22e2b75850a84acc47c033291d0893d417b3ff7",
+  "gonka_sha": "e86e4899bd8cf52d1ad4766c811f65230b2f9296",
+  "acceptance_status": "NOT_REVIEWED",
+  "cases": [
+    {
+      "old_case_id": "r3-duplicate_routing-lock",
+      "invariant": "Fail closed without storage writes; healthy retry locks or rejects exact routing; epoch recovery permits emergency refund",
+      "error_mechanism": "Synthetic query boundary: duplicate_routing-lock",
+      "proof_level": "Rust unit",
+      "exact_test": "contract::tests::c_routing_duplicate_routing_lock",
+      "unproven": "No production Gonka arbitrary fault reachability, Cosmos SDK/wasmd/FFI execution or native claim/vesting ledger proof.",
+      "status": "LINUX_OFFLINE_PASS"
+    },
+    {
+      "old_case_id": "r3-duplicate_routing-lock-healthy",
+      "invariant": "Fail closed without storage writes; healthy retry locks or rejects exact routing; epoch recovery permits emergency refund",
+      "error_mechanism": "Synthetic query boundary: duplicate_routing-lock",
+      "proof_level": "Rust unit",
+      "exact_test": "contract::tests::c_routing_duplicate_routing_lock",
+      "unproven": "No production Gonka arbitrary fault reachability, Cosmos SDK/wasmd/FFI execution or native claim/vesting ledger proof.",
+      "status": "LINUX_OFFLINE_PASS"
+    },
+    {
+      "old_case_id": "r3-duplicate_routing-refund",
+      "invariant": "Fail closed without storage writes; healthy retry locks or rejects exact routing; epoch recovery permits emergency refund",
+      "error_mechanism": "Synthetic query boundary: duplicate_routing-refund",
+      "proof_level": "Rust unit",
+      "exact_test": "contract::tests::c_routing_duplicate_routing_refund",
+      "unproven": "No production Gonka arbitrary fault reachability, Cosmos SDK/wasmd/FFI execution or native claim/vesting ledger proof.",
+      "status": "LINUX_OFFLINE_PASS"
+    },
+    {
+      "old_case_id": "r3-duplicate_routing-refund-healthy",
+      "invariant": "Fail closed without storage writes; healthy retry locks or rejects exact routing; epoch recovery permits emergency refund",
+      "error_mechanism": "Synthetic query boundary: duplicate_routing-refund",
+      "proof_level": "Rust unit",
+      "exact_test": "contract::tests::c_routing_duplicate_routing_refund",
+      "unproven": "No production Gonka arbitrary fault reachability, Cosmos SDK/wasmd/FFI execution or native claim/vesting ledger proof.",
+      "status": "LINUX_OFFLINE_PASS"
+    },
+    {
+      "old_case_id": "r3-epoch-lock",
+      "invariant": "Fail closed without storage writes; healthy retry locks or rejects exact routing; epoch recovery permits emergency refund",
+      "error_mechanism": "Synthetic query boundary: epoch-lock",
+      "proof_level": "Rust unit",
+      "exact_test": "contract::tests::c_routing_epoch_lock",
+      "unproven": "No production Gonka arbitrary fault reachability, Cosmos SDK/wasmd/FFI execution or native claim/vesting ledger proof.",
+      "status": "LINUX_OFFLINE_PASS"
+    },
+    {
+      "old_case_id": "r3-epoch-lock-healthy",
+      "invariant": "Fail closed without storage writes; healthy retry locks or rejects exact routing; epoch recovery permits emergency refund",
+      "error_mechanism": "Synthetic query boundary: epoch-lock",
+      "proof_level": "Rust unit",
+      "exact_test": "contract::tests::c_routing_epoch_lock",
+      "unproven": "No production Gonka arbitrary fault reachability, Cosmos SDK/wasmd/FFI execution or native claim/vesting ledger proof.",
+      "status": "LINUX_OFFLINE_PASS"
+    },
+    {
+      "old_case_id": "r3-epoch-refund",
+      "invariant": "Fail closed without storage writes; healthy retry locks or rejects exact routing; epoch recovery permits emergency refund",
+      "error_mechanism": "Synthetic query boundary: epoch-refund",
+      "proof_level": "Rust unit",
+      "exact_test": "contract::tests::c_routing_epoch_refund",
+      "unproven": "No production Gonka arbitrary fault reachability, Cosmos SDK/wasmd/FFI execution or native claim/vesting ledger proof.",
+      "status": "LINUX_OFFLINE_PASS"
+    },
+    {
+      "old_case_id": "r3-epoch-refund-healthy",
+      "invariant": "Fail closed without storage writes; healthy retry locks or rejects exact routing; epoch recovery permits emergency refund",
+      "error_mechanism": "Synthetic query boundary: epoch-refund",
+      "proof_level": "Rust unit",
+      "exact_test": "contract::tests::c_routing_epoch_refund",
+      "unproven": "No production Gonka arbitrary fault reachability, Cosmos SDK/wasmd/FFI execution or native claim/vesting ledger proof.",
+      "status": "LINUX_OFFLINE_PASS"
+    },
+    {
+      "old_case_id": "r3-handler_error-lock",
+      "invariant": "Fail closed without storage writes; healthy retry locks or rejects exact routing; epoch recovery permits emergency refund",
+      "error_mechanism": "Synthetic query boundary: handler_error-lock",
+      "proof_level": "Rust unit",
+      "exact_test": "contract::tests::c_routing_handler_error_lock",
+      "unproven": "No production Gonka arbitrary fault reachability, Cosmos SDK/wasmd/FFI execution or native claim/vesting ledger proof.",
+      "status": "LINUX_OFFLINE_PASS"
+    },
+    {
+      "old_case_id": "r3-handler_error-lock-healthy",
+      "invariant": "Fail closed without storage writes; healthy retry locks or rejects exact routing; epoch recovery permits emergency refund",
+      "error_mechanism": "Synthetic query boundary: handler_error-lock",
+      "proof_level": "Rust unit",
+      "exact_test": "contract::tests::c_routing_handler_error_lock",
+      "unproven": "No production Gonka arbitrary fault reachability, Cosmos SDK/wasmd/FFI execution or native claim/vesting ledger proof.",
+      "status": "LINUX_OFFLINE_PASS"
+    },
+    {
+      "old_case_id": "r3-handler_error-refund",
+      "invariant": "Fail closed without storage writes; healthy retry locks or rejects exact routing; epoch recovery permits emergency refund",
+      "error_mechanism": "Synthetic query boundary: handler_error-refund",
+      "proof_level": "Rust unit",
+      "exact_test": "contract::tests::c_routing_handler_error_refund",
+      "unproven": "No production Gonka arbitrary fault reachability, Cosmos SDK/wasmd/FFI execution or native claim/vesting ledger proof.",
+      "status": "LINUX_OFFLINE_PASS"
+    },
+    {
+      "old_case_id": "r3-handler_error-refund-healthy",
+      "invariant": "Fail closed without storage writes; healthy retry locks or rejects exact routing; epoch recovery permits emergency refund",
+      "error_mechanism": "Synthetic query boundary: handler_error-refund",
+      "proof_level": "Rust unit",
+      "exact_test": "contract::tests::c_routing_handler_error_refund",
+      "unproven": "No production Gonka arbitrary fault reachability, Cosmos SDK/wasmd/FFI execution or native claim/vesting ledger proof.",
+      "status": "LINUX_OFFLINE_PASS"
+    },
+    {
+      "old_case_id": "r3-malformed_protobuf-lock",
+      "invariant": "Fail closed without storage writes; healthy retry locks or rejects exact routing; epoch recovery permits emergency refund",
+      "error_mechanism": "Synthetic query boundary: malformed_protobuf-lock",
+      "proof_level": "Rust unit",
+      "exact_test": "contract::tests::c_routing_malformed_protobuf_lock",
+      "unproven": "No production Gonka arbitrary fault reachability, Cosmos SDK/wasmd/FFI execution or native claim/vesting ledger proof.",
+      "status": "LINUX_OFFLINE_PASS"
+    },
+    {
+      "old_case_id": "r3-malformed_protobuf-lock-healthy",
+      "invariant": "Fail closed without storage writes; healthy retry locks or rejects exact routing; epoch recovery permits emergency refund",
+      "error_mechanism": "Synthetic query boundary: malformed_protobuf-lock",
+      "proof_level": "Rust unit",
+      "exact_test": "contract::tests::c_routing_malformed_protobuf_lock",
+      "unproven": "No production Gonka arbitrary fault reachability, Cosmos SDK/wasmd/FFI execution or native claim/vesting ledger proof.",
+      "status": "LINUX_OFFLINE_PASS"
+    },
+    {
+      "old_case_id": "r3-malformed_protobuf-refund",
+      "invariant": "Fail closed without storage writes; healthy retry locks or rejects exact routing; epoch recovery permits emergency refund",
+      "error_mechanism": "Synthetic query boundary: malformed_protobuf-refund",
+      "proof_level": "Rust unit",
+      "exact_test": "contract::tests::c_routing_malformed_protobuf_refund",
+      "unproven": "No production Gonka arbitrary fault reachability, Cosmos SDK/wasmd/FFI execution or native claim/vesting ledger proof.",
+      "status": "LINUX_OFFLINE_PASS"
+    },
+    {
+      "old_case_id": "r3-malformed_protobuf-refund-healthy",
+      "invariant": "Fail closed without storage writes; healthy retry locks or rejects exact routing; epoch recovery permits emergency refund",
+      "error_mechanism": "Synthetic query boundary: malformed_protobuf-refund",
+      "proof_level": "Rust unit",
+      "exact_test": "contract::tests::c_routing_malformed_protobuf_refund",
+      "unproven": "No production Gonka arbitrary fault reachability, Cosmos SDK/wasmd/FFI execution or native claim/vesting ledger proof.",
+      "status": "LINUX_OFFLINE_PASS"
+    },
+    {
+      "old_case_id": "r4-handler_error-e2",
+      "invariant": "Exact error for SettleClaim and Refund at E+2; emergency refund at E+3; recovered healthy response cannot reopen terminal state",
+      "error_mechanism": "Synthetic QuerierResult / protobuf: handler_error",
+      "proof_level": "Rust unit",
+      "exact_test": "contract::tests::c_policy_handler_error",
+      "unproven": "No production Gonka arbitrary fault reachability, Cosmos SDK/wasmd/FFI execution or native claim/vesting ledger proof.",
+      "status": "LINUX_OFFLINE_PASS"
+    },
+    {
+      "old_case_id": "r4-handler_error-e3",
+      "invariant": "Exact error for SettleClaim and Refund at E+2; emergency refund at E+3; recovered healthy response cannot reopen terminal state",
+      "error_mechanism": "Synthetic QuerierResult / protobuf: handler_error",
+      "proof_level": "Rust unit",
+      "exact_test": "contract::tests::c_policy_handler_error",
+      "unproven": "No production Gonka arbitrary fault reachability, Cosmos SDK/wasmd/FFI execution or native claim/vesting ledger proof.",
+      "status": "LINUX_OFFLINE_PASS"
+    },
+    {
+      "old_case_id": "r4-handler_error-probe",
+      "invariant": "Exact error for SettleClaim and Refund at E+2; emergency refund at E+3; recovered healthy response cannot reopen terminal state",
+      "error_mechanism": "Synthetic QuerierResult / protobuf: handler_error",
+      "proof_level": "Rust unit",
+      "exact_test": "contract::tests::c_policy_handler_error",
+      "unproven": "No production Gonka arbitrary fault reachability, Cosmos SDK/wasmd/FFI execution or native claim/vesting ledger proof.",
+      "status": "LINUX_OFFLINE_PASS"
+    },
+    {
+      "old_case_id": "r4-handler_error-terminal-refund",
+      "invariant": "Exact error for SettleClaim and Refund at E+2; emergency refund at E+3; recovered healthy response cannot reopen terminal state",
+      "error_mechanism": "Synthetic QuerierResult / protobuf: handler_error",
+      "proof_level": "Rust unit",
+      "exact_test": "contract::tests::c_policy_handler_error",
+      "unproven": "No production Gonka arbitrary fault reachability, Cosmos SDK/wasmd/FFI execution or native claim/vesting ledger proof.",
+      "status": "LINUX_OFFLINE_PASS"
+    },
+    {
+      "old_case_id": "r4-handler_error-terminal-settle_claim",
+      "invariant": "Exact error for SettleClaim and Refund at E+2; emergency refund at E+3; recovered healthy response cannot reopen terminal state",
+      "error_mechanism": "Synthetic QuerierResult / protobuf: handler_error",
+      "proof_level": "Rust unit",
+      "exact_test": "contract::tests::c_policy_handler_error",
+      "unproven": "No production Gonka arbitrary fault reachability, Cosmos SDK/wasmd/FFI execution or native claim/vesting ledger proof.",
+      "status": "LINUX_OFFLINE_PASS"
+    },
+    {
+      "old_case_id": "r4-invalid_participant_address-e2",
+      "invariant": "Exact error for SettleClaim and Refund at E+2; emergency refund at E+3; recovered healthy response cannot reopen terminal state",
+      "error_mechanism": "Synthetic QuerierResult / protobuf: invalid_participant_address",
+      "proof_level": "Rust unit",
+      "exact_test": "contract::tests::c_policy_invalid_participant_address",
+      "unproven": "No production Gonka arbitrary fault reachability, Cosmos SDK/wasmd/FFI execution or native claim/vesting ledger proof.",
+      "status": "LINUX_OFFLINE_PASS"
+    },
+    {
+      "old_case_id": "r4-invalid_participant_address-e3",
+      "invariant": "Exact error for SettleClaim and Refund at E+2; emergency refund at E+3; recovered healthy response cannot reopen terminal state",
+      "error_mechanism": "Synthetic QuerierResult / protobuf: invalid_participant_address",
+      "proof_level": "Rust unit",
+      "exact_test": "contract::tests::c_policy_invalid_participant_address",
+      "unproven": "No production Gonka arbitrary fault reachability, Cosmos SDK/wasmd/FFI execution or native claim/vesting ledger proof.",
+      "status": "LINUX_OFFLINE_PASS"
+    },
+    {
+      "old_case_id": "r4-invalid_participant_address-probe",
+      "invariant": "Exact error for SettleClaim and Refund at E+2; emergency refund at E+3; recovered healthy response cannot reopen terminal state",
+      "error_mechanism": "Synthetic QuerierResult / protobuf: invalid_participant_address",
+      "proof_level": "Rust unit",
+      "exact_test": "contract::tests::c_policy_invalid_participant_address",
+      "unproven": "No production Gonka arbitrary fault reachability, Cosmos SDK/wasmd/FFI execution or native claim/vesting ledger proof.",
+      "status": "LINUX_OFFLINE_PASS"
+    },
+    {
+      "old_case_id": "r4-invalid_participant_address-terminal-refund",
+      "invariant": "Exact error for SettleClaim and Refund at E+2; emergency refund at E+3; recovered healthy response cannot reopen terminal state",
+      "error_mechanism": "Synthetic QuerierResult / protobuf: invalid_participant_address",
+      "proof_level": "Rust unit",
+      "exact_test": "contract::tests::c_policy_invalid_participant_address",
+      "unproven": "No production Gonka arbitrary fault reachability, Cosmos SDK/wasmd/FFI execution or native claim/vesting ledger proof.",
+      "status": "LINUX_OFFLINE_PASS"
+    },
+    {
+      "old_case_id": "r4-invalid_participant_address-terminal-settle_claim",
+      "invariant": "Exact error for SettleClaim and Refund at E+2; emergency refund at E+3; recovered healthy response cannot reopen terminal state",
+      "error_mechanism": "Synthetic QuerierResult / protobuf: invalid_participant_address",
+      "proof_level": "Rust unit",
+      "exact_test": "contract::tests::c_policy_invalid_participant_address",
+      "unproven": "No production Gonka arbitrary fault reachability, Cosmos SDK/wasmd/FFI execution or native claim/vesting ledger proof.",
+      "status": "LINUX_OFFLINE_PASS"
+    },
+    {
+      "old_case_id": "r4-malformed_protobuf-e2",
+      "invariant": "Exact error for SettleClaim and Refund at E+2; emergency refund at E+3; recovered healthy response cannot reopen terminal state",
+      "error_mechanism": "Synthetic QuerierResult / protobuf: malformed_protobuf",
+      "proof_level": "Rust unit",
+      "exact_test": "contract::tests::c_policy_malformed_protobuf",
+      "unproven": "No production Gonka arbitrary fault reachability, Cosmos SDK/wasmd/FFI execution or native claim/vesting ledger proof.",
+      "status": "LINUX_OFFLINE_PASS"
+    },
+    {
+      "old_case_id": "r4-malformed_protobuf-e3",
+      "invariant": "Exact error for SettleClaim and Refund at E+2; emergency refund at E+3; recovered healthy response cannot reopen terminal state",
+      "error_mechanism": "Synthetic QuerierResult / protobuf: malformed_protobuf",
+      "proof_level": "Rust unit",
+      "exact_test": "contract::tests::c_policy_malformed_protobuf",
+      "unproven": "No production Gonka arbitrary fault reachability, Cosmos SDK/wasmd/FFI execution or native claim/vesting ledger proof.",
+      "status": "LINUX_OFFLINE_PASS"
+    },
+    {
+      "old_case_id": "r4-malformed_protobuf-probe",
+      "invariant": "Exact error for SettleClaim and Refund at E+2; emergency refund at E+3; recovered healthy response cannot reopen terminal state",
+      "error_mechanism": "Synthetic QuerierResult / protobuf: malformed_protobuf",
+      "proof_level": "Rust unit",
+      "exact_test": "contract::tests::c_policy_malformed_protobuf",
+      "unproven": "No production Gonka arbitrary fault reachability, Cosmos SDK/wasmd/FFI execution or native claim/vesting ledger proof.",
+      "status": "LINUX_OFFLINE_PASS"
+    },
+    {
+      "old_case_id": "r4-malformed_protobuf-terminal-refund",
+      "invariant": "Exact error for SettleClaim and Refund at E+2; emergency refund at E+3; recovered healthy response cannot reopen terminal state",
+      "error_mechanism": "Synthetic QuerierResult / protobuf: malformed_protobuf",
+      "proof_level": "Rust unit",
+      "exact_test": "contract::tests::c_policy_malformed_protobuf",
+      "unproven": "No production Gonka arbitrary fault reachability, Cosmos SDK/wasmd/FFI execution or native claim/vesting ledger proof.",
+      "status": "LINUX_OFFLINE_PASS"
+    },
+    {
+      "old_case_id": "r4-malformed_protobuf-terminal-settle_claim",
+      "invariant": "Exact error for SettleClaim and Refund at E+2; emergency refund at E+3; recovered healthy response cannot reopen terminal state",
+      "error_mechanism": "Synthetic QuerierResult / protobuf: malformed_protobuf",
+      "proof_level": "Rust unit",
+      "exact_test": "contract::tests::c_policy_malformed_protobuf",
+      "unproven": "No production Gonka arbitrary fault reachability, Cosmos SDK/wasmd/FFI execution or native claim/vesting ledger proof.",
+      "status": "LINUX_OFFLINE_PASS"
+    },
+    {
+      "old_case_id": "r4-missing_nested_summary-e2",
+      "invariant": "Exact error for SettleClaim and Refund at E+2; emergency refund at E+3; recovered healthy response cannot reopen terminal state",
+      "error_mechanism": "Synthetic QuerierResult / protobuf: missing_nested_summary",
+      "proof_level": "Rust unit",
+      "exact_test": "contract::tests::c_policy_missing_nested_summary",
+      "unproven": "No production Gonka arbitrary fault reachability, Cosmos SDK/wasmd/FFI execution or native claim/vesting ledger proof.",
+      "status": "LINUX_OFFLINE_PASS"
+    },
+    {
+      "old_case_id": "r4-missing_nested_summary-e3",
+      "invariant": "Exact error for SettleClaim and Refund at E+2; emergency refund at E+3; recovered healthy response cannot reopen terminal state",
+      "error_mechanism": "Synthetic QuerierResult / protobuf: missing_nested_summary",
+      "proof_level": "Rust unit",
+      "exact_test": "contract::tests::c_policy_missing_nested_summary",
+      "unproven": "No production Gonka arbitrary fault reachability, Cosmos SDK/wasmd/FFI execution or native claim/vesting ledger proof.",
+      "status": "LINUX_OFFLINE_PASS"
+    },
+    {
+      "old_case_id": "r4-missing_nested_summary-probe",
+      "invariant": "Exact error for SettleClaim and Refund at E+2; emergency refund at E+3; recovered healthy response cannot reopen terminal state",
+      "error_mechanism": "Synthetic QuerierResult / protobuf: missing_nested_summary",
+      "proof_level": "Rust unit",
+      "exact_test": "contract::tests::c_policy_missing_nested_summary",
+      "unproven": "No production Gonka arbitrary fault reachability, Cosmos SDK/wasmd/FFI execution or native claim/vesting ledger proof.",
+      "status": "LINUX_OFFLINE_PASS"
+    },
+    {
+      "old_case_id": "r4-missing_nested_summary-terminal-refund",
+      "invariant": "Exact error for SettleClaim and Refund at E+2; emergency refund at E+3; recovered healthy response cannot reopen terminal state",
+      "error_mechanism": "Synthetic QuerierResult / protobuf: missing_nested_summary",
+      "proof_level": "Rust unit",
+      "exact_test": "contract::tests::c_policy_missing_nested_summary",
+      "unproven": "No production Gonka arbitrary fault reachability, Cosmos SDK/wasmd/FFI execution or native claim/vesting ledger proof.",
+      "status": "LINUX_OFFLINE_PASS"
+    },
+    {
+      "old_case_id": "r4-missing_nested_summary-terminal-settle_claim",
+      "invariant": "Exact error for SettleClaim and Refund at E+2; emergency refund at E+3; recovered healthy response cannot reopen terminal state",
+      "error_mechanism": "Synthetic QuerierResult / protobuf: missing_nested_summary",
+      "proof_level": "Rust unit",
+      "exact_test": "contract::tests::c_policy_missing_nested_summary",
+      "unproven": "No production Gonka arbitrary fault reachability, Cosmos SDK/wasmd/FFI execution or native claim/vesting ledger proof.",
+      "status": "LINUX_OFFLINE_PASS"
+    },
+    {
+      "old_case_id": "r4-oversized_response-e2",
+      "invariant": "Exact error for SettleClaim and Refund at E+2; emergency refund at E+3; recovered healthy response cannot reopen terminal state",
+      "error_mechanism": "Synthetic QuerierResult / protobuf: oversized_response",
+      "proof_level": "Rust unit",
+      "exact_test": "contract::tests::c_policy_oversized_response",
+      "unproven": "No production Gonka arbitrary fault reachability, Cosmos SDK/wasmd/FFI execution or native claim/vesting ledger proof.",
+      "status": "LINUX_OFFLINE_PASS"
+    },
+    {
+      "old_case_id": "r4-oversized_response-e3",
+      "invariant": "Exact error for SettleClaim and Refund at E+2; emergency refund at E+3; recovered healthy response cannot reopen terminal state",
+      "error_mechanism": "Synthetic QuerierResult / protobuf: oversized_response",
+      "proof_level": "Rust unit",
+      "exact_test": "contract::tests::c_policy_oversized_response",
+      "unproven": "No production Gonka arbitrary fault reachability, Cosmos SDK/wasmd/FFI execution or native claim/vesting ledger proof.",
+      "status": "LINUX_OFFLINE_PASS"
+    },
+    {
+      "old_case_id": "r4-oversized_response-probe",
+      "invariant": "Exact error for SettleClaim and Refund at E+2; emergency refund at E+3; recovered healthy response cannot reopen terminal state",
+      "error_mechanism": "Synthetic QuerierResult / protobuf: oversized_response",
+      "proof_level": "Rust unit",
+      "exact_test": "contract::tests::c_policy_oversized_response",
+      "unproven": "No production Gonka arbitrary fault reachability, Cosmos SDK/wasmd/FFI execution or native claim/vesting ledger proof.",
+      "status": "LINUX_OFFLINE_PASS"
+    },
+    {
+      "old_case_id": "r4-oversized_response-terminal-refund",
+      "invariant": "Exact error for SettleClaim and Refund at E+2; emergency refund at E+3; recovered healthy response cannot reopen terminal state",
+      "error_mechanism": "Synthetic QuerierResult / protobuf: oversized_response",
+      "proof_level": "Rust unit",
+      "exact_test": "contract::tests::c_policy_oversized_response",
+      "unproven": "No production Gonka arbitrary fault reachability, Cosmos SDK/wasmd/FFI execution or native claim/vesting ledger proof.",
+      "status": "LINUX_OFFLINE_PASS"
+    },
+    {
+      "old_case_id": "r4-oversized_response-terminal-settle_claim",
+      "invariant": "Exact error for SettleClaim and Refund at E+2; emergency refund at E+3; recovered healthy response cannot reopen terminal state",
+      "error_mechanism": "Synthetic QuerierResult / protobuf: oversized_response",
+      "proof_level": "Rust unit",
+      "exact_test": "contract::tests::c_policy_oversized_response",
+      "unproven": "No production Gonka arbitrary fault reachability, Cosmos SDK/wasmd/FFI execution or native claim/vesting ledger proof.",
+      "status": "LINUX_OFFLINE_PASS"
+    },
+    {
+      "old_case_id": "r4-unsupported_request-e2",
+      "invariant": "Exact error for SettleClaim and Refund at E+2; emergency refund at E+3; recovered healthy response cannot reopen terminal state",
+      "error_mechanism": "Synthetic QuerierResult / protobuf: unsupported_request",
+      "proof_level": "Rust unit",
+      "exact_test": "contract::tests::c_policy_unsupported_request",
+      "unproven": "No production Gonka arbitrary fault reachability, Cosmos SDK/wasmd/FFI execution or native claim/vesting ledger proof.",
+      "status": "LINUX_OFFLINE_PASS"
+    },
+    {
+      "old_case_id": "r4-unsupported_request-e3",
+      "invariant": "Exact error for SettleClaim and Refund at E+2; emergency refund at E+3; recovered healthy response cannot reopen terminal state",
+      "error_mechanism": "Synthetic QuerierResult / protobuf: unsupported_request",
+      "proof_level": "Rust unit",
+      "exact_test": "contract::tests::c_policy_unsupported_request",
+      "unproven": "No production Gonka arbitrary fault reachability, Cosmos SDK/wasmd/FFI execution or native claim/vesting ledger proof.",
+      "status": "LINUX_OFFLINE_PASS"
+    },
+    {
+      "old_case_id": "r4-unsupported_request-probe",
+      "invariant": "Exact error for SettleClaim and Refund at E+2; emergency refund at E+3; recovered healthy response cannot reopen terminal state",
+      "error_mechanism": "Synthetic QuerierResult / protobuf: unsupported_request",
+      "proof_level": "Rust unit",
+      "exact_test": "contract::tests::c_policy_unsupported_request",
+      "unproven": "No production Gonka arbitrary fault reachability, Cosmos SDK/wasmd/FFI execution or native claim/vesting ledger proof.",
+      "status": "LINUX_OFFLINE_PASS"
+    },
+    {
+      "old_case_id": "r4-unsupported_request-terminal-refund",
+      "invariant": "Exact error for SettleClaim and Refund at E+2; emergency refund at E+3; recovered healthy response cannot reopen terminal state",
+      "error_mechanism": "Synthetic QuerierResult / protobuf: unsupported_request",
+      "proof_level": "Rust unit",
+      "exact_test": "contract::tests::c_policy_unsupported_request",
+      "unproven": "No production Gonka arbitrary fault reachability, Cosmos SDK/wasmd/FFI execution or native claim/vesting ledger proof.",
+      "status": "LINUX_OFFLINE_PASS"
+    },
+    {
+      "old_case_id": "r4-unsupported_request-terminal-settle_claim",
+      "invariant": "Exact error for SettleClaim and Refund at E+2; emergency refund at E+3; recovered healthy response cannot reopen terminal state",
+      "error_mechanism": "Synthetic QuerierResult / protobuf: unsupported_request",
+      "proof_level": "Rust unit",
+      "exact_test": "contract::tests::c_policy_unsupported_request",
+      "unproven": "No production Gonka arbitrary fault reachability, Cosmos SDK/wasmd/FFI execution or native claim/vesting ledger proof.",
+      "status": "LINUX_OFFLINE_PASS"
+    },
+    {
+      "old_case_id": "r4-wrong_epoch-e2",
+      "invariant": "Exact error for SettleClaim and Refund at E+2; emergency refund at E+3; recovered healthy response cannot reopen terminal state",
+      "error_mechanism": "Synthetic QuerierResult / protobuf: wrong_epoch",
+      "proof_level": "Rust unit",
+      "exact_test": "contract::tests::c_policy_wrong_epoch",
+      "unproven": "No production Gonka arbitrary fault reachability, Cosmos SDK/wasmd/FFI execution or native claim/vesting ledger proof.",
+      "status": "LINUX_OFFLINE_PASS"
+    },
+    {
+      "old_case_id": "r4-wrong_epoch-e3",
+      "invariant": "Exact error for SettleClaim and Refund at E+2; emergency refund at E+3; recovered healthy response cannot reopen terminal state",
+      "error_mechanism": "Synthetic QuerierResult / protobuf: wrong_epoch",
+      "proof_level": "Rust unit",
+      "exact_test": "contract::tests::c_policy_wrong_epoch",
+      "unproven": "No production Gonka arbitrary fault reachability, Cosmos SDK/wasmd/FFI execution or native claim/vesting ledger proof.",
+      "status": "LINUX_OFFLINE_PASS"
+    },
+    {
+      "old_case_id": "r4-wrong_epoch-probe",
+      "invariant": "Exact error for SettleClaim and Refund at E+2; emergency refund at E+3; recovered healthy response cannot reopen terminal state",
+      "error_mechanism": "Synthetic QuerierResult / protobuf: wrong_epoch",
+      "proof_level": "Rust unit",
+      "exact_test": "contract::tests::c_policy_wrong_epoch",
+      "unproven": "No production Gonka arbitrary fault reachability, Cosmos SDK/wasmd/FFI execution or native claim/vesting ledger proof.",
+      "status": "LINUX_OFFLINE_PASS"
+    },
+    {
+      "old_case_id": "r4-wrong_epoch-terminal-refund",
+      "invariant": "Exact error for SettleClaim and Refund at E+2; emergency refund at E+3; recovered healthy response cannot reopen terminal state",
+      "error_mechanism": "Synthetic QuerierResult / protobuf: wrong_epoch",
+      "proof_level": "Rust unit",
+      "exact_test": "contract::tests::c_policy_wrong_epoch",
+      "unproven": "No production Gonka arbitrary fault reachability, Cosmos SDK/wasmd/FFI execution or native claim/vesting ledger proof.",
+      "status": "LINUX_OFFLINE_PASS"
+    },
+    {
+      "old_case_id": "r4-wrong_epoch-terminal-settle_claim",
+      "invariant": "Exact error for SettleClaim and Refund at E+2; emergency refund at E+3; recovered healthy response cannot reopen terminal state",
+      "error_mechanism": "Synthetic QuerierResult / protobuf: wrong_epoch",
+      "proof_level": "Rust unit",
+      "exact_test": "contract::tests::c_policy_wrong_epoch",
+      "unproven": "No production Gonka arbitrary fault reachability, Cosmos SDK/wasmd/FFI execution or native claim/vesting ledger proof.",
+      "status": "LINUX_OFFLINE_PASS"
+    },
+    {
+      "old_case_id": "r4-wrong_host-e2",
+      "invariant": "Exact error for SettleClaim and Refund at E+2; emergency refund at E+3; recovered healthy response cannot reopen terminal state",
+      "error_mechanism": "Synthetic QuerierResult / protobuf: wrong_host",
+      "proof_level": "Rust unit",
+      "exact_test": "contract::tests::c_policy_wrong_host",
+      "unproven": "No production Gonka arbitrary fault reachability, Cosmos SDK/wasmd/FFI execution or native claim/vesting ledger proof.",
+      "status": "LINUX_OFFLINE_PASS"
+    },
+    {
+      "old_case_id": "r4-wrong_host-e3",
+      "invariant": "Exact error for SettleClaim and Refund at E+2; emergency refund at E+3; recovered healthy response cannot reopen terminal state",
+      "error_mechanism": "Synthetic QuerierResult / protobuf: wrong_host",
+      "proof_level": "Rust unit",
+      "exact_test": "contract::tests::c_policy_wrong_host",
+      "unproven": "No production Gonka arbitrary fault reachability, Cosmos SDK/wasmd/FFI execution or native claim/vesting ledger proof.",
+      "status": "LINUX_OFFLINE_PASS"
+    },
+    {
+      "old_case_id": "r4-wrong_host-probe",
+      "invariant": "Exact error for SettleClaim and Refund at E+2; emergency refund at E+3; recovered healthy response cannot reopen terminal state",
+      "error_mechanism": "Synthetic QuerierResult / protobuf: wrong_host",
+      "proof_level": "Rust unit",
+      "exact_test": "contract::tests::c_policy_wrong_host",
+      "unproven": "No production Gonka arbitrary fault reachability, Cosmos SDK/wasmd/FFI execution or native claim/vesting ledger proof.",
+      "status": "LINUX_OFFLINE_PASS"
+    },
+    {
+      "old_case_id": "r4-wrong_host-terminal-refund",
+      "invariant": "Exact error for SettleClaim and Refund at E+2; emergency refund at E+3; recovered healthy response cannot reopen terminal state",
+      "error_mechanism": "Synthetic QuerierResult / protobuf: wrong_host",
+      "proof_level": "Rust unit",
+      "exact_test": "contract::tests::c_policy_wrong_host",
+      "unproven": "No production Gonka arbitrary fault reachability, Cosmos SDK/wasmd/FFI execution or native claim/vesting ledger proof.",
+      "status": "LINUX_OFFLINE_PASS"
+    },
+    {
+      "old_case_id": "r4-wrong_host-terminal-settle_claim",
+      "invariant": "Exact error for SettleClaim and Refund at E+2; emergency refund at E+3; recovered healthy response cannot reopen terminal state",
+      "error_mechanism": "Synthetic QuerierResult / protobuf: wrong_host",
+      "proof_level": "Rust unit",
+      "exact_test": "contract::tests::c_policy_wrong_host",
+      "unproven": "No production Gonka arbitrary fault reachability, Cosmos SDK/wasmd/FFI execution or native claim/vesting ledger proof.",
+      "status": "LINUX_OFFLINE_PASS"
+    },
+    {
+      "old_case_id": "r5-cancel-e2",
+      "invariant": "Hidden claimed summary; E+2 refusal; E+3 CW20 rollback then exact refund; recovery cannot reopen terminal state",
+      "error_mechanism": "cw-multi-test native query boundary and failing CW20",
+      "proof_level": "cw-multi-test",
+      "exact_test": "c_network_unconfirmed_refund_rolls_back_retries_and_keeps_terminal_host_only_economics",
+      "unproven": "No production Gonka arbitrary fault reachability, Cosmos SDK/wasmd/FFI execution or native claim/vesting ledger proof.",
+      "status": "LINUX_OFFLINE_PASS"
+    },
+    {
+      "old_case_id": "r5-cancel-e3",
+      "invariant": "Hidden claimed summary; E+2 refusal; E+3 CW20 rollback then exact refund; recovery cannot reopen terminal state",
+      "error_mechanism": "cw-multi-test native query boundary and failing CW20",
+      "proof_level": "cw-multi-test",
+      "exact_test": "c_network_unconfirmed_refund_rolls_back_retries_and_keeps_terminal_host_only_economics",
+      "unproven": "No production Gonka arbitrary fault reachability, Cosmos SDK/wasmd/FFI execution or native claim/vesting ledger proof.",
+      "status": "LINUX_OFFLINE_PASS"
+    },
+    {
+      "old_case_id": "r5-cancel-ledger",
+      "invariant": "Hidden claimed summary; E+2 refusal; E+3 CW20 rollback then exact refund; recovery cannot reopen terminal state",
+      "error_mechanism": "cw-multi-test native query boundary and failing CW20",
+      "proof_level": "cw-multi-test",
+      "exact_test": "c_network_unconfirmed_refund_rolls_back_retries_and_keeps_terminal_host_only_economics",
+      "unproven": "No production Gonka arbitrary fault reachability, Cosmos SDK/wasmd/FFI execution or native claim/vesting ledger proof. Original native claim/ledger observation is modeled, NOT reproduced; funded-claim native scenario remains complementary, not equivalent simultaneous fault evidence.",
+      "status": "LINUX_OFFLINE_PASS"
+    },
+    {
+      "old_case_id": "r5-cancel-native",
+      "invariant": "Hidden claimed summary; E+2 refusal; E+3 CW20 rollback then exact refund; recovery cannot reopen terminal state",
+      "error_mechanism": "cw-multi-test native query boundary and failing CW20",
+      "proof_level": "cw-multi-test",
+      "exact_test": "c_network_unconfirmed_refund_rolls_back_retries_and_keeps_terminal_host_only_economics",
+      "unproven": "No production Gonka arbitrary fault reachability, Cosmos SDK/wasmd/FFI execution or native claim/vesting ledger proof. Original native claim/ledger observation is modeled, NOT reproduced; funded-claim native scenario remains complementary, not equivalent simultaneous fault evidence.",
+      "status": "LINUX_OFFLINE_PASS"
+    },
+    {
+      "old_case_id": "r5-cancel-probe",
+      "invariant": "Hidden claimed summary; E+2 refusal; E+3 CW20 rollback then exact refund; recovery cannot reopen terminal state",
+      "error_mechanism": "cw-multi-test native query boundary and failing CW20",
+      "proof_level": "cw-multi-test",
+      "exact_test": "c_network_unconfirmed_refund_rolls_back_retries_and_keeps_terminal_host_only_economics",
+      "unproven": "No production Gonka arbitrary fault reachability, Cosmos SDK/wasmd/FFI execution or native claim/vesting ledger proof.",
+      "status": "LINUX_OFFLINE_PASS"
+    },
+    {
+      "old_case_id": "r5-cancel-terminal-refund",
+      "invariant": "Hidden claimed summary; E+2 refusal; E+3 CW20 rollback then exact refund; recovery cannot reopen terminal state",
+      "error_mechanism": "cw-multi-test native query boundary and failing CW20",
+      "proof_level": "cw-multi-test",
+      "exact_test": "c_network_unconfirmed_refund_rolls_back_retries_and_keeps_terminal_host_only_economics",
+      "unproven": "No production Gonka arbitrary fault reachability, Cosmos SDK/wasmd/FFI execution or native claim/vesting ledger proof.",
+      "status": "LINUX_OFFLINE_PASS"
+    },
+    {
+      "old_case_id": "r5-cancel-terminal-settle_claim",
+      "invariant": "Hidden claimed summary; E+2 refusal; E+3 CW20 rollback then exact refund; recovery cannot reopen terminal state",
+      "error_mechanism": "cw-multi-test native query boundary and failing CW20",
+      "proof_level": "cw-multi-test",
+      "exact_test": "c_network_unconfirmed_refund_rolls_back_retries_and_keeps_terminal_host_only_economics",
+      "unproven": "No production Gonka arbitrary fault reachability, Cosmos SDK/wasmd/FFI execution or native claim/vesting ledger proof.",
+      "status": "LINUX_OFFLINE_PASS"
+    },
+    {
+      "old_case_id": "r5-recover-e2",
+      "invariant": "E+2 query failure has no effects; healthy claimed summary restored before E+3; refund rejected; settlement once",
+      "error_mechanism": "cw-multi-test native query boundary",
+      "proof_level": "cw-multi-test",
+      "exact_test": "c_recovery_before_deadline_preserves_ledgers_and_settles_once",
+      "unproven": "No production Gonka arbitrary fault reachability, Cosmos SDK/wasmd/FFI execution or native claim/vesting ledger proof.",
+      "status": "LINUX_OFFLINE_PASS"
+    },
+    {
+      "old_case_id": "r5-recover-ledger",
+      "invariant": "E+2 query failure has no effects; healthy claimed summary restored before E+3; refund rejected; settlement once",
+      "error_mechanism": "cw-multi-test native query boundary",
+      "proof_level": "cw-multi-test",
+      "exact_test": "c_recovery_before_deadline_preserves_ledgers_and_settles_once",
+      "unproven": "No production Gonka arbitrary fault reachability, Cosmos SDK/wasmd/FFI execution or native claim/vesting ledger proof. Original native claim/ledger observation is modeled, NOT reproduced; funded-claim native scenario remains complementary, not equivalent simultaneous fault evidence.",
+      "status": "LINUX_OFFLINE_PASS"
+    },
+    {
+      "old_case_id": "r5-recover-native",
+      "invariant": "E+2 query failure has no effects; healthy claimed summary restored before E+3; refund rejected; settlement once",
+      "error_mechanism": "cw-multi-test native query boundary",
+      "proof_level": "cw-multi-test",
+      "exact_test": "c_recovery_before_deadline_preserves_ledgers_and_settles_once",
+      "unproven": "No production Gonka arbitrary fault reachability, Cosmos SDK/wasmd/FFI execution or native claim/vesting ledger proof. Original native claim/ledger observation is modeled, NOT reproduced; funded-claim native scenario remains complementary, not equivalent simultaneous fault evidence.",
+      "status": "LINUX_OFFLINE_PASS"
+    },
+    {
+      "old_case_id": "r5-recover-probe",
+      "invariant": "E+2 query failure has no effects; healthy claimed summary restored before E+3; refund rejected; settlement once",
+      "error_mechanism": "cw-multi-test native query boundary",
+      "proof_level": "cw-multi-test",
+      "exact_test": "c_recovery_before_deadline_preserves_ledgers_and_settles_once",
+      "unproven": "No production Gonka arbitrary fault reachability, Cosmos SDK/wasmd/FFI execution or native claim/vesting ledger proof.",
+      "status": "LINUX_OFFLINE_PASS"
+    },
+    {
+      "old_case_id": "r5-recover-refund",
+      "invariant": "E+2 query failure has no effects; healthy claimed summary restored before E+3; refund rejected; settlement once",
+      "error_mechanism": "cw-multi-test native query boundary",
+      "proof_level": "cw-multi-test",
+      "exact_test": "c_recovery_before_deadline_preserves_ledgers_and_settles_once",
+      "unproven": "No production Gonka arbitrary fault reachability, Cosmos SDK/wasmd/FFI execution or native claim/vesting ledger proof.",
+      "status": "LINUX_OFFLINE_PASS"
+    },
+    {
+      "old_case_id": "r5-recover-repeat",
+      "invariant": "E+2 query failure has no effects; healthy claimed summary restored before E+3; refund rejected; settlement once",
+      "error_mechanism": "cw-multi-test native query boundary",
+      "proof_level": "cw-multi-test",
+      "exact_test": "c_recovery_before_deadline_preserves_ledgers_and_settles_once",
+      "unproven": "No production Gonka arbitrary fault reachability, Cosmos SDK/wasmd/FFI execution or native claim/vesting ledger proof.",
+      "status": "LINUX_OFFLINE_PASS"
+    },
+    {
+      "old_case_id": "r5-recover-settle",
+      "invariant": "E+2 query failure has no effects; healthy claimed summary restored before E+3; refund rejected; settlement once",
+      "error_mechanism": "cw-multi-test native query boundary",
+      "proof_level": "cw-multi-test",
+      "exact_test": "c_recovery_before_deadline_preserves_ledgers_and_settles_once",
+      "unproven": "No production Gonka arbitrary fault reachability, Cosmos SDK/wasmd/FFI execution or native claim/vesting ledger proof.",
+      "status": "LINUX_OFFLINE_PASS"
+    },
+    {
+      "old_case_id": "r6.3",
+      "invariant": "Hidden claimed summary; E+2 refusal; E+3 CW20 rollback then exact refund; recovery cannot reopen terminal state",
+      "error_mechanism": "cw-multi-test native query boundary and failing CW20",
+      "proof_level": "cw-multi-test",
+      "exact_test": "c_network_unconfirmed_refund_rolls_back_retries_and_keeps_terminal_host_only_economics",
+      "unproven": "No production Gonka arbitrary fault reachability, Cosmos SDK/wasmd/FFI execution or native claim/vesting ledger proof.",
+      "status": "LINUX_OFFLINE_PASS"
+    },
+    {
+      "old_case_id": "r7.2-fault",
+      "invariant": "HostOnly Bank failure rolls back; restriction expiry permits exact retry; repeat cannot pay twice",
+      "error_mechanism": "Native governance restriction after reachable absent-summary refund",
+      "proof_level": "native E2E (reachable replacement fixture)",
+      "exact_test": "marketplace emergency refund host only release rolls back and retries",
+      "unproven": "Proves reachable Bank rollback/retry on native Gonka; does not prove arbitrary query-fault injection or the old simultaneous claimed-summary fault fixture.",
+      "status": "PENDING_IMMUTABLE_ALL_RUN"
+    },
+    {
+      "old_case_id": "r7.2-retry",
+      "invariant": "HostOnly Bank failure rolls back; restriction expiry permits exact retry; repeat cannot pay twice",
+      "error_mechanism": "Native governance restriction after reachable absent-summary refund",
+      "proof_level": "native E2E (reachable replacement fixture)",
+      "exact_test": "marketplace emergency refund host only release rolls back and retries",
+      "unproven": "Proves reachable Bank rollback/retry on native Gonka; does not prove arbitrary query-fault injection or the old simultaneous claimed-summary fault fixture.",
+      "status": "PENDING_IMMUTABLE_ALL_RUN"
+    }
+  ],
+  "retired_infrastructure": {
+    "activate": "Remove controller binary/plan installation; not a contract PASS",
+    "recover-before": "Retire plan transition only; business recovery retained in named test",
+    "recover-after": "Retire plan removal only; terminal recovery retained per fault variant"
+  }
+}

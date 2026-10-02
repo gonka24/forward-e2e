@@ -1,0 +1,77 @@
+{
+  "date": "2026-09-10",
+  "source": {
+    "marketplace": "f4518654e967b25d1479660115c13f67bace18df",
+    "marketplace_test_commit": "d4b34a4",
+    "gonka": "c5afa458de7eb8affa7020f1d0fcd4635ba1fd42"
+  },
+  "go_classification_json": {
+    "status": "PASS",
+    "level": "Go classification and JSON roundtrip; not FFI",
+    "command": "python3 scripts/run_a8_go_boundary.py <clean-linux-gonka> <evidence>",
+    "docker_exit": 0,
+    "go_exit": 0,
+    "required_tests": [
+      "TestToQuerierResultClassifiesVMSystemErrors",
+      "TestStrictPlanValidation"
+    ],
+    "files": {
+      "build_log_sha256": "b645e3e3764691d7b3302a6bcc367bbcd094273243d41d770a256596f9c4baf7",
+      "go_test_json_sha256": "a27081350fba653eb99e1e37d791074e205216e0358d907812e079aab2b791c1",
+      "exit_code_sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "report_sha256": "2d0e4723e37aa8f97935edc874f36e202084f8f5d0391c76832318aa2430f9e6"
+    }
+  },
+  "wasm_query_chain_abi": {
+    "status": "PASS",
+    "level": "compiled-Wasm query_chain ABI with synthetic host; not libwasmvm/keeper",
+    "command": "node scripts/test_wasm_query_boundary.mjs artifacts/a8-boundary/probe.wasm docs/reviews/evidence/a8-wasm-abi-probe-rerun-20260910.json",
+    "wasm_sha256": "76480bf002eca59c4cce9d3288cf3cc76f47bfafde4cc67863d60e43cce46b7f",
+    "result_sha256": "d886b7b5ab7ef55fcea027d6e1a47fd20fc3e321552bfc47c13afea48f1dd196",
+    "cases": 9
+  },
+  "r4_6_contract_decision_policy": {
+    "status": "PASS",
+    "level": "contract unit tests",
+    "commands": [
+      "cargo test --locked --offline -p marketplace-deal network_unconfirmed_refund_rejects_early_and_unexpected_system_failures -- --nocapture",
+      "cargo test --locked --offline -p marketplace-deal claim_expiry_checks_pristine_locked_accounting_and_epoch_overflow -- --nocapture"
+    ],
+    "result_sha256": "fdca788897f1083fba788e1f11335cfe12c302fdb6c46c3c0ed0812a08b01dfa",
+    "independent_full_logs": "a8-r4-6-full-logs-review.json",
+    "verified_test_count": 2
+  },
+  "c1_exact_e_live": {
+    "status": "PASS",
+    "level": "native Testermint",
+    "run_id": "c1-exact-e-20260910",
+    "command": "./ops/a8/Start-A8.ps1 -Action run -RunId c1-exact-e-20260910 -Scenario lock-exact-e",
+    "expected_epoch": 5,
+    "epoch_bracket": {
+      "before_height": 133,
+      "tx_height": 134,
+      "after_height": 134,
+      "epoch": 5
+    },
+    "lock_tx_hash": "07DA32D503655D9AC62A86992185F3E6DA536EFD802D5D9CFD799812176BABFA",
+    "assertions": [
+      "Host/E routes to Deal",
+      "Funded to Locked",
+      "recipient_locked=true",
+      "immutable config/accounting and tracked balances unchanged",
+      "no Deal Bank transfer"
+    ],
+    "live_context_sha256": "32b791e8065b27c6f33b99c52bb96a46044fb25e48c4ebd272078888fe3838ea",
+    "junit_sha256": "9df5280df5af10c86e8612f0b8b69a93d442c3075a21f1c319fb0f240c8e0cf0",
+    "cleanup": {
+      "status": "PASS",
+      "ownership_sha256": "12e16bed67e6ef8c2284205963b955d29a9995f7047d337cea0d9537ab63ee81",
+      "completed_sha256": "07501d4739a1997372915ed52bfb079cbb88d509cacba1d61254657ae0bb30ac"
+    }
+  },
+  "limitations": [
+    "Go result proves classification/serialization only; it is not libwasmvm FFI or contract error-handling evidence.",
+    "Wasm ABI result uses a synthetic query_chain host; it is not production Go dispatcher/keeper reachability evidence.",
+    "R4.6 result is contract decision-policy coverage and does not corrupt live state or prove a production fault source."
+  ]
+}

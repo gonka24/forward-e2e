@@ -1,0 +1,133 @@
+{
+  "level": "compiled-Wasm query_chain ABI; synthetic host",
+  "wasm_sha256": "76480bf002eca59c4cce9d3288cf3cc76f47bfafde4cc67863d60e43cce46b7f",
+  "node": "v24.13.0",
+  "status": "PASS",
+  "cases": [
+    {
+      "name": "malformed-envelope",
+      "status": "PASS",
+      "envelope": "{",
+      "observed": {
+        "error": {
+          "invalid_response": {
+            "error": "Error parsing into type cosmwasm_std::results::system_result::SystemResult<cosmwasm_std::results::contract_result::ContractResult<cosmwasm_std::binary::Binary>>: EOF while parsing a JSON value.",
+            "response": "ew=="
+          }
+        }
+      },
+      "query_chain_calls": 1
+    },
+    {
+      "name": "invalid-envelope-shape",
+      "status": "PASS",
+      "envelope": "{\"unexpected\":true}",
+      "observed": {
+        "error": {
+          "invalid_response": {
+            "error": "Error parsing into type cosmwasm_std::results::system_result::SystemResult<cosmwasm_std::results::contract_result::ContractResult<cosmwasm_std::binary::Binary>>: unknown variant `unexpected`, expected `ok` or `error`",
+            "response": "eyJ1bmV4cGVjdGVkIjp0cnVlfQ=="
+          }
+        }
+      },
+      "query_chain_calls": 1
+    },
+    {
+      "name": "invalid_request",
+      "status": "PASS",
+      "envelope": "{\"error\":{\"invalid_request\":{\"error\":\"bad request\",\"request\":\"e30=\"}}}",
+      "observed": {
+        "error": {
+          "invalid_request": {
+            "error": "bad request",
+            "request": "e30="
+          }
+        }
+      },
+      "query_chain_calls": 1
+    },
+    {
+      "name": "unknown",
+      "status": "PASS",
+      "envelope": "{\"error\":{\"unknown\":{}}}",
+      "observed": {
+        "error": {
+          "unknown": {}
+        }
+      },
+      "query_chain_calls": 1
+    },
+    {
+      "name": "no_such_contract",
+      "status": "PASS",
+      "envelope": "{\"error\":{\"no_such_contract\":{\"addr\":\"missing\"}}}",
+      "observed": {
+        "error": {
+          "no_such_contract": {
+            "addr": "missing"
+          }
+        }
+      },
+      "query_chain_calls": 1
+    },
+    {
+      "name": "no_such_code",
+      "status": "PASS",
+      "envelope": "{\"error\":{\"no_such_code\":{\"code_id\":7}}}",
+      "observed": {
+        "error": {
+          "no_such_code": {
+            "code_id": 7
+          }
+        }
+      },
+      "query_chain_calls": 1
+    },
+    {
+      "name": "unsupported_request",
+      "status": "PASS",
+      "envelope": "{\"error\":{\"unsupported_request\":{\"kind\":\"grpc\"}}}",
+      "observed": {
+        "error": {
+          "unsupported_request": {
+            "kind": "grpc"
+          }
+        }
+      },
+      "query_chain_calls": 1
+    },
+    {
+      "name": "contract-error-control",
+      "status": "PASS",
+      "envelope": "{\"ok\":{\"error\":\"keeper failure\"}}",
+      "observed": {
+        "ok": {
+          "error": "keeper failure"
+        }
+      },
+      "query_chain_calls": 1
+    },
+    {
+      "name": "success-control",
+      "status": "PASS",
+      "envelope": "{\"ok\":{\"ok\":\"AQI=\"}}",
+      "observed": {
+        "ok": {
+          "ok": "AQI="
+        }
+      },
+      "query_chain_calls": 1
+    }
+  ],
+  "source_files": {
+    "Cargo.lock": "949f5873784ea674f848672c5cccc772809f446128e2fe525d252fdf3268ff55",
+    "Cargo.toml": "287d901a153a3801ec24a5a833ccf05de23efe00f694cf2bc5a0538132ce21a7",
+    "tests/contracts/a8-query-boundary/Cargo.toml": "36d2f9753756c3afc63582b7ffe410fbd35ee28e3252a743ca8af646363936f1",
+    "tests/contracts/a8-query-boundary/src/lib.rs": "52d2b3fed963b9dd9d98c8175b93023f6612c3b150675519b5c2131e8880495b",
+    "scripts/test_wasm_query_boundary.mjs": "34b5bff890c0b63b8120e3dbedd8429643f30c1202ffabed08ecb9b050bacdb2"
+  },
+  "source_commit_containing_test": "d4b34a4",
+  "build_note": "Built from working source before commit; exact test/manifest hashes recorded above. No production Wasm or native evidence generated.",
+  "build_command": "cargo build --offline --release --target wasm32-unknown-unknown -p a8-query-boundary",
+  "run_command": "node scripts/test_wasm_query_boundary.mjs artifacts/a8-boundary/probe.wasm artifacts/a8-boundary/abi-result.json"
+}

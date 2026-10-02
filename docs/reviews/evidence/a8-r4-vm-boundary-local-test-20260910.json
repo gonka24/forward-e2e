@@ -1,0 +1,49 @@
+{
+  "scenario": "A8 package C R4.4/R4.5 VM-boundary focus tests",
+  "scope": "test-only evidence for wasmvm SystemError layer",
+  "status": "NOT_EXECUTED_ENVIRONMENT",
+  "result": {
+    "code_head_marketplace": "bf8e31837d177433379d15eb121a1e7ef458c9a5",
+    "code_head_gonka": "6a09808e512f73e9809c845a93e7871f20e539b8",
+    "test_source_gonka_commit": "2d05c2fa8fe9c5bbe38441be5ea2cdaf624deee2",
+    "report_commit_marketplace_before_this_update": "b9541e1fb3b162d5158f26e9075b51a2845b4fca",
+    "runtime_pins": {
+      "cosmos_sdk": "v0.53.3-ps19-observability",
+      "wasmd": "v0.54.2",
+      "wasmvm": "v2.2.4",
+      "go": "go version go1.24.2 linux/amd64"
+    }
+  },
+  "artifacts": {
+    "evidence": "inference-chain/app/a8_query_fault_selector_test.go",
+    "evidence_2": "inference-chain/app/a8faults/plan_test.go",
+    "matrix_row": "R4.4 / R4.5"
+  },
+  "commands": [
+    {
+      "command": "go test ./app ./app/a8faults -run \"TestA8SummaryFaultDecoratorProducesOnlyItsDeclaredLayer|TestToQuerierResultClassifiesVMSystemErrors\"",
+      "workdir": "a8-gonka-worktree/inference-chain",
+      "status": "not_executed",
+      "result": "go: The term 'go' is not recognized as the name of a cmdlet, function, script file, or executable program.",
+      "notes": [
+        "Unable to execute Go tests in this workspace",
+        "No production behavior was changed; updates are test-only"
+      ]
+    },
+    {
+      "command": "wsl.exe -d Ubuntu -- bash -lc \"cd ./workspace/a8-gonka-worktree/inference-chain && go test ./app ./app/a8faults -run 'TestA8SummaryFaultDecoratorProducesOnlyItsDeclaredLayer|TestToQuerierResultClassifiesVMSystemErrors'\"",
+      "workdir": "./workspace",
+      "status": "not_executed",
+      "result": "wsl sandbox attempt failed with Wsl/Service/E_ACCESSDENIED; scoped elevated retry reached Ubuntu but failed with bash: go: command not found",
+      "notes": [
+        "ops/a8/README.md was read before the WSL attempt",
+        "This was a narrow Go unit-test attempt only; no Docker, Testermint, native chain, runtime snapshot, merge, push, or deployment was used"
+      ]
+    }
+  ],
+  "assertion_intent": [
+    "typed InvalidResponse via decorator injected invalid_response_envelope payload",
+    "SystemError field checks for InvalidResponse / InvalidRequest / Unknown / NoSuchContract / NoSuchCode",
+    "plan kind validation remains rejecting VM-only fault kinds"
+  ]
+}

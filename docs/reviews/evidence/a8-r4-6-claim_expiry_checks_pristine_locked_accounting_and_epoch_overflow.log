@@ -1,0 +1,19 @@
+COMMAND: cargo test --locked -p marketplace-deal claim_expiry_checks_pristine_locked_accounting_and_epoch_overflow -- --nocapture
+   Compiling cosmwasm-std v2.2.2
+   Compiling cw-utils v2.0.0
+   Compiling cw-storage-plus v2.0.0
+   Compiling marketplace-common v0.1.0 (/tmp/a8-boundary-build.dwllxwxe/packages/marketplace-common)
+   Compiling cw20 v2.0.0
+   Compiling cw2 v2.0.0
+   Compiling marketplace-api v0.1.0 (/tmp/a8-boundary-build.dwllxwxe/packages/marketplace-api)
+   Compiling marketplace-deal v0.1.0 (/tmp/a8-boundary-build.dwllxwxe/contracts/marketplace-deal)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 3.57s
+     Running unittests src/lib.rs (target/debug/deps/marketplace_deal-d8b56dd3f4724f96)
+
+running 1 test
+test contract::tests::claim_expiry_checks_pristine_locked_accounting_and_epoch_overflow ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 50 filtered out; finished in 0.00s
+
+
+EXIT_CODE: 0

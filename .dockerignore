@@ -1,0 +1,44 @@
+# Git metadata
+.git
+.gitignore
+
+# Build outputs and temporary files
+target/
+**/target/
+artifacts/
+out/
+runs/
+tmp/
+.a8-bundles/
+.e2e-bridge*/
+**/*.local.md
+*.log
+*.tmp
+*.bin
+
+# Python caches
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+
+# IDE and OS
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+
+# Secrets and environment files
+.env
+.env.*
+!ops/a8/.env.example
+
+# Recorded review evidence is a binding input to ops/a8/tests/real_fixtures.py.
+# Keep it in the runner image so the documented Linux offline suite is runnable.
+
+# Preserve recorded fixture bytes even when their suffix resembles a run log.
+!docs/reviews/evidence/**
+# This committed probe is a versioned test fixture, not a local build output.
+!ops/a8/harness/wasm-probe/p0-probe/artifacts/
+!ops/a8/harness/wasm-probe/p0-probe/artifacts/**

@@ -1,0 +1,61 @@
+{
+  "scenario": "C1/E+5 Lock",
+  "result": "PASS",
+  "run_id": "e5-lock-002",
+  "raw_evidence": {
+    "path": "/home/runner/a8-runtime/e5-lock-002/evidence/e5-lock-002/live-context.json",
+    "sha256": "9bad881e3cad87d2836e6b78bc65ea6a568a55d55d83009a30cefdbf94826fc9"
+  },
+  "junit": {
+    "path": "/home/runner/a8-runtime/e5-lock-002/junit/TEST-MarketplaceContractAcceptanceTests.xml",
+    "sha256": "7105c86fcd7c8d8245a82da01ea25a1849f61b8e27b3089890a538901742d586",
+    "tests": 1,
+    "failures": 0,
+    "errors": 0
+  },
+  "tx": {
+    "hash": "D64CF88A2744F6270E308BD0F6B60C802921144D32BF1EA215F47113996BA8CE",
+    "height": 259,
+    "layer": "deliver_tx",
+    "code": 5,
+    "codespace": "wasm",
+    "gas_wanted": 2000000,
+    "gas_used": 100831,
+    "error": "lock window is closed: current epoch 10, target epoch 5, exclusive end 10"
+  },
+  "epoch_proof": {
+    "target_epoch": 5,
+    "expected_epoch": 10,
+    "before_height": 258,
+    "included_height": 259,
+    "after_height": 259,
+    "same_epoch": true
+  },
+  "recipient": {
+    "host_epoch": 5,
+    "raw_response": {},
+    "target_row_observation": "absent"
+  },
+  "state": {
+    "before": "funded",
+    "after": "funded",
+    "recipient_locked_before": false,
+    "recipient_locked_after": false
+  },
+  "assertions": [
+    "distinct Host/Buyer/fee roles",
+    "caller differs from Host",
+    "included DeliverTx, not CheckTx or simulation",
+    "exact LockWindowClosed error with explicit 2,000,000 gas",
+    "config, Buyer deposit, accounting, CW20 and Deal native balance unchanged",
+    "no Deal-involving native transfer"
+  ],
+  "provenance": {
+    "marketplace_commit": "dfcbf2eb7ac2a3bf86bb2d62959200e71dc48975",
+    "gonka_harness_commit": "52554bd218dbe15e4c852c8e7975f242c4c2d38c",
+    "gonka_runtime": "29a58fcf64b87967cb874b6169ce2c61e1f269b1",
+    "a9_manifest_sha256": "652e1fb8ef0a120dab63e1d6180ffc24dd97c9b84736f96eafb2821f383adcf0",
+    "deal_wasm_sha256": "2caa08099be647a9c3d5fa9868ec6faee30ae7c2a9136cc4891cd75ccd55c0e5",
+    "factory_wasm_sha256": "8366a874619c03e54ed36edf6b0ebbde4001afcf6c1b02ed40f9762350e6d82b"
+  }
+}

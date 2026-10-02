@@ -1,0 +1,9 @@
+{
+  "NodeInfo": {
+    "network": "gonka-local-a9"
+  },
+  "SyncInfo": {
+    "catching_up": false,
+    "latest_block_height": "42"
+  }
+}

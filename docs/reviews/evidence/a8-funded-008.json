@@ -1,0 +1,82 @@
+{
+  "schema_version": 1,
+  "kind": "gonka_forward_marketplace_live_acceptance_summary",
+  "run_id": "a8-funded-008",
+  "result": "pass_with_release_blockers",
+  "source": {
+    "marketplace_base_sha": "bffb60c0fdabda9d6d22a1cc9924fbe32a91cbac",
+    "marketplace_acceptance_sha": "0ce328ee115b237c6af784dfcf96cd1896fa989d",
+    "gonka_runtime_sha": "29a58fcf64b87967cb874b6169ce2c61e1f269b1",
+    "gonka_testermint_sha": "e76a11a2627f3d39940826386243bf49d500543d",
+    "protobuf_sha": "379bebced638aeb5e6077bfd51c986f898443832"
+  },
+  "runtime": {
+    "chain_id": "gonka-mainnet",
+    "go": "1.24.2",
+    "cosmos_sdk": "v0.53.3-ps19-observability",
+    "wasmd": "v0.54.2",
+    "wasmvm": "v2.2.4",
+    "transfer_restriction_active": false,
+    "transfer_restriction_end_block": 0
+  },
+  "artifacts": {
+    "deal": {"code_id": 1, "sha256": "2caa08099be647a9c3d5fa9868ec6faee30ae7c2a9136cc4891cd75ccd55c0e5"},
+    "factory": {"code_id": 2, "sha256": "8366a874619c03e54ed36edf6b0ebbde4001afcf6c1b02ed40f9762350e6d82b"},
+    "cw20": {"code_id": 3, "sha256": "50a3d9d47245235f2c99a4bba6c98a5d3fead5c4fadb4c809ffd206879203226"},
+    "caller": {"code_id": 4, "sha256": "af6ddcc305a3292e6e99cfafadc38ea0f0def7892f4f9fc37a0a5c3f55baa147"},
+    "p0_probe": {"code_id": 5, "sha256": "7eacebc656412fe59d290ecac1a0608686372c39ae6d63a8cb7fcba23417a91d"}
+  },
+  "contracts": {
+    "factory": "gonka1nc5tatafv6eyq7llkr2gv50ff9e22mnf70qgjlv737ktmt4eswrq7zustp",
+    "deal": "gonka1yw4xvtc43me9scqfr2jr2gzvcxd3a9y4eq7gaukreugw2yd2f8tsp8zyp8",
+    "cw20": "gonka1hrpna9v7vs3stzyd4z3xf00676kf78zpe2u5ksvljswn2vnjp3ys6w65a0",
+    "p0_probe": "gonka1eyfccmjm6732k7wp4p6gdjwhxjwsvje44j0hfx8nkgrm8fs7vqfspcs294",
+    "factory_admin": "",
+    "deal_admin": ""
+  },
+  "transactions": {
+    "offer": "75C3DA1C2A1CC75B14E734E1ABD8FCD67ABB847D78285322788B2DBF488AB17C",
+    "recipient": "F5F6384D0191D53FEC042B8C753DC74CD1F3D297845F3066E4E3EEDB3D28BA76",
+    "fund": "E1AFC3C0F2D422EC8A4BBD5AAACB669B4D0EC0E71248A71E0C7C5258FCE561BD",
+    "lock": "C50D48D70B1F967A9A576F7E40E92626237336C81DCE5D34485DC5B1F5F3ACEA",
+    "claim": "FDA058140BF38C133B36FE5541471829A1483B2EE8A5C540CDCC47031E847ADD",
+    "settle": "9A6EB6B73AB40C79C385CC37D4994699306C2856F9011F03BE1ABB8C0A1342C0",
+    "release_1": "7C02ADED4F617E08F3BC4CC8BA73C94D58DD9F18C6457F167DB27812893C5419",
+    "release_2": "B7FF1777363BEDDE3E57B67B70525569BD68550F879E048C8ADB011CFC1B4A81",
+    "late_donation": "0AE5CA17564B141F0BB8CA62480E6E42EFAF900FF96AD75E92C25F1D97478471",
+    "late_release": "7F265E5730F048B63D86DE7D2814BD54497314277F47EBF8A9C8D764D7CBD4EE",
+    "p0_store": "3787B8A3C493174A79E88F5A934DDA1DD552883B0A1305F62CB06197CC0550A2",
+    "p0_instantiate": "A57ABF083CDDF71A562AFE98B9BA24A780BFF06ACB8A0D322A829E84B2310522"
+  },
+  "economics": {
+    "budget_micro_usdt": 100000000,
+    "host_net_micro_usdt": 98500000,
+    "fee_micro_usdt": 1500000,
+    "buyer_refund_micro_usdt": 0,
+    "reward_ngonka": 94819671366450,
+    "buyer_entitlement_ngonka": 100000000000,
+    "host_entitlement_ngonka": 94719671366450,
+    "release_tranches_ngonka": [47409835683225, 47409835683225],
+    "late_donation_ngonka": 1000000,
+    "late_buyer_delta_ngonka": 1054,
+    "late_host_delta_ngonka": 998946,
+    "final_deal_balance_ngonka": 0,
+    "final_status": "completed"
+  },
+  "p0": {
+    "allowed": [
+      "/inference.inference.Query/GetCurrentEpoch",
+      "/inference.inference.Query/ListClaimRecipients",
+      "/inference.inference.Query/EpochPerformanceSummaryByParticipant",
+      "/inference.streamvesting.Query/TotalVestingAmount"
+    ],
+    "denied": "/inference.inference.Query/Params",
+    "denied_returncode": 1
+  },
+  "release_blockers": [
+    "CWA-2025-007 applies to wasmd v0.54.2; upgrade or verified backport required",
+    "native fault-injection matrix E2/E3/G1/G2 not executed",
+    "native gas sweep F1/F2 not executed",
+    "remaining live no-sale/refund/pruning/multi-deal scenarios not executed"
+  ]
+}

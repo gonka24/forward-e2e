@@ -1,0 +1,186 @@
+{
+  "scenario": "E1 native missing-summary emergency Refund",
+  "status": "PASS",
+  "run_id": "stable-e1-002",
+  "date": "2026-09-09",
+  "source": {
+    "marketplace_commit_sha": "bddf1dbf5e32afb987fa5df430bc885ad28687f3",
+    "gonka_test_harness_sha": "470aa440b2846cd5b9398c579c6214690531ef2b",
+    "pinned_gonka_source_sha": "29a58fcf64b87967cb874b6169ce2c61e1f269b1",
+    "protobuf_sha": "379bebced638aeb5e6077bfd51c986f898443832",
+    "a9_manifest_sha256": "8d09a4aedd481e39c2259d65d09401bade051bce961e17cff449d70a8f4e0337",
+    "deal_wasm_sha256": "2caa08099be647a9c3d5fa9868ec6faee30ae7c2a9136cc4891cd75ccd55c0e5",
+    "factory_wasm_sha256": "8366a874619c03e54ed36edf6b0ebbde4001afcf6c1b02ed40f9762350e6d82b",
+    "runtime": {
+      "cosmos_sdk": "v0.53.3-ps19-observability",
+      "wasmd": "v0.54.2",
+      "wasmvm": "v2.2.4"
+    }
+  },
+  "junit": {
+    "tests": 1,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "test": "marketplace absent native summary refunds only at emergency deadline()",
+    "duration_seconds": 1334.893
+  },
+  "deal": {
+    "address": "gonka1ltd0maxmte3xf4zshta9j5djrq9cl692ctsp9u5q0p9wss0f5lmsa2r502",
+    "target_epoch": 7,
+    "buyer_budget_micro_usdt": 10000000,
+    "buyer": "gonka1echslgnkxhtqluz2avcnftvay3x3d730qkgc65",
+    "host": "gonka1echslgnkxhtqluz2avcnftvay3x3d730qkgc65",
+    "fee_recipient": "gonka1rvlg2spn48jjt8n7usy73hn9lj0edpyv0fukyn",
+    "buyer_host_address_alias": true,
+    "fund_tx": {
+      "tx_hash": "6600A7E3396D7227FBB0A30976B82A9062C9F6E0BB284FD81621246C55A0249F",
+      "height": 79,
+      "code": 0
+    },
+    "lock_tx": {
+      "tx_hash": "C01508E567B457968F0938E0C842A5A4D5E0003F6A38CF74677B43FF9B800A6D",
+      "height": 184,
+      "inclusion_epoch": 7,
+      "code": 0
+    },
+    "locked_recipient": {
+      "epoch": 7,
+      "recipient": "gonka1ltd0maxmte3xf4zshta9j5djrq9cl692ctsp9u5q0p9wss0f5lmsa2r502"
+    },
+    "locked_state": {
+      "status": "locked",
+      "recipient_locked": true,
+      "refund_reason": null,
+      "buyer_refund_usdt": 0,
+      "gnk_release_policy": "unset"
+    },
+    "deal_cw20_after_funding": 10000000
+  },
+  "e_plus_2": {
+    "epoch": 9,
+    "offset": 2,
+    "native_observation_height": 233,
+    "native_query": {
+      "exact_host_epoch": true,
+      "exact_recipient": true,
+      "transport_available": true,
+      "summary_absent": true,
+      "grpc_code": "NotFound",
+      "grpc_description": "not found",
+      "stderr": "rpc error: code = NotFound desc = rpc error: code = NotFound desc = not found: key not found"
+    },
+    "refund_tx": {
+      "tx_hash": "500023D438336A47CE26C6CC426AED8471E7C82B44E12B7EA2A45AE5FA07463A",
+      "height": 234,
+      "inclusion_epoch": 9,
+      "same_epoch_bracket": true,
+      "code": 5,
+      "codespace": "wasm",
+      "error_layer": "deliver_tx",
+      "raw_log": "failed to execute message; message index: 0: Gonka query failed for /inference.inference.Query/EpochPerformanceSummaryByParticipant: execute wasm contract failed"
+    },
+    "rollback": {
+      "state_unchanged": true,
+      "status": "locked",
+      "refund_reason": null,
+      "buyer_refund_usdt": 0,
+      "deal_cw20_before": 10000000,
+      "deal_cw20_after": 10000000,
+      "buyer_cw20_before": 90000000,
+      "buyer_cw20_after": 90000000,
+      "fee_recipient_cw20_before": 0,
+      "fee_recipient_cw20_after": 0
+    }
+  },
+  "e_plus_3": {
+    "epoch": 10,
+    "offset": 3,
+    "native_observation_height": 258,
+    "native_query": {
+      "exact_host_epoch": true,
+      "exact_recipient": true,
+      "transport_available": true,
+      "summary_absent": true,
+      "grpc_code": "NotFound",
+      "grpc_description": "not found",
+      "stderr": "rpc error: code = NotFound desc = rpc error: code = NotFound desc = not found: key not found"
+    },
+    "refund_tx": {
+      "tx_hash": "6986C8C8D1A28C6C232CC0404B0843AAB9AFFF97E785FF52197C524ADC020C39",
+      "height": 259,
+      "inclusion_epoch": 10,
+      "same_epoch_bracket": true,
+      "code": 0,
+      "gas_used": 200252,
+      "events": {
+        "reason": "network_unconfirmed",
+        "status": "refunded",
+        "amount_micro_usdt": 10000000,
+        "cw20_action": "transfer",
+        "cw20_from": "gonka1ltd0maxmte3xf4zshta9j5djrq9cl692ctsp9u5q0p9wss0f5lmsa2r502",
+        "cw20_to": "gonka1echslgnkxhtqluz2avcnftvay3x3d730qkgc65"
+      }
+    },
+    "final": {
+      "status": "refunded",
+      "refund_reason": "network_unconfirmed",
+      "buyer_refund_usdt": 10000000,
+      "gross_usdt": 0,
+      "host_net_usdt": 0,
+      "fee_usdt": 0,
+      "gnk_release_policy": "host_only",
+      "buyer_cw20_delta": 10000000,
+      "deal_cw20_delta": -10000000,
+      "deal_cw20_balance": 0,
+      "fee_recipient_cw20_delta": 0,
+      "native_gnk_moved": 0,
+      "single_outgoing_cw20_transfer": true
+    }
+  },
+  "path_validation": {
+    "pinned_keeper": "EpochPerformanceSummaryByParticipant returns gRPC NotFound/not found for an absent exact Host/E key",
+    "wasm_runtime": "native handler NotFound is exposed to Wasm as ContractResult::Err",
+    "adapter": "ContractResult::Err maps to GonkaQueryError::QueryFailed",
+    "deadline": "QueryFailed remains fail-closed at E+2 and permits NetworkUnconfirmed only at E+3 or later",
+    "matches_adr_0013": true
+  },
+  "role_alias_limitation": "Buyer and Host use the same chain address in this focused network. The exact Deal outflow and events prove one full-deposit transfer to the saved Buyer, no separate Host or fee transfer, and contract accounting records host_net_usdt=fee_usdt=0. An independent address-level Host balance delta cannot be separated from the Buyer delta in this run.",
+  "attempts_in_task": [
+    {
+      "run_id": "stable-e1-001",
+      "result": "infrastructure failure before network start",
+      "cause": "required cosmwasm-check 2.2.2 missing from prepared Linux toolchain",
+      "blockchain_transactions": 0
+    },
+    {
+      "run_id": "stable-e1-002",
+      "result": "PASS"
+    }
+  ],
+  "raw_evidence": {
+    "root": "/home/runner/a8-runtime/stable-e1-002",
+    "identity": "/home/runner/a8-runtime/stable-e1-002/identity.json",
+    "mount_probe": "/home/runner/a8-runtime/stable-e1-002/mount-probe.json",
+    "launcher_log": {
+      "path": "/home/runner/a8-runtime/stable-e1-002/launcher.log",
+      "sha256": "97bee8c560fb2b751b2196a4e8a26cf6af28d51d749ec02e10ec657ef15a46dd"
+    },
+    "live_context": {
+      "path": "/home/runner/a8-runtime/stable-e1-002/evidence/stable-e1-002/live-context.json",
+      "sha256": "699bc9d503eb4ca78215626e2566fc373b89c9420fad1e4474950e2b70a48d8d"
+    },
+    "testermint_log": {
+      "path": "/home/runner/a8-runtime/stable-e1-002/evidence/stable-e1-002/testermint.log",
+      "sha256": "94a968e0af553002f19cd5d4c3ae44c8df636cab3c933caf0a8f3b893b10db53"
+    },
+    "junit": {
+      "path": "/home/runner/a8-runtime/stable-e1-002/junit/TEST-MarketplaceContractAcceptanceTests.xml",
+      "sha256": "67ce080f225126f78cc51a996222cf9d8582c46b0871fa85d7dbed13d5fde06c"
+    },
+    "result": {
+      "path": "/home/runner/a8-runtime/stable-e1-002/result.json",
+      "sha256": "d85d46dc675b2d5b2c7562171490fe87dfa80151443b2d548120cf5356180cef"
+    }
+  }
+}

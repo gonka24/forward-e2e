@@ -1,0 +1,85 @@
+{
+  "schema_version": "1.0.0",
+  "kind": "gonka-marketplace-d1-zero-native-feasibility-assessment",
+  "result": "NATIVE_NOT_RUN",
+  "live_attempts": 0,
+  "assessment": "The exact zero, unclaimed native summary is representable in storage but is not ordinarily and deterministically reachable for an active Host in the unchanged fresh run043 Testermint configuration. Producing it would require a test-only change to Gonka parameters/state or would fail another required precondition.",
+  "source": {
+    "gonka_runtime_sha": "29a58fcf64b87967cb874b6169ce2c61e1f269b1",
+    "gonka_test_harness_sha_reviewed": "e9eb8f6a7b7e2a3478cc00daae358a1374f60eea",
+    "production_paths_unchanged_between_runtime_and_harness_head": true,
+    "blobs": {
+      "accountsettle.go": "c36dfe6ca716290a7ab396ee4a389700a2dd5ec5",
+      "bitcoin_rewards.go": "257fb7249d75f91b2cd88633683c47910f63325a",
+      "confirmation_poc.go": "3424f6f6cfc696d0348982491fc3e96185d1cfd1",
+      "status.go": "bd5ff73647050d400addc516db4309af4a9ca418",
+      "msg_server_settle_devshard_escrow.go": "312e015ecc3b96e4a09054f4d9b698509194e031",
+      "CollateralTests.kt": "13f7b05fee82717d71056ee633dacf26872c2fbb"
+    }
+  },
+  "source_proof": [
+    {
+      "symbol": "keeper.SettleAccounts",
+      "finding": "For every address in the epoch ActiveParticipants snapshot, settlement writes EpochPerformanceSummary with EarnedCoins=WorkCoins, RewardedCoins=RewardCoins and Claimed=false before skipping a zero SettleAmount payout. Therefore an existing zero summary is structurally possible and is distinct from a missing summary."
+    },
+    {
+      "symbol": "keeper.CalculateParticipantBitcoinRewardsWithTransfers",
+      "finding": "An ACTIVE participant with positive effective/full PoC weight receives its proportional share of the positive fixed epoch reward. The unchanged run043 configuration and live result demonstrate this ordinary branch for the selected Host."
+    },
+    {
+      "symbol": "types.DefaultConfirmationPoCParams",
+      "finding": "ExpectedConfirmationsPerEpoch is 0, so confirmation PoC is disabled by default. Enabling it to force ConfirmationWeight to zero would modify genesis parameters specifically for this test."
+    },
+    {
+      "symbol": "module.PoCWeightCalculator.validatedParticipant",
+      "finding": "A participant claiming weight below 1 is omitted from the newly computed active set. Setting the Host regular PoC weight to zero therefore produces no Host summary rather than the required existing zero summary."
+    },
+    {
+      "symbol": "module participation-state consensus weighting",
+      "finding": "Pinned source also recognizes an operational edge case where an already validated participant remains in ActiveParticipants with consensus weight zero because all of its weight belongs to an ineligible model group. The fresh run043 topology has one shared eligible model; constructing this edge case would require a special multi-model/delegation configuration rather than reusing the unchanged scenario."
+    },
+    {
+      "symbol": "keeper.msgServer.SettleDevshardEscrow",
+      "finding": "The current missed-request path aggregates signed devshard HostStats, but the same current-epoch settlement distributes fees/cost by slot and calls AddToCoinBalance. Default create and per-nonce fees are nonzero, so a Host used to produce native misses also receives WorkCoins and cannot satisfy earned_coins=0 without changing parameters/state."
+    },
+    {
+      "symbol": "InferenceFailureAccountingTests / CollateralTests",
+      "finding": "Testermint documents the former classic-inference missed-request path as removed and excludes those tests; it is not an available ordinary replacement for the current devshard settlement path."
+    }
+  ],
+  "disallowed_forcing_options": [
+    "enable or retune confirmation PoC in genesis solely to zero the Host effective weight",
+    "replace the run043 single eligible model topology with a specially ineligible model group",
+    "set epoch subsidy or supply-cap state to zero/exhausted",
+    "inject debt or a full delegation/reward penalty",
+    "write EpochPerformanceSummary directly",
+    "substitute an inactive/non-active Host or a missing summary"
+  ],
+  "appropriate_test_level": {
+    "level": "contract unit and cw-multi-test with a synthetic authoritative gRPC response",
+    "reason": "This level can exercise the Marketplace trust boundary and financial state transition without pretending the zero summary was produced by the pinned native lifecycle.",
+    "existing_tests": [
+      "marketplace-deal::claim_expiry_enforces_e_plus_two_and_handles_funded_or_no_sale_summaries",
+      "marketplace-factory::no_sale_claim_expiry_emits_no_transfer_and_keeps_host_only_lifecycle",
+      "marketplace-factory::claim_expiry_fails_closed_at_e_plus_one_for_claimed_and_invalid_evidence"
+    ]
+  },
+  "verification": {
+    "marketplace_tests_run": [
+      "marketplace-deal::claim_expiry_enforces_e_plus_two_and_handles_funded_or_no_sale_summaries: PASS",
+      "marketplace-factory::no_sale_claim_expiry_emits_no_transfer_and_keeps_host_only_lifecycle: PASS",
+      "marketplace-factory::claim_expiry_fails_closed_at_e_plus_one_for_claimed_and_invalid_evidence: PASS"
+    ],
+    "source_checks": [
+      "all production paths cited by this record are unchanged between Gonka runtime SHA and the harness PR head",
+      "Git blob IDs were captured from the pinned runtime SHA"
+    ]
+  },
+  "acceptance_effect": {
+    "D1-positive": "PASS from run043",
+    "D1-zero_under_unchanged_run043_config": "NOT RUN; this assessment remains the production-configuration caveat",
+    "D1-zero_under_special_validated_test_genesis": "PASS from run044 after the user explicitly allowed test-network genesis changes; see a8-claim-expiry-zero-044.json"
+  },
+  "live_environment_created": false,
+  "cleanup_required": false
+}

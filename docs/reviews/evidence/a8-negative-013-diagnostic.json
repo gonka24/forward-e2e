@@ -1,0 +1,53 @@
+{
+  "schema_version": "1.0.0",
+  "kind": "gonka-marketplace-a8-live-diagnostic",
+  "run_id": "a8-negative-013",
+  "status": "failed",
+  "proof_level": "live_network",
+  "source": {
+    "marketplace_commit_sha": "e75bb9c2170355b1d0d10f02c323c851e51a7b53",
+    "gonka_harness_commit_sha": "cf606387f4ee2c54dc5da1505d0e2aee662e0c93",
+    "gonka_runtime_source_sha": "29a58fcf64b87967cb874b6169ce2c61e1f269b1",
+    "protobuf_source_sha": "379bebced638aeb5e6077bfd51c986f898443832"
+  },
+  "artifacts": {
+    "deal_wasm_sha256": "2caa08099be647a9c3d5fa9868ec6faee30ae7c2a9136cc4891cd75ccd55c0e5",
+    "factory_wasm_sha256": "8366a874619c03e54ed36edf6b0ebbde4001afcf6c1b02ed40f9762350e6d82b",
+    "live_context": {
+      "path": "artifacts/a8-evidence/a8-negative-013/live-context.json",
+      "sha256": "1f76c44aaf4537deee7e52a7e16503b075d487014fe1c7d1187ef188aeb60069"
+    },
+    "testermint_log": {
+      "path": "artifacts/a8-evidence/a8-negative-013/testermint.log",
+      "sha256": "7ad49cfecbece2420db4810fcd2fd7580ed2f081cf8b62176ffd5e9fa6894b06"
+    }
+  },
+  "completed_before_failure": {
+    "primary": [
+      "lock",
+      "claim_settle",
+      "release"
+    ],
+    "routing_mismatch": [
+      "routing_mutation",
+      "refund_committed"
+    ],
+    "routing_missing": [
+      "routing_mutation",
+      "refund_committed"
+    ]
+  },
+  "failure": {
+    "phase": "duplicate_primary_release",
+    "message": "Deal has no spendable ngonka; release predicate not reached",
+    "classification": "test_harness_control_flow",
+    "marketplace_contract_failure": false,
+    "diagnosis": "The harness invoked release a second time after the first release had transferred the complete spendable balance and committed completed state."
+  },
+  "remediation": {
+    "gonka_harness_commit_sha": "813e4d28bdebaaa9afa61995422f7c2f256424b9",
+    "change": "Removed the duplicate release invocation; the first release and its conservation assertions remain unchanged.",
+    "verification": "Gradle testClasses BUILD SUCCESSFUL"
+  },
+  "acceptance_effect": "diagnostic_only_not_a_complete_acceptance_pass"
+}

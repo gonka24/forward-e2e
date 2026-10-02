@@ -1,0 +1,68 @@
+{
+  "schema_version": "1.0.0",
+  "run_id": "a8-claim-expiry-positive-042",
+  "result": "NOT_RUN_REFUND",
+  "new_live_attempt": 1,
+  "source": {
+    "marketplace_harness_sha": "4bfcb3e8e655240152c7eee6140b2846d5459bf0",
+    "gonka_test_harness_sha": "98ef060ada18bb47ab8c3988106b8f67641b2136",
+    "gonka_runtime_sha": "29a58fcf64b87967cb874b6169ce2c61e1f269b1"
+  },
+  "artifacts": {
+    "live_context": {
+      "path": "artifacts/a8-evidence/a8-claim-expiry-positive-042/live-context.json",
+      "sha256": "7bb92a1da300b7e19679911dbbe510f6a09b847e5f4704f6c5ff3f82a461aa7a",
+      "bytes": 42577
+    },
+    "testermint_log": {
+      "path": "artifacts/a8-evidence/a8-claim-expiry-positive-042/testermint.log",
+      "sha256": "8352f46edbb7bfd151d7d8bfa33d9ccbf1847c3acc622708f3eb1201cfa7b9e6",
+      "bytes": 7351
+    },
+    "junit_xml": {
+      "path": "../a8-gonka-d1-run42/testermint/build/test-results/test/TEST-MarketplaceContractAcceptanceTests.xml",
+      "sha256": "8b9ae7f6e8a9e3700beee962ecf674aa52a7b83d5150c9793e97aedc805d39c1",
+      "bytes": 9173720
+    }
+  },
+  "prepared_deal": {
+    "target_epoch": 5,
+    "host": "gonka19at35hyf758t9v0t7kuuneyhfuew4svcfcf9qw",
+    "buyer": "gonka18vyf9rzaj74wk0cudtv98tyqry9gjd33wl6lwd",
+    "deal": "gonka1ltd0maxmte3xf4zshta9j5djrq9cl692ctsp9u5q0p9wss0f5lmsa2r502",
+    "funded_micro_usdt": 10000000,
+    "fund_tx": "3DC227612E4931D63C2E46729FE239D64FF68C706B10384AFA90DE86576AC779",
+    "lock_tx": "C29D200E92567A69A6854A6228637E44DD67096AD77D2DDD192D11F1BB4CB05B"
+  },
+  "post_failure_native_query": {
+    "observed_epoch": 6,
+    "epoch_index": 5,
+    "participant_id": "gonka19at35hyf758t9v0t7kuuneyhfuew4svcfcf9qw",
+    "rewarded_coins": 94819671366450,
+    "claimed_field_present": false,
+    "authoritative_claimed_value": false,
+    "positive_total": true
+  },
+  "failure": {
+    "phase": "verify-unclaimed-scenario",
+    "cause": "The 120-second query window started at the beginning of target epoch E=5. Settlement created the E=5 summary at the transition to E+1=6, immediately after that window expired.",
+    "refund_e_plus_1": "NOT_RUN",
+    "refund_e_plus_2": "NOT_RUN"
+  },
+  "correction": {
+    "gonka_test_harness_sha": "e9eb8f6a7b7e2a3478cc00daae358a1374f60eea",
+    "behavior": "Wait explicitly for E+1, then verify the settled summary and submit the too-early Refund in that same epoch. No retry or sleep was added."
+  },
+  "cleanup": {
+    "removed_containers": 19,
+    "removed_volumes": [
+      "genesis_postgres-data",
+      "join1_postgres-data",
+      "join2_postgres-data"
+    ],
+    "removed_network": "chain-public",
+    "removed_prod_local": true,
+    "foreign_resources_touched": false
+  },
+  "acceptance_effect": "The run proves the filesystem fix and existence of the required positive unclaimed native summary, but Refund remained NOT RUN."
+}

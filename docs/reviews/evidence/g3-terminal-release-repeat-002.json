@@ -1,0 +1,188 @@
+{
+  "schema_version": "1.0.0",
+  "scenario": "G3 native terminal ReleaseUnlockedGnk repeat",
+  "status": "FAIL",
+  "run_id": "g3-terminal-002",
+  "date": "2026-09-09",
+  "live_attempts_used": 2,
+  "live_attempt_limit": 2,
+  "semantic_conclusion": "A real ReleaseUnlockedGnk transaction after Completed with zero liquid and zero pending vesting was included and rejected with NothingToRelease. It was not a successful no-op.",
+  "scope": {
+    "proved": [
+      "one funded Deal with a positive native claim",
+      "native settlement and two releases through Completed",
+      "zero Deal ngonka balance and zero pending/scheduled vesting before repeat",
+      "real terminal ReleaseUnlockedGnk broadcast from a fourth independent caller",
+      "no state, counter, GNK, settlement CW20, or foreign CW20 change after rejection"
+    ],
+    "not_extended": [
+      "Factory index",
+      "multi-Deal isolation",
+      "donations after Completed"
+    ]
+  },
+  "source": {
+    "marketplace_commit_sha": "df90bea47bfff39748585e2a4f453631cb94a771",
+    "gonka_test_harness_sha": "db0e40f8a2109636cf08c6c7b1070d8d396d0a4c",
+    "pinned_gonka_source_sha": "29a58fcf64b87967cb874b6169ce2c61e1f269b1",
+    "protobuf_sha": "379bebced638aeb5e6077bfd51c986f898443832",
+    "runtime": {
+      "cosmos_sdk": "v0.53.3-ps19-observability",
+      "wasmd": "v0.54.2",
+      "wasmvm": "v2.2.4",
+      "go": "go version go1.24.2 linux/amd64"
+    },
+    "toolchain_preflight": {
+      "cosmwasm_check": "2.2.2",
+      "verified_output": "Contract checking 2.2.2"
+    },
+    "a9_manifest_sha256": "726dec3897bb6017d7bc3fdf947064f7a8954be2d4735f253e7ec328b6dffc4d",
+    "wasm_sha256": {
+      "marketplace_deal": "2caa08099be647a9c3d5fa9868ec6faee30ae7c2a9136cc4891cd75ccd55c0e5",
+      "marketplace_factory": "8366a874619c03e54ed36edf6b0ebbde4001afcf6c1b02ed40f9762350e6d82b",
+      "a8_caller": "1680a8c107c4ba0df77aa2652657d8790b33e5b35459a1a2095f8011f0228d99",
+      "a8_cw20": "9e2cc208027e5ceb8cffdfb36546720559ccd50cdd8b4c2c48d80aec75e5843b"
+    }
+  },
+  "roles": {
+    "host": "gonka1uv470lrwp6g4de9fjqeju2g090ls439xctscyp",
+    "buyer": "gonka146gnuj6kxvct4supuxey2jlx7knq255vav3sge",
+    "fee_recipient": "gonka10pqqghgxm7lj9k9f6l48zasyxlq6wz5a5wvyun",
+    "caller": "gonka1yy4q7lu9dtmlrnkg6m2q72raaraxnz34r0u3fd",
+    "all_four_distinct": true
+  },
+  "contracts": {
+    "deal": "gonka1cnuw3f076wgdyahssdkd0g3nr96ckq8cwa2mh029fn5mgf2fmcmsctg4n4",
+    "settlement_cw20": "gonka1hrpna9v7vs3stzyd4z3xf00676kf78zpe2u5ksvljswn2vnjp3ys6w65a0",
+    "foreign_cw20": "gonka1qg5ega6dykkxc307y25pecuufrjkxkaggkkxh7nad0vhyhtuhw3sautzd3"
+  },
+  "lifecycle_transactions": {
+    "lock": {"tx_hash": "06EAE029B5DD3894AD9912A58BF2AC2E6AB64B12AC8A73959A07419159E84193", "height": 134, "code": 0},
+    "claim_rewards": {"tx_hash": "C4662E4A92A49E46B77DA8D43BE53369144555B7FFD0BE05C102FD4C6E1EA33C", "height": 160, "code": 0},
+    "settle_claim": {"tx_hash": "0870A3F318FF9DB384BB63A96AE8FEDEE3507CBF9FD433065BD9B8A8D326D50E", "height": 161, "code": 0},
+    "release_1": {"tx_hash": "7992EFC734CD5C50C32CF43BA776694FEB3ABEAC9275B500C6CA118472AE5D95", "height": 189, "code": 0},
+    "release_2_completed": {"tx_hash": "32D6130A0D231BFC122AD6C79AC12C0FAE020D49E966C1909ABE6C848F60C93D", "height": 212, "code": 0}
+  },
+  "terminal_preconditions": {
+    "status": "completed",
+    "positive_total_claim_ngonka": 94819671366450,
+    "released_total_ngonka": 94819671366450,
+    "buyer_original_remaining_ngonka": 0,
+    "host_original_remaining_ngonka": 0,
+    "liquid_balance_ngonka": 0,
+    "remaining_vesting_ngonka": 0,
+    "scheduled_vesting_ngonka": 0,
+    "vesting_total_amount": null,
+    "vesting_epoch_amounts": null
+  },
+  "terminal_transaction": {
+    "tx_hash": "238CDCCAFAC01B0C83EBD29E5C3F083E35A3C61DB02E6380C7379E11894973C5",
+    "height": 214,
+    "epoch": 8,
+    "layer": "deliver_tx",
+    "codespace": "wasm",
+    "code": 5,
+    "gas_wanted": 2000000,
+    "gas_used": 115167,
+    "events": [],
+    "raw_log": "failed to execute message; message index: 0: no additional GNK is currently available for release: execute wasm contract failed"
+  },
+  "terminal_snapshot": {
+    "state": {
+      "status": "completed",
+      "buyer": "gonka146gnuj6kxvct4supuxey2jlx7knq255vav3sge",
+      "recipient_locked": true,
+      "work_ngonka": "0",
+      "reward_ngonka": "94819671366450",
+      "total_claim_ngonka": "94819671366450",
+      "buyer_entitlement_ngonka": "100000000000",
+      "host_entitlement_ngonka": "94719671366450",
+      "released_total_ngonka": "94819671366450",
+      "buyer_released_ngonka": "100000000000",
+      "host_released_ngonka": "94719671366450",
+      "gross_usdt": "100000000",
+      "fee_usdt": "1500000",
+      "host_net_usdt": "98500000",
+      "buyer_refund_usdt": "0",
+      "refund_reason": null,
+      "gnk_release_policy": {
+        "proportional": {
+          "buyer_share_numerator": "100000000000",
+          "share_denominator": "94819671366450"
+        }
+      }
+    },
+    "release_status": {
+      "released_total_ngonka": "94819671366450",
+      "buyer_released_ngonka": "100000000000",
+      "host_released_ngonka": "94719671366450",
+      "buyer_original_remaining_ngonka": "0",
+      "host_original_remaining_ngonka": "0"
+    },
+    "native_status": {
+      "liquid_balance_ngonka": "0",
+      "remaining_vesting_ngonka": "0"
+    },
+    "bank_balances": {
+      "host": {"ngonka": 474449071346005},
+      "buyer": {"ngonka": 545730053384282},
+      "fee_recipient": {},
+      "caller": {"ngonka": 100000000},
+      "deal": {}
+    },
+    "settlement_cw20_balances": {
+      "host": 98500000,
+      "buyer": 100000000,
+      "fee_recipient": 1500000,
+      "caller": 0,
+      "deal": 0
+    },
+    "foreign_cw20_balances": {
+      "host": 0,
+      "buyer": 1000000,
+      "fee_recipient": 0,
+      "caller": 0,
+      "deal": 0
+    },
+    "before_equals_after": true,
+    "caller_ngonka_delta": 0,
+    "deal_transfer_events": 0,
+    "repeat_payout_ngonka": 0
+  },
+  "attempts": [
+    {
+      "run_id": "g3-terminal-001",
+      "classification": "HARNESS_PRECONDITION_FAILURE",
+      "terminal_transaction_sent": false,
+      "reason": "The isolated flow attempted the terminal check after only the first vesting tranche; Deal was Releasing with 47409835683225 of 94819671366450 released.",
+      "cleanup": "PASS"
+    },
+    {
+      "run_id": "g3-terminal-002",
+      "classification": "TERMINAL_SEMANTIC_FAILURE",
+      "terminal_transaction_sent": true,
+      "result": "FAIL",
+      "cleanup": "PASS"
+    }
+  ],
+  "raw_evidence": {
+    "g3-terminal-001": {
+      "root": "/home/runner/a8-runtime/g3-terminal-001",
+      "live_context": {"sha256": "13a1bb6673626e1b078d81d82ba7f081e76e992fcb0c03698bab3e01e2440779", "bytes": 52905},
+      "testermint_log": {"sha256": "78ddcbb68f34d49f79c17686e50871103fa3903a90f0f4e681af7f4db1f650ca", "bytes": 6202},
+      "junit_xml": {"sha256": "e68283f7799c870a089d5ac827085a8fe27efd51af1739584c7e9dc5eaf72011", "bytes": 11730692}
+    },
+    "g3-terminal-002": {
+      "root": "/home/runner/a8-runtime/g3-terminal-002",
+      "live_context": {"sha256": "3469ec137100d4d1fed4943567ea194c36a64a166a32bc5525c7eb25c9be9c90", "bytes": 70281},
+      "testermint_log": {"sha256": "a7a230a8e3abd9288efcef4e85ed0706e7bd42043e8745c2c5922162dcc0bf48", "bytes": 6202},
+      "junit_xml": {"sha256": "6c6615292a9164bab4985620e5894e93aa35c23d08c3819452de7cb0e069ca3b", "bytes": 13450999},
+      "a9_manifest": {"sha256": "726dec3897bb6017d7bc3fdf947064f7a8954be2d4735f253e7ec328b6dffc4d", "bytes": 7470},
+      "toolchain_preflight": {"sha256": "8e9ab58b455b537da9c965fdb0f06a19de91cc2faf808a7badb16d0b51157314", "bytes": 80},
+      "identity": {"sha256": "eab53f5fc765edb0a1181ed93a4e246e5c4d8816ec797ea9d071f9aeef95e5d8", "bytes": 160},
+      "result": {"sha256": "78cfd2cede9a75e6ef356eac6e1e16a87e15df016bd0477b50b9bfe6a468cd5a", "bytes": 88},
+      "cleanup_ownership": {"sha256": "dfeb9a545eb9cf66741330d25937c45c98808322313f1544a59499866a1e6b63", "bytes": 188895},
+      "cleanup_completed": {"sha256": "7707093af23c08ebf2f90eec80f83beb57bfd56ed637a94cb9640a0b51488376", "bytes": 55}
+    }
+  }
+}

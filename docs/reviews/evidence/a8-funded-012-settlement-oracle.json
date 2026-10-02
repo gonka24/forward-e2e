@@ -1,0 +1,54 @@
+{
+  "kind": "gonka-marketplace-a8-compact-evidence",
+  "run_id": "a8-funded-012",
+  "result": "PASS",
+  "source": {
+    "marketplace_oracle_commit": "e369b48bd2640c79161f9566cc507c51307e813c",
+    "gonka_runtime_sha": "29a58fcf64b87967cb874b6169ce2c61e1f269b1",
+    "gonka_test_harness_sha": "9f32e0274a3e22ddb567ea024820cc2522a250db",
+    "protobuf_sha": "379bebced638aeb5e6077bfd51c986f898443832",
+    "wasmd": "v0.54.2",
+    "wasmvm": "v2.2.4"
+  },
+  "fresh_checkout_guard": {
+    "prod_local_absent_before_run": true,
+    "existing_prod_local_regression": "PASS: refused before A9/evidence/Testermint and preserved the path"
+  },
+  "offer_terms": {
+    "target_epoch": 5,
+    "price_micro_usdt_per_gnk": 1000000,
+    "buyer_budget_micro_usdt": 100000000,
+    "fee_bps": 150,
+    "funded_capacity_ngonka": 100000000000
+  },
+  "native_summary": {
+    "epoch_index": 5,
+    "participant_id": "gonka1cyn2dj0dqwytn3ywy3pl6pzvqgjnf0ux4h0z8r",
+    "claimed": true,
+    "earned_coins": 0,
+    "rewarded_coins": 94819671366450
+  },
+  "settlement_expected": {
+    "work_ngonka": 0,
+    "reward_ngonka": 94819671366450,
+    "total_claim_ngonka": 94819671366450,
+    "buyer_entitlement_ngonka": 100000000000,
+    "host_entitlement_ngonka": 94719671366450,
+    "gross_usdt": 100000000,
+    "fee_usdt": 1500000,
+    "host_net_usdt": 98500000,
+    "buyer_refund_usdt": 0,
+    "cw20_deltas": {
+      "buyer": 0,
+      "host": 98500000,
+      "fee_recipient": 1500000
+    },
+    "deal_outflow": 100000000
+  },
+  "settlement_actual_matches_expected": true,
+  "transactions": {
+    "claim": "09558164EABE4947E178A2ADF8A89E33F4083D42C5E04FC5920448F23F35403D",
+    "settle": "3C5270395D38F5C5D57B9D31E00D98C56966FE6BD8F6B375EEE97EAFEB3A54A5"
+  },
+  "raw_evidence": "artifacts/a8-evidence/a8-funded-012/live-context.json"
+}

@@ -1,0 +1,9 @@
+# Project-authored text is stable across Windows and Linux checkouts.
+* text=auto eol=lf
+
+# Vendored protobuf files preserve the pinned upstream bytes, including the
+# upstream mixture of LF and CRLF line endings. Git must not normalize them.
+packages/gonka-proto/proto/vendor/** -text !eol -whitespace
+
+# Preserve the exact pinned upstream license bytes and whitespace.
+licenses/Gonka-pinned.txt -text !eol -whitespace

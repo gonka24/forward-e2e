@@ -1,0 +1,9 @@
+{
+  "gonka_sha": "c5afa458de7eb8affa7020f1d0fcd4635ba1fd42",
+  "level": "Go classification and JSON roundtrip, not FFI",
+  "docker_exit": 0,
+  "go_exit": "0",
+  "dockerfile_sha256": "ea315f51715a50e7b551675c089c27e0dd3deb00426e5b87be8aae00ed04a6bb",
+  "status": "PASS",
+  "test_output_sha256": "a27081350fba653eb99e1e37d791074e205216e0358d907812e079aab2b791c1"
+}
