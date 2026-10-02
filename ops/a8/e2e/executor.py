@@ -104,6 +104,7 @@ from .runlock import (
     utc_now_iso,
 )
 from .runner_image import assert_runner_image_matches, resolve_runner_image
+from .runner_source import read_runner_source
 from .runpackage import (
     BUILD_LOG_DIRNAME,
     BUILD_OUTPUT_DIRNAME,
@@ -179,6 +180,11 @@ def assert_runner_matches_lock(lock: RunLock, layout: RunnerLayout) -> None:
     run with different rules.
     """
     locked = lock.runner
+    actual_source = read_runner_source(layout.root)
+    for key, actual in actual_source.items():
+        if locked.get(key) != actual:
+            raise IntegrityError("Runner Git identity differs from the plan; create a new plan",
+                                 {"field": key, "locked": locked.get(key), "actual": actual})
     checks = (
         ("harness_hash", hash_runner_files(layout.root, HARNESS_FILES)),
         ("verifier_hash", hash_runner_files(layout.root, VERIFIER_FILES)),

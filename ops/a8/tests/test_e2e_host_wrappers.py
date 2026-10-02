@@ -83,6 +83,8 @@ case "${1:-}" in
             printf 'E2E_RUNNER_IMAGE=%s\\n' "${E2E_RUNNER_IMAGE:-}"
             printf 'E2E_RUNNER_IMAGE_ID=%s\\n' "${E2E_RUNNER_IMAGE_ID:-}"
             printf 'E2E_RUNNER_IMAGE_DIGEST=%s\\n' "${E2E_RUNNER_IMAGE_DIGEST:-}"
+            printf 'E2E_RUNNER_SHA=%s\\n' "${E2E_RUNNER_SHA:-}"
+            printf 'E2E_RUNNER_REPO=%s\\n' "${E2E_RUNNER_REPO:-}"
             printf 'GONKA_DIR=%s\\n' "${GONKA_DIR:-}"
             printf 'CONTRACTS_DIR=%s\\n' "${CONTRACTS_DIR:-}"
             printf 'E2E_PLAN_DIR=%s\\n' "${E2E_PLAN_DIR:-}"
@@ -648,8 +650,45 @@ exit $LASTEXITCODE
         self.assertFalse(self.record.exists())
 
     def test_a_failed_image_build_preserves_the_docker_exit_code(self):
-        result = self.invoke(build=True, fail_build=True)
+        with patch.dict(os.environ, {"E2E_RUNNER_SHA": "3" * 40}):
+            result = self.invoke(build=True, fail_build=True)
         self.assertEqual(result.returncode, 23, result.stderr)
+
+    def test_a_runner_build_refuses_a_branch_or_short_sha_before_docker(self):
+        for sha in ("main", "abc123", "", "HEAD"):
+            with self.subTest(sha=sha), patch.dict(os.environ, {"E2E_RUNNER_SHA": sha}):
+                result = self.invoke(build=True)
+                self.assertEqual(result.returncode, 2, result.stderr)
+                self.assertFalse(self.record.exists())
+
+
+@unittest.skipUnless(bool(shutil.which("bash")) and os.name == "posix", "Bash builds require POSIX")
+class BashRunnerBuildTests(unittest.TestCase):
+    def test_build_passes_the_full_runner_sha_and_refuses_mutable_revisions(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            bin_dir = root / "bin"
+            bin_dir.mkdir()
+            fake = bin_dir / "docker"
+            fake.write_text(FAKE_DOCKER, encoding="utf-8")
+            fake.chmod(0o755)
+            argv_file = root / "argv.txt"
+            env_file = root / "env.txt"
+            environment = {**os.environ, "PATH": str(bin_dir) + os.pathsep + os.environ["PATH"],
+                           "FAKE_DOCKER_ARGV_FILE": str(argv_file), "FAKE_DOCKER_ENV_FILE": str(env_file),
+                           "OUTPUT_DIR": str(root / "out"), "E2E_RUNNER_SHA": ""}
+            wrapper = REPO_ROOT / "ops/e2e/build-runner.sh"
+            for sha in ("main", "abc123", "HEAD", ""):
+                with self.subTest(sha=sha):
+                    result = subprocess.run(["bash", str(wrapper), "--runner-sha", sha],
+                                            env=environment, capture_output=True, text=True)
+                    self.assertEqual(result.returncode, 2, result.stderr)
+                    self.assertFalse(argv_file.exists())
+            result = subprocess.run(["bash", str(wrapper), "--runner-sha", "3" * 40],
+                                    env=environment, capture_output=True, text=True)
+            self.assertEqual(result.returncode, 0, result.stderr)
+            self.assertEqual(argv_file.read_text().splitlines()[-2:], ["build", "e2e-runner"])
+            self.assertIn("E2E_RUNNER_SHA=" + "3" * 40, env_file.read_text())
 
 
 class RunnerBuildContextTests(unittest.TestCase):

@@ -19,11 +19,27 @@ SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd -- "${SCRIPT_DIR}/../.." && pwd)"
 COMPOSE_FILE="${REPO_ROOT}/ops/a8/compose.yaml"
 IMAGE="${E2E_RUNNER_IMAGE:-a8-runner:local}"
+RUNNER_SHA="${E2E_RUNNER_SHA:-}"
+RUNNER_REPO="${E2E_RUNNER_REPO:-https://github.com/gonka24/forward-e2e.git}"
 
 die() {
     printf 'error: %s\n' "$1" >&2
     exit "${2:-1}"
 }
+
+while [ "$#" -gt 0 ]; do
+    [ "$#" -ge 2 ] || die "Missing value for $1" 2
+    case "$1" in
+        --runner-sha) RUNNER_SHA="$2" ;;
+        --runner-repo) RUNNER_REPO="$2" ;;
+        --image) IMAGE="$2" ;;
+        *) die "Unknown build argument: $1" 2 ;;
+    esac
+    shift 2
+done
+[[ "$RUNNER_SHA" =~ ^[0-9a-f]{40}$ ]] || die "--runner-sha requires a full lowercase 40-hex commit SHA." 2
+[[ "$RUNNER_REPO" == https://* && "$RUNNER_REPO" != *'#'* ]] || die "--runner-repo requires an HTTPS Git URL without a revision fragment." 2
+export E2E_RUNNER_SHA="$RUNNER_SHA" E2E_RUNNER_REPO="$RUNNER_REPO"
 
 command -v docker >/dev/null 2>&1 || die "Docker is required on the host but was not found."
 
@@ -48,6 +64,7 @@ export E2E_SECRETS_DIR="${E2E_SECRETS_DIR:-$REPO_ROOT}"
 mkdir -p -- "$OUTPUT_DIR"
 
 printf 'Building the E2E runner image %s ...\n' "$IMAGE"
+printf '  runner SHA: %s\n' "$RUNNER_SHA"
 compose build e2e-runner || die "Runner image build failed." 1
 
 IMAGE_ID="$(docker image inspect --format '{{.Id}}' "$IMAGE")" \

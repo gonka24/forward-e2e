@@ -4,6 +4,7 @@ All fixtures are synthetic. No network, Docker, or live chain calls.
 """
 
 from pathlib import Path
+import json
 import shutil
 import tempfile
 import unittest
@@ -57,6 +58,11 @@ class PlannerPackageTests(unittest.TestCase):
         self.addCleanup(temporary.cleanup)
         self.root = Path(temporary.name).resolve()
         self.runner_root = self.root / "runner"
+        self.runner_root.mkdir()
+        (self.runner_root / "runner-source.json").write_text(json.dumps({
+            "schema_version": 1, "repo_url": "https://example.org/runner.git",
+            "commit_sha": "3" * 40, "tree_sha": "4" * 40,
+        }), encoding="utf-8")
         for rel in HARNESS_FILES + VERIFIER_FILES + NETWORK_FILES:
             write_text_file(self.runner_root / rel, "# synthetic runner asset\n")
         write_text_file(
@@ -106,6 +112,9 @@ class PlannerPackageTests(unittest.TestCase):
         self.assertNotIn("overlay", lock.to_dict())
         self.assertEqual(lock.runner["runner_version"], "2.0.0-e2e-immutable-source")
         self.assertTrue(lock.runner["runner_version_sha256"])
+        self.assertEqual(lock.runner["commit_sha"], "3" * 40)
+        self.assertEqual(lock.runner["tree_sha"], "4" * 40)
+        self.assertEqual(lock.runner["repo_url"], "https://example.org/runner.git")
         self.assertEqual(
             set(lock.external_tests["trees"]),
             {name for name, _ in EXTERNAL_TEST_DIRS},

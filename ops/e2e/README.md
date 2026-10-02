@@ -37,16 +37,26 @@ for the boundary between source trees and run state.
 Build the tools container once:
 
 ```bash
-./ops/e2e/build-runner.sh
+./ops/e2e/build-runner.sh --runner-sha <RUNNER_FULL_40_HEX_SHA>
 ```
 
 ```powershell
-.\ops\e2e\Build-Runner.ps1
+.\ops\e2e\Build-Runner.ps1 -RunnerSha <RUNNER_FULL_40_HEX_SHA>
 ```
 
 This builds **only** the runner image. It does not fetch, build or run anything
 from a target repository and it never starts the inner Docker daemon. It prints
 the resolved image id and digest; keep them, they are what a plan is pinned to.
+
+The runner is also selected by a full SHA. Docker fetches that commit from
+`https://github.com/gonka24/forward-e2e.git`, verifies its HEAD and pristine tree,
+and bakes `runner-source.json` into the image. Local uncommitted files are not
+build inputs. The Dockerfile itself comes from the same selected Git context.
+Use `--runner-repo` (PowerShell: `-RunnerRepo`) to select another HTTPS repository.
+The plan records `runner.repo_url`, `runner.commit_sha` and `runner.tree_sha`
+alongside the image ID and asset hashes. Execution refuses a missing or
+different runner Git identity. Older images must be rebuilt and new plans made;
+historical packages remain available for offline reporting.
 
 > [!WARNING]
 > A locally built image may show a `RepoDigest` even when it was never published.
@@ -642,7 +652,7 @@ python3 -B -m unittest discover -s scripts/tests -v
 python3 -B -m unittest discover -s ops/a8/integration_tests -v
 
 # 1. Build the runner image once.
-./ops/e2e/build-runner.sh
+./ops/e2e/build-runner.sh --runner-sha <RUNNER_FULL_40_HEX_SHA>
 
 # 2. Catalog listing. Must not start a daemon.
 ./ops/e2e/run-e2e.sh list
