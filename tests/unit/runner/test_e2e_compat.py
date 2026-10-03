@@ -630,6 +630,28 @@ class ExternalHarnessScenarioSourceTests(unittest.TestCase):
         }
         self.assertEqual(mapping, expected)
 
+    def test_live_launcher_legacy_alias_table_matches_the_catalog_aliases_of_every_native_task(self):
+        import ast
+        from forward_e2e.suite.catalog import NATIVE_TASKS
+        # The harness runs standalone inside the image, where the catalog is
+        # not importable, so it carries its own alias table. Read it without
+        # executing the module: a renamed task or a dropped alias on either
+        # side would otherwise be noticed only when a legacy selector reaches
+        # Gradle and runs nothing.
+        launcher = Path(__file__).resolve().parents[3] / "scripts" / "acceptance_harness.py"
+        tree = ast.parse(launcher.read_text(encoding="utf-8"))
+        aliases = next(
+            ast.literal_eval(node.value)
+            for node in tree.body
+            if isinstance(node, ast.AnnAssign)
+            and isinstance(node.target, ast.Name)
+            and node.target.id == "LEGACY_LIVE_SCENARIO_ALIASES"
+        )
+        expected = {alias: task.task_id for task in NATIVE_TASKS for alias in task.aliases}
+        self.assertEqual(aliases, expected)
+        # Every alias must resolve to a selector the launcher can dispatch.
+        self.assertTrue(set(aliases.values()) <= {task.scenario_selector for task in NATIVE_TASKS})
+
     def test_every_kotlin_acceptance_test_has_one_catalog_owner(self):
         # A whole-class JUnit invocation must not discover a leftover monolith
         # that the canonical runner never exercises.

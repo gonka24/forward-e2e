@@ -404,7 +404,7 @@ class MarketplaceContractAcceptanceTests : TestermintTest() {
             "--rejected-recipient", host,
         )
 
-        genesis.node.waitForMinimumBlock(restrictionEndBlock + 1, "A8 restriction expiry")
+        genesis.node.waitForMinimumBlock(restrictionEndBlock + 1, "restriction expiry")
         check(!genesis.node.queryRestrictionsStatus().isActive) {
             "transfer restrictions remained active after block $restrictionEndBlock"
         }
@@ -544,7 +544,7 @@ class MarketplaceContractAcceptanceTests : TestermintTest() {
             "--rejected-recipient", restrictions.rejectedRecipient,
             "--exemption-id", "a8-r7-1-buyer-first",
         )
-        genesis.node.waitForMinimumBlock(restrictionEndBlock + 1, "A8 R7.1 restriction expiry")
+        genesis.node.waitForMinimumBlock(restrictionEndBlock + 1, "native release restriction expiry")
         check(!genesis.node.queryRestrictionsStatus().isActive)
         runHarness(
             "bank-release-retry-scenario", "--context", requiredEnv("E2E_CONTEXT"), "--name", "bootstrap",

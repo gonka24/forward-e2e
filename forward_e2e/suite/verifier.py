@@ -4911,6 +4911,17 @@ def verify_go_boundary_report(
     except Exception as exc:
         return False, [], f"Corrupted report.json: {exc}"
 
+    if not isinstance(rep, dict):
+        return False, [], "Go boundary report.json root must be a JSON object"
+
+    # The committed test fixtures carry this marker precisely so that a copy of
+    # one can never be graded as a run's evidence. verify_live_context refuses
+    # it for the live context; the boundary reports must not be the one door
+    # that check leaves open, or a fixture report dropped into a run directory
+    # would pass as a real Go boundary result.
+    if rep.get("test_fixture_only") is True:
+        return False, [], "test-only fixture cannot be verified as live evidence"
+
     if rep.get("status") != "PASS":
         return False, [], f"Go boundary status is {rep.get('status')!r}, expected 'PASS'"
     if str(rep.get("docker_exit")) != "0":
@@ -4962,6 +4973,12 @@ def verify_wasm_abi_report(
         return False, [], f"Corrupted abi.json: {exc}"
     if not isinstance(data, dict):
         return False, [], "Wasm ABI report is not an object"
+
+    # Same refusal as verify_live_context and verify_go_boundary_report: the
+    # committed Wasm fixture is a test input, never a probe result, and the
+    # marker is checked before a single case is credited.
+    if data.get("test_fixture_only") is True:
+        return False, [], "test-only fixture cannot be verified as live evidence"
 
     if data.get("status") != "PASS":
         return False, [], f"Wasm ABI probe status is {data.get('status')!r}, expected 'PASS'"
@@ -5371,7 +5388,7 @@ COMPLETION_EVENT_TYPES = frozenset(
 
 @dataclass(frozen=True)
 class SuiteVerification:
-    """Explicit result of verifying and recalculating an A8 suite directory."""
+    """Explicit result of verifying and recalculating a suite directory."""
 
     suite_dir: Path
     plan: Optional[SuitePlan]

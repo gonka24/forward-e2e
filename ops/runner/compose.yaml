@@ -16,6 +16,16 @@
 #   ./ops/e2e/run-e2e.sh run ...
 # ==============================================================================
 
+# The project name is the identity of every piece of Docker state Compose has
+# ever created for this runner: container names, the com.docker.compose.project
+# label and the project recorded on the named volumes below. Compose derives it
+# from the directory holding this file when it is not stated, so moving the
+# file from ops/a8/ to ops/runner/ silently turned the project into "runner"
+# and made Compose v2 warn about volumes "created for project a8". Pin the
+# historical name: renaming existing Docker state is a separate, explicit
+# migration, never a side effect of a repository layout change.
+name: a8
+
 services:
   # ==========================================================================
   # E2E runner: unified tools image, explicit-SHA CLI.
@@ -44,10 +54,13 @@ services:
     # host's default bridge supplies the real upstream resolver instead.
     network_mode: bridge
     environment:
+      # Only the canonical E2E_* names are baked in. Every reader inside the
+      # image resolves E2E_* first and falls back to A8_* only when the
+      # canonical name is unset, so a baked A8_* twin had no consumer; it only
+      # turned an operator's `-e E2E_WORKSPACE_DIR=...` override into a
+      # phantom "conflicting environment variables" refusal.
       - E2E_WORKSPACE_DIR=/workspace
       - E2E_OUTPUT_DIR=/out
-      - A8_WORKSPACE_DIR=/workspace
-      - A8_OUTPUT_DIR=/out
       - DOCKER_HOST=unix:///var/run/docker.sock
       # Injected by the wrappers after resolving the tag. A tag is only a
       # locator; this is the immutable identity recorded in the run lock.

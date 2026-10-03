@@ -1476,26 +1476,44 @@
         "host": "gonka1u9utqwzev7hrwv4y0qtg0cgdplpsf0as7v58vg",
         "inactive_host": "gonka120nqgp8409ncdrzqyt643sze6xw05gm86ch5ql",
         "settlement_cw20": "gonka1ze8c802vjqx96gu0vyjxhzrpxhjhjakfc8w7hqrkw52tltr96eysf08y4u"
+      },
+      "pubkeys": {
+        "validator": "yq/h3Fx2itXw+ql4lSIhHbnA7KU1/OG3ZaumBa+F5eo="
       }
     },
     "identity_rules": {
-      "address": "bech32('gonka', seed('<document>:address:<role>')[:20 or 32])",
+      "address": "bech32('gonka', seed('<document>:address:<role>')[:20 or 32]), role declared in identities.addresses",
+      "bound_digests": "sha256 of other committed fixture bytes, recomputed by the check; never a recorded digest",
       "checked_by": "tests/unit/runner/test_synthetic_evidence.py",
       "hex40": "seed('<document>:hex40:<n>').hex()[:40], n = order of first appearance",
+      "pubkey": "base64(seed('<document>:pubkey:<label>')), label declared in identities.pubkeys",
       "seed": "sha256('forward-e2e synthetic fixture:' + label)",
       "sha256": "seed('<document>:sha256:<n>').hex(), n = order of first appearance",
       "timestamp": "2026-01-01T00:00:00Z + n minutes, preserving relative order",
       "tx_hash": "seed('<document>:tx:<n>').hex().upper(), n = order of first appearance"
     },
-    "notice": "Synthetic offline test fixture. Every chain identity is derived from a labelled SHA-256 seed (see identity_rules); this document is not evidence of any executed chain, Docker or Testermint run.",
+    "notice": "Synthetic offline test fixture derived from a former development receipt. Every chain identity -- Bech32 address, transaction and block hash, code checksum, node id, validator public key, timestamp, run id, host path and run label -- was replaced by a labelled SHA-256 seed derivation with renumber_identities() (see identity_rules); the recorded economic arithmetic (amounts, heights, epochs, gas, balances, runtime versions, event attributes) was deliberately kept so the verifier's cross-field rules still meet producer-shaped numbers. This document is not evidence of any executed chain, Docker or Testermint run and must not be read as a live receipt: it regresses the arithmetic shape of recorded producer output, never its identities.",
     "producer": "scripts/acceptance_harness.py",
     "producer_functions": [
+      "bootstrap",
+      "create_deal",
+      "lock_exact_e_scenario",
       "run_live",
-      "lock_exact_e",
-      "prepare_runtime_snapshot",
-      "write_live_context"
+      "write_object"
     ],
-    "producer_revision": "8079c0c274f5252800ee16b9f4fb0148bfcae2fe",
+    "producer_phases": [
+      "lock_exact_e (scenarios['lock-exact-e'].phases[0])"
+    ],
+    "producer_revision": "8079c0c274f5252800ee16b9f4fb0148bfcae2fe (then scripts/a8_acceptance.py; the relocation to scripts/acceptance_harness.py changed environment names, scenario aliases and paths, no phase shape)",
+    "producer_shape_note": "bootstrap writes the document skeleton (chain, terms, accounts, key_names, contracts, code_ids, stores, deployments, bootstrap), create_deal the scenario record, lock_exact_e_scenario (lock_e_plus_4_scenario with offset 0) the lock_exact_e phase, run_live the final source and command fields; write_object is the JSON writer. The source block keeps the pre-evidence-model shape (gonka_test_harness_sha, no evidence_model) that the then scripts/a8_acceptance.py wrote and the current producer no longer writes: that legacy shape is the point of the fixture.",
+    "provenance": {
+      "kind": "identity-scrubbed development receipt",
+      "live_receipt": false,
+      "method": "renumber_identities() in tests/unit/runner/support/synthetic_evidence.py over a former development receipt, then hand-maintained; after any edit run tests/unit/runner/test_synthetic_evidence.py",
+      "regression_value": "the arithmetic shape of recorded producer output, so the verifier's cross-field rules are exercised against real-shaped numbers; no regression on recorded identities",
+      "replaced": "every Bech32 address, transaction and block hash, code checksum, node id, validator public key, timestamp, run id, host path and run label",
+      "retained": "recorded amounts, heights, epochs, gas, balances, runtime versions and event attributes"
+    },
     "purpose": "Full live-context of a lock-exact-E scenario in the pre-evidence-model (legacy) source shape: bootstrap, stores, deployments and one lock_exact_e phase with its checkpoints",
     "revision_constants": {
       "29a58fcf64b87967cb874b6169ce2c61e1f269b1": "GONKA_SOURCE_SHA (real_fixtures.py)",

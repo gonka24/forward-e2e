@@ -125,23 +125,40 @@
       }
     },
     "identity_rules": {
-      "address": "bech32('gonka', seed('<document>:address:<role>')[:20 or 32])",
+      "address": "bech32('gonka', seed('<document>:address:<role>')[:20 or 32]), role declared in identities.addresses",
+      "bound_digests": "sha256 of other committed fixture bytes, recomputed by the check; never a recorded digest",
       "checked_by": "tests/unit/runner/test_synthetic_evidence.py",
       "hex40": "seed('<document>:hex40:<n>').hex()[:40], n = order of first appearance",
+      "pubkey": "base64(seed('<document>:pubkey:<label>')), label declared in identities.pubkeys",
       "seed": "sha256('forward-e2e synthetic fixture:' + label)",
       "sha256": "seed('<document>:sha256:<n>').hex(), n = order of first appearance",
       "timestamp": "2026-01-01T00:00:00Z + n minutes, preserving relative order",
       "tx_hash": "seed('<document>:tx:<n>').hex().upper(), n = order of first appearance"
     },
-    "notice": "Synthetic offline test fixture. Every chain identity is derived from a labelled SHA-256 seed (see identity_rules); this document is not evidence of any executed chain, Docker or Testermint run.",
+    "notice": "Synthetic offline test fixture derived from a former development receipt. Every chain identity -- Bech32 address, transaction and block hash, code checksum, node id, validator public key, timestamp, run id, host path and run label -- was replaced by a labelled SHA-256 seed derivation with renumber_identities() (see identity_rules); the recorded economic arithmetic (amounts, heights, epochs, gas, balances, runtime versions, event attributes) was deliberately kept so the verifier's cross-field rules still meet producer-shaped numbers. This document is not evidence of any executed chain, Docker or Testermint run and must not be read as a live receipt: it regresses the arithmetic shape of recorded producer output, never its identities.",
     "producer": "scripts/acceptance_harness.py",
     "producer_functions": [
-      "r1_1_refund_e_plus_5_rejected",
-      "release",
+      "refund_e_plus_5_rejected_scenario",
+      "close_gnk_release",
       "r2_gift_checkpoint",
-      "vesting_addition"
+      "r2_gift_snapshot",
+      "verify_vesting_addition_scenario",
+      "reconcile_vesting_addition"
     ],
-    "producer_revision": "8079c0c274f5252800ee16b9f4fb0148bfcae2fe",
+    "producer_phases": [
+      "r1_1_refund_e_plus_5_rejected (refund_e_plus_5_phase)",
+      "release, r2_gift_checkpoint[stage], vesting_addition (vested_gift_phases, producer order)"
+    ],
+    "producer_revision": "8079c0c274f5252800ee16b9f4fb0148bfcae2fe (then scripts/a8_acceptance.py; the relocation to scripts/acceptance_harness.py changed environment names, scenario aliases and paths, no phase shape)",
+    "producer_shape_note": "refund_e_plus_5_rejected_scenario writes the r1_1_refund_e_plus_5_rejected phase; close_gnk_release (reached through release and release_scenario) the four release phases; r2_gift_checkpoint with r2_gift_snapshot the pre_gift/fully_locked/first_unlocked/final checkpoints; verify_vesting_addition_scenario with reconcile_vesting_addition the vesting_addition phase. Both top-level keys are phase lists lifted out of their scenario; real_fixtures.py re-nests them under synthetic scenario records.",
+    "provenance": {
+      "kind": "identity-scrubbed development receipt",
+      "live_receipt": false,
+      "method": "renumber_identities() in tests/unit/runner/support/synthetic_evidence.py over a former development receipt, then hand-maintained; after any edit run tests/unit/runner/test_synthetic_evidence.py",
+      "regression_value": "the arithmetic shape of recorded producer output, so the verifier's cross-field rules are exercised against real-shaped numbers; no regression on recorded identities",
+      "replaced": "every Bech32 address, transaction and block hash, code checksum, node id, validator public key, timestamp, run id, host path and run label",
+      "retained": "recorded amounts, heights, epochs, gas, balances, runtime versions and event attributes"
+    },
     "purpose": "A settled Deal: the Refund rejected at E+5 (refund_e_plus_5_phase) and the vested-gift sequence (vested_gift_phases): two settlement releases, pre_gift/fully_locked/first_unlocked/final checkpoints, the governance vesting_addition and two gift releases",
     "revision_constants": {
       "379bebced638aeb5e6077bfd51c986f898443832": "EXPECTED_PROTO_SHA (scripts/acceptance_harness.py)"

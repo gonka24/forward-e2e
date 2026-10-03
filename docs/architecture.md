@@ -24,16 +24,23 @@ Owns task definitions, per-task runtime lifecycle, artifact collection, task
 verification, and suite reporting:
 
 - [`catalog.py`](../forward_e2e/suite/catalog.py) — the 24-task scenario catalog,
-  legacy task-ID alias resolution (`SCENARIO_ID_ALIASES`), profiles (`smoke`,
-  `native`, `boundary`, `all`), per-task timeouts, and `compute_catalog_hash()`.
+  legacy task-ID alias resolution (`LEGACY_SCENARIO_ALIASES`, `canonical_task_id`,
+  `get_task_by_id_or_alias`), profiles (`smoke`, `native`, `boundary`, `all`),
+  per-task timeouts, and `compute_catalog_hash()`.
 - [`orchestrator.py`](../forward_e2e/suite/orchestrator.py) — executes the
   selected catalog tasks in canonical catalog order, writes `suite-plan.json`,
-  `e2e-context.json`, and `suite-result.json`.
-- [`adapters.py`](../forward_e2e/suite/adapters.py) — builds subprocess command
-  lines for `NativeTaskAdapter` (`scripts/acceptance_harness.py run-live`),
-  `BoundaryTaskAdapter` (`scripts/run_go_boundary.py` and
-  `scripts/test_wasm_query_boundary.mjs`), and `ContractTestTaskAdapter`
-  (`cargo test`).
+  `e2e-context.json`, `events.jsonl` and `suite-result.json`; also owns
+  `reconcile_suite_runtime_evidence`, which `recover` uses to fold the raw
+  runtime snapshots of an interrupted run back into the suite directory
+  without overwriting any artifact whose hash is already indexed.
+- [`adapters.py`](../forward_e2e/suite/adapters.py) — builds and runs the
+  subprocess command lines. There are exactly two adapters:
+  `NativeTaskAdapter` (`scripts/acceptance_harness.py run-live`, one task per
+  Kotlin test method) and `BoundaryTaskAdapter`, which dispatches on the
+  canonical task id to `scripts/run_go_boundary.py` (`GO_BOUNDARY`), to
+  `cargo build` of the `a8-query-boundary` probe followed by
+  `scripts/test_wasm_query_boundary.mjs` (`WASM_ABI`), or to `cargo test --locked`
+  in the contracts snapshot (`CONTRACT_TEST`).
 - [`runtime.py`](../forward_e2e/suite/runtime.py) — prepares per-task runtime
   snapshots (`identity.json`), verifies immutable source checkouts, and enforces
   post-task Docker container ownership cleanup (`cleanup-evidence/ownership.json`).
@@ -41,10 +48,12 @@ verification, and suite reporting:
   task artifacts into the suite directory and writes `artifact-index.json`.
 - [`verifier.py`](../forward_e2e/suite/verifier.py) — verifies task outputs,
   checkpoint sequences, source immutability (`check_source_immutability_document`),
-  B3 genesis delta, and boundary reports.
-- [`reporter.py`](../forward_e2e/suite/reporter.py) — generates offline suite
-  reports (`summary.md`, `coverage.json`) and reconciles interrupted runtime
-  snapshots.
+  the genesis delta of `foreign-native-preservation` (coverage id `B3`), and
+  the boundary reports (`verify_go_boundary_report`, `verify_wasm_abi_report`).
+- [`reporter.py`](../forward_e2e/suite/reporter.py) — `OfflineReporter`
+  renders the derived suite reports (`summary.md`, `coverage.json`, and
+  `suite-result.json` when asked to) from an already verified `SuiteResult`;
+  it never calls the verifier and never modifies raw evidence.
 - [`source_snapshot.py`](../forward_e2e/suite/source_snapshot.py) — stdlib-only
   working-tree and submodule immutability verifier (loaded by bare file path from
   `scripts/acceptance_harness.py`).
@@ -137,10 +146,13 @@ flowchart TD
 - **Upstream API Verification:** Before starting any container, the runner checks
   `<gonka>/testermint` against [`harness/testermint/required-upstream-api.json`](../harness/testermint/required-upstream-api.json)
   and fails fast with `TESTERMINT_API_MISSING` if a required symbol is absent.
-- **B3 Genesis Provisioning:** Only `foreign-native-preservation` (legacy alias
-  `b3-foreign-native`) mounts [`harness/network/genesis/foreign-native-genesis-provision.sh`](../harness/network/genesis/foreign-native-genesis-provision.sh)
+- **Foreign-Native Genesis Provisioning (coverage id `B3`):** Only
+  `foreign-native-preservation` (legacy alias `b3-foreign-native`) mounts [`harness/network/genesis/foreign-native-genesis-provision.sh`](../harness/network/genesis/foreign-native-genesis-provision.sh)
   via `foreign-native-genesis.yml` to add `12345ua8b3foreign` at genesis. `verify_b3_genesis_delta`
-  verifies that no other account balance or supply entry changed.
+  verifies that no other account balance or supply entry changed. The `b3`
+  spelling survives in the evidence file names (`genesis/genesis-before-b3.json`,
+  `b3-provision.json`, `b3-genesis-verification.json`) and the Compose mount
+  path, because they are wire identifiers (see `migration.md` §4).
 - **API Container Restarts:** Restart scenarios invoke
   [`harness/container_control.py`](../harness/container_control.py), which checks
   the `io.gonka.a8.run-id` label, records the stopped container ID, and starts

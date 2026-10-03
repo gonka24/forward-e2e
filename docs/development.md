@@ -45,24 +45,44 @@ python3 -B -m unittest discover -s tests/integration/local_sources -p 'test_*.py
    ```
    (Or, if using a loopback-only `127.0.0.1` HTTP server on an ephemeral port:
    `All fixtures are synthetic. No external network, Docker, or live chain calls; HTTP is loopback-only.`)
-2. **Self-Contained Synthetic Fixtures (`tests/fixtures/evidence/`):**
-   - Positive baseline fixtures under [`tests/fixtures/evidence/`](../tests/fixtures/evidence/README.md)
-     are deterministic, producer-shaped synthetic documents. Each carries
-     `"test_fixture_only": true` (rejected outright by `verify_live_context`,
-     so a committed fixture can never pass as a live artefact) and a
-     `synthetic_fixture` block naming the producer, its functions and the
-     revision whose code defines the shape.
-   - Every chain identity (Bech32 address, transaction/block hash, code
-     checksum, timestamp, run id) is derived from the labelled seed in
-     [`tests/unit/runner/support/synthetic_evidence.py`](../tests/unit/runner/support/synthetic_evidence.py):
+2. **Committed Fixtures (`tests/fixtures/evidence/`) and their provenance:**
+   - The committed documents under [`tests/fixtures/evidence/`](../tests/fixtures/evidence/README.md)
+     are producer-shaped so that the real verifier code paths are exercised,
+     and carry **no identity of any recorded run**. Each carries
+     `"test_fixture_only": true` (rejected outright by `verify_live_context`
+     and by the boundary report verifiers, so a committed fixture can never
+     pass as a live artefact) and a `synthetic_fixture` block naming the
+     producer, its functions and the revision whose code defines the shape.
+   - Two kinds of document share that contract and must not be confused
+     (module docstring of
+     [`tests/unit/runner/support/synthetic_evidence.py`](../tests/unit/runner/support/synthetic_evidence.py)):
+     - The four live-context documents (`claim-settlement-fault-phase.json`,
+       `lock-exact-epoch-legacy-context.json`,
+       `settled-deal-late-refund-and-vested-gift.json`,
+       `terminal-release-repeat.json`) are **identity-scrubbed derivations of
+       former development receipts**. `renumber_identities` replaced every
+       address, transaction and block hash, code checksum, node id, validator
+       public key, timestamp, run id, host path and run label with a seed
+       derivation; the recorded economic arithmetic (amounts, heights, epochs,
+       gas, balances, runtime versions, event attributes) was deliberately
+       kept so the verifier's cross-field rules still meet producer-shaped
+       numbers. They therefore retain a partial regression on recorded
+       *arithmetic shape* and none on recorded *identities*; they are never
+       live receipts and never evidence about any commit.
+     - The two boundary fixtures (`wasm-query-allowlist-abi.json`,
+       `go-query-error-classification/`) are **generated** by
+       `boundary_fixture_files` from the constants in that module; no value
+       in them was ever recorded. `python3 -B tests/unit/runner/support/synthetic_evidence.py`
+       rewrites them and they must stay byte-identical to its output.
+   - Every chain identity (Bech32 address of any human-readable part,
+     transaction/block hash, code checksum, validator key, timestamp, run id)
+     is derived from the labelled seed in `synthetic_evidence.py`:
      `synthetic_address(doc, role)`, `synthetic_tx_hash` / `fixture_tx_hash`,
      `synthetic_timestamp(n)` (minutes after `2026-01-01T00:00:00Z`),
      `synthetic_run_id(doc)`. Use these helpers for new values; never paste a
-     real address, hash or wall-clock time.
-   - The two boundary fixtures (`wasm-query-allowlist-abi.json`,
-     `go-query-error-classification/`) are generated:
-     `python3 -B tests/unit/runner/support/synthetic_evidence.py` rewrites them
-     and they must stay byte-identical to its output.
+     real address, hash or wall-clock time. `identity_findings` is the machine
+     check that no foreign identity, developer path (`/home/`, `/Users/`,
+     `/tmp/`, `/workspace/`, `/out/`, …) or dated run label is present.
    - [`tests/unit/runner/test_synthetic_evidence.py`](../tests/unit/runner/test_synthetic_evidence.py)
      re-derives the contract from the committed bytes on every run (identity
      derivations, complete address cast list, canonical encoding, generator
@@ -85,6 +105,18 @@ python3 -B -m unittest discover -s tests/integration/local_sources -p 'test_*.py
    with `NotADirectoryError: 'tmp'`. Export a `TMPDIR` whose path contains no
    symlink (for example a directory under your home) before running the
    suites; CI on Linux does not need this.
+4. **Host Git configuration note (`tests/integration/local_sources`):** the
+   acquirer fetches into a runner-owned *bare* scratch repository
+   (`init_repo(scratch, bare=True)` in `forward_e2e/execution/sources.py`), and
+   `GitClient` in `forward_e2e/execution/gitio.py` deliberately discards every
+   inherited `GIT_CONFIG*` override and points `GIT_CONFIG_GLOBAL` at
+   `os.devnull`, so a developer's configuration can never influence a
+   reproducible run. A host Git whose **system** config sets
+   `safe.bareRepository = explicit` (some vendor builds do) therefore makes
+   `git -C <bare> fetch` fail with "cannot use bare repository", and one or
+   more local-source tests error out. This is a property of that host Git,
+   not of the code; the same test passes with a stock Git, which is what CI
+   runs. Do not work around it by loosening `GitClient`.
 
 ---
 
@@ -122,9 +154,15 @@ the following runner-owned files into every `run.lock.json`:
   - `ops/runner/RUNNER_VERSION`
 
 Editing any file above changes the runner's asset hashes and invalidates
-previously generated `run.lock.json` plans. If you add or rename a file in these
-lists, update `planner.py`, `RunnerLayout.assert_complete()`, and the layout unit
-tests in `tests/unit/runner/`.
+previously generated `run.lock.json` plans. `RunnerLayout.assert_complete()`
+takes these lists as its only input (every entry of `HARNESS_FILES`,
+`VERIFIER_FILES`, `NETWORK_FILES` and `RUNNER_VERSION_FILE` must be a regular
+file, every `EXTERNAL_TEST_DIRS` entry a directory, and no path may be a
+symlink), so adding or renaming a file in a list extends the gate by itself;
+[`tests/unit/runner/test_e2e_planner.py`](../tests/unit/runner/test_e2e_planner.py)
+checks the lists against the real checkout, so a path that does not exist
+fails the offline suite before it can fail inside an image. Update the layout
+expectations there when you change a list.
 
 ---
 

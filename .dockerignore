@@ -34,8 +34,12 @@ Thumbs.db
 .env.*
 !ops/runner/.env.example
 
+# Note on scope: ops/runner/Dockerfile never COPYs or ADDs from the build
+# context (the runner is fetched by Git at E2E_RUNNER_SHA inside a RUN step),
+# so this file only limits what a local-directory build uploads as context;
+# it does not decide what ends up in the image. The negations below keep the
+# context complete for anyone who does COPY it, nothing more.
 # Synthetic evidence fixtures are required by tests/unit/runner/real_fixtures.py.
-# Keep them in the runner image so the documented Linux offline suite is runnable.
 !tests/fixtures/**
 # This committed probe is a versioned test fixture, not a local build output.
 !harness/wasm_query_allowlist/artifacts/

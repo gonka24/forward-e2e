@@ -20,6 +20,8 @@ import unittest
 from unittest.mock import patch
 
 from forward_e2e.execution.cli import (
+    ALLOWED_WITH_FROM,
+    LOCK_IDENTITY_FLAGS,
     SEMANTIC_FLAGS,
     SUBCOMMANDS,
     _with_inner_dockerd,
@@ -458,6 +460,56 @@ class E2ECliTests(unittest.TestCase):
                     load_lock.assert_not_called()
                     with_dockerd.assert_not_called()
                     start_dockerd.assert_not_called()
+
+    def test_a_plan_id_given_with_from_is_refused_as_a_lock_override_before_the_lock_is_read(self):
+        # Before this check existed the flag parsed and was then never read on
+        # the replay path, so the operator believed the plan had been renamed.
+        lock_path = str(self.root / "package" / "run.lock.json")
+        for subcommand in ("run", "rerun"):
+            with self.subTest(subcommand=subcommand):
+                argv = [subcommand, "--from", lock_path, "--plan-id", "renamed-plan"]
+                with patch("forward_e2e.execution.cli.load_run_lock") as load_lock, patch(
+                    "forward_e2e.execution.cli._with_inner_dockerd"
+                ) as with_dockerd, patch.object(
+                    DinDSupervisor, "start_dockerd"
+                ) as start_dockerd:
+                    code, _stdout, stderr = self._run_cli(argv)
+                self.assertEqual(code, 2, stderr)
+                self.assertIn("[LOCK_OVERRIDE_REJECTED]", stderr)
+                self.assertIn("the plan id comes from the lock", stderr)
+                self.assertIn("--plan-id", stderr)
+                self.assertIn("allowed_with_from", stderr)
+                self.assertNotIn("--plan-id", ALLOWED_WITH_FROM)
+                load_lock.assert_not_called()
+                with_dockerd.assert_not_called()
+                start_dockerd.assert_not_called()
+
+    def test_plan_id_stays_out_of_the_semantic_flag_set_but_is_a_lock_identity_flag(self):
+        # The semantic set is the list of proof-changing flags; a plan id does
+        # not change what is proven, so the refusal lives in a separate list.
+        self.assertNotIn("--plan-id", {flag for _, flag in SEMANTIC_FLAGS})
+        self.assertEqual(LOCK_IDENTITY_FLAGS, (("plan_id", "--plan-id"),))
+
+    def test_plan_and_run_without_from_still_pass_an_explicit_plan_id_to_the_planner(self):
+        fake_result = self._fake_plan_result()
+        # `run` hands the already-acquired checkouts to the executor; the fake
+        # only needs the attributes that are read before that hand-over.
+        fake_result.gonka_source = SimpleNamespace(worktree=self.root / "gonka")
+        fake_result.contracts_source = SimpleNamespace(worktree=self.root / "contracts")
+        for command in ("plan", "run"):
+            with self.subTest(command=command):
+                argv = self._plan_argv({"--plan-id": "plan-chosen-by-hand"})
+                argv[0] = command
+                with patch(
+                    "forward_e2e.execution.planner.build_plan", return_value=fake_result,
+                ) as build_plan, patch(
+                    "forward_e2e.execution.cli._execute_selected_run", return_value=0
+                ), patch.object(DinDSupervisor, "start_dockerd") as start_dockerd:
+                    code, _stdout, stderr = self._run_cli(argv)
+                self.assertEqual(code, 0, stderr)
+                build_plan.assert_called_once()
+                self.assertEqual(build_plan.call_args.args[0].plan_id, "plan-chosen-by-hand")
+                start_dockerd.assert_not_called()
 
     def test_run_and_rerun_forward_operational_flags_and_return_the_executor_exit_code(self):
         credential_file = self.root / "token.txt"

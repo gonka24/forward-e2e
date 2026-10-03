@@ -61,13 +61,25 @@ Common arguments for every build:
 
 ## Environment read by the Kotlin code
 
-The Kotlin process accepts `E2E_*` variables as primary and `A8_*` as fallback
-(`E2E_PYTHON` / `A8_PYTHON`, `E2E_HARNESS` / `A8_HARNESS`,
-`E2E_MARKETPLACE_DIR` / `A8_MARKETPLACE_DIR`, `E2E_CONTEXT` / `A8_CONTEXT`,
-`E2E_RUN_ID` / `A8_RUN_ID`, `E2E_DEAL_WASM` / `A8_DEAL_WASM`,
-`E2E_FACTORY_WASM` / `A8_FACTORY_WASM`, `E2E_CW20_WASM` / `A8_CW20_WASM`,
-`E2E_CALLER_WASM` / `A8_CALLER_WASM`,
-`E2E_CONTAINER_CONTROL` / `A8_CONTAINER_CONTROL`,
-`E2E_CONTAINER_CONTROL_STATE_DIR` / `A8_CONTAINER_CONTROL_STATE_DIR`).
-Upstream Testermint reads `GONKA_REPO_ROOT`. See
-[`docs/migration.md`](../../docs/migration.md) for the complete environment variable table.
+Every variable goes through one resolver, `requiredHarnessEnv(canonicalName,
+legacyName)` in [`ApiContainerControl.kt`](src/test/kotlin/ApiContainerControl.kt)
+(the scenarios reach it through the `requiredEnv(name)` wrapper in
+`MarketplaceContractAcceptanceTests`, which derives the `E2E_*`/`A8_*` pair
+from either spelling). The canonical `E2E_*` value wins; the `A8_*` alias is
+only a fallback; if both are set to **different** values the test fails with
+"Conflicting environment variables" instead of guessing; a blank value counts
+as unset. There is no default for any of them.
+
+The variables resolved this way are `E2E_PYTHON`, `E2E_HARNESS`,
+`E2E_MARKETPLACE_DIR`, `E2E_CONTEXT`, `E2E_RUN_ID`, `E2E_DEAL_WASM`,
+`E2E_FACTORY_WASM`, `E2E_CW20_WASM`, `E2E_CALLER_WASM`,
+`E2E_CONTAINER_CONTROL` and `E2E_CONTAINER_CONTROL_STATE_DIR` (each with its
+`A8_*` alias). Upstream Testermint itself reads `GONKA_REPO_ROOT`.
+
+`build.gradle.kts` forwards the `E2E_*`, `A8_*` and `GONKA_REPO_ROOT` entries
+of the build's environment into the test JVM explicitly (on top of the normal
+inheritance), so a Gradle daemon started earlier cannot leave a stale value;
+the runner also passes `--no-daemon`.
+The meaning of each variable and who sets it is kept in one place,
+[`docs/migration.md`](../../docs/migration.md); this file only describes how
+the Kotlin side resolves them.

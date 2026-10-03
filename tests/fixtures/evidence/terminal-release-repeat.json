@@ -26,21 +26,37 @@
       }
     },
     "identity_rules": {
-      "address": "bech32('gonka', seed('<document>:address:<role>')[:20 or 32])",
+      "address": "bech32('gonka', seed('<document>:address:<role>')[:20 or 32]), role declared in identities.addresses",
+      "bound_digests": "sha256 of other committed fixture bytes, recomputed by the check; never a recorded digest",
       "checked_by": "tests/unit/runner/test_synthetic_evidence.py",
       "hex40": "seed('<document>:hex40:<n>').hex()[:40], n = order of first appearance",
+      "pubkey": "base64(seed('<document>:pubkey:<label>')), label declared in identities.pubkeys",
       "seed": "sha256('forward-e2e synthetic fixture:' + label)",
       "sha256": "seed('<document>:sha256:<n>').hex(), n = order of first appearance",
       "timestamp": "2026-01-01T00:00:00Z + n minutes, preserving relative order",
       "tx_hash": "seed('<document>:tx:<n>').hex().upper(), n = order of first appearance"
     },
-    "notice": "Synthetic offline test fixture. Every chain identity is derived from a labelled SHA-256 seed (see identity_rules); this document is not evidence of any executed chain, Docker or Testermint run.",
+    "notice": "Synthetic offline test fixture derived from a former development receipt. Every chain identity -- Bech32 address, transaction and block hash, code checksum, node id, validator public key, timestamp, run id, host path and run label -- was replaced by a labelled SHA-256 seed derivation with renumber_identities() (see identity_rules); the recorded economic arithmetic (amounts, heights, epochs, gas, balances, runtime versions, event attributes) was deliberately kept so the verifier's cross-field rules still meet producer-shaped numbers. This document is not evidence of any executed chain, Docker or Testermint run and must not be read as a live receipt: it regresses the arithmetic shape of recorded producer output, never its identities.",
     "producer": "scripts/acceptance_harness.py",
     "producer_functions": [
       "terminal_release_repeat",
-      "terminal_release_snapshot"
+      "terminal_release_snapshot",
+      "assert_terminal_release_preconditions",
+      "assert_terminal_nothing_to_release"
     ],
-    "producer_revision": "8079c0c274f5252800ee16b9f4fb0148bfcae2fe",
+    "producer_phases": [
+      "terminal_release_repeat, compacted: terminal_transaction = tx, terminal_preconditions = preconditions, terminal_snapshot = the unchanged before/after snapshot with bank, settlement_cw20 and foreign_cw20 renamed bank_balances, settlement_cw20_balances, foreign_cw20_balances"
+    ],
+    "producer_revision": "8079c0c274f5252800ee16b9f4fb0148bfcae2fe (then scripts/a8_acceptance.py; the relocation to scripts/acceptance_harness.py changed environment names, scenario aliases and paths, no phase shape)",
+    "producer_shape_note": "A compact record, not a live-context phase: terminal_release_repeat's tx_attempt, assert_terminal_release_preconditions result and one terminal_release_snapshot, with the roles and contracts the phase refers to. tests/unit/runner/real_fixtures.py real_terminal_release_repeat_phase() re-expands it into the producer's phase layout without changing an amount.",
+    "provenance": {
+      "kind": "identity-scrubbed development receipt",
+      "live_receipt": false,
+      "method": "renumber_identities() in tests/unit/runner/support/synthetic_evidence.py over a former development receipt, then hand-maintained; after any edit run tests/unit/runner/test_synthetic_evidence.py",
+      "regression_value": "the arithmetic shape of recorded producer output, so the verifier's cross-field rules are exercised against real-shaped numbers; no regression on recorded identities",
+      "replaced": "every Bech32 address, transaction and block hash, code checksum, node id, validator public key, timestamp, run id, host path and run label",
+      "retained": "recorded amounts, heights, epochs, gas, balances, runtime versions and event attributes"
+    },
     "purpose": "Compact record of a Completed Deal whose repeated ReleaseUnlockedGnk is included and rejected with NothingToRelease while every snapshot stays unchanged",
     "revision_constants": {},
     "schema": "forward-e2e.synthetic-fixture/2"

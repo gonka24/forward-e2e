@@ -62,7 +62,6 @@ REQUIRED_SYNTHETIC_EVIDENCE = (
     f"{GO_BOUNDARY_EVIDENCE_DIR}/build.log",
     f"{GO_BOUNDARY_EVIDENCE_DIR}/raw/exit-code",
 )
-REQUIRED_RECORDED_EVIDENCE = REQUIRED_SYNTHETIC_EVIDENCE
 
 # Derivation labels ("documents" in synthetic_evidence.py terms). The first
 # three are the labels of the committed documents, so an address derived here
@@ -280,21 +279,33 @@ def _immutable_source_section(
     }
 
 
-def go_boundary_evidence() -> tuple[Dict[str, Any], str]:
-    """Load the synthetic Go boundary report and raw Go output without simplifying their shape."""
-    directory = EVIDENCE_DIR / GO_BOUNDARY_EVIDENCE_DIR
-    return (
-        json.loads((directory / "report.json").read_text(encoding="utf-8")),
-        (directory / "raw" / "go-test.json").read_text(encoding="utf-8"),
-    )
+def load_synthetic_evidence(name: str) -> Dict[str, Any]:
+    """Loads one synthetic evidence fixture document from tests/fixtures/evidence, verbatim.
 
-
-def load_recorded_evidence(name: str) -> Dict[str, Any]:
-    """Loads one synthetic evidence fixture document from tests/fixtures/evidence."""
+    The returned document still carries ``test_fixture_only`` and the
+    ``synthetic_fixture`` block: callers that hand it to a verifier decide,
+    visibly, whether they are testing the refusal of the marker or the rules
+    behind it.
+    """
     return json.loads((EVIDENCE_DIR / name).read_text(encoding="utf-8"))
 
 
-load_synthetic_evidence = load_recorded_evidence
+def go_boundary_evidence() -> tuple[Dict[str, Any], str]:
+    """The synthetic Go boundary report, ready for ``verify_go_boundary_report``, plus the raw Go output.
+
+    The on-disk ``test_fixture_only`` marker is stripped here, in memory only,
+    for the same reason ``real_lock_exact_e_context`` strips it from the live
+    context: ``verify_go_boundary_report`` refuses a marked document before
+    reading anything else, so a test of its inner rules (exit codes, the
+    ``test_output_sha256`` binding, the required pass events) has to start from
+    a copy without it. The shape is otherwise untouched; the committed bytes
+    themselves are what ``test_synthetic_evidence.py`` pins and what the
+    refusal test in ``test_verifier.py`` presents verbatim.
+    """
+    report = load_synthetic_evidence(f"{GO_BOUNDARY_EVIDENCE_DIR}/report.json")
+    report.pop("test_fixture_only", None)
+    raw = (EVIDENCE_DIR / GO_BOUNDARY_EVIDENCE_DIR / "raw" / "go-test.json").read_text(encoding="utf-8")
+    return report, raw
 
 
 def _find_phase(document: Any, phase_name: str) -> Dict[str, Any]:
@@ -324,7 +335,7 @@ def real_lock_exact_e_context() -> Dict[str, Any]:
     invariants, and the on-disk `test_fixture_only` guard is stripped in-memory
     so unit tests can exercise `verify_live_context`.
     """
-    context = load_recorded_evidence(LOCK_EXACT_E_EVIDENCE)
+    context = load_synthetic_evidence(LOCK_EXACT_E_EVIDENCE)
     context.pop("test_fixture_only", None)
     context.pop("synthetic_fixture", None)
     source = context["source"]
@@ -408,11 +419,12 @@ def real_cw20_fault_rollbacks() -> List[Dict[str, Any]]:
 def real_claim_settle_phase() -> Dict[str, Any]:
     """Adapt settlement economics to settlement followed by independent withdrawals.
 
-    Shapes follow claim_settle and query_usdt_payments in
-    scripts/acceptance_harness.py. These are offline synthetic examples, not
-    live withdrawal executions.
+    Shapes follow claim_settle in scripts/acceptance_harness.py; the
+    ``settlement_payments`` entries are the Deal's ``usdt_payments`` smart-query
+    response as withdraw_pending_usdt and verify_recorded_settlement read it.
+    These are offline synthetic examples, not live withdrawal executions.
     """
-    phase = copy.deepcopy(load_recorded_evidence(CLAIM_SETTLEMENT_FAULT_EVIDENCE)["phase"])
+    phase = copy.deepcopy(load_synthetic_evidence(CLAIM_SETTLEMENT_FAULT_EVIDENCE)["phase"])
     faults = phase["cw20_fault_rollbacks"]
     state = phase["after"]["deal_state"]
     payments = {}
@@ -485,7 +497,7 @@ def real_claim_settle_phase() -> Dict[str, Any]:
 
 def real_r1_refund_phase() -> Dict[str, Any]:
     """The producer-shaped r1_1_refund_e_plus_5_rejected phase, in its passing form."""
-    document = load_recorded_evidence(SETTLED_DEAL_LATE_REFUND_EVIDENCE)
+    document = load_synthetic_evidence(SETTLED_DEAL_LATE_REFUND_EVIDENCE)
     phase = copy.deepcopy(document["refund_e_plus_5_phase"])
     phase["status"] = "PASS"
     phase["semantic_error"] = ""
@@ -937,7 +949,19 @@ def toy_claim_expiry_context() -> Dict[str, Any]:
 
 E1_TARGET_EPOCH = 7
 E1_HOST = synthetic_address(NETWORK_UNCONFIRMED_DOCUMENT, "host")
-E1_BUYER = E1_HOST  # This fixture aliases Buyer and Host to one address.
+# Buyer and Host are deliberately one address. The catalog records it as a
+# limitation of the ``network-unconfirmed`` task ("Requires coincident
+# Buyer/Host addresses for emergency sweep", forward_e2e/suite/catalog.py), and
+# it follows from the live scenario's key choice: ``refundAtEmergencyDeadline``
+# in harness/testermint/.../MarketplaceContractAcceptanceTests.kt prepares the
+# Deal with ``hostKey = "join2"`` while the harness's ``DEFAULT_BUYER_KEY`` is
+# also ``join2`` (scripts/acceptance_harness.py), so the emergency refund
+# sweeps the Deal's balance back to the very account that is the Host. A
+# fixture with distinct roles would exercise a transfer the live scenario never
+# performs, which is why ``_e1_snapshot`` below mirrors its ``cw20.host`` row
+# from ``cw20_buyer`` (two rows, one account) and why the commit raises the
+# buyer's CW20 balance by exactly the Deal's budget.
+E1_BUYER = E1_HOST
 E1_FEE_RECIPIENT = synthetic_address(NETWORK_UNCONFIRMED_DOCUMENT, "fee_recipient")
 E1_DEAL = synthetic_address(NETWORK_UNCONFIRMED_DOCUMENT, "deal", contract=True)
 
@@ -1168,7 +1192,7 @@ def _g3_snapshot(document: Dict[str, Any]) -> Dict[str, Any]:
 
 def real_terminal_release_repeat_phase() -> Dict[str, Any]:
     """Producer-shaped terminal rejection wrapped in the current synthetic phase layout."""
-    document = load_recorded_evidence(G3_EVIDENCE)
+    document = load_synthetic_evidence(G3_EVIDENCE)
     tx = document["terminal_transaction"]
     tx_hash = tx["tx_hash"]
     return {
@@ -1234,7 +1258,7 @@ R2_SCENARIO = "r2-vested-gift"
 
 
 def _r2_fixture_phases() -> List[Dict[str, Any]]:
-    document = load_recorded_evidence(SETTLED_DEAL_LATE_REFUND_EVIDENCE)
+    document = load_synthetic_evidence(SETTLED_DEAL_LATE_REFUND_EVIDENCE)
     return copy.deepcopy(document["vested_gift_phases"])
 
 

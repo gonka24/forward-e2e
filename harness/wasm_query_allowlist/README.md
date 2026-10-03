@@ -38,14 +38,20 @@ prove its deny paths. Its coverage gap is recorded in
 [`docs/coverage.md`](../../docs/coverage.md).
 
 This fixture remains available for the explicit `wasm-query-allowlist` (legacy
-alias `p0-probe`) acceptance command when an operator supplies a compatible Wasm
-artifact. Its checksum manifest and external-test tree hash bind the checked-in
-copy to the runner version, but neither proves that the binary was exercised by
-an automated suite run or rebuilt from these sources during that run.
+alias `p0-probe`, which prints a deprecation notice) harness subcommand when an
+operator supplies a compatible Wasm artifact. Its checksum manifest and
+external-test tree hash bind the checked-in copy to the runner version, but
+neither proves that the binary was exercised by an automated suite run or
+rebuilt from these sources during that run.
 
-To perform the live allowlist check manually, run it while the selected testnet
-is still available and `live-context.json` contains the deployed Deal and
-account addresses:
+What `wasm_query_allowlist` in `scripts/acceptance_harness.py` does when it
+runs: it stores the probe (label `p0-probe`), instantiates it as
+`a8-p0-probe-<run_id>`, checks the four supported queries, requires the broad
+`/inference.inference.Query/Params` query to be rejected with Gonka's specific
+`'<path>' path is not allowed from the contract` response — a timeout, RPC
+failure or other error that merely mentions the route does not count as a
+denial — and appends the result as the phase `p0_wasm_grpc_allowlist` to the
+context it was given.
 
 ```bash
 python3 scripts/acceptance_harness.py wasm-query-allowlist \
@@ -53,14 +59,29 @@ python3 scripts/acceptance_harness.py wasm-query-allowlist \
   --wasm harness/wasm_query_allowlist/artifacts/p0_probe.wasm
 ```
 
-The command stores and instantiates the probe, checks the four supported
-queries, and requires the broad `/inference.inference.Query/Params` query to be
-rejected with Gonka's specific `path is not allowed from the contract`
-response. A timeout, RPC failure, or other error that merely mentions the
-route does not count as a denial. It appends the result as
-`p0_wasm_grpc_allowlist` in the live context.
-This remains a separate operator-run check, not an automated suite task; record
-the resulting context and source/artifact hashes with the E2E evidence.
+Where this can run, stated honestly:
+
+- `--context` must be a bootstrapped live context carrying `chain.chain_id`,
+  `run_id`, `accounts.host`, `contracts.deal` and `terms.target_epoch`, i.e.
+  one written by a NATIVE task that has already deployed a Deal.
+- The command reaches the chain through `docker exec -i genesis-node
+  inferenced …` (`DockerGonka`, `DEFAULT_NODE = "genesis-node"`). That
+  container exists only inside the runner's **private** Docker daemon while
+  a NATIVE task is executing, and is removed by the ownership cleanup at the
+  end of the task. It is never visible to the host's Docker, so the command
+  above cannot work from the host.
+- The runner entrypoint always executes the E2E CLI, whose subcommands are
+  `list`, `plan`, `run`, `rerun`, `report` and `recover`; none of them runs
+  this probe, and no catalog task does.
+
+There is therefore **no supported path to execute the live allowlist check
+today**. The only conceivable environment — a shell inside the running runner
+container during a NATIVE task — is neither automated nor documented. Until a
+catalog task exists for it, treat the allowlist obligation as *not covered*
+(see [`docs/coverage.md`](../../docs/coverage.md) §3.3 and §4) and this
+directory as a maintained source artefact whose offline checks
+(`./harness/wasm_query_allowlist/build.sh verify`, the Rust unit tests below)
+are the only ones that run.
 
 ## Prerequisites and canonical build
 

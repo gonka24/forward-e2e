@@ -20,7 +20,10 @@ from forward_e2e.execution.planner import (
     RUNNER_VERSION_FILE,
     VERIFIER_FILES,
     PlanRequest,
+    RunnerLayout,
     build_plan,
+    default_runner_root,
+    hash_runner_files,
 )
 from forward_e2e.execution.runlock import RUN_LOCK_SCHEMA, load_run_lock
 from forward_e2e.execution.sources import SourceKind, SourceSpec, sha256_path
@@ -31,6 +34,62 @@ from tests.unit.runner.support.git import FakeGitRunner
 
 GONKA_SHA = "1" * 40
 CONTRACTS_SHA = "2" * 40
+
+
+class RunnerLayoutOnTheRealCheckoutTests(unittest.TestCase):
+    """The checked-in tree must satisfy the layout the runner image asserts.
+
+    ``RunnerLayout.assert_complete`` runs inside the image against ``/app``; a
+    file added to one of the hashed lists but not committed would only be
+    noticed at the first ``plan`` in a freshly built image. Checking the real
+    checkout here moves that discovery to the offline suite. Only reads.
+    """
+
+    def test_the_real_checkout_is_a_complete_runner_layout_with_a_non_empty_version(self):
+        layout = RunnerLayout(default_runner_root())
+        layout.assert_complete()
+        self.assertTrue(layout.runner_version())
+
+    def test_every_hashed_runner_asset_is_a_regular_file_and_every_external_test_tree_a_directory(self):
+        root = default_runner_root()
+        for rel in HARNESS_FILES + VERIFIER_FILES + NETWORK_FILES + (RUNNER_VERSION_FILE,):
+            with self.subTest(path=rel):
+                path = root / rel
+                self.assertFalse(path.is_symlink(), f"{rel} must be a regular file, not a link")
+                self.assertTrue(path.is_file(), f"{rel} is listed for hashing but is not a file")
+        for label, rel in EXTERNAL_TEST_DIRS:
+            with self.subTest(tree=label):
+                path = root / rel
+                self.assertFalse(path.is_symlink(), f"{rel} must be a real directory, not a link")
+                self.assertTrue(path.is_dir(), f"{rel} is listed as an external test tree but is not a directory")
+
+    def test_a_missing_hashed_file_raises_instead_of_producing_a_shorter_hash(self):
+        # Work on a copy: the real tree is never mutated by a unit test.
+        root = default_runner_root()
+        with tempfile.TemporaryDirectory(prefix="fe2e-test-layout-") as temp:
+            copy_root = Path(temp).resolve()
+            for rel in HARNESS_FILES:
+                destination = copy_root / rel
+                destination.parent.mkdir(parents=True, exist_ok=True)
+                shutil.copyfile(root / rel, destination)
+            # Path names and bytes are what is hashed, so the copy agrees with
+            # the checkout; this is the baseline a missing file must break.
+            complete = hash_runner_files(copy_root, HARNESS_FILES)
+            self.assertEqual(complete, hash_runner_files(root, HARNESS_FILES))
+            for rel in HARNESS_FILES:
+                with self.subTest(missing=rel):
+                    (copy_root / rel).unlink()
+                    try:
+                        with self.assertRaises(IntegrityError) as caught:
+                            hash_runner_files(copy_root, HARNESS_FILES)
+                        self.assertEqual(caught.exception.details["path"], rel)
+                    finally:
+                        shutil.copyfile(root / rel, copy_root / rel)
+                    self.assertEqual(hash_runner_files(copy_root, HARNESS_FILES), complete)
+            # Nor can a shorter *list* impersonate the full one: dropping a path
+            # from the list changes the digest instead of being absorbed.
+            shorter = hash_runner_files(copy_root, HARNESS_FILES[1:])
+            self.assertNotEqual(shorter, complete)
 
 
 class PlanningGitRunner(FakeGitRunner):

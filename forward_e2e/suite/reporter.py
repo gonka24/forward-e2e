@@ -1,4 +1,4 @@
-"""Offline report generator for A8 suites.
+"""Offline report generator for Forward E2E suites.
 
 Renders and atomically writes derived reports from an already verified
 SuiteResult without calling the verifier or modifying raw evidence files:
@@ -70,7 +70,7 @@ class OfflineReporter:
         model = EVIDENCE_MODEL_E2E if historical else EVIDENCE_MODEL_IMMUTABLE
         provenance = PROVENANCE_MODEL_HISTORICAL_PREPARED if historical else PROVENANCE_MODEL_IMMUTABLE
         lines = [
-            f"# A8 Test Suite Summary: {result.suite_id}",
+            f"# Forward E2E Suite Summary: {result.suite_id}",
             "",
             "> [!IMPORTANT]",
             "> **Acceptance Authority Notice**",

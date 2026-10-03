@@ -62,21 +62,24 @@
       "addresses": {}
     },
     "identity_rules": {
-      "address": "bech32('gonka', seed('<document>:address:<role>')[:20 or 32])",
+      "address": "bech32('gonka', seed('<document>:address:<role>')[:20 or 32]), role declared in identities.addresses",
+      "bound_digests": "sha256 of other committed fixture bytes, recomputed by the check; never a recorded digest",
       "checked_by": "tests/unit/runner/test_synthetic_evidence.py",
       "hex40": "seed('<document>:hex40:<n>').hex()[:40], n = order of first appearance",
+      "pubkey": "base64(seed('<document>:pubkey:<label>')), label declared in identities.pubkeys",
       "seed": "sha256('forward-e2e synthetic fixture:' + label)",
       "sha256": "seed('<document>:sha256:<n>').hex(), n = order of first appearance",
       "timestamp": "2026-01-01T00:00:00Z + n minutes, preserving relative order",
       "tx_hash": "seed('<document>:tx:<n>').hex().upper(), n = order of first appearance"
     },
-    "notice": "Synthetic offline test fixture. Every chain identity is derived from a labelled SHA-256 seed (see identity_rules); this document is not evidence of any executed chain, Docker or Testermint run.",
+    "notice": "Synthetic offline test fixture generated from code by boundary_fixture_files() in tests/unit/runner/support/synthetic_evidence.py. No value in it was recorded: placeholder hashes are labelled SHA-256 seed derivations (see identity_rules) and the one bound digest is recomputed from the committed bytes it binds. This document is not evidence of any executed chain, Docker or Wasm probe run.",
     "producer": "scripts/run_go_boundary.py",
     "producer_functions": [
       "generate_dockerfile",
       "main"
     ],
-    "producer_revision": "df40b74341657db43e3a544534aaf2fbc4c483ec",
+    "producer_revision": "refactor/repository-layout (post-relocation scripts/run_go_boundary.py; not the scripts/run_a8_go_boundary.py shape of 8079c0c)",
+    "producer_shape_note": "Generated from the producer shape on refactor/repository-layout: module github.com/gonka24/forward-e2e-go-boundary, harness directory /app/harness/go_boundary, package ./query_faults. At 8079c0c the producer wrote a8-go-boundary, /app/a8-go-boundary and ./a8faults; this fixture does not reproduce that older shape.",
     "purpose": "Go query-error classification boundary report whose test_output_sha256 binds raw/go-test.json",
     "schema": "forward-e2e.synthetic-fixture/2"
   },

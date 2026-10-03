@@ -1,4 +1,4 @@
-"""Low-level A8 runtime environment controller: prepare, probe, run, cleanup.
+"""Low-level suite runtime environment controller: prepare, probe, run, cleanup.
 
 Ensures:
 - Preflight guards: native POSIX filesystem check (rejects /mnt/c and symlinks), mount probe (2 cycles), tool versions (cosmwasm-check 2.2.2).
@@ -149,7 +149,7 @@ def check_native_filesystem(path: Path) -> None:
     if resolved_str.startswith("/mnt/c") or resolved_str.startswith("/mnt/C"):
         raise SuiteRuntimeError(
             f"Path {resolved} is on Windows /mnt/c mount. "
-            "A8 live execution requires a native Linux filesystem."
+            "Live execution requires a native Linux filesystem."
         )
 
     # Check if path itself is a symlink resolving to forbidden mounts
@@ -172,7 +172,7 @@ def check_native_filesystem(path: Path) -> None:
                         if fs_type in ("cifs", "smbfs", "9p", "vboxsf", "drvfs", "fuse.sshfs"):
                             raise SuiteRuntimeError(
                                 f"Path {resolved} is mounted on unsupported filesystem type {fs_type!r}. "
-                                "A8 live execution requires a native POSIX Linux filesystem."
+                                "Live execution requires a native POSIX Linux filesystem."
                             )
         except Exception as exc:
             if isinstance(exc, SuiteRuntimeError):
@@ -305,7 +305,7 @@ def git_tree_sha(repo_dir: Path) -> str:
 
 
 class RuntimeSnapshot:
-    """Represents an isolated A8 runtime execution directory."""
+    """Represents an isolated suite runtime execution directory."""
 
     def __init__(self, runtime_root: Path, run_id: str):
         if not RUN_ID_REGEX.fullmatch(run_id):

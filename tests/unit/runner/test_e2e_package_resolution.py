@@ -247,8 +247,8 @@ class TestE2EPackageResolution(unittest.TestCase):
         _, args = parse_e2e_args(argv)
         code = cmd_report(args, emit=messages.append)
         self.assertEqual(code, 1)
-        self.assertTrue(any("A8 suite, not an E2E run package" in m for m in messages))
-        self.assertTrue(any("Bare A8 suites without an E2E run package envelope cannot produce a passing E2E verdict" in m for m in messages))
+        self.assertTrue(any("a bare suite directory, not an E2E run package" in m for m in messages))
+        self.assertTrue(any("Bare suite directories without an E2E run package envelope cannot produce a passing E2E verdict" in m for m in messages))
 
     def test_parent_plan_with_child_completed_run_resolves_to_child_and_leaves_parent_untouched_via_run_path(self):
         """Passing --run <out>/<run-id> grades the child run and leaves parent plan untouched."""

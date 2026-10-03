@@ -85,6 +85,63 @@ PowerShell:
   --output ./out/e2e
 ```
 
+### 5. Read the result
+
+The wrapper mounts the `--output` directory (or `<repo>/out` when the flag is
+absent) at `/out` inside the container, so the run package lands on the host at
+`./out/e2e/<run-id>/` for the command above, or at `<repo>/out/runs/<run-id>/`
+without `--output`. Inside it:
+
+| File | Meaning |
+|---|---|
+| `run.lock.json` | The sealed plan: both full SHAs, the runner image id, the catalog and harness hashes. Written once, never rewritten. |
+| `build-manifest.json`, `execution-manifest.json` | What this execution built and ran, bound to the lock by `lock_sha256`. |
+| `result.json` = `e2e-run-result.json` | The whole-run verdict (`PASSED`, `FAILED`, `INCOMPLETE` or `CANCELLED`, schema `e2e/run-result/2`), produced only by `evaluate_run` in `forward_e2e/execution/outcome.py`. The wrapper exits with its `exit_code`: `0` only for `PASSED`. |
+| `suite/<run-id>/summary.md`, `suite-result.json`, `coverage.json` | Per-task status, verifier findings and the acceptance line, which is always `acceptance_status: NOT_REVIEWED` — no automated path awards acceptance. |
+| `suite/<run-id>/runs/<task-run-id>/…` | Raw per-task evidence (`live-context.json`, `source-immutability.json`, JUnit XML, boundary reports). |
+
+Two offline commands work on that package and never start Docker:
+
+```bash
+# Re-derive the verdict and regenerate summary.md / coverage.json
+./ops/e2e/run-e2e.sh report --run ./out/e2e/<run-id>
+
+# A run that was interrupted before export: reconcile the runtime snapshots
+# left in the persistent /workspace volume, export and grade them
+./ops/e2e/run-e2e.sh recover --run <run-id> --output ./out/e2e-recovered
+```
+
+See [`docs/evidence.md`](docs/evidence.md) for the complete layout and
+[`docs/operations.md`](docs/operations.md) for every flag.
+
+### 6. What a result does and does not mean
+
+- **A `PASSED` verdict is a statement about one SHA pair, in one run package,
+  on one runner image.** The repository itself contains no run package, no
+  recorded verdict and no historical receipt for any Gonka or contracts
+  commit; the only committed evidence documents are the synthetic fixtures
+  under `tests/fixtures/evidence/`, each marked `test_fixture_only: true` and
+  refused by the verifier. If you need to know whether a commit pair passes,
+  run it.
+- **Packages from the retired overlay/prepared-commit runner are read-only
+  history.** `report` classifies them `historical-prepared-build` from their
+  documents (never from the runner version string), keeps their original
+  `e2e-run-result.json` and writes its own re-derivation beside it as
+  `e2e-run-result.historical-regrade.json`; they can never become proof about
+  unmodified sources.
+- **The runner proves what its catalog exercises and nothing more.**
+  [`docs/coverage.md`](docs/coverage.md) §3 maps every lifecycle operation of
+  the contracts onto the 24 tasks and names the gaps explicitly: `Cancel` and
+  `ForwardExcessGnk` have no scenario, and Gonka's gRPC query allowlist is
+  checked only by a manual probe that has no supported execution path, so a
+  `PASSED` run says nothing about them. Boundary tasks (`GO_BOUNDARY`,
+  `WASM_ABI`, `CONTRACT_TEST`) run against synthetic hosts and are never
+  relabelled as live chain proof; the catalog's per-task `limitations` are
+  carried unchanged into `suite-plan.json` and `coverage.json`.
+- **Acceptance is a human decision.** Every report says
+  `acceptance_status: NOT_REVIEWED`; release sign-off is a separate review of
+  the evidence, not an output of this tool.
+
 ---
 
 ## Repository Layout

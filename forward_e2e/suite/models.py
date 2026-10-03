@@ -1,4 +1,4 @@
-"""Strongly typed models and serialization for the A8 unified runner.
+"""Strongly typed models and serialization for the Forward E2E suite runner.
 
 Uses strictly the Python standard library. No Linux-specific or external imports.
 """

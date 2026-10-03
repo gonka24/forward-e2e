@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Live Gonka A8/B acceptance orchestration.
+"""Live Gonka acceptance orchestration for the Forward E2E runner.
 
 The script talks only to explicitly named local Docker containers. It never
 prints or persists key material. All broadcasts are followed by a tx query and
@@ -6939,7 +6939,7 @@ def main() -> int:
         KeyError,
         ValueError,
     ) as exc:
-        print(f"A8 acceptance failed: {exc}", file=sys.stderr)
+        print(f"Acceptance harness failed: {exc}", file=sys.stderr)
         return 1
     return 0
 

@@ -11,6 +11,13 @@ against the output root -- the one given with ``--output``, or the one inferred
 from the documented ``<output>/runs/<run-id>`` layout -- and a run that does not
 live under that root has to be refused rather than silently mounted away.
 
+Two host-side rules that the container cannot enforce are pinned here as well:
+the ``E2E_DOCKER_ROOT_VOLUME`` / ``A8_DOCKER_ROOT_VOLUME`` alias matrix
+(conflict, equal, legacy-only, canonical-only, absent) and the refusal of
+``--runner-image`` next to ``--from``. ``HostWrapperParityTests`` checks the
+facts both wrappers and ``ops/runner/compose.yaml`` must agree on textually:
+the pinned Compose project name and the absence of any Compose v1 fallback.
+
 The Bash wrapper is executed for real, with a fake ``docker`` placed first on
 ``PATH`` that records the argument vector it was handed. PowerShell execution checks use a fake Docker function when pwsh is available.
 Separate source checks only pin selected lines and do not establish runtime
@@ -32,7 +39,7 @@ import unittest
 from unittest.mock import patch
 
 from forward_e2e.execution.cli import parse_e2e_args
-from tests.unit.runner.real_fixtures import REQUIRED_RECORDED_EVIDENCE
+from tests.unit.runner.real_fixtures import REQUIRED_SYNTHETIC_EVIDENCE
 
 REPO_ROOT = Path(__file__).resolve().parents[3]
 BASH_WRAPPER = REPO_ROOT / "ops" / "e2e" / "run-e2e.sh"
@@ -89,6 +96,7 @@ case "${1:-}" in
             printf 'CONTRACTS_DIR=%s\\n' "${CONTRACTS_DIR:-}"
             printf 'E2E_PLAN_DIR=%s\\n' "${E2E_PLAN_DIR:-}"
             printf 'E2E_SECRETS_DIR=%s\\n' "${E2E_SECRETS_DIR:-}"
+            printf 'E2E_DOCKER_ROOT_VOLUME=%s\\n' "${E2E_DOCKER_ROOT_VOLUME:-}"
             printf 'A8_DOCKER_ROOT_VOLUME=%s\\n' "${A8_DOCKER_ROOT_VOLUME:-}"
         } > "$FAKE_DOCKER_ENV_FILE"
         exit 0
@@ -147,18 +155,25 @@ class BashWrapperRunTranslationTests(unittest.TestCase):
         self.tmp_dir.cleanup()
 
     # -- helpers -------------------------------------------------------
-    def _invoke(self, *args):
-        env = dict(os.environ)
-        env["PATH"] = f"{self.bin_dir}{os.pathsep}{env.get('PATH', '')}"
-        env["FAKE_DOCKER_ARGV_FILE"] = str(self.argv_file)
-        env["FAKE_DOCKER_ENV_FILE"] = str(self.env_file)
+    #: Operator-facing variables the wrapper reads from the ambient shell. They
+    #: are removed from every invocation so a developer's own shell cannot
+    #: decide a test, and re-added only through ``env`` overrides.
+    AMBIENT_WRAPPER_VARIABLES = ("E2E_RUNNER_IMAGE", "E2E_DOCKER_ROOT_VOLUME", "A8_DOCKER_ROOT_VOLUME")
+
+    def _invoke(self, *args, env=None):
+        environment = dict(os.environ)
+        environment["PATH"] = f"{self.bin_dir}{os.pathsep}{environment.get('PATH', '')}"
+        environment["FAKE_DOCKER_ARGV_FILE"] = str(self.argv_file)
+        environment["FAKE_DOCKER_ENV_FILE"] = str(self.env_file)
         # Keep the wrapper's Git bridge out of the checkout.
-        env["E2E_BRIDGE_DIR"] = str(self.bridge_dir)
-        env.pop("E2E_RUNNER_IMAGE", None)
+        environment["E2E_BRIDGE_DIR"] = str(self.bridge_dir)
+        for name in self.AMBIENT_WRAPPER_VARIABLES:
+            environment.pop(name, None)
+        environment.update(env or {})
         return subprocess.run(
             ["bash", str(self.wrapper), *args],
             cwd=str(self.root),
-            env=env,
+            env=environment,
             capture_output=True,
             text=True,
             timeout=60,
@@ -248,13 +263,23 @@ class BashWrapperRunTranslationTests(unittest.TestCase):
         self.assertTrue(output.is_dir())
         self.assertEqual(self._recorded_environment("OUTPUT_DIR"), str(output))
 
+    def _assert_docker_root_volume_exported_as(self, expected):
+        """Both spellings must reach Compose with the same value.
+
+        ``ops/runner/compose.yaml`` interpolates ``E2E_DOCKER_ROOT_VOLUME``
+        first and ``A8_DOCKER_ROOT_VOLUME`` second, so exporting only one of
+        them would let a stale ambient value of the other win on some hosts.
+        """
+        self.assertEqual(self._recorded_environment("E2E_DOCKER_ROOT_VOLUME"), expected)
+        self.assertEqual(self._recorded_environment("A8_DOCKER_ROOT_VOLUME"), expected)
+
     def test_equals_style_run_and_output_options_translate_like_separate_arguments(self):
         result = self._invoke("report", f"--run={self.run_dir}", f"--output={self.output_dir}",
                               "--docker-root-volume=review-cache")
         forwarded = self._container_arguments(result)
         self.assertEqual(forwarded, ["report", "--run", f"/out/runs/{RUN_ID}", "--output", "/out"])
         parse_e2e_args(forwarded)
-        self.assertEqual(self._recorded_environment("A8_DOCKER_ROOT_VOLUME"), "review-cache")
+        self._assert_docker_root_volume_exported_as("review-cache")
 
     def test_equals_style_plan_and_credential_paths_preserve_spaces_and_equals_in_values(self):
         plan = self.root / "plan = one"
@@ -409,16 +434,105 @@ class BashWrapperRunTranslationTests(unittest.TestCase):
         # the command that would be executed inside the container.
         parse_e2e_args(forwarded)
         self.assertEqual(self._recorded_environment("OUTPUT_DIR"), str(self.output_dir))
-        self.assertEqual(
-            self._recorded_environment("A8_DOCKER_ROOT_VOLUME"),
-            "a8-docker-root-test-001",
-        )
+        self._assert_docker_root_volume_exported_as("a8-docker-root-test-001")
 
     def test_unsafe_docker_state_name_is_refused_before_compose(self):
         result = self._invoke("list", "--docker-root-volume", "../foreign")
 
         self.assertEqual(result.returncode, 2, msg=result.stderr)
         self.assertIn("must be a plain Docker volume name", result.stderr)
+        self.assertFalse(self.argv_file.exists())
+
+    # -- E2E_DOCKER_ROOT_VOLUME / A8_DOCKER_ROOT_VOLUME alias matrix --------
+    # The same five cases every other alias reader is held to (see
+    # ``resolve_suite_env``): the wrapper is the one reader that cannot share
+    # that Python implementation, so its copy of the rule is pinned here.
+    def test_conflicting_canonical_and_legacy_docker_root_volume_values_exit_2_before_compose(self):
+        result = self._invoke("list", env={
+            "E2E_DOCKER_ROOT_VOLUME": "canonical-cache",
+            "A8_DOCKER_ROOT_VOLUME": "legacy-cache",
+        })
+        self.assertEqual(result.returncode, 2, msg=result.stderr)
+        self.assertIn("Conflicting environment variables", result.stderr)
+        self.assertIn("E2E_DOCKER_ROOT_VOLUME='canonical-cache'", result.stderr)
+        self.assertIn("A8_DOCKER_ROOT_VOLUME='legacy-cache'", result.stderr)
+        self.assertFalse(self.argv_file.exists(), "a conflict must never launch the runner")
+        self.assertFalse(self.env_file.exists())
+
+    def test_a_conflict_is_refused_even_when_an_explicit_flag_would_have_decided_the_value(self):
+        # Precedence is never used to paper over an ambiguous shell; the
+        # operator has to remove the stale legacy value first.
+        result = self._invoke("list", "--docker-root-volume", "flag-cache", env={
+            "E2E_DOCKER_ROOT_VOLUME": "canonical-cache",
+            "A8_DOCKER_ROOT_VOLUME": "legacy-cache",
+        })
+        self.assertEqual(result.returncode, 2, msg=result.stderr)
+        self.assertIn("Conflicting environment variables", result.stderr)
+        self.assertFalse(self.argv_file.exists())
+
+    def test_equal_canonical_and_legacy_docker_root_volume_values_normalise_to_one_export(self):
+        result = self._invoke("list", env={
+            "E2E_DOCKER_ROOT_VOLUME": "shared-cache",
+            "A8_DOCKER_ROOT_VOLUME": "shared-cache",
+        })
+        self.assertEqual(self._container_arguments(result), ["list"])
+        self.assertNotIn("Conflicting", result.stderr)
+        self._assert_docker_root_volume_exported_as("shared-cache")
+
+    def test_a_legacy_only_docker_root_volume_is_honoured_and_exported_under_both_names(self):
+        result = self._invoke("list", env={"A8_DOCKER_ROOT_VOLUME": "legacy-cache"})
+        self.assertEqual(self._container_arguments(result), ["list"])
+        self._assert_docker_root_volume_exported_as("legacy-cache")
+
+    def test_a_canonical_only_docker_root_volume_is_exported_under_both_names(self):
+        result = self._invoke("list", env={"E2E_DOCKER_ROOT_VOLUME": "canonical-cache"})
+        self.assertEqual(self._container_arguments(result), ["list"])
+        self._assert_docker_root_volume_exported_as("canonical-cache")
+
+    def test_an_absent_docker_root_volume_falls_back_to_the_historical_default_volume_name(self):
+        result = self._invoke("list")
+        self.assertEqual(self._container_arguments(result), ["list"])
+        # The default is the preserved volume name from docs/migration.md §4;
+        # a different default would silently start from an empty cache.
+        self._assert_docker_root_volume_exported_as("a8-docker-root")
+
+    def test_an_explicit_flag_overrides_a_consistent_environment_under_both_names(self):
+        result = self._invoke("list", "--docker-root-volume", "flag-cache",
+                              env={"A8_DOCKER_ROOT_VOLUME": "legacy-cache"})
+        self.assertEqual(self._container_arguments(result), ["list"])
+        self._assert_docker_root_volume_exported_as("flag-cache")
+
+    # -- Compose V2 only ------------------------------------------------------
+    def _install_fake_compose_v1_and_disable_the_plugin(self):
+        """A host with the retired v1 binary but no ``docker compose`` plugin.
+
+        The decoy records every invocation so the test can prove that the
+        wrapper no longer falls back to it rather than merely preferring V2.
+        """
+        marker = self.root / "compose-v1-invoked.txt"
+        decoy = self.bin_dir / "docker-compose"
+        decoy.write_text(
+            "#!/usr/bin/env bash\n"
+            f"printf '%s\\n' \"$*\" >> '{marker}'\n"
+            "exit 0\n",
+            encoding="utf-8",
+        )
+        decoy.chmod(0o755)
+        without_plugin = FAKE_DOCKER.replace(
+            '            echo "Docker Compose version v2.99.0-fake"\n            exit 0\n',
+            "            echo \"docker: 'compose' is not a docker command.\" >&2\n            exit 1\n",
+        )
+        self.assertNotEqual(without_plugin, FAKE_DOCKER, "the fake docker's version probe moved")
+        self.fake_docker.write_text(without_plugin, encoding="utf-8")
+        return marker
+
+    def test_a_host_without_the_compose_v2_plugin_is_refused_and_the_v1_binary_is_never_used(self):
+        marker = self._install_fake_compose_v1_and_disable_the_plugin()
+        result = self._invoke("list")
+        self.assertEqual(result.returncode, 2, msg=result.stderr)
+        self.assertIn("Docker Compose V2", result.stderr)
+        self.assertIn("docker compose", result.stderr)
+        self.assertFalse(marker.exists(), "the retired v1 binary must not be invoked as a fallback")
         self.assertFalse(self.argv_file.exists())
 
     def test_an_explicit_output_is_bound_and_its_run_directory_is_forwarded_as_a_container_path(self):
@@ -519,13 +633,131 @@ class PowerShellWrapperSourceStructureTests(unittest.TestCase):
 
     def test_the_source_contains_the_docker_volume_case_and_environment_assignment(self):
         self._assert_code_line("'--docker-root-volume' {")
+        self._assert_code_line("$env:E2E_DOCKER_ROOT_VOLUME = $dockerRootVolume")
         self._assert_code_line("$env:A8_DOCKER_ROOT_VOLUME = $dockerRootVolume")
+
+    def test_the_source_refuses_a_canonical_legacy_docker_volume_conflict_with_exit_code_2(self):
+        # The Bash twin dies before Compose with exit 2 and a message naming
+        # both variables; the same three facts are pinned here textually.
+        self._assert_code_line(
+            "if ($env:E2E_DOCKER_ROOT_VOLUME -and $env:A8_DOCKER_ROOT_VOLUME "
+            "-and ($env:E2E_DOCKER_ROOT_VOLUME -ne $env:A8_DOCKER_ROOT_VOLUME)) {"
+        )
+        self._assert_source_line(
+            "Fail \"Conflicting environment variables "
+            "E2E_DOCKER_ROOT_VOLUME='$($env:E2E_DOCKER_ROOT_VOLUME)' and "
+            "A8_DOCKER_ROOT_VOLUME='$($env:A8_DOCKER_ROOT_VOLUME)'; "
+            "unset the legacy A8_DOCKER_ROOT_VOLUME variable or set both to the same value.\" 2"
+        )
+
+    def test_the_source_resolves_the_docker_volume_canonical_first_then_legacy_then_the_historical_default(self):
+        self._assert_code_line(
+            "$dockerRootVolume = if ($env:E2E_DOCKER_ROOT_VOLUME) { $env:E2E_DOCKER_ROOT_VOLUME } "
+            "elseif ($env:A8_DOCKER_ROOT_VOLUME) { $env:A8_DOCKER_ROOT_VOLUME } else { 'a8-docker-root' }"
+        )
+
+    def test_the_source_refuses_an_explicit_runner_image_together_with_from(self):
+        # Parity with run-e2e.sh: --runner-image is consumed on the host and
+        # never reaches the container parser, so the host must apply the rule.
+        self._assert_code_line("$runnerImageExplicit = $false")
+        self._assert_code_line("$runnerImageExplicit = $true")
+        self._assert_code_line("if ($planDirHost -and $runnerImageExplicit) {")
+        self._assert_code_line(
+            "Fail '--from executes a saved plan exactly; --runner-image cannot be combined "
+            "with --from. Create a new plan instead.'"
+        )
 
     def test_the_source_reads_digest_from_the_inspected_image_id(self):
         self.assertIn(
             "@('image', 'inspect', '--format', '{{if .RepoDigests}}{{index .RepoDigests 0}}{{end}}', $imageId)",
             self.source,
         )
+
+
+class HostWrapperParityTests(unittest.TestCase):
+    """Facts both wrappers and the Compose file must agree on, checked textually.
+
+    Not a shell or PowerShell parser: these checks pin the presence or absence
+    of specific tokens so a change to one side cannot silently leave the other
+    behind.
+    """
+
+    WRAPPERS = (
+        REPO_ROOT / "ops/e2e/run-e2e.sh",
+        REPO_ROOT / "ops/e2e/build-runner.sh",
+        REPO_ROOT / "ops/e2e/Run-E2E.ps1",
+        REPO_ROOT / "ops/e2e/Build-Runner.ps1",
+    )
+
+    @staticmethod
+    def _code_lines(path):
+        """Source lines with full-line comments removed (``#`` for both languages)."""
+        return [
+            line for line in path.read_text(encoding="utf-8").splitlines()
+            if not line.lstrip().startswith("#")
+        ]
+
+    def test_the_from_and_runner_image_refusal_reads_identically_in_both_run_wrappers(self):
+        message = ("--from executes a saved plan exactly; --runner-image cannot be combined "
+                   "with --from. Create a new plan instead.")
+        for wrapper in (BASH_WRAPPER, POWERSHELL_WRAPPER):
+            with self.subTest(wrapper=wrapper.name):
+                self.assertIn(message, wrapper.read_text(encoding="utf-8"))
+
+    def test_the_compose_file_pins_the_historical_project_name_at_top_level(self):
+        # Compose derives the project name from the directory of the file when
+        # it is not stated; the move from ops/a8/ to ops/runner/ would rename
+        # every container and volume label. Only the file may say the name.
+        compose = (REPO_ROOT / COMPOSE_RELPATH).read_text(encoding="utf-8")
+        self.assertRegex(compose, r"(?m)^name:[ \t]*a8[ \t]*(?:#.*)?$")
+
+    def test_no_wrapper_sets_the_compose_project_name_itself(self):
+        for wrapper in self.WRAPPERS:
+            with self.subTest(wrapper=wrapper.name):
+                lines = self._code_lines(wrapper)
+                self.assertFalse(
+                    any("COMPOSE_PROJECT_NAME" in line for line in lines),
+                    f"{wrapper.name} must leave the project name to compose.yaml",
+                )
+                for line in lines:
+                    if "compose" not in line:
+                        continue
+                    tokens = line.split()
+                    self.assertNotIn("-p", tokens, f"{wrapper.name}: {line.strip()}")
+                    self.assertFalse(
+                        any(token == "--project-name" or token.startswith("--project-name=")
+                            for token in tokens),
+                        f"{wrapper.name}: {line.strip()}",
+                    )
+
+    def test_no_wrapper_mentions_the_retired_compose_v1_binary(self):
+        # The compose file needs `name:`, a URL#SHA build context, `platform:`
+        # and nested `${A:-${B:-c}}` defaults; v1 accepts none of them, so a
+        # fallback could only fail later with a misleading error.
+        for wrapper in self.WRAPPERS:
+            with self.subTest(wrapper=wrapper.name):
+                self.assertNotIn("docker-compose", wrapper.read_text(encoding="utf-8"))
+
+    def test_both_bash_wrappers_require_compose_v2_by_name(self):
+        for wrapper in (BASH_WRAPPER, REPO_ROOT / "ops/e2e/build-runner.sh"):
+            with self.subTest(wrapper=wrapper.name):
+                source = wrapper.read_text(encoding="utf-8")
+                self.assertIn("docker compose version >/dev/null 2>&1", source)
+                self.assertIn("Docker Compose V2 ('docker compose') is required on the host", source)
+
+    def test_the_image_only_bakes_the_canonical_workspace_and_output_variables(self):
+        # A baked A8_* twin had no reader (every consumer resolves E2E_* first)
+        # and turned an operator's E2E_* override into a phantom conflict.
+        compose = (REPO_ROOT / COMPOSE_RELPATH).read_text(encoding="utf-8")
+        dockerfile = (REPO_ROOT / "ops/runner/Dockerfile").read_text(encoding="utf-8")
+        self.assertRegex(compose, r"(?m)^      - E2E_WORKSPACE_DIR=/workspace[ \t]*$")
+        self.assertRegex(compose, r"(?m)^      - E2E_OUTPUT_DIR=/out[ \t]*$")
+        self.assertRegex(dockerfile, r"(?m)^ENV E2E_WORKSPACE_DIR=/workspace \\$")
+        self.assertRegex(dockerfile, r"(?m)^    E2E_OUTPUT_DIR=/out \\$")
+        for legacy in ("A8_WORKSPACE_DIR", "A8_OUTPUT_DIR"):
+            with self.subTest(variable=legacy):
+                self.assertNotIn(legacy, compose)
+                self.assertNotIn(legacy, dockerfile)
 
 
 @unittest.skipUnless(shutil.which("pwsh"), "PowerShell runtime checks require pwsh")
@@ -546,7 +778,9 @@ function global:docker {
     if ($args[0] -eq 'compose') {
         @{ argv = @($args); output = $env:OUTPUT_DIR; plan = $env:E2E_PLAN_DIR;
            secrets = $env:E2E_SECRETS_DIR; image = $env:E2E_RUNNER_IMAGE;
-           image_id = $env:E2E_RUNNER_IMAGE_ID } | ConvertTo-Json -Depth 4 |
+           image_id = $env:E2E_RUNNER_IMAGE_ID;
+           docker_root = $env:E2E_DOCKER_ROOT_VOLUME;
+           docker_root_legacy = $env:A8_DOCKER_ROOT_VOLUME } | ConvertTo-Json -Depth 4 |
             Set-Content -LiteralPath $env:FAKE_DOCKER_RECORD
         if ($env:FAKE_BUILD_FAILURE -eq '1') { $global:LASTEXITCODE = 23 }
         return
@@ -558,8 +792,13 @@ $wrapperArgs = @(ConvertFrom-Json $env:FAKE_WRAPPER_ARGS)
 exit $LASTEXITCODE
 """, encoding="utf-8")
 
-    def invoke(self, *args, build=False, fail_build=False):
+    #: See ``BashWrapperRunTranslationTests.AMBIENT_WRAPPER_VARIABLES``.
+    AMBIENT_WRAPPER_VARIABLES = ("E2E_RUNNER_IMAGE", "E2E_DOCKER_ROOT_VOLUME", "A8_DOCKER_ROOT_VOLUME")
+
+    def invoke(self, *args, build=False, fail_build=False, env=None):
         environment = dict(os.environ)
+        for name in self.AMBIENT_WRAPPER_VARIABLES:
+            environment.pop(name, None)
         environment.update({
             "FAKE_DOCKER_RECORD": str(self.record),
             "FAKE_WRAPPER_ARGS": json.dumps(args),
@@ -568,10 +807,19 @@ exit $LASTEXITCODE
             "OUTPUT_DIR": str(self.root / "out"),
             "E2E_BRIDGE_DIR": str(self.root / "bridge"),
         })
+        environment.update(env or {})
         return subprocess.run(
             [shutil.which("pwsh"), "-NoProfile", "-File", str(self.driver)],
             cwd=self.root, env=environment, capture_output=True, text=True, timeout=30,
         )
+
+    def _recorded(self):
+        return json.loads(self.record.read_text(encoding="utf-8-sig"))
+
+    def _assert_docker_root_volume_exported_as(self, expected):
+        recorded = self._recorded()
+        self.assertEqual(recorded["docker_root"], expected)
+        self.assertEqual(recorded["docker_root_legacy"], expected)
 
     def test_a_nested_suite_keeps_the_enclosing_package_inside_the_evidence_mount(self):
         package = self.root / "out" / "runs" / RUN_ID
@@ -649,6 +897,59 @@ exit $LASTEXITCODE
         self.assertEqual(result.returncode, 2, result.stderr)
         self.assertFalse(self.record.exists())
 
+    def test_replaying_a_plan_rejects_an_explicit_runner_image_before_docker(self):
+        (self.root / "run.lock.json").write_text("{}", encoding="utf-8")
+        for command in ("run", "rerun"):
+            with self.subTest(command=command):
+                result = self.invoke(command, "--from", "run.lock.json", "--runner-image", "a8-runner:local")
+                self.assertEqual(result.returncode, 2, result.stderr)
+                # Write-Error renders through the host; which stream carries the
+                # text is a host detail, the wording is the contract.
+                self.assertIn("--runner-image cannot be combined with --from", result.stderr + result.stdout)
+                self.assertFalse(self.record.exists())
+
+    # -- E2E_DOCKER_ROOT_VOLUME / A8_DOCKER_ROOT_VOLUME alias matrix --------
+    def test_conflicting_canonical_and_legacy_docker_root_volume_values_exit_2_before_compose(self):
+        result = self.invoke("list", env={
+            "E2E_DOCKER_ROOT_VOLUME": "canonical-cache",
+            "A8_DOCKER_ROOT_VOLUME": "legacy-cache",
+        })
+        self.assertEqual(result.returncode, 2, result.stderr)
+        diagnostics = result.stderr + result.stdout
+        self.assertIn("Conflicting environment variables", diagnostics)
+        self.assertIn("E2E_DOCKER_ROOT_VOLUME='canonical-cache'", diagnostics)
+        self.assertIn("A8_DOCKER_ROOT_VOLUME='legacy-cache'", diagnostics)
+        self.assertFalse(self.record.exists())
+
+    def test_equal_canonical_and_legacy_docker_root_volume_values_normalise_to_one_export(self):
+        result = self.invoke("list", env={
+            "E2E_DOCKER_ROOT_VOLUME": "shared-cache",
+            "A8_DOCKER_ROOT_VOLUME": "shared-cache",
+        })
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self._assert_docker_root_volume_exported_as("shared-cache")
+
+    def test_a_legacy_only_docker_root_volume_is_honoured_and_exported_under_both_names(self):
+        result = self.invoke("list", env={"A8_DOCKER_ROOT_VOLUME": "legacy-cache"})
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self._assert_docker_root_volume_exported_as("legacy-cache")
+
+    def test_a_canonical_only_docker_root_volume_is_exported_under_both_names(self):
+        result = self.invoke("list", env={"E2E_DOCKER_ROOT_VOLUME": "canonical-cache"})
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self._assert_docker_root_volume_exported_as("canonical-cache")
+
+    def test_an_absent_docker_root_volume_falls_back_to_the_historical_default_volume_name(self):
+        result = self.invoke("list")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self._assert_docker_root_volume_exported_as("a8-docker-root")
+
+    def test_an_explicit_flag_overrides_a_consistent_environment_under_both_names(self):
+        result = self.invoke("list", "--docker-root-volume", "flag-cache",
+                             env={"A8_DOCKER_ROOT_VOLUME": "legacy-cache"})
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self._assert_docker_root_volume_exported_as("flag-cache")
+
     def test_a_failed_image_build_preserves_the_docker_exit_code(self):
         with patch.dict(os.environ, {"E2E_RUNNER_SHA": "3" * 40}):
             result = self.invoke(build=True, fail_build=True)
@@ -690,10 +991,40 @@ class BashRunnerBuildTests(unittest.TestCase):
             self.assertEqual(argv_file.read_text().splitlines()[-2:], ["build", "e2e-runner"])
             self.assertIn("E2E_RUNNER_SHA=" + "3" * 40, env_file.read_text())
 
+    def test_build_refuses_a_host_without_the_compose_v2_plugin_and_never_uses_the_v1_binary(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            bin_dir = root / "bin"
+            bin_dir.mkdir()
+            without_plugin = FAKE_DOCKER.replace(
+                '            echo "Docker Compose version v2.99.0-fake"\n            exit 0\n',
+                "            echo \"docker: 'compose' is not a docker command.\" >&2\n            exit 1\n",
+            )
+            self.assertNotEqual(without_plugin, FAKE_DOCKER, "the fake docker's version probe moved")
+            fake = bin_dir / "docker"
+            fake.write_text(without_plugin, encoding="utf-8")
+            fake.chmod(0o755)
+            marker = root / "compose-v1-invoked.txt"
+            decoy = bin_dir / "docker-compose"
+            decoy.write_text("#!/usr/bin/env bash\n" f"printf '%s\\n' \"$*\" >> '{marker}'\n" "exit 0\n",
+                             encoding="utf-8")
+            decoy.chmod(0o755)
+            argv_file = root / "argv.txt"
+            environment = {**os.environ, "PATH": str(bin_dir) + os.pathsep + os.environ["PATH"],
+                           "FAKE_DOCKER_ARGV_FILE": str(argv_file), "FAKE_DOCKER_ENV_FILE": str(root / "env.txt"),
+                           "OUTPUT_DIR": str(root / "out"), "E2E_RUNNER_SHA": ""}
+            wrapper = REPO_ROOT / "ops/e2e/build-runner.sh"
+            result = subprocess.run(["bash", str(wrapper), "--runner-sha", "3" * 40],
+                                    env=environment, capture_output=True, text=True)
+            self.assertNotEqual(result.returncode, 0)
+            self.assertIn("Docker Compose V2", result.stderr)
+            self.assertFalse(marker.exists(), "the retired v1 binary must not be invoked as a fallback")
+            self.assertFalse(argv_file.exists())
+
 
 class RunnerBuildContextTests(unittest.TestCase):
-    def test_all_binding_recorded_fixtures_are_available_to_the_runner_test_suite(self):
-        for name in REQUIRED_RECORDED_EVIDENCE:
+    def test_all_binding_synthetic_fixtures_are_available_to_the_runner_test_suite(self):
+        for name in REQUIRED_SYNTHETIC_EVIDENCE:
             with self.subTest(fixture=name):
                 fixture = REPO_ROOT / "tests/fixtures/evidence" / name
                 self.assertTrue(fixture.is_file(), f"Missing synthetic fixture: {fixture}")

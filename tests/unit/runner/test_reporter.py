@@ -291,6 +291,19 @@ class ReporterTests(unittest.TestCase):
         self.assertIn("acceptance_status: NOT_REVIEWED", summary_text)
         self.assertIn("Acceptance Authority Notice", summary_text)
 
+    def test_summary_markdown_opens_with_the_runner_neutral_heading_and_the_suite_id(self):
+        # The heading is the one line of summary.md that humans and greps key
+        # on, so it is pinned exactly; the historical "A8 Test Suite Summary"
+        # wording must not come back with a careless merge.
+        self._write_passed_suite("suite-heading-01")
+        verification = verify_and_recalculate_suite(self.suite_dir)
+        OfflineReporter(self.suite_dir).write_reports(
+            verification.result, integrity_errors=verification.integrity_errors,
+        )
+        summary_lines = (self.suite_dir / "summary.md").read_text(encoding="utf-8").splitlines()
+        self.assertEqual(summary_lines[0], "# Forward E2E Suite Summary: suite-heading-01")
+        self.assertNotIn("A8 Test Suite Summary", "\n".join(summary_lines))
+
     def test_offline_report_reconstructs_interrupted_suite(self):
         self._write_two_task_suite("suite-interrupted", ExecutionStatus.NOT_RUN)
         # Simulate an interruption before the aggregate result was persisted;

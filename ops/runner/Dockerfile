@@ -1,5 +1,5 @@
 # ==============================================================================
-# Dockerfile: A8 Acceptance Runner in Docker-in-Docker (DinD)
+# Dockerfile: Forward E2E runner in Docker-in-Docker (DinD)
 #
 # Base: Debian 12 bookworm-slim, linux/amd64 manifest pinned by digest
 # Architecture: linux/amd64 (default for reproducible cosmwasm & Gonka builds)
@@ -160,8 +160,11 @@ RUN printf '%s' "$E2E_RUNNER_SHA" | grep -Eq '^[0-9a-f]{40}$' \
 LABEL org.opencontainers.image.source=$E2E_RUNNER_REPO \
       org.opencontainers.image.revision=$E2E_RUNNER_SHA
 
-# Check all binding fixtures after Docker applies its build-context exclusions.
-# Reuse the offline packaging test so builds and checkouts share one inventory.
+# /app is the Git checkout fetched above, not the Docker build context: this
+# Dockerfile never COPYs or ADDs from the context, so .dockerignore cannot add
+# or remove anything from the image. What this proves is that the selected
+# runner commit itself carries every binding fixture; the offline packaging
+# test is reused so image builds and checkouts share one inventory.
 RUN python3 -B -m unittest tests.unit.runner.test_e2e_host_wrappers.RunnerBuildContextTests
 
 # Configure Git safe.directory for specific input and workspace paths (never global *)
@@ -174,11 +177,13 @@ RUN git config --system --add safe.directory /input/marketplace \
 RUN cp /app/ops/runner/entrypoint.sh /usr/local/bin/e2e-entrypoint \
     && chmod +x /usr/local/bin/e2e-entrypoint
 
-# Default runtime environment variables
+# Default runtime environment variables. Only the canonical E2E_* names are
+# baked in: every reader inside the image resolves E2E_* first and falls back
+# to A8_* only when the canonical name is unset, so a baked A8_* twin had no
+# consumer and only turned an operator's `-e E2E_WORKSPACE_DIR=...` override
+# into a phantom "conflicting environment variables" refusal.
 ENV E2E_WORKSPACE_DIR=/workspace \
     E2E_OUTPUT_DIR=/out \
-    A8_WORKSPACE_DIR=/workspace \
-    A8_OUTPUT_DIR=/out \
     DOCKER_HOST=unix:///var/run/docker.sock \
     GONKA_SOURCE=/input/gonka \
     MARKETPLACE_SOURCE=/input/marketplace \

@@ -69,6 +69,22 @@ SEMANTIC_FLAGS: Tuple[Tuple[str, str], ...] = (
     ("runner_image", "--runner-image"),
 )
 
+#: Flags that name the *identity* of the plan rather than what it proves. A
+#: replay takes that identity from the lock it was given, so these are refused
+#: with ``--from`` as well. They are deliberately not part of ``SEMANTIC_FLAGS``:
+#: reporting ``--plan-id`` as "changing what is proven" would be false, and the
+#: semantic set is pinned by tests as the list of proof-changing flags.
+LOCK_IDENTITY_FLAGS: Tuple[Tuple[str, str], ...] = (
+    ("plan_id", "--plan-id"),
+)
+
+#: The complete list of flags a replay accepts, repeated in every refusal so
+#: the operator never has to guess which flag to move to a new plan instead.
+ALLOWED_WITH_FROM: Tuple[str, ...] = (
+    "--run-id", "--output", "--workspace", "--runtime-root",
+    "--credential-file", "--credential-username", "--parent-run-id",
+)
+
 SUBCOMMANDS = ("list", "plan", "run", "rerun", "report", "recover")
 
 
@@ -211,7 +227,14 @@ def parse_e2e_args(argv: Optional[Sequence[str]] = None) -> Tuple[str, argparse.
 
 
 def assert_no_semantic_overrides(args: argparse.Namespace) -> None:
-    """``--from`` replays a decision; it never re-opens it."""
+    """``--from`` replays a decision; it never re-opens it.
+
+    Two kinds of flag are refused. Semantic flags would change *what* is
+    proven. ``--plan-id`` would not, but a replay has no plan identity of its
+    own -- it inherits the one sealed in the lock -- so accepting the flag and
+    then ignoring it, which is what happened before this check existed, let an
+    operator believe a plan had been renamed when nothing had changed.
+    """
     offenders = [
         flag
         for attr, flag in SEMANTIC_FLAGS
@@ -223,10 +246,22 @@ def assert_no_semantic_overrides(args: argparse.Namespace) -> None:
             "proven and are therefore refused. Create a new plan instead.",
             {
                 "rejected_flags": offenders,
-                "allowed_with_from": [
-                    "--run-id", "--output", "--workspace", "--runtime-root",
-                    "--credential-file", "--credential-username", "--parent-run-id",
-                ],
+                "allowed_with_from": list(ALLOWED_WITH_FROM),
+            },
+        )
+    identity_offenders = [
+        flag
+        for attr, flag in LOCK_IDENTITY_FLAGS
+        if getattr(args, attr, None) not in (None, [], ())
+    ]
+    if identity_offenders:
+        raise LockOverrideError(
+            "--from executes a saved plan exactly: the plan id comes from the lock and "
+            "cannot be overridden, so --plan-id is refused together with --from. Name the "
+            "execution with --run-id, or create a new plan under the id you want.",
+            {
+                "rejected_flags": identity_offenders,
+                "allowed_with_from": list(ALLOWED_WITH_FROM),
             },
         )
 
@@ -562,9 +597,9 @@ def cmd_report(args: argparse.Namespace, *, emit) -> int:
     for cand in _candidate_run_dirs(args):
         if cand.is_dir() and ((cand / "suite-plan.json").is_file() or (cand / "suite-result.json").is_file()):
             emit(
-                f"Error: This directory is an A8 suite, not an E2E run package ({cand}): "
+                f"Error: This directory is a bare suite directory, not an E2E run package ({cand}): "
                 "a suite-level directory is not an E2E run verdict. "
-                "Bare A8 suites without an E2E run package envelope cannot produce a passing E2E verdict."
+                "Bare suite directories without an E2E run package envelope cannot produce a passing E2E verdict."
             )
             return 1
 
@@ -1071,6 +1106,8 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
 
 
 __all__ = [
+    "ALLOWED_WITH_FROM",
+    "LOCK_IDENTITY_FLAGS",
     "SEMANTIC_FLAGS",
     "SUBCOMMANDS",
     "assert_no_semantic_overrides",

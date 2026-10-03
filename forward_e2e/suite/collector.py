@@ -1,4 +1,4 @@
-"""Artifact collector and integrity checker for A8 evidence.
+"""Artifact collector and integrity checker for suite evidence.
 
 Collects raw evidence using a strict allowlist to prevent copying Git clones,
 Gradle cache, node keyrings, private keys, or mnemonics.

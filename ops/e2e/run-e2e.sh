@@ -59,13 +59,13 @@ abs_path() {
 }
 
 compose() {
-    if docker compose version >/dev/null 2>&1; then
-        docker compose -f "$COMPOSE_FILE" "$@"
-    elif command -v docker-compose >/dev/null 2>&1; then
-        docker-compose -f "$COMPOSE_FILE" "$@"
-    else
-        die "Neither 'docker compose' nor 'docker-compose' is available."
-    fi
+    # Compose V2 only. ops/runner/compose.yaml relies on a top-level `name:`,
+    # a `URL#SHA` build context, `platform:` and nested `${A:-${B:-c}}`
+    # defaults; the retired Python Compose v1 binary parses none of them, so a
+    # fallback to it could only fail later with a misleading error.
+    docker compose version >/dev/null 2>&1 \
+        || die "Docker Compose V2 ('docker compose') is required on the host but was not found."
+    docker compose -f "$COMPOSE_FILE" "$@"
 }
 
 require_cmd docker

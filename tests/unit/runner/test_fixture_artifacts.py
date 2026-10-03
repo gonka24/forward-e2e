@@ -15,7 +15,7 @@ from tests.unit.runner.real_fixtures import (
     EVIDENCE_DIR,
     GO_BOUNDARY_EVIDENCE_DIR,
     WASM_ABI_EVIDENCE,
-    load_recorded_evidence,
+    load_synthetic_evidence,
 )
 from tests.unit.runner.support.fakes import write_suite_output
 from forward_e2e.suite.verifier import (
@@ -35,12 +35,30 @@ class ArtifactFixtureTests(unittest.TestCase):
                                    profile=None, scenarios=[scenario], e2e_context=None)
         return next((suite / "runs").iterdir()) / relative
 
+    def test_staged_boundary_reports_drop_the_test_only_marker_the_committed_files_keep(self):
+        """A staged package models a run's output; the committed file stays a marked fixture.
+
+        If the marker survived staging, every synthetic boundary package would
+        be refused by the verifiers for being a fixture, and the tests built on
+        these packages would stop proving anything about the rules behind that
+        refusal. If it disappeared from the committed files, a copy of one could
+        be graded as live evidence. Both halves are asserted.
+        """
+        for scenario, relative, committed_name in (
+            ("wasm-abi-boundary", "abi.json", WASM_ABI_EVIDENCE),
+            ("go-boundary", "report.json", f"{GO_BOUNDARY_EVIDENCE_DIR}/report.json"),
+        ):
+            with self.subTest(scenario=scenario):
+                staged = json.loads(self.artifact(scenario, relative).read_text(encoding="utf-8"))
+                self.assertNotIn("test_fixture_only", staged)
+                self.assertIs(load_synthetic_evidence(committed_name).get("test_fixture_only"), True)
+
     def test_abi_fixture_passes_real_validator_and_missing_case_is_rejected(self):
         path = self.artifact("wasm-abi-boundary", "abi.json")
         wasm_path = path.parent / "a8_query_boundary.wasm"
         self.assertTrue(verify_wasm_abi_report(path, wasm_path)[0])
         data = json.loads(path.read_text())
-        recorded = load_recorded_evidence(WASM_ABI_EVIDENCE)
+        recorded = load_synthetic_evidence(WASM_ABI_EVIDENCE)
         self.assertEqual(data["cases"], recorded["cases"])
         self.assertEqual(data["wasm_sha256"], hashlib.sha256(
             (path.parent / "a8_query_boundary.wasm").read_bytes()).hexdigest())

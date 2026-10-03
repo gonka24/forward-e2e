@@ -201,6 +201,7 @@ $contractsSha = Get-FlagValue -Tokens $ContainerArgs -Flag '--contracts-sha'
 
 $forward = New-Object System.Collections.Generic.List[string]
 $runnerImage = if ($env:E2E_RUNNER_IMAGE) { $env:E2E_RUNNER_IMAGE } else { 'a8-runner:local' }
+$runnerImageExplicit = $false
 $gonkaBridge = $null
 $contractsBridge = $null
 $outputHost = $null
@@ -219,6 +220,7 @@ for ($i = 0; $i -lt $ContainerArgs.Count; $i++) {
         '--runner-image' {
             if ($i + 1 -ge $ContainerArgs.Count) { Fail '--runner-image requires a value.' }
             $runnerImage = $ContainerArgs[$i + 1]; $i++
+            $runnerImageExplicit = $true
         }
         '--docker-root-volume' {
             if ($i + 1 -ge $ContainerArgs.Count) { Fail '--docker-root-volume requires a value.' }
@@ -281,6 +283,13 @@ for ($i = 0; $i -lt $ContainerArgs.Count; $i++) {
         }
         default { $forward.Add($token) }
     }
+}
+
+# This host-consumed option is removed from $forward, so the container cannot
+# enforce its semantic-override rule. Preserve that rule here before launching
+# anything, exactly as ops/e2e/run-e2e.sh does.
+if ($planDirHost -and $runnerImageExplicit) {
+    Fail '--from executes a saved plan exactly; --runner-image cannot be combined with --from. Create a new plan instead.'
 }
 
 # -----------------------------------------------------------------------------

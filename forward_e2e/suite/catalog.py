@@ -1,4 +1,4 @@
-"""Versioned task catalog and profile definitions for A8 acceptance runner.
+"""Versioned task catalog and profile definitions for the Forward E2E suite runner.
 
 Zero external dependencies; uses strictly the Python standard library.
 Does NOT import Linux-only fcntl or execute subprocesses on import.

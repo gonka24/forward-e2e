@@ -105,25 +105,69 @@ exclusive):
 
 ### 3.3 Operational Flags
 
-Allowed on `plan`, `run`, `rerun`, and with `--from`:
+`--from` replays a sealed decision and never re-opens it
+(`assert_no_semantic_overrides` in
+[`forward_e2e/execution/cli.py`](../forward_e2e/execution/cli.py)). Two groups
+of flags are therefore refused together with `--from`, with exit code `2` and
+an error that lists the flags a replay *does* accept (`ALLOWED_WITH_FROM`):
 
-| Flag | Purpose |
-|---|---|
-| `--from <PATH>` | Execute (`run` / `rerun`) from an existing `run.lock.json` or plan directory. Rejects all source and selection flags. |
-| `--output <DIR>` | Host directory for the exported plan or run package. Required for `plan`; optional for `run` (defaults to `<E2E_OUTPUT_DIR>/runs`). |
-| `--workspace <DIR>` | Persistent workspace root inside the container (default: `/workspace`). |
-| `--runtime-root <DIR>` | Override directory for per-task runtime snapshots. |
-| `--runner-image <IMAGE>` | Override the runner container image reference. |
-| `--credential-file <FILE>` | Path to a file containing a Git HTTPS token for private repositories (passed via credential helper; never logged or written to evidence). |
-| `--credential-username <NAME>` | Username paired with `--credential-file` (default: `x-access-token`). |
-| `--run-id <ID>` | Explicit run identifier for `run` / `rerun`. |
-| `--parent-run-id <ID>` | Explicit parent run identifier for `run` / `rerun`. |
-| `--plan-id <ID>` | Explicit plan identifier. |
-| `--docker-root-volume <NAME>` | Host-wrapper flag (`run-e2e.sh` / `Run-E2E.ps1`) selecting the named Docker volume mounted at `/var/lib/docker` inside the runner. |
+- `SEMANTIC_FLAGS` — everything that changes **what is proven**: the four
+  source flags of §3.1, `--profile`, `--scenario` and `--runner-image`. The
+  bash and PowerShell wrappers repeat the `--runner-image` refusal on the host
+  because they consume that flag before the container sees it.
+- `LOCK_IDENTITY_FLAGS` — `--plan-id`. It does not change what is proven, but
+  a replay has no plan identity of its own; it inherits the one sealed in the
+  lock, so accepting the flag and ignoring it would let an operator believe a
+  plan had been renamed.
+
+| Flag | Applies to | Purpose |
+|---|---|---|
+| `--from <PATH>` | `run`, `rerun` | Execute from an existing `run.lock.json` or plan directory. Rejects all source and selection flags, `--runner-image` and `--plan-id`. |
+| `--output <DIR>` | `plan`, `run`, `rerun`, `report`, `recover`; allowed with `--from` | Destination directory. Required for `plan`. For `run`/`rerun` the package lands at `<DIR>/<run-id>`; without the flag it lands at `<E2E_OUTPUT_DIR>/runs/<run-id>` (`/out/runs/<run-id>` inside the container). See §4 for what that means on the host. |
+| `--workspace <DIR>` | `plan`, `run`, `rerun`, `report`, `recover`; allowed with `--from` | Persistent workspace root inside the container (default: `/workspace`). |
+| `--runtime-root <DIR>` | `run`, `rerun`; allowed with `--from` | Override directory for per-task runtime snapshots. |
+| `--runner-image <IMAGE>` | `plan`, `run` without `--from` | Override the runner container image reference. **Refused with `--from`**: the lock pins the image id, and a replay must happen in that image. To replay after a rebuild, point the wrappers at the pinned image through the environment (`E2E_RUNNER_IMAGE=<image id or digest from the lock>`), see [`migration.md`](migration.md) §5. |
+| `--credential-file <FILE>` | `plan`, `run`, `rerun`; allowed with `--from` | Path to a file containing a Git HTTPS token for private repositories (passed via credential helper; never logged or written to evidence). |
+| `--credential-username <NAME>` | as above | Username paired with `--credential-file` (default: `x-access-token`). |
+| `--run-id <ID>` | `run`, `rerun`; allowed with `--from` | Explicit run identifier. |
+| `--parent-run-id <ID>` | `run`, `rerun`; allowed with `--from` | Explicit parent run identifier. |
+| `--plan-id <ID>` | `plan`, `run` without `--from` | Explicit plan identifier. **Refused with `--from`** (the plan id comes from the lock; name the execution with `--run-id` instead). |
+| `--run <PATH_OR_ID>` | `report`, `recover` | The run to grade or recover: an exported run directory (or a nested suite path, which resolves upwards to the package), or a bare run id, which the container resolves against the output root (`<output>/<id>`, `<output>/runs/<id>`; `_candidate_run_dirs`) and, for `recover`, the durable stage under `--workspace` (`_resolve_recovery_target`). The wrappers translate a host directory to its location under the single `/out` mount, so a directory given with `--output` must live under that `--output`. |
+| `--docker-root-volume <NAME>` | host wrappers only | Selects the named Docker volume mounted at `/var/lib/docker` inside the runner (default `a8-docker-root`, or `E2E_DOCKER_ROOT_VOLUME`). |
+| `--keep-resources` | — | Accepted by the parser for parity with the suite runner but **always rejected inside the runner container** (`cmd_run`): the inner `dockerd` and its containers end with the container, so there is nothing to keep. |
+
+The host wrappers require **Docker Compose V2** (`docker compose`); the retired
+Python `docker-compose` v1 binary cannot parse
+[`ops/runner/compose.yaml`](../ops/runner/compose.yaml) and is not tried
+(`compose()` in [`run-e2e.sh`](../ops/e2e/run-e2e.sh) and
+[`build-runner.sh`](../ops/e2e/build-runner.sh); `Run-E2E.ps1` and
+`Build-Runner.ps1` call `docker compose` directly).
 
 ---
 
 ## 4. Common Workflows
+
+Every example is shown for `run-e2e.sh` (Linux/macOS) and `Run-E2E.ps1`
+(Windows). Both wrappers forward the arguments verbatim to the single parser
+inside the container; they only translate host paths and bind mounts.
+
+**Where the results land on the host.** The wrapper mounts exactly one host
+directory at `/out`: the directory given with `--output`, or `<repo>/out` when
+the flag is absent (`OUTPUT_DIR` in `run-e2e.sh` / `Run-E2E.ps1`,
+`ops/runner/compose.yaml`). Combined with the container-side defaults of §3.3:
+
+| Invocation | Host location of the run package |
+|---|---|
+| `run … --output ./out/e2e` | `./out/e2e/<run-id>/` |
+| `run …` (no `--output`) | `<repo>/out/runs/<run-id>/` |
+| `plan … --output ./out/plan-package` | `./out/plan-package/run.lock.json` (plus bundles) |
+
+Inside the run package you will find `run.lock.json`, `build-manifest.json`,
+`execution-manifest.json`, `result.json` / `e2e-run-result.json` (the whole-run
+verdict) and `suite/<run-id>/` with `summary.md`, `suite-result.json` and the
+per-task evidence; see [`evidence.md`](evidence.md) §1 for the full layout. The
+wrapper's exit code is the verdict's exit code (§5 of `evidence.md`): `0` only
+for `PASSED`.
 
 ### 4.1 Direct Run from Remote Repositories
 
@@ -135,6 +179,16 @@ Allowed on `plan`, `run`, `rerun`, and with `--from`:
   --contracts-sha 7497304e5dc6bf48accdd8c91549bc22de6997fc \
   --profile smoke \
   --output ./out/e2e
+```
+
+```powershell
+.\ops\e2e\Run-E2E.ps1 run `
+  --gonka-repo https://github.com/gonka-ai/gonka `
+  --gonka-sha e86e4899bd8cf52d1ad4766c811f65230b2f9296 `
+  --contracts-repo https://github.com/gonka24/forward-contracts `
+  --contracts-sha 7497304e5dc6bf48accdd8c91549bc22de6997fc `
+  --profile smoke `
+  --output .\out\e2e
 ```
 
 ### 4.2 Plan Once, Replay Offline (`plan` -> `run --from` -> `rerun --from`)
@@ -160,6 +214,24 @@ Allowed on `plan`, `run`, `rerun`, and with `--from`:
   --output ./out/e2e-replay
 ```
 
+```powershell
+.\ops\e2e\Run-E2E.ps1 plan `
+  --gonka-repo https://github.com/gonka-ai/gonka `
+  --gonka-sha e86e4899bd8cf52d1ad4766c811f65230b2f9296 `
+  --contracts-path ..\forward-contracts `
+  --contracts-sha <CONTRACTS_FULL_40_HEX_SHA> `
+  --profile all `
+  --output .\out\plan-package
+
+.\ops\e2e\Run-E2E.ps1 run --from .\out\plan-package\run.lock.json --output .\out\e2e
+
+.\ops\e2e\Run-E2E.ps1 rerun --from .\out\plan-package\run.lock.json --output .\out\e2e-replay
+```
+
+Steps 2 and 3 accept only the flags in `ALLOWED_WITH_FROM` (§3.3). In
+particular, do not add `--runner-image` or `--plan-id`: both are refused, and
+the replay must run in the image id recorded in the lock.
+
 ### 4.3 Private Repositories with `--credential-file`
 
 ```bash
@@ -176,15 +248,56 @@ chmod 600 ~/.config/e2e-token
   --output ./out/e2e
 ```
 
+```powershell
+Set-Content -Path "$env:USERPROFILE\e2e-token" -Value $env:GH_TOKEN -NoNewline
+
+.\ops\e2e\Run-E2E.ps1 run `
+  --gonka-repo https://github.com/my-org/private-gonka `
+  --gonka-sha <GONKA_FULL_40_HEX_SHA> `
+  --contracts-path ..\forward-contracts `
+  --contracts-sha <CONTRACTS_FULL_40_HEX_SHA> `
+  --profile native `
+  --credential-file "$env:USERPROFILE\e2e-token" `
+  --output .\out\e2e
+```
+
+The token file is bind-mounted read-only under `/run/secrets/e2e/` and handed
+to Git through a credential helper; it is never written into the plan, the
+lock or the evidence.
+
 ### 4.4 Offline Re-Grading (`report`) and Workspace Recovery (`recover`)
+
+`report` re-derives the whole-run verdict from the documents of an exported run
+package without executing anything (`grade_run_package` → `evaluate_run`),
+rewrites `result.json` / `e2e-run-result.json` and regenerates `summary.md` and
+`coverage.json`. `recover` is for a run that was interrupted before export: it
+reconciles the per-task runtime snapshots left in the persistent `/workspace`
+volume (`reconcile_suite_runtime_evidence`), exports the durable stage as a run
+package and grades it. Neither starts the inner `dockerd`.
 
 ```bash
 # Re-grade an exported run package (or its nested suite path, which resolves upwards)
 ./ops/e2e/run-e2e.sh report --run ./out/e2e/<run-id>
 
+# Re-grade a run that was written without --output
+./ops/e2e/run-e2e.sh report --run ./out/runs/<run-id>
+
 # Recover and export a run package from the persistent /workspace volume
 ./ops/e2e/run-e2e.sh recover --run <run-id> --output ./out/e2e-recovered
 ```
+
+```powershell
+.\ops\e2e\Run-E2E.ps1 report --run .\out\e2e\<run-id>
+
+.\ops\e2e\Run-E2E.ps1 recover --run <run-id> --output .\out\e2e-recovered
+```
+
+A bare suite directory (one holding `suite-plan.json` / `suite-result.json`
+but no run package envelope) is refused by `report`: a suite result is never
+an E2E verdict. A historical package keeps its original `e2e-run-result.json`;
+the re-derived verdict is written beside it as
+`e2e-run-result.historical-regrade.json` and carries the blocking
+`HISTORICAL_PREPARED_BUILD` finding.
 
 ---
 

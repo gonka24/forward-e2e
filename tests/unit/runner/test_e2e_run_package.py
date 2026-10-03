@@ -2148,9 +2148,9 @@ class ReportAndRecoverResolutionTests(RunPackageCase):
         code, messages = self.report(suite_dir, output=legacy_output)
 
         joined = "\n".join(messages)
-        self.assertIn("This directory is an A8 suite, not an E2E run package", joined)
+        self.assertIn("This directory is a bare suite directory, not an E2E run package", joined)
         self.assertIn("is not an E2E run verdict", joined)
-        self.assertIn("Bare A8 suites without an E2E run package envelope cannot produce a passing E2E verdict", joined)
+        self.assertIn("Bare suite directories without an E2E run package envelope cannot produce a passing E2E verdict", joined)
         # A bare suite without an E2E run package envelope unconditionally fails
         # with exit code 1, and no E2E verdict document is invented for it.
         self.assertEqual(code, 1)

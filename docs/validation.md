@@ -93,11 +93,22 @@ before touching the network or starting `dockerd`:
 
 ---
 
-## Stage 4: Verify Out-of-Tree Testermint Harness Compilation (`build-external-harness`)
+## Stage 4 (optional, developer-only): Out-of-Tree Testermint Harness Compilation (`build-external-harness`)
 
-Before launching a full multi-hour suite, you can verify that the selected
-Gonka commit passes the upstream Testermint API check and compiles out-of-tree
-alongside `harness/testermint` without mutating the Gonka checkout:
+> [!WARNING]
+> This stage is **not a supported validation path** and is not part of any
+> wrapper, plan or run package. It runs `scripts/acceptance_harness.py`
+> directly on the host, which contradicts the runner's promise that nothing
+> but Docker is needed there: it requires a host JDK (the runner image pins
+> Temurin 21), Git, and a full Gonka working tree at the selected commit, and
+> it runs Gonka's own Gradle wrapper. It exists for people editing
+> `harness/testermint` who want a compile check before a multi-hour suite.
+> Skip it unless you are doing exactly that; nothing later depends on it.
+
+`build_external_harness` is the build-only half of `run_live`: pristine check
+of the Gonka snapshot, the required upstream API check, the upstream classpath
+export, the harness `testClasses` build and the after-snapshot comparison. It
+never starts Docker or a network.
 
 ```bash
 python3 scripts/acceptance_harness.py build-external-harness \
@@ -107,9 +118,16 @@ python3 scripts/acceptance_harness.py build-external-harness \
   --testermint-harness-dir ./harness/testermint
 ```
 
-Verify that `<PATH_TO_GONKA_CHECKOUT>` remains completely clean (`git status --ignored`)
-and that `/tmp/e2e-harness-check` contains `source-immutability.json` with
-`"verdict": "immutable"`.
+`--work-root` and the evidence directory (default `<work-root>/evidence`) must
+lie outside the Gonka checkout (`_assert_outside_snapshots`). On success the
+command prints `{"status": "pass", "evidence": "<work-root>/evidence"}`;
+verify that `<PATH_TO_GONKA_CHECKOUT>` is still exactly the selected commit
+(`git status --ignored` shows nothing) and that
+`<work-root>/evidence/source-immutability.json` has top-level
+`"verdict": "UNCHANGED"` with a `roots.gonka` record (this command measures the
+Gonka root only; there is no `marketplace` or `network_root` entry here). Any
+other verdict is reported as `[SOURCE_SNAPSHOT_MUTATED]` and the command exits
+non-zero.
 
 ---
 
@@ -144,14 +162,24 @@ mv ./out/plan-smoke /tmp/plan-smoke-moved
   --output ./out/e2e-smoke-replay
 ```
 
-Check in `./out/e2e-smoke/<run-id>/`:
+Check in `./out/e2e-smoke/<run-id>/` (the task directory is keyed by the task
+run id, `<run-id truncated to 30 chars>-01-lock-exact-e`; see
+[`evidence.md`](evidence.md) §1):
 
-- `e2e-run-result.json` and `result.json` have `"status": "PASSED"` and `"exit_code": 0`.
-- `suite/<run-id>/tasks/lock-exact-e/live-context.json` has
-  `"evidence_model": "a8.evidence/e2e-immutable-source/2"` and
-  `"source_immutability_verdict": "immutable"`.
-- `suite/<run-id>/tasks/lock-exact-e/source-immutability.json` reports
-  `"verdict": "immutable"` for `gonka`, `marketplace`, and `network_root`.
+- `e2e-run-result.json` and `result.json` have `"status": "PASSED"`,
+  `"exit_code": 0` and `"schema_version": "e2e/run-result/2"`.
+- `suite/<run-id>/runs/<task-run-id>/evidence/<task-run-id>/live-context.json`
+  has, under `source`, `"evidence_model": "a8.evidence/e2e-immutable-source/2"`,
+  `"source_immutability_verdict": "UNCHANGED"`, and `gonka_sha` /
+  `marketplace_commit_sha` equal to the two SHAs in `run.lock.json`.
+- `suite/<run-id>/runs/<task-run-id>/evidence/<task-run-id>/source-immutability.json`
+  has `"schema": "a8.source-immutability-set/2"`, top-level
+  `"verdict": "UNCHANGED"`, `"verdict": "UNCHANGED"` in each of
+  `roots.gonka` and `roots.marketplace`, and a `network_root` block whose
+  `verdict` is also `UNCHANGED`.
+- `suite/<run-id>/summary.md` starts with
+  `# Forward E2E Suite Summary: <run-id>` and records
+  `acceptance_status: NOT_REVIEWED`.
 
 ---
 

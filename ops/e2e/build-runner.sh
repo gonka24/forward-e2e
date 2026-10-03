@@ -44,13 +44,11 @@ export E2E_RUNNER_SHA="$RUNNER_SHA" E2E_RUNNER_REPO="$RUNNER_REPO"
 command -v docker >/dev/null 2>&1 || die "Docker is required on the host but was not found."
 
 compose() {
-    if docker compose version >/dev/null 2>&1; then
-        docker compose -f "$COMPOSE_FILE" "$@"
-    elif command -v docker-compose >/dev/null 2>&1; then
-        docker-compose -f "$COMPOSE_FILE" "$@"
-    else
-        die "Neither 'docker compose' nor 'docker-compose' is available."
-    fi
+    # Compose V2 only; see ops/e2e/run-e2e.sh for why the retired Compose v1
+    # binary cannot parse ops/runner/compose.yaml.
+    docker compose version >/dev/null 2>&1 \
+        || die "Docker Compose V2 ('docker compose') is required on the host but was not found."
+    docker compose -f "$COMPOSE_FILE" "$@"
 }
 
 export E2E_RUNNER_IMAGE="$IMAGE"

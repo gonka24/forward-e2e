@@ -19,6 +19,8 @@ from forward_e2e.suite.evidence_model import EVIDENCE_MODEL_E2E, EVIDENCE_MODEL_
 from forward_e2e.suite.models import EvidenceStatus, ExecutionStatus, SourceIdentity, TaskPlan, TOP_LEVEL_SCOPE
 from tests.unit.runner.real_fixtures import (
     E1_TARGET_EPOCH,
+    EVIDENCE_DIR,
+    GO_BOUNDARY_EVIDENCE_DIR,
     GONKA_PREPARED_SHA,
     GONKA_SOURCE_SHA,
     GONKA_TREE_SHA,
@@ -28,6 +30,7 @@ from tests.unit.runner.real_fixtures import (
     OVERLAY_MANIFEST_SHA,
     REPO_ROOT,
     R2_SCENARIO,
+    WASM_ABI_EVIDENCE,
     funded_claim_release_context,
     go_boundary_evidence,
     legacy_funded_claim_release_phase,
@@ -496,6 +499,73 @@ class VerifierTests(unittest.TestCase):
                 ok, _, err = verify_go_boundary_report(rep)
                 self.assertFalse(ok)
                 self.assertIn(diagnostic, err)
+
+    def _copy_committed_go_fixture(self) -> Path:
+        """The committed Go boundary files, byte for byte, laid out as a run would leave them."""
+        source = EVIDENCE_DIR / GO_BOUNDARY_EVIDENCE_DIR
+        rep = self.evidence_dir / "report.json"
+        rep.write_bytes((source / "report.json").read_bytes())
+        raw_path = self.evidence_dir / "raw" / "go-test.json"
+        raw_path.parent.mkdir()
+        raw_path.write_bytes((source / "raw" / "go-test.json").read_bytes())
+        return rep
+
+    def test_the_committed_go_boundary_fixture_presented_verbatim_is_refused_as_a_test_only_fixture(self):
+        """A fixture copied into a run directory is not that run's evidence.
+
+        The committed report satisfies every inner rule (PASS status, zero
+        exit codes, a digest that binds the committed raw events, both named
+        tests passed), which is exactly why the marker has to be refused
+        first: nothing later in the verifier would notice the substitution.
+        """
+        rep = self._copy_committed_go_fixture()
+        self.assertIs(json.loads(rep.read_text(encoding="utf-8")).get("test_fixture_only"), True)
+        ok, observed, err = verify_go_boundary_report(rep)
+        self.assertFalse(ok)
+        self.assertEqual(observed, [])
+        self.assertEqual(err, "test-only fixture cannot be verified as live evidence")
+
+    def test_the_committed_go_boundary_fixture_passes_once_only_the_marker_is_removed(self):
+        """Removing the single marker key, and nothing else, is what makes the inner rules reachable."""
+        rep = self._copy_committed_go_fixture()
+        report = json.loads(rep.read_text(encoding="utf-8"))
+        del report["test_fixture_only"]
+        rep.write_text(json.dumps(report), encoding="utf-8")
+        ok, observed, err = verify_go_boundary_report(rep)
+        self.assertTrue(ok, err)
+        self.assertEqual(set(observed), {"TestToQuerierResultClassifiesVMSystemErrors", "TestStrictPlanValidation"})
+
+    def test_a_go_boundary_report_whose_root_is_not_an_object_is_refused_not_crashed(self):
+        rep = self.evidence_dir / "report.json"
+        for root in ("[]", "\"PASS\"", "null"):
+            with self.subTest(root=root):
+                rep.write_text(root, encoding="utf-8")
+                ok, observed, err = verify_go_boundary_report(rep)
+                self.assertFalse(ok)
+                self.assertEqual(observed, [])
+                self.assertEqual(err, "Go boundary report.json root must be a JSON object")
+
+    def test_the_committed_wasm_abi_fixture_presented_verbatim_is_refused_and_passes_once_only_the_marker_is_removed(self):
+        """Same contract for the Wasm report: the marker is refused before a single case is credited."""
+        abi_f = self.evidence_dir / "abi.json"
+        wasm_f = self.evidence_dir / "a8_query_boundary.wasm"
+        # The committed report binds the empty placeholder module by sha256.
+        wasm_f.write_bytes(b"\x00asm\x01\x00\x00\x00")
+        abi_f.write_bytes((EVIDENCE_DIR / WASM_ABI_EVIDENCE).read_bytes())
+        committed = json.loads(abi_f.read_text(encoding="utf-8"))
+        self.assertIs(committed.get("test_fixture_only"), True)
+        self.assertEqual(committed["wasm_sha256"], hashlib.sha256(wasm_f.read_bytes()).hexdigest())
+
+        ok, cases, err = verify_wasm_abi_report(abi_f, wasm_f)
+        self.assertFalse(ok)
+        self.assertEqual(cases, [])
+        self.assertEqual(err, "test-only fixture cannot be verified as live evidence")
+
+        del committed["test_fixture_only"]
+        abi_f.write_text(json.dumps(committed), encoding="utf-8")
+        ok, cases, err = verify_wasm_abi_report(abi_f, wasm_f)
+        self.assertTrue(ok, err)
+        self.assertEqual(set(cases), set(WASM_ABI_REQUIRED_CASES))
 
     def test_wasm_abi_requires_exact_9_named_cases(self):
         abi_f = self.evidence_dir / "abi.json"

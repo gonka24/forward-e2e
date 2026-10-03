@@ -1,4 +1,4 @@
-"""Sequential suite orchestrator for A8 test execution and evidence collection.
+"""Sequential suite orchestrator for Forward E2E test execution and evidence collection.
 
 Guarantees:
 - Fixed Git SHAs across the entire suite (exported once, cloned per step)
@@ -628,7 +628,7 @@ class SuiteOrchestrator:
             with events_file.open("a", encoding="utf-8") as f:
                 f.write(ev.to_json_line())
 
-        log_event("INIT", "SUITE_STARTED", f"Started A8 suite {sid}", details=plan.to_dict())
+        log_event("INIT", "SUITE_STARTED", f"Started suite {sid}", details=plan.to_dict())
 
         suite_m_bundle: Optional[Path] = None
         suite_g_bundle: Optional[Path] = None

@@ -1,4 +1,4 @@
-# Runner-generated compose overlay (A8 immutable-source runner).
+# Runner-generated compose overlay (Forward E2E immutable-source runner).
 #
 # Replaces what the removed DockerGroup.kt patch wrote at run time as
 # prod-local/docker-compose.testermint-nats-bind.yml: the api's NATS state is

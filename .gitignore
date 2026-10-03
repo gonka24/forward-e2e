@@ -28,7 +28,7 @@ htmlcov/
 #ai
 *.local.md
 
-# A8 Acceptance bundles and local outputs
+# Runner-generated source bundles, host Git bridges and local outputs
 .a8-bundles/
 .e2e-bridge*/
 out/

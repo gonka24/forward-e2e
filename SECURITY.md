@@ -1,8 +1,13 @@
 > These inherited product invariants describe the contracts under test.
 > Production implementation and its current security policy live in
 > [forward-contracts](https://github.com/gonka24/forward-contracts/blob/main/SECURITY.md).
-> Runner integrity, immutable sources, credentials and ownership cleanup are
-> specified in [AGENTS.md](AGENTS.md) and [the runner guide](ops/e2e/README.md).
+> This repository is the acceptance runner that executes those contracts on a
+> real Gonka network. Runner integrity, immutable sources, credentials and
+> ownership cleanup are specified in [AGENTS.md](AGENTS.md) §4 and in
+> [`docs/`](docs/README.md) — chiefly [`docs/architecture.md`](docs/architecture.md),
+> [`docs/operations.md`](docs/operations.md) and [`docs/evidence.md`](docs/evidence.md);
+> what each catalog task does and does not exercise is in
+> [`docs/coverage.md`](docs/coverage.md).
 
 # Security Policy and Initial Invariants
 
@@ -53,7 +58,13 @@ This document outlines the security boundaries of the project. Detailed invarian
 
 ## Current State and Pending Implementation
 
-Factory creates one isolated Deal per `(Host, target_epoch)` and indexes it via safe reply. The Deal accepts exact CW20 budget, stores recipient Lock proof, implements Cancel, permissionless SettleClaim, routing and positive-summary claim expiry, and E+3 NetworkUnconfirmed Refund/Expired with atomic CW20 payouts, permanent-share GNK release, late distributions from Completed/Refunded/Expired, and a compatible `ForwardExcessGnk` alias. Gonka query boundary and financial transitions have been tested on pinned protobuf fixtures/mocks and `cw-multi-test` with real CW20/bank ledgers and test-only fault injection; real-chain golden E2E is not yet executed. A8 additionally validates three Factory-created Deals across two Hosts and two epochs, segregated deposits/rewards/recipients/counters, preservation of the Factory index after Completed, and both release entry points after Completed. Detailed evidence tracing is located in [`docs/reviews/a8-contract-gap-analysis.md`](https://github.com/gonka24/forward-contracts/blob/d637eea5432506d60c90c1d8436c67b93802d829/docs/reviews/a8-contract-gap-analysis.md).
+Factory creates one isolated Deal per `(Host, target_epoch)` and indexes it via safe reply. The Deal accepts exact CW20 budget, stores recipient Lock proof, implements Cancel, permissionless SettleClaim, routing and positive-summary claim expiry, and E+3 NetworkUnconfirmed Refund/Expired with atomic CW20 payouts, permanent-share GNK release, late distributions from Completed/Refunded/Expired, and a compatible `ForwardExcessGnk` alias. At the extraction commit, the Gonka query boundary and financial transitions had been tested on pinned protobuf fixtures/mocks and `cw-multi-test` with real CW20/bank ledgers and test-only fault injection, and real-chain golden E2E had not yet been executed. The `forward-contracts` acceptance milestone `A8` additionally validated three Factory-created Deals across two Hosts and two epochs, segregated deposits/rewards/recipients/counters, preservation of the Factory index after Completed, and both release entry points after Completed; its evidence tracing is in [`docs/reviews/a8-contract-gap-analysis.md`](https://github.com/gonka24/forward-contracts/blob/d637eea5432506d60c90c1d8436c67b93802d829/docs/reviews/a8-contract-gap-analysis.md).
+
+This repository is the runner for that real-chain golden E2E. Three facts about it bear on the statements above:
+
+- No live run result is tracked in this repository; a result exists only as a run package produced by an actual execution ([`docs/evidence.md`](docs/evidence.md)).
+- The catalog does not exercise `Cancel` or `ForwardExcessGnk` at all (no such execute message is sent anywhere in `scripts/` or `harness/`), and the Gonka query allowlist is not asserted by any catalog task; see the obligation mapping in [`docs/coverage.md`](docs/coverage.md) §3. A `PASSED` run says nothing about those.
+- Every task is written with `acceptance_status: NOT_REVIEWED` (`forward_e2e/suite/orchestrator.py`, `forward_e2e/suite/reporter.py`); no automated path in this runner awards acceptance.
 
 ## No-Admin Deployment Gate
 
@@ -76,13 +87,13 @@ Factory creates one isolated Deal per `(Host, target_epoch)` and indexes it via 
 - Pinned protobuf source does not contain the Marketplace allowlist patch; verified Gonka PR head `042758f…` adds four routes without schema changes. Release requires exact production binary SHA and real-chain verification.
 - wasmd `v0.54.2` does not retain typed gRPC status accessible to the contract for regular handler errors: node-side `NotFound` is indistinguishable from other `ContractResult::Err`. Typed `UnsupportedRequest`, `InvalidRequest`, and `InvalidResponse` are preserved via raw query envelope.
 - Claim-expiry `Refund/Expired` uses exact `claimed=false` summary from E+2. From E+3, summary response/availability failures from the explicit ADR-0013 matrix yield NetworkUnconfirmed. This is deliberate risk allocation, not proof of claim absence. Routing-failure refund does not use this adapter.
-- Exact source `wasmvm v2.2.4` converts gas exhaustion/panic query callbacks into backend error/VM abort, rather than standard raw query results. Focused native Wasm gas regression has not been executed on this machine due to lack of a Go toolchain and remains mandatory before production alongside contract/submessage scenarios.
+- Exact source `wasmvm v2.2.4` converts gas exhaustion/panic query callbacks into backend error/VM abort, rather than standard raw query results. A focused native Wasm gas regression is **not** part of this runner's catalog — the Go boundary task `go-query-error-classification` runs only `TestToQuerierResultClassifiesVMSystemErrors` and `TestStrictPlanValidation` against the runner's own fixtures (`REQUIRED_TESTS` in `scripts/run_go_boundary.py`) — and it remains mandatory before production alongside contract/submessage scenarios.
 - Gonka `ListClaimRecipients` is not paginated. Contract-side byte/entry limits safeguard decode and subsequent processing, but not keeper construction of the full response. Lookahead `40` does not bound historical entries if pruning lags; chain-side gas/size bounds must still be proven in the Gonka PR.
 - Funding uses successful `ListClaimRecipients` solely as positive proof of exact routing. Query/decode failures, missing, mismatched, invalid, or duplicate target entries block funding. The test native adapter in `cw-multi-test` does not prove actual Gonka runtime behavior.
 - Lock uses the same positive exact proof and persists it in state. Cancel uses only successful validated `Missing` or valid mismatch; general query/decode errors are never classified as absence.
 - SettleClaim uses the stored proof and does not repeat recipient queries following potential pruning. Performance summary must be positively located, identity-checked, and `claimed=true`; errors are not treated as zero claim or refund grounds.
 - Release does not repeat performance/recipient/vesting queries. After checking frozen policy and canonical counters, it reads only standard `BankQuery::Balance` for `ngonka`. `TotalVestingAmount` remains diagnostic in `NativeStatus` and its error does not block payout of available bank balance.
-- In pinned Gonka, locked streamvesting funds remain on the module account, and `ProcessEpochUnlocks` transfers only the unlocked tranche to the Deal. Therefore, Deal balance is spendable for A6 in the source model; real-chain spendability and `BankMsg::Send` still require B5 golden E2E.
+- In pinned Gonka, locked streamvesting funds remain on the module account, and `ProcessEpochUnlocks` transfers only the unlocked tranche to the Deal. Therefore, Deal balance is spendable for A6 in the source model; real-chain spendability and `BankMsg::Send` still require the real-chain golden E2E. In this runner those are the `NATIVE` catalog tasks that execute a release on a live chain — `funded-claim`, `terminal-release-repeat`, `foreign-native-preservation`, `late-donation-after-completed`, `native-release-rollback-retry`, `no-sale-vesting-lifecycle` and `emergency-host-only-recovery` ([`docs/coverage.md`](docs/coverage.md) §2.3) — and no result of theirs is tracked in this repository.
 - Pinned setter prohibits altering E starting from E, and pruner may first delete E at current=E+5. Thus the permissionless proof window terminates strictly before E+5; potential pruner lag does not expand the safe window.
 
 ## Chain Runtime Release Gate
@@ -90,14 +101,14 @@ Factory creates one isolated Deal per `(Host, target_epoch)` and indexes it via 
 - Pinned Gonka source uses `wasmd v0.54.2`, which falls within the affected range of [CWA-2025-007](https://github.com/CosmWasm/advisories/blob/main/CWAs/CWA-2025-007.md). The patched version of this branch is `v0.54.3`; the patch changes consensus behavior and requires a coordinated network upgrade.
 - Prior to production deployment, the Gonka core team must provide verifiable confirmation of the patch/backport and actual binary: source revision, build metadata, and hash/attestation of the artifact run by validators.
 - Local `cargo-audit` verifies Rust dependencies of the contract and cannot inspect the Go dependency `wasmd`. The absence of RustSec findings does not clear this blocker.
-- As of 2026-09-07, the official advisory index also contains CWA-2026-001 and placeholders CWA-2026-002…006. CWA-2026-001 lists affected `wasmd v0.54.5`/`wasmvm v2.2.5`, rather than pinned `v0.54.2`/`v2.2.4`; this does not imply the legacy runtime is safe, since CWA-2025-007 applies independently. Placeholder entries lack scope assessment data; B4 must repeat verification once details are published.
+- As of 2026-09-07, the official advisory index also contains CWA-2026-001 and placeholders CWA-2026-002…006. CWA-2026-001 lists affected `wasmd v0.54.5`/`wasmvm v2.2.5`, rather than pinned `v0.54.2`/`v2.2.4`; this does not imply the legacy runtime is safe, since CWA-2025-007 applies independently. Placeholder entries lack scope assessment data; this verification must be repeated once details are published. Nothing in this runner automates it: a run records the selected Gonka commit and the `wasmd`/`wasmvm`/`go`/`cosmos_sdk` versions reported by the running `inferenced` (`parse_runtime_identity` in `scripts/acceptance_harness.py`); it does not consult an advisory index.
 
 ## Checks
 
 - Unit tests verify local functions and error branches.
 - Property tests verify financial invariants across a large space of inputs.
 - `cw-multi-test` validates contract interactions within a simulated chain.
-- Golden E2E on real Gonka validates protobuf, custom gRPC, and actual network module behavior.
+- Golden E2E on real Gonka validates protobuf, custom gRPC, and actual network module behavior. This repository is that layer; its result is a run package graded by `evaluate_run` (`forward_e2e/execution/outcome.py`), and its acceptance status is always `NOT_REVIEWED`.
 
 None of these layers individually substitutes for a comprehensive security review prior to production deployment.
 

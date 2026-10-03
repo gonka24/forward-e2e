@@ -18,13 +18,30 @@ from tests.unit.runner.real_fixtures import (
     EVIDENCE_DIR,
     GO_BOUNDARY_EVIDENCE_DIR,
     WASM_ABI_EVIDENCE,
-    load_recorded_evidence,
+    load_synthetic_evidence,
 )
 from tests.unit.runner.support.synthetic_evidence import WASM_PLACEHOLDER
 
 
 def _json_bytes(value):
     return (json.dumps(value, indent=2) + "\n").encode()
+
+
+def _staged_report(name):
+    """A committed boundary report as a run would have written it.
+
+    The ``test_fixture_only`` marker is what the verifiers refuse outright
+    (``verify_go_boundary_report`` / ``verify_wasm_abi_report``), so a staged
+    package that kept it would fail for a reason unrelated to the behaviour
+    under test. It is dropped here, in memory, and only here: the committed
+    bytes keep it, and ``test_fixture_artifacts.py`` checks the staged copy
+    does not. The ``synthetic_fixture`` block stays: a real producer does not
+    write one, but the verifiers ignore unknown keys and keeping it means the
+    staged report still names its own provenance.
+    """
+    report = load_synthetic_evidence(name)
+    report.pop("test_fixture_only", None)
+    return report
 
 
 def _cargo_suite_log(tests, *, filtered_out):
@@ -53,7 +70,7 @@ def task_artifacts(task, gonka_sha):
         # The committed report is already bound to this placeholder's sha256;
         # it is re-stated here so the package cannot drift from the file.
         wasm = WASM_PLACEHOLDER
-        report = load_recorded_evidence(WASM_ABI_EVIDENCE)
+        report = _staged_report(WASM_ABI_EVIDENCE)
         report["wasm_sha256"] = hashlib.sha256(wasm).hexdigest()
         artifacts = {
             "a8_query_boundary.wasm": wasm,
@@ -61,7 +78,7 @@ def task_artifacts(task, gonka_sha):
         }
     elif task.task_id == "go-query-error-classification":
         fixture_dir = EVIDENCE_DIR / GO_BOUNDARY_EVIDENCE_DIR
-        report = load_recorded_evidence(f"{GO_BOUNDARY_EVIDENCE_DIR}/report.json")
+        report = _staged_report(f"{GO_BOUNDARY_EVIDENCE_DIR}/report.json")
         # The package belongs to this synthetic run; raw events remain verbatim
         # because test_output_sha256 binds their exact bytes.
         report["gonka_sha"] = gonka_sha
