@@ -1,0 +1,1746 @@
+{
+  "refund_e_plus_5_phase": {
+    "after": {
+      "bank_ngonka": {
+        "buyer": 616676038844026,
+        "deal": 0,
+        "fee_recipient": 0,
+        "host": 0
+      },
+      "cw20": {
+        "buyer": 80000000,
+        "deal": 10000000,
+        "fee_recipient": 150000,
+        "host": 0
+      },
+      "foreign_cw20": {
+        "buyer": 1000000,
+        "deal": 0
+      },
+      "state": {
+        "buyer": "gonka1xv9cmdl32d0khd756c48ke2wgvakndzkt7jkpm",
+        "buyer_entitlement_ngonka": "0",
+        "buyer_refund_usdt": "0",
+        "buyer_released_ngonka": "0",
+        "fee_usdt": "0",
+        "gnk_release_policy": "unset",
+        "gross_usdt": "0",
+        "host_entitlement_ngonka": "0",
+        "host_net_usdt": "0",
+        "host_released_ngonka": "0",
+        "recipient_locked": false,
+        "refund_reason": null,
+        "released_total_ngonka": "0",
+        "reward_ngonka": "0",
+        "status": "funded",
+        "total_claim_ngonka": "0",
+        "work_ngonka": "0"
+      }
+    },
+    "attempt": {
+      "code": 5,
+      "codespace": "wasm",
+      "events": [],
+      "gas_used": "100882",
+      "gas_wanted": "2000000",
+      "height": "259",
+      "layer": "deliver_tx",
+      "raw_log": "failed to execute message; message index: 0: refund routing-proof window is closed: current epoch 10, target epoch 5, exclusive end 10: execute wasm contract failed",
+      "tx_hash": "961526170E2A3491B266E63EBA834F966DE5A2285CB51188AFFB62818B064EA6"
+    },
+    "before": {
+      "bank_ngonka": {
+        "buyer": 616676038844026,
+        "deal": 0,
+        "fee_recipient": 0,
+        "host": 0
+      },
+      "cw20": {
+        "buyer": 80000000,
+        "deal": 10000000,
+        "fee_recipient": 150000,
+        "host": 0
+      },
+      "foreign_cw20": {
+        "buyer": 1000000,
+        "deal": 0
+      },
+      "state": {
+        "buyer": "gonka1xv9cmdl32d0khd756c48ke2wgvakndzkt7jkpm",
+        "buyer_entitlement_ngonka": "0",
+        "buyer_refund_usdt": "0",
+        "buyer_released_ngonka": "0",
+        "fee_usdt": "0",
+        "gnk_release_policy": "unset",
+        "gross_usdt": "0",
+        "host_entitlement_ngonka": "0",
+        "host_net_usdt": "0",
+        "host_released_ngonka": "0",
+        "recipient_locked": false,
+        "refund_reason": null,
+        "released_total_ngonka": "0",
+        "reward_ngonka": "0",
+        "status": "funded",
+        "total_claim_ngonka": "0",
+        "work_ngonka": "0"
+      }
+    },
+    "caller": "gonka18p5qmfvhae6r62n0dyedgjmsvrdtkw6gzy7wfn",
+    "caller_native_fee_delta": 0,
+    "epoch_bracket": {
+      "after_height": 259,
+      "before_height": 258,
+      "epoch": 10,
+      "same_epoch": true,
+      "tx_height": 259
+    },
+    "expected": {
+      "arbitrary_error_accepted": false,
+      "contract_error": "RefundWindowClosed",
+      "deposit_on_deal": true,
+      "recipient_locked": false,
+      "simulation_accepted": false,
+      "state": "funded"
+    },
+    "gas": 2000000,
+    "invariant_errors": [],
+    "level": "live_network",
+    "name": "r1_1_refund_e_plus_5_rejected",
+    "recipient_query": {},
+    "semantic_error": "E+5 Refund did not return RefundWindowClosed",
+    "status": "FAIL"
+  },
+  "synthetic_fixture": {
+    "document": "settled-deal-late-refund-and-vested-gift",
+    "identities": {
+      "addresses": {
+        "buyer": "gonka1xv9cmdl32d0khd756c48ke2wgvakndzkt7jkpm",
+        "caller": "gonka18p5qmfvhae6r62n0dyedgjmsvrdtkw6gzy7wfn",
+        "deal": "gonka1rc40zxhdxq79j9920dyaf6yacnntxm3kqf0dnz52yctpf3tms0pqaurwt8",
+        "factory": "gonka1uhq7a8jkczjckmlfc73uchu80ahtxvsflxva0kh56d3fz2hq5n3sh5heqj",
+        "fee_recipient": "gonka1e3nd60ur3wdf5urfxt6nfmud52n6ekeuq05zn6",
+        "gov_module": "gonka1e3fawtzuxl5zpvdtjwgjz4m8hufkhkhu4pgj8s",
+        "host": "gonka1xw3ucqx383rg6sv90m25wwry7r6pvcxgja8hu9",
+        "settlement_cw20": "gonka1l4am49w5jujwnu53ym3h2uq75ennmysrmyx84cnyqpqrzxastq5q37w5a9"
+      }
+    },
+    "identity_rules": {
+      "address": "bech32('gonka', seed('<document>:address:<role>')[:20 or 32])",
+      "checked_by": "tests/unit/runner/test_synthetic_evidence.py",
+      "hex40": "seed('<document>:hex40:<n>').hex()[:40], n = order of first appearance",
+      "seed": "sha256('forward-e2e synthetic fixture:' + label)",
+      "sha256": "seed('<document>:sha256:<n>').hex(), n = order of first appearance",
+      "timestamp": "2026-01-01T00:00:00Z + n minutes, preserving relative order",
+      "tx_hash": "seed('<document>:tx:<n>').hex().upper(), n = order of first appearance"
+    },
+    "notice": "Synthetic offline test fixture. Every chain identity is derived from a labelled SHA-256 seed (see identity_rules); this document is not evidence of any executed chain, Docker or Testermint run.",
+    "producer": "scripts/acceptance_harness.py",
+    "producer_functions": [
+      "r1_1_refund_e_plus_5_rejected",
+      "release",
+      "r2_gift_checkpoint",
+      "vesting_addition"
+    ],
+    "producer_revision": "8079c0c274f5252800ee16b9f4fb0148bfcae2fe",
+    "purpose": "A settled Deal: the Refund rejected at E+5 (refund_e_plus_5_phase) and the vested-gift sequence (vested_gift_phases): two settlement releases, pre_gift/fully_locked/first_unlocked/final checkpoints, the governance vesting_addition and two gift releases",
+    "revision_constants": {
+      "379bebced638aeb5e6077bfd51c986f898443832": "EXPECTED_PROTO_SHA (scripts/acceptance_harness.py)"
+    },
+    "schema": "forward-e2e.synthetic-fixture/2"
+  },
+  "test_fixture_only": true,
+  "vested_gift_phases": [
+    {
+      "actual": {
+        "address_delta": 47387321358851,
+        "buyer_delta": 5000000000,
+        "coincident_recipients": false,
+        "host_delta": 47382321358851
+      },
+      "bank_after": {
+        "buyer": 521941392704856,
+        "deal": 0,
+        "host": 427111721338406
+      },
+      "bank_before": {
+        "buyer": 521936392704856,
+        "deal": 47387321358851,
+        "host": 379729399979555
+      },
+      "caller": "gonka18p5qmfvhae6r62n0dyedgjmsvrdtkw6gzy7wfn",
+      "caller_native_fee_delta": 0,
+      "epoch_bracket": {
+        "after_height": 212,
+        "before_height": 211,
+        "epoch": 8,
+        "same_epoch": true,
+        "tx_height": 212
+      },
+      "expected": {
+        "buyer_delta": 5000000000,
+        "buyer_released": 5000000000,
+        "host_delta": 47382321358851,
+        "host_released": 47382321358851,
+        "released_total": 47387321358851
+      },
+      "foreign_cw20_after": 0,
+      "foreign_cw20_before": 0,
+      "name": "release",
+      "state_after": {
+        "buyer": "gonka1xv9cmdl32d0khd756c48ke2wgvakndzkt7jkpm",
+        "buyer_entitlement_ngonka": "10000000000",
+        "buyer_refund_usdt": "0",
+        "buyer_released_ngonka": "5000000000",
+        "fee_usdt": "150000",
+        "gnk_release_policy": {
+          "proportional": {
+            "buyer_share_numerator": "10000000000",
+            "share_denominator": "94774642717702"
+          }
+        },
+        "gross_usdt": "10000000",
+        "host_entitlement_ngonka": "94764642717702",
+        "host_net_usdt": "9850000",
+        "host_released_ngonka": "47382321358851",
+        "recipient_locked": true,
+        "refund_reason": null,
+        "released_total_ngonka": "47387321358851",
+        "reward_ngonka": "94774642717702",
+        "status": "releasing",
+        "total_claim_ngonka": "94774642717702",
+        "work_ngonka": "0"
+      },
+      "state_before": {
+        "buyer": "gonka1xv9cmdl32d0khd756c48ke2wgvakndzkt7jkpm",
+        "buyer_entitlement_ngonka": "10000000000",
+        "buyer_refund_usdt": "0",
+        "buyer_released_ngonka": "0",
+        "fee_usdt": "150000",
+        "gnk_release_policy": {
+          "proportional": {
+            "buyer_share_numerator": "10000000000",
+            "share_denominator": "94774642717702"
+          }
+        },
+        "gross_usdt": "10000000",
+        "host_entitlement_ngonka": "94764642717702",
+        "host_net_usdt": "9850000",
+        "host_released_ngonka": "0",
+        "recipient_locked": true,
+        "refund_reason": null,
+        "released_total_ngonka": "0",
+        "reward_ngonka": "94774642717702",
+        "status": "releasing",
+        "total_claim_ngonka": "94774642717702",
+        "work_ngonka": "0"
+      },
+      "tx": {
+        "code": 0,
+        "events": [
+          {
+            "attributes": [
+              {
+                "index": true,
+                "key": "_contract_address",
+                "value": "gonka1rc40zxhdxq79j9920dyaf6yacnntxm3kqf0dnz52yctpf3tms0pqaurwt8"
+              },
+              {
+                "index": true,
+                "key": "msg_index",
+                "value": "0"
+              }
+            ],
+            "type": "execute"
+          },
+          {
+            "attributes": [
+              {
+                "index": true,
+                "key": "_contract_address",
+                "value": "gonka1rc40zxhdxq79j9920dyaf6yacnntxm3kqf0dnz52yctpf3tms0pqaurwt8"
+              },
+              {
+                "index": true,
+                "key": "deal",
+                "value": "gonka1rc40zxhdxq79j9920dyaf6yacnntxm3kqf0dnz52yctpf3tms0pqaurwt8"
+              },
+              {
+                "index": true,
+                "key": "host",
+                "value": "gonka1xw3ucqx383rg6sv90m25wwry7r6pvcxgja8hu9"
+              },
+              {
+                "index": true,
+                "key": "target_epoch",
+                "value": "6"
+              },
+              {
+                "index": true,
+                "key": "released_total_ngonka",
+                "value": "47387321358851"
+              },
+              {
+                "index": true,
+                "key": "buyer_released_ngonka",
+                "value": "5000000000"
+              },
+              {
+                "index": true,
+                "key": "host_released_ngonka",
+                "value": "47382321358851"
+              },
+              {
+                "index": true,
+                "key": "buyer_delta_ngonka",
+                "value": "5000000000"
+              },
+              {
+                "index": true,
+                "key": "host_delta_ngonka",
+                "value": "47382321358851"
+              },
+              {
+                "index": true,
+                "key": "buyer_share_numerator",
+                "value": "10000000000"
+              },
+              {
+                "index": true,
+                "key": "host_share_numerator",
+                "value": "94764642717702"
+              },
+              {
+                "index": true,
+                "key": "share_denominator",
+                "value": "94774642717702"
+              },
+              {
+                "index": true,
+                "key": "entry_point",
+                "value": "release_unlocked_gnk"
+              },
+              {
+                "index": true,
+                "key": "available_balance_ngonka",
+                "value": "47387321358851"
+              },
+              {
+                "index": true,
+                "key": "buyer",
+                "value": "gonka1xv9cmdl32d0khd756c48ke2wgvakndzkt7jkpm"
+              },
+              {
+                "index": true,
+                "key": "msg_index",
+                "value": "0"
+              }
+            ],
+            "type": "wasm-gnk_released"
+          },
+          {
+            "attributes": [
+              {
+                "index": true,
+                "key": "recipient",
+                "value": "gonka1xv9cmdl32d0khd756c48ke2wgvakndzkt7jkpm"
+              },
+              {
+                "index": true,
+                "key": "sender",
+                "value": "gonka1rc40zxhdxq79j9920dyaf6yacnntxm3kqf0dnz52yctpf3tms0pqaurwt8"
+              },
+              {
+                "index": true,
+                "key": "amount",
+                "value": "5000000000ngonka"
+              },
+              {
+                "index": true,
+                "key": "msg_index",
+                "value": "0"
+              }
+            ],
+            "type": "transfer"
+          },
+          {
+            "attributes": [
+              {
+                "index": true,
+                "key": "recipient",
+                "value": "gonka1xw3ucqx383rg6sv90m25wwry7r6pvcxgja8hu9"
+              },
+              {
+                "index": true,
+                "key": "sender",
+                "value": "gonka1rc40zxhdxq79j9920dyaf6yacnntxm3kqf0dnz52yctpf3tms0pqaurwt8"
+              },
+              {
+                "index": true,
+                "key": "amount",
+                "value": "47382321358851ngonka"
+              },
+              {
+                "index": true,
+                "key": "msg_index",
+                "value": "0"
+              }
+            ],
+            "type": "transfer"
+          }
+        ],
+        "gas_used": "164232",
+        "gas_wanted": "776285",
+        "height": "212",
+        "tx_hash": "6E70DFF16AD9B6E725D77ABD41F0FF3D4DD0D2B2FD97EE02410F97962176FB50"
+      }
+    },
+    {
+      "actual": {
+        "address_delta": 47387321358851,
+        "buyer_delta": 5000000000,
+        "coincident_recipients": false,
+        "host_delta": 47382321358851
+      },
+      "bank_after": {
+        "buyer": 569333714063707,
+        "deal": 0,
+        "host": 474494042697257
+      },
+      "bank_before": {
+        "buyer": 569328714063707,
+        "deal": 47387321358851,
+        "host": 427111721338406
+      },
+      "caller": "gonka18p5qmfvhae6r62n0dyedgjmsvrdtkw6gzy7wfn",
+      "caller_native_fee_delta": 0,
+      "epoch_bracket": {
+        "after_height": 237,
+        "before_height": 236,
+        "epoch": 9,
+        "same_epoch": true,
+        "tx_height": 237
+      },
+      "expected": {
+        "buyer_delta": 5000000000,
+        "buyer_released": 10000000000,
+        "host_delta": 47382321358851,
+        "host_released": 94764642717702,
+        "released_total": 94774642717702
+      },
+      "foreign_cw20_after": 0,
+      "foreign_cw20_before": 0,
+      "name": "release",
+      "state_after": {
+        "buyer": "gonka1xv9cmdl32d0khd756c48ke2wgvakndzkt7jkpm",
+        "buyer_entitlement_ngonka": "10000000000",
+        "buyer_refund_usdt": "0",
+        "buyer_released_ngonka": "10000000000",
+        "fee_usdt": "150000",
+        "gnk_release_policy": {
+          "proportional": {
+            "buyer_share_numerator": "10000000000",
+            "share_denominator": "94774642717702"
+          }
+        },
+        "gross_usdt": "10000000",
+        "host_entitlement_ngonka": "94764642717702",
+        "host_net_usdt": "9850000",
+        "host_released_ngonka": "94764642717702",
+        "recipient_locked": true,
+        "refund_reason": null,
+        "released_total_ngonka": "94774642717702",
+        "reward_ngonka": "94774642717702",
+        "status": "completed",
+        "total_claim_ngonka": "94774642717702",
+        "work_ngonka": "0"
+      },
+      "state_before": {
+        "buyer": "gonka1xv9cmdl32d0khd756c48ke2wgvakndzkt7jkpm",
+        "buyer_entitlement_ngonka": "10000000000",
+        "buyer_refund_usdt": "0",
+        "buyer_released_ngonka": "5000000000",
+        "fee_usdt": "150000",
+        "gnk_release_policy": {
+          "proportional": {
+            "buyer_share_numerator": "10000000000",
+            "share_denominator": "94774642717702"
+          }
+        },
+        "gross_usdt": "10000000",
+        "host_entitlement_ngonka": "94764642717702",
+        "host_net_usdt": "9850000",
+        "host_released_ngonka": "47382321358851",
+        "recipient_locked": true,
+        "refund_reason": null,
+        "released_total_ngonka": "47387321358851",
+        "reward_ngonka": "94774642717702",
+        "status": "releasing",
+        "total_claim_ngonka": "94774642717702",
+        "work_ngonka": "0"
+      },
+      "tx": {
+        "code": 0,
+        "events": [
+          {
+            "attributes": [
+              {
+                "index": true,
+                "key": "_contract_address",
+                "value": "gonka1rc40zxhdxq79j9920dyaf6yacnntxm3kqf0dnz52yctpf3tms0pqaurwt8"
+              },
+              {
+                "index": true,
+                "key": "msg_index",
+                "value": "0"
+              }
+            ],
+            "type": "execute"
+          },
+          {
+            "attributes": [
+              {
+                "index": true,
+                "key": "_contract_address",
+                "value": "gonka1rc40zxhdxq79j9920dyaf6yacnntxm3kqf0dnz52yctpf3tms0pqaurwt8"
+              },
+              {
+                "index": true,
+                "key": "deal",
+                "value": "gonka1rc40zxhdxq79j9920dyaf6yacnntxm3kqf0dnz52yctpf3tms0pqaurwt8"
+              },
+              {
+                "index": true,
+                "key": "host",
+                "value": "gonka1xw3ucqx383rg6sv90m25wwry7r6pvcxgja8hu9"
+              },
+              {
+                "index": true,
+                "key": "target_epoch",
+                "value": "6"
+              },
+              {
+                "index": true,
+                "key": "released_total_ngonka",
+                "value": "94774642717702"
+              },
+              {
+                "index": true,
+                "key": "buyer_released_ngonka",
+                "value": "10000000000"
+              },
+              {
+                "index": true,
+                "key": "host_released_ngonka",
+                "value": "94764642717702"
+              },
+              {
+                "index": true,
+                "key": "buyer_delta_ngonka",
+                "value": "5000000000"
+              },
+              {
+                "index": true,
+                "key": "host_delta_ngonka",
+                "value": "47382321358851"
+              },
+              {
+                "index": true,
+                "key": "buyer_share_numerator",
+                "value": "10000000000"
+              },
+              {
+                "index": true,
+                "key": "host_share_numerator",
+                "value": "94764642717702"
+              },
+              {
+                "index": true,
+                "key": "share_denominator",
+                "value": "94774642717702"
+              },
+              {
+                "index": true,
+                "key": "entry_point",
+                "value": "release_unlocked_gnk"
+              },
+              {
+                "index": true,
+                "key": "available_balance_ngonka",
+                "value": "47387321358851"
+              },
+              {
+                "index": true,
+                "key": "buyer",
+                "value": "gonka1xv9cmdl32d0khd756c48ke2wgvakndzkt7jkpm"
+              },
+              {
+                "index": true,
+                "key": "msg_index",
+                "value": "0"
+              }
+            ],
+            "type": "wasm-gnk_released"
+          },
+          {
+            "attributes": [
+              {
+                "index": true,
+                "key": "_contract_address",
+                "value": "gonka1rc40zxhdxq79j9920dyaf6yacnntxm3kqf0dnz52yctpf3tms0pqaurwt8"
+              },
+              {
+                "index": true,
+                "key": "deal",
+                "value": "gonka1rc40zxhdxq79j9920dyaf6yacnntxm3kqf0dnz52yctpf3tms0pqaurwt8"
+              },
+              {
+                "index": true,
+                "key": "host",
+                "value": "gonka1xw3ucqx383rg6sv90m25wwry7r6pvcxgja8hu9"
+              },
+              {
+                "index": true,
+                "key": "target_epoch",
+                "value": "6"
+              },
+              {
+                "index": true,
+                "key": "total_claim_ngonka",
+                "value": "94774642717702"
+              },
+              {
+                "index": true,
+                "key": "msg_index",
+                "value": "0"
+              }
+            ],
+            "type": "wasm-deal_completed"
+          },
+          {
+            "attributes": [
+              {
+                "index": true,
+                "key": "recipient",
+                "value": "gonka1xv9cmdl32d0khd756c48ke2wgvakndzkt7jkpm"
+              },
+              {
+                "index": true,
+                "key": "sender",
+                "value": "gonka1rc40zxhdxq79j9920dyaf6yacnntxm3kqf0dnz52yctpf3tms0pqaurwt8"
+              },
+              {
+                "index": true,
+                "key": "amount",
+                "value": "5000000000ngonka"
+              },
+              {
+                "index": true,
+                "key": "msg_index",
+                "value": "0"
+              }
+            ],
+            "type": "transfer"
+          },
+          {
+            "attributes": [
+              {
+                "index": true,
+                "key": "recipient",
+                "value": "gonka1xw3ucqx383rg6sv90m25wwry7r6pvcxgja8hu9"
+              },
+              {
+                "index": true,
+                "key": "sender",
+                "value": "gonka1rc40zxhdxq79j9920dyaf6yacnntxm3kqf0dnz52yctpf3tms0pqaurwt8"
+              },
+              {
+                "index": true,
+                "key": "amount",
+                "value": "47382321358851ngonka"
+              },
+              {
+                "index": true,
+                "key": "msg_index",
+                "value": "0"
+              }
+            ],
+            "type": "transfer"
+          }
+        ],
+        "gas_used": "164962",
+        "gas_wanted": "779935",
+        "height": "237",
+        "tx_hash": "35C1214B75D154CC4098629166ECCC54493300D58FC48CB0E23B4B0FC09FF2FF"
+      }
+    },
+    {
+      "epoch": {
+        "epoch": 9,
+        "height": 237
+      },
+      "gift_amount_ngonka": 0,
+      "name": "r2_gift_checkpoint",
+      "snapshot": {
+        "bank": {
+          "buyer": {
+            "ngonka": 569333714063707
+          },
+          "deal": {},
+          "fee_recipient": {},
+          "host": {
+            "ngonka": 474494042697257
+          }
+        },
+        "config": {
+          "buyer_budget_micro_usdt": "10000000",
+          "deal_address": "gonka1rc40zxhdxq79j9920dyaf6yacnntxm3kqf0dnz52yctpf3tms0pqaurwt8",
+          "factory": "gonka1uhq7a8jkczjckmlfc73uchu80ahtxvsflxva0kh56d3fz2hq5n3sh5heqj",
+          "fee_bps": 150,
+          "fee_recipient": "gonka1e3nd60ur3wdf5urfxt6nfmud52n6ekeuq05zn6",
+          "funded_capacity_ngonka": "10000000000",
+          "host": "gonka1xw3ucqx383rg6sv90m25wwry7r6pvcxgja8hu9",
+          "pinned_gonka_sha": "379bebced638aeb5e6077bfd51c986f898443832",
+          "price_micro_usdt_per_gnk": "1000000",
+          "settlement_cw20": "gonka1l4am49w5jujwnu53ym3h2uq75ennmysrmyx84cnyqpqrzxastq5q37w5a9",
+          "target_epoch": 6
+        },
+        "entitlements": {
+          "buyer_entitlement_ngonka": "10000000000",
+          "gnk_release_policy": {
+            "proportional": {
+              "buyer_share_numerator": "10000000000",
+              "share_denominator": "94774642717702"
+            }
+          },
+          "host_entitlement_ngonka": "94764642717702",
+          "reward_ngonka": "94774642717702",
+          "total_claim_ngonka": "94774642717702",
+          "work_ngonka": "0"
+        },
+        "native_status": {
+          "liquid_balance_ngonka": "0",
+          "remaining_vesting_ngonka": "0"
+        },
+        "release_status": {
+          "buyer_original_remaining_ngonka": "0",
+          "buyer_released_ngonka": "10000000000",
+          "gnk_release_policy": {
+            "proportional": {
+              "buyer_share_numerator": "10000000000",
+              "share_denominator": "94774642717702"
+            }
+          },
+          "host_original_remaining_ngonka": "0",
+          "host_released_ngonka": "94764642717702",
+          "released_total_ngonka": "94774642717702"
+        },
+        "settlement_cw20": {
+          "buyer": 80000000,
+          "deal": 0,
+          "fee_recipient": 150000,
+          "host": 9850000
+        },
+        "state": {
+          "buyer": "gonka1xv9cmdl32d0khd756c48ke2wgvakndzkt7jkpm",
+          "buyer_entitlement_ngonka": "10000000000",
+          "buyer_refund_usdt": "0",
+          "buyer_released_ngonka": "10000000000",
+          "fee_usdt": "150000",
+          "gnk_release_policy": {
+            "proportional": {
+              "buyer_share_numerator": "10000000000",
+              "share_denominator": "94774642717702"
+            }
+          },
+          "gross_usdt": "10000000",
+          "host_entitlement_ngonka": "94764642717702",
+          "host_net_usdt": "9850000",
+          "host_released_ngonka": "94764642717702",
+          "recipient_locked": true,
+          "refund_reason": null,
+          "released_total_ngonka": "94774642717702",
+          "reward_ngonka": "94774642717702",
+          "status": "completed",
+          "total_claim_ngonka": "94774642717702",
+          "work_ngonka": "0"
+        },
+        "vesting_schedule": {
+          "vesting_schedule": {
+            "epoch_amounts": null,
+            "participant_address": "gonka1rc40zxhdxq79j9920dyaf6yacnntxm3kqf0dnz52yctpf3tms0pqaurwt8"
+          }
+        },
+        "vesting_total": {
+          "total_amount": null
+        }
+      },
+      "stage": "pre_gift"
+    },
+    {
+      "addition_by_epoch": [
+        {
+          "ngonka": 5000000001
+        },
+        {
+          "ngonka": 5000000000
+        }
+      ],
+      "after": {
+        "vesting_schedule": {
+          "epoch_amounts": [
+            {
+              "coins": [
+                {
+                  "amount": "5000000001",
+                  "denom": "ngonka"
+                }
+              ]
+            },
+            {
+              "coins": [
+                {
+                  "amount": "5000000000",
+                  "denom": "ngonka"
+                }
+              ]
+            }
+          ],
+          "participant_address": "gonka1rc40zxhdxq79j9920dyaf6yacnntxm3kqf0dnz52yctpf3tms0pqaurwt8"
+        }
+      },
+      "allow_empty_before": true,
+      "amount_ngonka": 10000000001,
+      "assertion": "subtracting the new schedule leaves every old tranche unchanged",
+      "before": {
+        "vesting_schedule": {
+          "epoch_amounts": null,
+          "participant_address": "gonka1rc40zxhdxq79j9920dyaf6yacnntxm3kqf0dnz52yctpf3tms0pqaurwt8"
+        }
+      },
+      "epoch": 10,
+      "expected": [
+        {
+          "ngonka": 5000000001
+        },
+        {
+          "ngonka": 5000000000
+        }
+      ],
+      "funding_tx": {
+        "code": 0,
+        "events": [
+          {
+            "attributes": [
+              {
+                "index": true,
+                "key": "recipient",
+                "value": "gonka1e3fawtzuxl5zpvdtjwgjz4m8hufkhkhu4pgj8s"
+              },
+              {
+                "index": true,
+                "key": "sender",
+                "value": "gonka18p5qmfvhae6r62n0dyedgjmsvrdtkw6gzy7wfn"
+              },
+              {
+                "index": true,
+                "key": "amount",
+                "value": "10000000001ngonka"
+              },
+              {
+                "index": true,
+                "key": "msg_index",
+                "value": "0"
+              }
+            ],
+            "type": "transfer"
+          }
+        ],
+        "gas_used": "48642",
+        "gas_wanted": "2000000",
+        "height": "260",
+        "tx_hash": "0A346A0FA2B52291B10EC4B721967694E302DD1580E4CA05B136606F5DABB64C"
+      },
+      "level": "live_network",
+      "name": "vesting_addition",
+      "proposal": {
+        "proposal": {
+          "deposit_end_time": "2026-01-01T00:03:00.000000000Z",
+          "final_tally_result": {
+            "abstain_count": "0",
+            "no_count": "0",
+            "no_with_veto_count": "0",
+            "yes_count": "30"
+          },
+          "id": "1",
+          "messages": [
+            {
+              "type": "inference/x/streamvesting/MsgTransferWithVesting",
+              "value": {
+                "amount": [
+                  {
+                    "amount": "10000000001",
+                    "denom": "ngonka"
+                  }
+                ],
+                "recipient": "gonka1rc40zxhdxq79j9920dyaf6yacnntxm3kqf0dnz52yctpf3tms0pqaurwt8",
+                "sender": "gonka1e3fawtzuxl5zpvdtjwgjz4m8hufkhkhu4pgj8s",
+                "vesting_epochs": "2"
+              }
+            }
+          ],
+          "metadata": "http://www.yahoo.com",
+          "proposer": "gonka18p5qmfvhae6r62n0dyedgjmsvrdtkw6gzy7wfn",
+          "status": "PROPOSAL_STATUS_PASSED",
+          "submit_time": "2026-01-01T00:01:00.000000000Z",
+          "summary": "some inferences are taking a very long time to respond to, we need a longer expiration",
+          "title": "Extend the expiration blocks",
+          "total_deposit": [
+            {
+              "amount": "2000",
+              "denom": "ngonka"
+            }
+          ],
+          "voting_end_time": "2026-01-01T00:02:00.000000000Z",
+          "voting_start_time": "2026-01-01T00:01:00.000000000Z"
+        }
+      },
+      "proposal_id": "1",
+      "vesting_epochs": 2
+    },
+    {
+      "epoch": {
+        "epoch": 10,
+        "height": 269
+      },
+      "gift_amount_ngonka": 10000000001,
+      "name": "r2_gift_checkpoint",
+      "snapshot": {
+        "bank": {
+          "buyer": {
+            "ngonka": 616676038844026
+          },
+          "deal": {},
+          "fee_recipient": {},
+          "host": {
+            "ngonka": 521836367477576
+          }
+        },
+        "config": {
+          "buyer_budget_micro_usdt": "10000000",
+          "deal_address": "gonka1rc40zxhdxq79j9920dyaf6yacnntxm3kqf0dnz52yctpf3tms0pqaurwt8",
+          "factory": "gonka1uhq7a8jkczjckmlfc73uchu80ahtxvsflxva0kh56d3fz2hq5n3sh5heqj",
+          "fee_bps": 150,
+          "fee_recipient": "gonka1e3nd60ur3wdf5urfxt6nfmud52n6ekeuq05zn6",
+          "funded_capacity_ngonka": "10000000000",
+          "host": "gonka1xw3ucqx383rg6sv90m25wwry7r6pvcxgja8hu9",
+          "pinned_gonka_sha": "379bebced638aeb5e6077bfd51c986f898443832",
+          "price_micro_usdt_per_gnk": "1000000",
+          "settlement_cw20": "gonka1l4am49w5jujwnu53ym3h2uq75ennmysrmyx84cnyqpqrzxastq5q37w5a9",
+          "target_epoch": 6
+        },
+        "entitlements": {
+          "buyer_entitlement_ngonka": "10000000000",
+          "gnk_release_policy": {
+            "proportional": {
+              "buyer_share_numerator": "10000000000",
+              "share_denominator": "94774642717702"
+            }
+          },
+          "host_entitlement_ngonka": "94764642717702",
+          "reward_ngonka": "94774642717702",
+          "total_claim_ngonka": "94774642717702",
+          "work_ngonka": "0"
+        },
+        "native_status": {
+          "liquid_balance_ngonka": "0",
+          "remaining_vesting_ngonka": "10000000001"
+        },
+        "release_status": {
+          "buyer_original_remaining_ngonka": "0",
+          "buyer_released_ngonka": "10000000000",
+          "gnk_release_policy": {
+            "proportional": {
+              "buyer_share_numerator": "10000000000",
+              "share_denominator": "94774642717702"
+            }
+          },
+          "host_original_remaining_ngonka": "0",
+          "host_released_ngonka": "94764642717702",
+          "released_total_ngonka": "94774642717702"
+        },
+        "settlement_cw20": {
+          "buyer": 80000000,
+          "deal": 0,
+          "fee_recipient": 150000,
+          "host": 9850000
+        },
+        "state": {
+          "buyer": "gonka1xv9cmdl32d0khd756c48ke2wgvakndzkt7jkpm",
+          "buyer_entitlement_ngonka": "10000000000",
+          "buyer_refund_usdt": "0",
+          "buyer_released_ngonka": "10000000000",
+          "fee_usdt": "150000",
+          "gnk_release_policy": {
+            "proportional": {
+              "buyer_share_numerator": "10000000000",
+              "share_denominator": "94774642717702"
+            }
+          },
+          "gross_usdt": "10000000",
+          "host_entitlement_ngonka": "94764642717702",
+          "host_net_usdt": "9850000",
+          "host_released_ngonka": "94764642717702",
+          "recipient_locked": true,
+          "refund_reason": null,
+          "released_total_ngonka": "94774642717702",
+          "reward_ngonka": "94774642717702",
+          "status": "completed",
+          "total_claim_ngonka": "94774642717702",
+          "work_ngonka": "0"
+        },
+        "vesting_schedule": {
+          "vesting_schedule": {
+            "epoch_amounts": [
+              {
+                "coins": [
+                  {
+                    "amount": "5000000001",
+                    "denom": "ngonka"
+                  }
+                ]
+              },
+              {
+                "coins": [
+                  {
+                    "amount": "5000000000",
+                    "denom": "ngonka"
+                  }
+                ]
+              }
+            ],
+            "participant_address": "gonka1rc40zxhdxq79j9920dyaf6yacnntxm3kqf0dnz52yctpf3tms0pqaurwt8"
+          }
+        },
+        "vesting_total": {
+          "total_amount": [
+            {
+              "amount": "10000000001",
+              "denom": "ngonka"
+            }
+          ]
+        }
+      },
+      "stage": "fully_locked"
+    },
+    {
+      "epoch": {
+        "epoch": 11,
+        "height": 283
+      },
+      "gift_amount_ngonka": 10000000001,
+      "name": "r2_gift_checkpoint",
+      "snapshot": {
+        "bank": {
+          "buyer": {
+            "ngonka": 711338206140354
+          },
+          "deal": {
+            "ngonka": 5000000001
+          },
+          "fee_recipient": {},
+          "host": {
+            "ngonka": 616498534773904
+          }
+        },
+        "config": {
+          "buyer_budget_micro_usdt": "10000000",
+          "deal_address": "gonka1rc40zxhdxq79j9920dyaf6yacnntxm3kqf0dnz52yctpf3tms0pqaurwt8",
+          "factory": "gonka1uhq7a8jkczjckmlfc73uchu80ahtxvsflxva0kh56d3fz2hq5n3sh5heqj",
+          "fee_bps": 150,
+          "fee_recipient": "gonka1e3nd60ur3wdf5urfxt6nfmud52n6ekeuq05zn6",
+          "funded_capacity_ngonka": "10000000000",
+          "host": "gonka1xw3ucqx383rg6sv90m25wwry7r6pvcxgja8hu9",
+          "pinned_gonka_sha": "379bebced638aeb5e6077bfd51c986f898443832",
+          "price_micro_usdt_per_gnk": "1000000",
+          "settlement_cw20": "gonka1l4am49w5jujwnu53ym3h2uq75ennmysrmyx84cnyqpqrzxastq5q37w5a9",
+          "target_epoch": 6
+        },
+        "entitlements": {
+          "buyer_entitlement_ngonka": "10000000000",
+          "gnk_release_policy": {
+            "proportional": {
+              "buyer_share_numerator": "10000000000",
+              "share_denominator": "94774642717702"
+            }
+          },
+          "host_entitlement_ngonka": "94764642717702",
+          "reward_ngonka": "94774642717702",
+          "total_claim_ngonka": "94774642717702",
+          "work_ngonka": "0"
+        },
+        "native_status": {
+          "liquid_balance_ngonka": "5000000001",
+          "remaining_vesting_ngonka": "5000000000"
+        },
+        "release_status": {
+          "buyer_original_remaining_ngonka": "0",
+          "buyer_released_ngonka": "10000000000",
+          "gnk_release_policy": {
+            "proportional": {
+              "buyer_share_numerator": "10000000000",
+              "share_denominator": "94774642717702"
+            }
+          },
+          "host_original_remaining_ngonka": "0",
+          "host_released_ngonka": "94764642717702",
+          "released_total_ngonka": "94774642717702"
+        },
+        "settlement_cw20": {
+          "buyer": 80000000,
+          "deal": 0,
+          "fee_recipient": 150000,
+          "host": 9850000
+        },
+        "state": {
+          "buyer": "gonka1xv9cmdl32d0khd756c48ke2wgvakndzkt7jkpm",
+          "buyer_entitlement_ngonka": "10000000000",
+          "buyer_refund_usdt": "0",
+          "buyer_released_ngonka": "10000000000",
+          "fee_usdt": "150000",
+          "gnk_release_policy": {
+            "proportional": {
+              "buyer_share_numerator": "10000000000",
+              "share_denominator": "94774642717702"
+            }
+          },
+          "gross_usdt": "10000000",
+          "host_entitlement_ngonka": "94764642717702",
+          "host_net_usdt": "9850000",
+          "host_released_ngonka": "94764642717702",
+          "recipient_locked": true,
+          "refund_reason": null,
+          "released_total_ngonka": "94774642717702",
+          "reward_ngonka": "94774642717702",
+          "status": "completed",
+          "total_claim_ngonka": "94774642717702",
+          "work_ngonka": "0"
+        },
+        "vesting_schedule": {
+          "vesting_schedule": {
+            "epoch_amounts": [
+              {
+                "coins": [
+                  {
+                    "amount": "5000000000",
+                    "denom": "ngonka"
+                  }
+                ]
+              }
+            ],
+            "participant_address": "gonka1rc40zxhdxq79j9920dyaf6yacnntxm3kqf0dnz52yctpf3tms0pqaurwt8"
+          }
+        },
+        "vesting_total": {
+          "total_amount": [
+            {
+              "amount": "5000000000",
+              "denom": "ngonka"
+            }
+          ]
+        }
+      },
+      "stage": "first_unlocked"
+    },
+    {
+      "actual": {
+        "address_delta": 5000000001,
+        "buyer_delta": 527567,
+        "coincident_recipients": false,
+        "host_delta": 4999472434
+      },
+      "bank_after": {
+        "buyer": 711338206667921,
+        "deal": 0,
+        "host": 616503534246338
+      },
+      "bank_before": {
+        "buyer": 711338206140354,
+        "deal": 5000000001,
+        "host": 616498534773904
+      },
+      "caller": "gonka18p5qmfvhae6r62n0dyedgjmsvrdtkw6gzy7wfn",
+      "caller_native_fee_delta": 0,
+      "epoch_bracket": {
+        "after_height": 285,
+        "before_height": 283,
+        "epoch": 11,
+        "same_epoch": true,
+        "tx_height": 285
+      },
+      "expected": {
+        "buyer_delta": 527567,
+        "buyer_released": 10000527567,
+        "host_delta": 4999472434,
+        "host_released": 94769642190136,
+        "released_total": 94779642717703
+      },
+      "foreign_cw20_after": 0,
+      "foreign_cw20_before": 0,
+      "name": "release",
+      "state_after": {
+        "buyer": "gonka1xv9cmdl32d0khd756c48ke2wgvakndzkt7jkpm",
+        "buyer_entitlement_ngonka": "10000000000",
+        "buyer_refund_usdt": "0",
+        "buyer_released_ngonka": "10000527567",
+        "fee_usdt": "150000",
+        "gnk_release_policy": {
+          "proportional": {
+            "buyer_share_numerator": "10000000000",
+            "share_denominator": "94774642717702"
+          }
+        },
+        "gross_usdt": "10000000",
+        "host_entitlement_ngonka": "94764642717702",
+        "host_net_usdt": "9850000",
+        "host_released_ngonka": "94769642190136",
+        "recipient_locked": true,
+        "refund_reason": null,
+        "released_total_ngonka": "94779642717703",
+        "reward_ngonka": "94774642717702",
+        "status": "completed",
+        "total_claim_ngonka": "94774642717702",
+        "work_ngonka": "0"
+      },
+      "state_before": {
+        "buyer": "gonka1xv9cmdl32d0khd756c48ke2wgvakndzkt7jkpm",
+        "buyer_entitlement_ngonka": "10000000000",
+        "buyer_refund_usdt": "0",
+        "buyer_released_ngonka": "10000000000",
+        "fee_usdt": "150000",
+        "gnk_release_policy": {
+          "proportional": {
+            "buyer_share_numerator": "10000000000",
+            "share_denominator": "94774642717702"
+          }
+        },
+        "gross_usdt": "10000000",
+        "host_entitlement_ngonka": "94764642717702",
+        "host_net_usdt": "9850000",
+        "host_released_ngonka": "94764642717702",
+        "recipient_locked": true,
+        "refund_reason": null,
+        "released_total_ngonka": "94774642717702",
+        "reward_ngonka": "94774642717702",
+        "status": "completed",
+        "total_claim_ngonka": "94774642717702",
+        "work_ngonka": "0"
+      },
+      "tx": {
+        "code": 0,
+        "events": [
+          {
+            "attributes": [
+              {
+                "index": true,
+                "key": "_contract_address",
+                "value": "gonka1rc40zxhdxq79j9920dyaf6yacnntxm3kqf0dnz52yctpf3tms0pqaurwt8"
+              },
+              {
+                "index": true,
+                "key": "msg_index",
+                "value": "0"
+              }
+            ],
+            "type": "execute"
+          },
+          {
+            "attributes": [
+              {
+                "index": true,
+                "key": "_contract_address",
+                "value": "gonka1rc40zxhdxq79j9920dyaf6yacnntxm3kqf0dnz52yctpf3tms0pqaurwt8"
+              },
+              {
+                "index": true,
+                "key": "deal",
+                "value": "gonka1rc40zxhdxq79j9920dyaf6yacnntxm3kqf0dnz52yctpf3tms0pqaurwt8"
+              },
+              {
+                "index": true,
+                "key": "host",
+                "value": "gonka1xw3ucqx383rg6sv90m25wwry7r6pvcxgja8hu9"
+              },
+              {
+                "index": true,
+                "key": "target_epoch",
+                "value": "6"
+              },
+              {
+                "index": true,
+                "key": "released_total_ngonka",
+                "value": "94779642717703"
+              },
+              {
+                "index": true,
+                "key": "buyer_released_ngonka",
+                "value": "10000527567"
+              },
+              {
+                "index": true,
+                "key": "host_released_ngonka",
+                "value": "94769642190136"
+              },
+              {
+                "index": true,
+                "key": "buyer_delta_ngonka",
+                "value": "527567"
+              },
+              {
+                "index": true,
+                "key": "host_delta_ngonka",
+                "value": "4999472434"
+              },
+              {
+                "index": true,
+                "key": "buyer_share_numerator",
+                "value": "10000000000"
+              },
+              {
+                "index": true,
+                "key": "host_share_numerator",
+                "value": "94764642717702"
+              },
+              {
+                "index": true,
+                "key": "share_denominator",
+                "value": "94774642717702"
+              },
+              {
+                "index": true,
+                "key": "entry_point",
+                "value": "release_unlocked_gnk"
+              },
+              {
+                "index": true,
+                "key": "available_balance_ngonka",
+                "value": "5000000001"
+              },
+              {
+                "index": true,
+                "key": "buyer",
+                "value": "gonka1xv9cmdl32d0khd756c48ke2wgvakndzkt7jkpm"
+              },
+              {
+                "index": true,
+                "key": "msg_index",
+                "value": "0"
+              }
+            ],
+            "type": "wasm-gnk_released"
+          },
+          {
+            "attributes": [
+              {
+                "index": true,
+                "key": "recipient",
+                "value": "gonka1xv9cmdl32d0khd756c48ke2wgvakndzkt7jkpm"
+              },
+              {
+                "index": true,
+                "key": "sender",
+                "value": "gonka1rc40zxhdxq79j9920dyaf6yacnntxm3kqf0dnz52yctpf3tms0pqaurwt8"
+              },
+              {
+                "index": true,
+                "key": "amount",
+                "value": "527567ngonka"
+              },
+              {
+                "index": true,
+                "key": "msg_index",
+                "value": "0"
+              }
+            ],
+            "type": "transfer"
+          },
+          {
+            "attributes": [
+              {
+                "index": true,
+                "key": "recipient",
+                "value": "gonka1xw3ucqx383rg6sv90m25wwry7r6pvcxgja8hu9"
+              },
+              {
+                "index": true,
+                "key": "sender",
+                "value": "gonka1rc40zxhdxq79j9920dyaf6yacnntxm3kqf0dnz52yctpf3tms0pqaurwt8"
+              },
+              {
+                "index": true,
+                "key": "amount",
+                "value": "4999472434ngonka"
+              },
+              {
+                "index": true,
+                "key": "msg_index",
+                "value": "0"
+              }
+            ],
+            "type": "transfer"
+          }
+        ],
+        "gas_used": "164201",
+        "gas_wanted": "776125",
+        "height": "285",
+        "tx_hash": "70551A17E6F3D7F8B9F1EA5318158C87DB8C5F5B867104F50695036C5378FACA"
+      }
+    },
+    {
+      "actual": {
+        "address_delta": 5000000000,
+        "buyer_delta": 527567,
+        "coincident_recipients": false,
+        "host_delta": 4999472433
+      },
+      "bank_after": {
+        "buyer": 805955420639736,
+        "deal": 0,
+        "host": 711125747163019
+      },
+      "bank_before": {
+        "buyer": 805955420112169,
+        "deal": 5000000000,
+        "host": 711120747690586
+      },
+      "caller": "gonka18p5qmfvhae6r62n0dyedgjmsvrdtkw6gzy7wfn",
+      "caller_native_fee_delta": 0,
+      "epoch_bracket": {
+        "after_height": 309,
+        "before_height": 308,
+        "epoch": 12,
+        "same_epoch": true,
+        "tx_height": 309
+      },
+      "expected": {
+        "buyer_delta": 527567,
+        "buyer_released": 10001055134,
+        "host_delta": 4999472433,
+        "host_released": 94774641662569,
+        "released_total": 94784642717703
+      },
+      "foreign_cw20_after": 0,
+      "foreign_cw20_before": 0,
+      "name": "release",
+      "state_after": {
+        "buyer": "gonka1xv9cmdl32d0khd756c48ke2wgvakndzkt7jkpm",
+        "buyer_entitlement_ngonka": "10000000000",
+        "buyer_refund_usdt": "0",
+        "buyer_released_ngonka": "10001055134",
+        "fee_usdt": "150000",
+        "gnk_release_policy": {
+          "proportional": {
+            "buyer_share_numerator": "10000000000",
+            "share_denominator": "94774642717702"
+          }
+        },
+        "gross_usdt": "10000000",
+        "host_entitlement_ngonka": "94764642717702",
+        "host_net_usdt": "9850000",
+        "host_released_ngonka": "94774641662569",
+        "recipient_locked": true,
+        "refund_reason": null,
+        "released_total_ngonka": "94784642717703",
+        "reward_ngonka": "94774642717702",
+        "status": "completed",
+        "total_claim_ngonka": "94774642717702",
+        "work_ngonka": "0"
+      },
+      "state_before": {
+        "buyer": "gonka1xv9cmdl32d0khd756c48ke2wgvakndzkt7jkpm",
+        "buyer_entitlement_ngonka": "10000000000",
+        "buyer_refund_usdt": "0",
+        "buyer_released_ngonka": "10000527567",
+        "fee_usdt": "150000",
+        "gnk_release_policy": {
+          "proportional": {
+            "buyer_share_numerator": "10000000000",
+            "share_denominator": "94774642717702"
+          }
+        },
+        "gross_usdt": "10000000",
+        "host_entitlement_ngonka": "94764642717702",
+        "host_net_usdt": "9850000",
+        "host_released_ngonka": "94769642190136",
+        "recipient_locked": true,
+        "refund_reason": null,
+        "released_total_ngonka": "94779642717703",
+        "reward_ngonka": "94774642717702",
+        "status": "completed",
+        "total_claim_ngonka": "94774642717702",
+        "work_ngonka": "0"
+      },
+      "tx": {
+        "code": 0,
+        "events": [
+          {
+            "attributes": [
+              {
+                "index": true,
+                "key": "_contract_address",
+                "value": "gonka1rc40zxhdxq79j9920dyaf6yacnntxm3kqf0dnz52yctpf3tms0pqaurwt8"
+              },
+              {
+                "index": true,
+                "key": "msg_index",
+                "value": "0"
+              }
+            ],
+            "type": "execute"
+          },
+          {
+            "attributes": [
+              {
+                "index": true,
+                "key": "_contract_address",
+                "value": "gonka1rc40zxhdxq79j9920dyaf6yacnntxm3kqf0dnz52yctpf3tms0pqaurwt8"
+              },
+              {
+                "index": true,
+                "key": "deal",
+                "value": "gonka1rc40zxhdxq79j9920dyaf6yacnntxm3kqf0dnz52yctpf3tms0pqaurwt8"
+              },
+              {
+                "index": true,
+                "key": "host",
+                "value": "gonka1xw3ucqx383rg6sv90m25wwry7r6pvcxgja8hu9"
+              },
+              {
+                "index": true,
+                "key": "target_epoch",
+                "value": "6"
+              },
+              {
+                "index": true,
+                "key": "released_total_ngonka",
+                "value": "94784642717703"
+              },
+              {
+                "index": true,
+                "key": "buyer_released_ngonka",
+                "value": "10001055134"
+              },
+              {
+                "index": true,
+                "key": "host_released_ngonka",
+                "value": "94774641662569"
+              },
+              {
+                "index": true,
+                "key": "buyer_delta_ngonka",
+                "value": "527567"
+              },
+              {
+                "index": true,
+                "key": "host_delta_ngonka",
+                "value": "4999472433"
+              },
+              {
+                "index": true,
+                "key": "buyer_share_numerator",
+                "value": "10000000000"
+              },
+              {
+                "index": true,
+                "key": "host_share_numerator",
+                "value": "94764642717702"
+              },
+              {
+                "index": true,
+                "key": "share_denominator",
+                "value": "94774642717702"
+              },
+              {
+                "index": true,
+                "key": "entry_point",
+                "value": "release_unlocked_gnk"
+              },
+              {
+                "index": true,
+                "key": "available_balance_ngonka",
+                "value": "5000000000"
+              },
+              {
+                "index": true,
+                "key": "buyer",
+                "value": "gonka1xv9cmdl32d0khd756c48ke2wgvakndzkt7jkpm"
+              },
+              {
+                "index": true,
+                "key": "msg_index",
+                "value": "0"
+              }
+            ],
+            "type": "wasm-gnk_released"
+          },
+          {
+            "attributes": [
+              {
+                "index": true,
+                "key": "recipient",
+                "value": "gonka1xv9cmdl32d0khd756c48ke2wgvakndzkt7jkpm"
+              },
+              {
+                "index": true,
+                "key": "sender",
+                "value": "gonka1rc40zxhdxq79j9920dyaf6yacnntxm3kqf0dnz52yctpf3tms0pqaurwt8"
+              },
+              {
+                "index": true,
+                "key": "amount",
+                "value": "527567ngonka"
+              },
+              {
+                "index": true,
+                "key": "msg_index",
+                "value": "0"
+              }
+            ],
+            "type": "transfer"
+          },
+          {
+            "attributes": [
+              {
+                "index": true,
+                "key": "recipient",
+                "value": "gonka1xw3ucqx383rg6sv90m25wwry7r6pvcxgja8hu9"
+              },
+              {
+                "index": true,
+                "key": "sender",
+                "value": "gonka1rc40zxhdxq79j9920dyaf6yacnntxm3kqf0dnz52yctpf3tms0pqaurwt8"
+              },
+              {
+                "index": true,
+                "key": "amount",
+                "value": "4999472433ngonka"
+              },
+              {
+                "index": true,
+                "key": "msg_index",
+                "value": "0"
+              }
+            ],
+            "type": "transfer"
+          }
+        ],
+        "gas_used": "164201",
+        "gas_wanted": "776125",
+        "height": "309",
+        "tx_hash": "D26E90615A00727137BE31EC37114A25BEB57001EA17B006433F7D8B2D27309B"
+      }
+    },
+    {
+      "epoch": {
+        "epoch": 12,
+        "height": 309
+      },
+      "gift_amount_ngonka": 10000000001,
+      "name": "r2_gift_checkpoint",
+      "snapshot": {
+        "bank": {
+          "buyer": {
+            "ngonka": 805955420639736
+          },
+          "deal": {},
+          "fee_recipient": {},
+          "host": {
+            "ngonka": 711125747163019
+          }
+        },
+        "config": {
+          "buyer_budget_micro_usdt": "10000000",
+          "deal_address": "gonka1rc40zxhdxq79j9920dyaf6yacnntxm3kqf0dnz52yctpf3tms0pqaurwt8",
+          "factory": "gonka1uhq7a8jkczjckmlfc73uchu80ahtxvsflxva0kh56d3fz2hq5n3sh5heqj",
+          "fee_bps": 150,
+          "fee_recipient": "gonka1e3nd60ur3wdf5urfxt6nfmud52n6ekeuq05zn6",
+          "funded_capacity_ngonka": "10000000000",
+          "host": "gonka1xw3ucqx383rg6sv90m25wwry7r6pvcxgja8hu9",
+          "pinned_gonka_sha": "379bebced638aeb5e6077bfd51c986f898443832",
+          "price_micro_usdt_per_gnk": "1000000",
+          "settlement_cw20": "gonka1l4am49w5jujwnu53ym3h2uq75ennmysrmyx84cnyqpqrzxastq5q37w5a9",
+          "target_epoch": 6
+        },
+        "entitlements": {
+          "buyer_entitlement_ngonka": "10000000000",
+          "gnk_release_policy": {
+            "proportional": {
+              "buyer_share_numerator": "10000000000",
+              "share_denominator": "94774642717702"
+            }
+          },
+          "host_entitlement_ngonka": "94764642717702",
+          "reward_ngonka": "94774642717702",
+          "total_claim_ngonka": "94774642717702",
+          "work_ngonka": "0"
+        },
+        "native_status": {
+          "liquid_balance_ngonka": "0",
+          "remaining_vesting_ngonka": "0"
+        },
+        "release_status": {
+          "buyer_original_remaining_ngonka": "0",
+          "buyer_released_ngonka": "10001055134",
+          "gnk_release_policy": {
+            "proportional": {
+              "buyer_share_numerator": "10000000000",
+              "share_denominator": "94774642717702"
+            }
+          },
+          "host_original_remaining_ngonka": "0",
+          "host_released_ngonka": "94774641662569",
+          "released_total_ngonka": "94784642717703"
+        },
+        "settlement_cw20": {
+          "buyer": 80000000,
+          "deal": 0,
+          "fee_recipient": 150000,
+          "host": 9850000
+        },
+        "state": {
+          "buyer": "gonka1xv9cmdl32d0khd756c48ke2wgvakndzkt7jkpm",
+          "buyer_entitlement_ngonka": "10000000000",
+          "buyer_refund_usdt": "0",
+          "buyer_released_ngonka": "10001055134",
+          "fee_usdt": "150000",
+          "gnk_release_policy": {
+            "proportional": {
+              "buyer_share_numerator": "10000000000",
+              "share_denominator": "94774642717702"
+            }
+          },
+          "gross_usdt": "10000000",
+          "host_entitlement_ngonka": "94764642717702",
+          "host_net_usdt": "9850000",
+          "host_released_ngonka": "94774641662569",
+          "recipient_locked": true,
+          "refund_reason": null,
+          "released_total_ngonka": "94784642717703",
+          "reward_ngonka": "94774642717702",
+          "status": "completed",
+          "total_claim_ngonka": "94774642717702",
+          "work_ngonka": "0"
+        },
+        "vesting_schedule": {
+          "vesting_schedule": {
+            "epoch_amounts": null,
+            "participant_address": "gonka1rc40zxhdxq79j9920dyaf6yacnntxm3kqf0dnz52yctpf3tms0pqaurwt8"
+          }
+        },
+        "vesting_total": {
+          "total_amount": null
+        }
+      },
+      "stage": "final"
+    }
+  ]
+}

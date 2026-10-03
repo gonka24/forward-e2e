@@ -1,5 +1,5 @@
 /target/
-/ops/a8/harness/wasm-probe/p0-probe/target/
+/harness/wasm_query_allowlist/target/
 /tools/proto-gen/target/
 __pycache__/
 *.pyc

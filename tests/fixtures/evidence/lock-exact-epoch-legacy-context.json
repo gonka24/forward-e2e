@@ -1,0 +1,1515 @@
+{
+  "accounts": {
+    "buyer": "gonka1vvy0l84m7nd6pxxjsk58d39ggl2swc9xdtg5sz",
+    "fee_recipient": "gonka14qqp2qjrkyfsyjaqn58lx09dqq75l2rvtet2nw",
+    "host": "gonka1d4kq5cc2qpx6wz7kdnd6mk2jguxmuneaehs94k",
+    "inactive_host": "gonka120nqgp8409ncdrzqyt643sze6xw05gm86ch5ql"
+  },
+  "bootstrap": {
+    "cw20_after": {
+      "buyer": 100000000,
+      "deal": 100000000
+    },
+    "cw20_before": {
+      "buyer": 200000000,
+      "deal": 0
+    },
+    "deal_state": {
+      "buyer": "gonka1vvy0l84m7nd6pxxjsk58d39ggl2swc9xdtg5sz",
+      "buyer_entitlement_ngonka": "0",
+      "buyer_refund_usdt": "0",
+      "buyer_released_ngonka": "0",
+      "fee_usdt": "0",
+      "gnk_release_policy": "unset",
+      "gross_usdt": "0",
+      "host_entitlement_ngonka": "0",
+      "host_net_usdt": "0",
+      "host_released_ngonka": "0",
+      "recipient_locked": false,
+      "refund_reason": null,
+      "released_total_ngonka": "0",
+      "reward_ngonka": "0",
+      "status": "funded",
+      "total_claim_ngonka": "0",
+      "work_ngonka": "0"
+    },
+    "fund_tx": {
+      "code": 0,
+      "events": [
+        {
+          "attributes": [
+            {
+              "index": true,
+              "key": "_contract_address",
+              "value": "gonka1ze8c802vjqx96gu0vyjxhzrpxhjhjakfc8w7hqrkw52tltr96eysf08y4u"
+            },
+            {
+              "index": true,
+              "key": "msg_index",
+              "value": "0"
+            }
+          ],
+          "type": "execute"
+        },
+        {
+          "attributes": [
+            {
+              "index": true,
+              "key": "_contract_address",
+              "value": "gonka1ze8c802vjqx96gu0vyjxhzrpxhjhjakfc8w7hqrkw52tltr96eysf08y4u"
+            },
+            {
+              "index": true,
+              "key": "action",
+              "value": "send"
+            },
+            {
+              "index": true,
+              "key": "from",
+              "value": "gonka1vvy0l84m7nd6pxxjsk58d39ggl2swc9xdtg5sz"
+            },
+            {
+              "index": true,
+              "key": "to",
+              "value": "gonka13pxw9wnpu55c9sfx6ktxkmxqhwu76agdyzc5s78dgdx8fa44qj9q5de86z"
+            },
+            {
+              "index": true,
+              "key": "amount",
+              "value": "100000000"
+            },
+            {
+              "index": true,
+              "key": "msg_index",
+              "value": "0"
+            }
+          ],
+          "type": "wasm"
+        },
+        {
+          "attributes": [
+            {
+              "index": true,
+              "key": "_contract_address",
+              "value": "gonka13pxw9wnpu55c9sfx6ktxkmxqhwu76agdyzc5s78dgdx8fa44qj9q5de86z"
+            },
+            {
+              "index": true,
+              "key": "msg_index",
+              "value": "0"
+            }
+          ],
+          "type": "execute"
+        },
+        {
+          "attributes": [
+            {
+              "index": true,
+              "key": "_contract_address",
+              "value": "gonka13pxw9wnpu55c9sfx6ktxkmxqhwu76agdyzc5s78dgdx8fa44qj9q5de86z"
+            },
+            {
+              "index": true,
+              "key": "buyer",
+              "value": "gonka1vvy0l84m7nd6pxxjsk58d39ggl2swc9xdtg5sz"
+            },
+            {
+              "index": true,
+              "key": "buyer_budget_micro_usdt",
+              "value": "100000000"
+            },
+            {
+              "index": true,
+              "key": "deal",
+              "value": "gonka13pxw9wnpu55c9sfx6ktxkmxqhwu76agdyzc5s78dgdx8fa44qj9q5de86z"
+            },
+            {
+              "index": true,
+              "key": "host",
+              "value": "gonka1d4kq5cc2qpx6wz7kdnd6mk2jguxmuneaehs94k"
+            },
+            {
+              "index": true,
+              "key": "target_epoch",
+              "value": "5"
+            },
+            {
+              "index": true,
+              "key": "msg_index",
+              "value": "0"
+            }
+          ],
+          "type": "wasm-deal_funded"
+        }
+      ],
+      "gas_used": "197979",
+      "gas_wanted": "945010",
+      "height": "77",
+      "tx_hash": "BF895FFFEFBAACBE7FF30FCBA1A333BD318B41B9EAA5945C4A09B024A0BDEA1D"
+    },
+    "inactive_host_funding_tx": {
+      "code": 0,
+      "events": [
+        {
+          "attributes": [
+            {
+              "index": true,
+              "key": "recipient",
+              "value": "gonka120nqgp8409ncdrzqyt643sze6xw05gm86ch5ql"
+            },
+            {
+              "index": true,
+              "key": "sender",
+              "value": "gonka1qsdj39fkmkdcpke99zld3eemgk23txc55fe6g2"
+            },
+            {
+              "index": true,
+              "key": "amount",
+              "value": "100000000ngonka"
+            },
+            {
+              "index": true,
+              "key": "msg_index",
+              "value": "0"
+            }
+          ],
+          "type": "transfer"
+        }
+      ],
+      "gas_used": "62134",
+      "gas_wanted": "265805",
+      "height": "66",
+      "tx_hash": "67A2029EB0415155669A907A634189C5244A8174903462976D38D58E2258E71D"
+    },
+    "offer_tx": {
+      "code": 0,
+      "events": [
+        {
+          "attributes": [
+            {
+              "index": true,
+              "key": "_contract_address",
+              "value": "gonka1wstt5ctav8v3athvumds5de50hq98c8d9phexm9qkrayz76dwzescuzzh4"
+            },
+            {
+              "index": true,
+              "key": "msg_index",
+              "value": "0"
+            }
+          ],
+          "type": "execute"
+        },
+        {
+          "attributes": [
+            {
+              "index": true,
+              "key": "_contract_address",
+              "value": "gonka1wstt5ctav8v3athvumds5de50hq98c8d9phexm9qkrayz76dwzescuzzh4"
+            },
+            {
+              "index": true,
+              "key": "action",
+              "value": "create_offer"
+            },
+            {
+              "index": true,
+              "key": "msg_index",
+              "value": "0"
+            }
+          ],
+          "type": "wasm"
+        },
+        {
+          "attributes": [
+            {
+              "index": true,
+              "key": "_contract_address",
+              "value": "gonka13pxw9wnpu55c9sfx6ktxkmxqhwu76agdyzc5s78dgdx8fa44qj9q5de86z"
+            },
+            {
+              "index": true,
+              "key": "code_id",
+              "value": "1"
+            },
+            {
+              "index": true,
+              "key": "msg_index",
+              "value": "0"
+            }
+          ],
+          "type": "instantiate"
+        },
+        {
+          "attributes": [
+            {
+              "index": true,
+              "key": "_contract_address",
+              "value": "gonka13pxw9wnpu55c9sfx6ktxkmxqhwu76agdyzc5s78dgdx8fa44qj9q5de86z"
+            },
+            {
+              "index": true,
+              "key": "action",
+              "value": "instantiate"
+            },
+            {
+              "index": true,
+              "key": "buyer_budget_micro_usdt",
+              "value": "100000000"
+            },
+            {
+              "index": true,
+              "key": "deal",
+              "value": "gonka13pxw9wnpu55c9sfx6ktxkmxqhwu76agdyzc5s78dgdx8fa44qj9q5de86z"
+            },
+            {
+              "index": true,
+              "key": "factory",
+              "value": "gonka1wstt5ctav8v3athvumds5de50hq98c8d9phexm9qkrayz76dwzescuzzh4"
+            },
+            {
+              "index": true,
+              "key": "fee_bps",
+              "value": "150"
+            },
+            {
+              "index": true,
+              "key": "fee_recipient",
+              "value": "gonka14qqp2qjrkyfsyjaqn58lx09dqq75l2rvtet2nw"
+            },
+            {
+              "index": true,
+              "key": "funded_capacity_ngonka",
+              "value": "100000000000"
+            },
+            {
+              "index": true,
+              "key": "host",
+              "value": "gonka1d4kq5cc2qpx6wz7kdnd6mk2jguxmuneaehs94k"
+            },
+            {
+              "index": true,
+              "key": "price_micro_usdt_per_gnk",
+              "value": "1000000"
+            },
+            {
+              "index": true,
+              "key": "settlement_cw20",
+              "value": "gonka1ze8c802vjqx96gu0vyjxhzrpxhjhjakfc8w7hqrkw52tltr96eysf08y4u"
+            },
+            {
+              "index": true,
+              "key": "target_epoch",
+              "value": "5"
+            },
+            {
+              "index": true,
+              "key": "msg_index",
+              "value": "0"
+            }
+          ],
+          "type": "wasm"
+        },
+        {
+          "attributes": [
+            {
+              "index": true,
+              "key": "_contract_address",
+              "value": "gonka1wstt5ctav8v3athvumds5de50hq98c8d9phexm9qkrayz76dwzescuzzh4"
+            },
+            {
+              "index": true,
+              "key": "deal_id",
+              "value": "1"
+            },
+            {
+              "index": true,
+              "key": "deal",
+              "value": "gonka13pxw9wnpu55c9sfx6ktxkmxqhwu76agdyzc5s78dgdx8fa44qj9q5de86z"
+            },
+            {
+              "index": true,
+              "key": "host",
+              "value": "gonka1d4kq5cc2qpx6wz7kdnd6mk2jguxmuneaehs94k"
+            },
+            {
+              "index": true,
+              "key": "target_epoch",
+              "value": "5"
+            },
+            {
+              "index": true,
+              "key": "price_micro_usdt_per_gnk",
+              "value": "1000000"
+            },
+            {
+              "index": true,
+              "key": "buyer_budget_micro_usdt",
+              "value": "100000000"
+            },
+            {
+              "index": true,
+              "key": "msg_index",
+              "value": "0"
+            }
+          ],
+          "type": "wasm-offer_created"
+        }
+      ],
+      "gas_used": "360722",
+      "gas_wanted": "1758710",
+      "height": "75",
+      "tx_hash": "837C1D029D9699CB2438599D00415B026370741BDEB0196F7C211518DE93FD8A"
+    },
+    "recipient_query": {
+      "entries": [
+        {
+          "epoch": "5",
+          "recipient": "gonka13pxw9wnpu55c9sfx6ktxkmxqhwu76agdyzc5s78dgdx8fa44qj9q5de86z"
+        }
+      ]
+    },
+    "recipient_tx": {
+      "code": 0,
+      "events": [],
+      "gas_used": "38501",
+      "gas_wanted": "147640",
+      "height": "76",
+      "tx_hash": "8A15A6B869D88CBFD200967FD8084BAC965FFDAC153D412A577425891051F39C"
+    }
+  },
+  "chain": {
+    "chain_id": "gonka-mainnet",
+    "status": {
+      "node_info": {
+        "channels": "40202122233038606100",
+        "id": "6bec08ecfa89fe4f5780e9f7726761c07caa563b",
+        "listen_addr": "genesis-node:26656",
+        "moniker": "my-node",
+        "network": "gonka-mainnet",
+        "other": {
+          "rpc_address": "tcp://0.0.0.0:26657",
+          "tx_index": "on"
+        },
+        "protocol_version": {
+          "app": "0",
+          "block": "11",
+          "p2p": "8"
+        },
+        "version": "0.38.19"
+      },
+      "sync_info": {
+        "catching_up": false,
+        "earliest_app_hash": "204E9DDB74E1BBD37AF4E8CC34019FA78949949C9032F288420E8E8D81AE3ECD",
+        "earliest_block_hash": "52C0D78CF2959AEC26091A270F53A9BED1CA1BC837255A70EE5292428E0062EF",
+        "earliest_block_height": "1",
+        "earliest_block_time": "2026-01-01T00:01:00.000000000Z",
+        "latest_app_hash": "BFA0F3250D6DCD63090442D3D87A8F80245956D8224533C3E4EBA3104600BCE7",
+        "latest_block_hash": "6A651A8F884D0BF00C4F9BDF147E2ABB538689635F851D8F73B31B11AD064873",
+        "latest_block_height": "65",
+        "latest_block_time": "2026-01-01T00:02:00.000000000Z"
+      },
+      "validator_info": {
+        "address": "8D7C37E4598BA18DC3D83AF7794F21D773BA3872",
+        "pub_key": {
+          "type": "tendermint/PubKeyEd25519",
+          "value": "yq/h3Fx2itXw+ql4lSIhHbnA7KU1/OG3ZaumBa+F5eo="
+        },
+        "voting_power": "10"
+      }
+    },
+    "transfer_restrictions": {
+      "current_block_height": 65,
+      "is_active": false,
+      "remaining_blocks": 0,
+      "restriction_end_block": 0
+    }
+  },
+  "code_ids": {
+    "caller": "4",
+    "cw20": "3",
+    "deal": "1",
+    "factory": "2"
+  },
+  "command": {
+    "entrypoint": "python scripts/acceptance_harness.py run-live",
+    "scenario": "lock-exact-e",
+    "test": "MarketplaceContractAcceptanceTests.marketplace funded lock succeeds exactly at E"
+  },
+  "contracts": {
+    "caller": "gonka1xgh8c69pwreusaan3pk7n3nw8w05z5lwgeqzqya6x3wfxpuhjjmsf93juz",
+    "cw20": "gonka1ze8c802vjqx96gu0vyjxhzrpxhjhjakfc8w7hqrkw52tltr96eysf08y4u",
+    "deal": "gonka13pxw9wnpu55c9sfx6ktxkmxqhwu76agdyzc5s78dgdx8fa44qj9q5de86z",
+    "factory": "gonka1wstt5ctav8v3athvumds5de50hq98c8d9phexm9qkrayz76dwzescuzzh4",
+    "foreign_cw20": "gonka1ws7jzwgmwhql8mr3fvq9s8v6lcjrfpf6lawrtpn0vj7yl9q0s2zqxtyu8l"
+  },
+  "created_at_utc": "2026-01-01T00:03:00Z",
+  "deployments": {
+    "caller": {
+      "address": "gonka1xgh8c69pwreusaan3pk7n3nw8w05z5lwgeqzqya6x3wfxpuhjjmsf93juz",
+      "contract_info": {
+        "address": "gonka1xgh8c69pwreusaan3pk7n3nw8w05z5lwgeqzqya6x3wfxpuhjjmsf93juz",
+        "contract_info": {
+          "admin": "",
+          "code_id": "4",
+          "created": {
+            "block_height": "74",
+            "tx_index": "0"
+          },
+          "creator": "gonka1qsdj39fkmkdcpke99zld3eemgk23txc55fe6g2",
+          "extension": null,
+          "ibc_port_id": "",
+          "label": "a8-caller-synthetic-lock-exact-e"
+        }
+      },
+      "tx": {
+        "code": 0,
+        "events": [
+          {
+            "attributes": [
+              {
+                "index": true,
+                "key": "_contract_address",
+                "value": "gonka1xgh8c69pwreusaan3pk7n3nw8w05z5lwgeqzqya6x3wfxpuhjjmsf93juz"
+              },
+              {
+                "index": true,
+                "key": "code_id",
+                "value": "4"
+              },
+              {
+                "index": true,
+                "key": "msg_index",
+                "value": "0"
+              }
+            ],
+            "type": "instantiate"
+          },
+          {
+            "attributes": [
+              {
+                "index": true,
+                "key": "_contract_address",
+                "value": "gonka1xgh8c69pwreusaan3pk7n3nw8w05z5lwgeqzqya6x3wfxpuhjjmsf93juz"
+              },
+              {
+                "index": true,
+                "key": "action",
+                "value": "a8_caller_instantiate"
+              },
+              {
+                "index": true,
+                "key": "msg_index",
+                "value": "0"
+              }
+            ],
+            "type": "wasm"
+          }
+        ],
+        "gas_used": "132953",
+        "gas_wanted": "619890",
+        "height": "74",
+        "tx_hash": "2917504153DBC59C1F1E00620F4982B2F3B26D49ADBD858C1558740B5ED00662"
+      }
+    },
+    "cw20": {
+      "address": "gonka1ze8c802vjqx96gu0vyjxhzrpxhjhjakfc8w7hqrkw52tltr96eysf08y4u",
+      "contract_info": {
+        "address": "gonka1ze8c802vjqx96gu0vyjxhzrpxhjhjakfc8w7hqrkw52tltr96eysf08y4u",
+        "contract_info": {
+          "admin": "",
+          "code_id": "3",
+          "created": {
+            "block_height": "71",
+            "tx_index": "0"
+          },
+          "creator": "gonka1qsdj39fkmkdcpke99zld3eemgk23txc55fe6g2",
+          "extension": null,
+          "ibc_port_id": "",
+          "label": "a8-cw20-synthetic-lock-exact-e"
+        }
+      },
+      "tx": {
+        "code": 0,
+        "events": [
+          {
+            "attributes": [
+              {
+                "index": true,
+                "key": "_contract_address",
+                "value": "gonka1ze8c802vjqx96gu0vyjxhzrpxhjhjakfc8w7hqrkw52tltr96eysf08y4u"
+              },
+              {
+                "index": true,
+                "key": "code_id",
+                "value": "3"
+              },
+              {
+                "index": true,
+                "key": "msg_index",
+                "value": "0"
+              }
+            ],
+            "type": "instantiate"
+          }
+        ],
+        "gas_used": "158140",
+        "gas_wanted": "745830",
+        "height": "71",
+        "tx_hash": "19722E07F5C578F8F4E37493C84DCCE697644C5F907BE72E2CCB735685302F44"
+      }
+    },
+    "deal": {
+      "config": {
+        "buyer_budget_micro_usdt": "100000000",
+        "deal_address": "gonka13pxw9wnpu55c9sfx6ktxkmxqhwu76agdyzc5s78dgdx8fa44qj9q5de86z",
+        "factory": "gonka1wstt5ctav8v3athvumds5de50hq98c8d9phexm9qkrayz76dwzescuzzh4",
+        "fee_bps": 150,
+        "fee_recipient": "gonka14qqp2qjrkyfsyjaqn58lx09dqq75l2rvtet2nw",
+        "funded_capacity_ngonka": "100000000000",
+        "host": "gonka1d4kq5cc2qpx6wz7kdnd6mk2jguxmuneaehs94k",
+        "pinned_gonka_sha": "379bebced638aeb5e6077bfd51c986f898443832",
+        "price_micro_usdt_per_gnk": "1000000",
+        "settlement_cw20": "gonka1ze8c802vjqx96gu0vyjxhzrpxhjhjakfc8w7hqrkw52tltr96eysf08y4u",
+        "target_epoch": 5
+      },
+      "contract_info": {
+        "address": "gonka13pxw9wnpu55c9sfx6ktxkmxqhwu76agdyzc5s78dgdx8fa44qj9q5de86z",
+        "contract_info": {
+          "admin": "",
+          "code_id": "1",
+          "created": {
+            "block_height": "75",
+            "tx_index": "0"
+          },
+          "creator": "gonka1wstt5ctav8v3athvumds5de50hq98c8d9phexm9qkrayz76dwzescuzzh4",
+          "extension": null,
+          "ibc_port_id": "",
+          "label": "gonka-forward-deal-1"
+        }
+      }
+    },
+    "factory": {
+      "address": "gonka1wstt5ctav8v3athvumds5de50hq98c8d9phexm9qkrayz76dwzescuzzh4",
+      "contract_info": {
+        "address": "gonka1wstt5ctav8v3athvumds5de50hq98c8d9phexm9qkrayz76dwzescuzzh4",
+        "contract_info": {
+          "admin": "",
+          "code_id": "2",
+          "created": {
+            "block_height": "73",
+            "tx_index": "0"
+          },
+          "creator": "gonka1qsdj39fkmkdcpke99zld3eemgk23txc55fe6g2",
+          "extension": null,
+          "ibc_port_id": "",
+          "label": "a8-factory-synthetic-lock-exact-e"
+        }
+      },
+      "tx": {
+        "code": 0,
+        "events": [
+          {
+            "attributes": [
+              {
+                "index": true,
+                "key": "_contract_address",
+                "value": "gonka1wstt5ctav8v3athvumds5de50hq98c8d9phexm9qkrayz76dwzescuzzh4"
+              },
+              {
+                "index": true,
+                "key": "code_id",
+                "value": "2"
+              },
+              {
+                "index": true,
+                "key": "msg_index",
+                "value": "0"
+              }
+            ],
+            "type": "instantiate"
+          },
+          {
+            "attributes": [
+              {
+                "index": true,
+                "key": "_contract_address",
+                "value": "gonka1wstt5ctav8v3athvumds5de50hq98c8d9phexm9qkrayz76dwzescuzzh4"
+              },
+              {
+                "index": true,
+                "key": "action",
+                "value": "instantiate"
+              },
+              {
+                "index": true,
+                "key": "deal_code_id",
+                "value": "1"
+              },
+              {
+                "index": true,
+                "key": "settlement_cw20",
+                "value": "gonka1ze8c802vjqx96gu0vyjxhzrpxhjhjakfc8w7hqrkw52tltr96eysf08y4u"
+              },
+              {
+                "index": true,
+                "key": "fee_recipient",
+                "value": "gonka14qqp2qjrkyfsyjaqn58lx09dqq75l2rvtet2nw"
+              },
+              {
+                "index": true,
+                "key": "fee_bps",
+                "value": "150"
+              },
+              {
+                "index": true,
+                "key": "msg_index",
+                "value": "0"
+              }
+            ],
+            "type": "wasm"
+          }
+        ],
+        "gas_used": "218983",
+        "gas_wanted": "1050035",
+        "height": "73",
+        "tx_hash": "4A3229E5AB96740A5FB3CDE9FC6FDB2C97F2EB22069E2B626BC15F1799A99E91"
+      }
+    },
+    "foreign_cw20": {
+      "address": "gonka1ws7jzwgmwhql8mr3fvq9s8v6lcjrfpf6lawrtpn0vj7yl9q0s2zqxtyu8l",
+      "contract_info": {
+        "address": "gonka1ws7jzwgmwhql8mr3fvq9s8v6lcjrfpf6lawrtpn0vj7yl9q0s2zqxtyu8l",
+        "contract_info": {
+          "admin": "",
+          "code_id": "3",
+          "created": {
+            "block_height": "72",
+            "tx_index": "0"
+          },
+          "creator": "gonka1qsdj39fkmkdcpke99zld3eemgk23txc55fe6g2",
+          "extension": null,
+          "ibc_port_id": "",
+          "label": "a8-foreign-cw20-synthetic-lock-exact-e"
+        }
+      },
+      "tx": {
+        "code": 0,
+        "events": [
+          {
+            "attributes": [
+              {
+                "index": true,
+                "key": "_contract_address",
+                "value": "gonka1ws7jzwgmwhql8mr3fvq9s8v6lcjrfpf6lawrtpn0vj7yl9q0s2zqxtyu8l"
+              },
+              {
+                "index": true,
+                "key": "code_id",
+                "value": "3"
+              },
+              {
+                "index": true,
+                "key": "msg_index",
+                "value": "0"
+              }
+            ],
+            "type": "instantiate"
+          }
+        ],
+        "gas_used": "158143",
+        "gas_wanted": "745840",
+        "height": "72",
+        "tx_hash": "D9CA4773055BA38186D2325BA1ADB54465E6957AE6A8DE956DDB32FBE3041BCA"
+      }
+    }
+  },
+  "key_names": {
+    "buyer": "join2",
+    "buyer_node": "join2-node",
+    "host": "join1",
+    "host_node": "join1-node",
+    "inactive_host": "a8-inactive-synthetic-lock-exact-e",
+    "inactive_host_node": "genesis-node"
+  },
+  "kind": "gonka-marketplace-a8-live-context",
+  "level": "live_network",
+  "phases": [],
+  "run_id": "synthetic-lock-exact-epoch-legacy",
+  "scenarios": {
+    "lock-exact-e": {
+      "accounts": {
+        "buyer": "gonka1vvy0l84m7nd6pxxjsk58d39ggl2swc9xdtg5sz",
+        "fee_recipient": "gonka14qqp2qjrkyfsyjaqn58lx09dqq75l2rvtet2nw",
+        "host": "gonka1u9utqwzev7hrwv4y0qtg0cgdplpsf0as7v58vg"
+      },
+      "contracts": {
+        "cw20": "gonka1ze8c802vjqx96gu0vyjxhzrpxhjhjakfc8w7hqrkw52tltr96eysf08y4u",
+        "deal": "gonka1j5mp0xw24fcwn5qvawlenpcqndnhz623kmwa94aa5de3lgggm99qtxyyf8",
+        "factory": "gonka1wstt5ctav8v3athvumds5de50hq98c8d9phexm9qkrayz76dwzescuzzh4"
+      },
+      "key_names": {
+        "host": "a8-lock-exact-e-synthetic",
+        "host_node": "genesis-node"
+      },
+      "name": "lock-exact-e",
+      "phases": [
+        {
+          "after": {
+            "bank_ngonka": {
+              "buyer": 237409782143079,
+              "deal": 0,
+              "fee_recipient": 0,
+              "host": 0
+            },
+            "cw20": {
+              "buyer": 90000000,
+              "deal": 10000000,
+              "fee_recipient": 0,
+              "host": 0
+            },
+            "foreign_cw20": {
+              "buyer": 1000000,
+              "deal": 0
+            },
+            "state": {
+              "buyer": "gonka1vvy0l84m7nd6pxxjsk58d39ggl2swc9xdtg5sz",
+              "buyer_entitlement_ngonka": "0",
+              "buyer_refund_usdt": "0",
+              "buyer_released_ngonka": "0",
+              "fee_usdt": "0",
+              "gnk_release_policy": "unset",
+              "gross_usdt": "0",
+              "host_entitlement_ngonka": "0",
+              "host_net_usdt": "0",
+              "host_released_ngonka": "0",
+              "recipient_locked": true,
+              "refund_reason": null,
+              "released_total_ngonka": "0",
+              "reward_ngonka": "0",
+              "status": "locked",
+              "total_claim_ngonka": "0",
+              "work_ngonka": "0"
+            }
+          },
+          "assertions": {
+            "buyer_deposit_and_accounting_preserved": true,
+            "caller_differs_from_host": true,
+            "distinct_financial_roles": true,
+            "immutable_config_preserved": true,
+            "no_contract_cw20_or_gnk_distribution": true
+          },
+          "before": {
+            "bank_ngonka": {
+              "buyer": 237409782143079,
+              "deal": 0,
+              "fee_recipient": 0,
+              "host": 0
+            },
+            "cw20": {
+              "buyer": 90000000,
+              "deal": 10000000,
+              "fee_recipient": 0,
+              "host": 0
+            },
+            "foreign_cw20": {
+              "buyer": 1000000,
+              "deal": 0
+            },
+            "state": {
+              "buyer": "gonka1vvy0l84m7nd6pxxjsk58d39ggl2swc9xdtg5sz",
+              "buyer_entitlement_ngonka": "0",
+              "buyer_refund_usdt": "0",
+              "buyer_released_ngonka": "0",
+              "fee_usdt": "0",
+              "gnk_release_policy": "unset",
+              "gross_usdt": "0",
+              "host_entitlement_ngonka": "0",
+              "host_net_usdt": "0",
+              "host_released_ngonka": "0",
+              "recipient_locked": false,
+              "refund_reason": null,
+              "released_total_ngonka": "0",
+              "reward_ngonka": "0",
+              "status": "funded",
+              "total_claim_ngonka": "0",
+              "work_ngonka": "0"
+            }
+          },
+          "caller": "gonka1qsdj39fkmkdcpke99zld3eemgk23txc55fe6g2",
+          "config_after": {
+            "buyer_budget_micro_usdt": "10000000",
+            "deal_address": "gonka1j5mp0xw24fcwn5qvawlenpcqndnhz623kmwa94aa5de3lgggm99qtxyyf8",
+            "factory": "gonka1wstt5ctav8v3athvumds5de50hq98c8d9phexm9qkrayz76dwzescuzzh4",
+            "fee_bps": 150,
+            "fee_recipient": "gonka14qqp2qjrkyfsyjaqn58lx09dqq75l2rvtet2nw",
+            "funded_capacity_ngonka": "10000000000",
+            "host": "gonka1u9utqwzev7hrwv4y0qtg0cgdplpsf0as7v58vg",
+            "pinned_gonka_sha": "379bebced638aeb5e6077bfd51c986f898443832",
+            "price_micro_usdt_per_gnk": "1000000",
+            "settlement_cw20": "gonka1ze8c802vjqx96gu0vyjxhzrpxhjhjakfc8w7hqrkw52tltr96eysf08y4u",
+            "target_epoch": 5
+          },
+          "config_before": {
+            "buyer_budget_micro_usdt": "10000000",
+            "deal_address": "gonka1j5mp0xw24fcwn5qvawlenpcqndnhz623kmwa94aa5de3lgggm99qtxyyf8",
+            "factory": "gonka1wstt5ctav8v3athvumds5de50hq98c8d9phexm9qkrayz76dwzescuzzh4",
+            "fee_bps": 150,
+            "fee_recipient": "gonka14qqp2qjrkyfsyjaqn58lx09dqq75l2rvtet2nw",
+            "funded_capacity_ngonka": "10000000000",
+            "host": "gonka1u9utqwzev7hrwv4y0qtg0cgdplpsf0as7v58vg",
+            "pinned_gonka_sha": "379bebced638aeb5e6077bfd51c986f898443832",
+            "price_micro_usdt_per_gnk": "1000000",
+            "settlement_cw20": "gonka1ze8c802vjqx96gu0vyjxhzrpxhjhjakfc8w7hqrkw52tltr96eysf08y4u",
+            "target_epoch": 5
+          },
+          "epoch_bracket": {
+            "after_height": 134,
+            "before_height": 133,
+            "epoch": 5,
+            "same_epoch": true,
+            "tx_height": 134
+          },
+          "expected_epoch": 5,
+          "name": "lock_exact_e",
+          "recipient_exact_row": {
+            "epoch": "5",
+            "recipient": "gonka1j5mp0xw24fcwn5qvawlenpcqndnhz623kmwa94aa5de3lgggm99qtxyyf8"
+          },
+          "recipient_query": {
+            "entries": [
+              {
+                "epoch": "5",
+                "recipient": "gonka1j5mp0xw24fcwn5qvawlenpcqndnhz623kmwa94aa5de3lgggm99qtxyyf8"
+              }
+            ]
+          },
+          "tx": {
+            "code": 0,
+            "events": [
+              {
+                "attributes": [
+                  {
+                    "index": true,
+                    "key": "_contract_address",
+                    "value": "gonka1j5mp0xw24fcwn5qvawlenpcqndnhz623kmwa94aa5de3lgggm99qtxyyf8"
+                  },
+                  {
+                    "index": true,
+                    "key": "msg_index",
+                    "value": "0"
+                  }
+                ],
+                "type": "execute"
+              },
+              {
+                "attributes": [
+                  {
+                    "index": true,
+                    "key": "_contract_address",
+                    "value": "gonka1j5mp0xw24fcwn5qvawlenpcqndnhz623kmwa94aa5de3lgggm99qtxyyf8"
+                  },
+                  {
+                    "index": true,
+                    "key": "deal",
+                    "value": "gonka1j5mp0xw24fcwn5qvawlenpcqndnhz623kmwa94aa5de3lgggm99qtxyyf8"
+                  },
+                  {
+                    "index": true,
+                    "key": "host",
+                    "value": "gonka1u9utqwzev7hrwv4y0qtg0cgdplpsf0as7v58vg"
+                  },
+                  {
+                    "index": true,
+                    "key": "target_epoch",
+                    "value": "5"
+                  },
+                  {
+                    "index": true,
+                    "key": "buyer",
+                    "value": "gonka1vvy0l84m7nd6pxxjsk58d39ggl2swc9xdtg5sz"
+                  },
+                  {
+                    "index": true,
+                    "key": "msg_index",
+                    "value": "0"
+                  }
+                ],
+                "type": "wasm-deal_locked"
+              }
+            ],
+            "gas_used": "118096",
+            "gas_wanted": "545600",
+            "height": "134",
+            "tx_hash": "D032AC8E5F3E1CEB96957898C71F16523BC9C95DFE74AC19BDAF45315C40E224"
+          }
+        }
+      ],
+      "prepared": {
+        "cw20_after": {
+          "buyer": 90000000,
+          "deal": 10000000
+        },
+        "cw20_before": {
+          "buyer": 100000000,
+          "deal": 0
+        },
+        "deal_config": {
+          "buyer_budget_micro_usdt": "10000000",
+          "deal_address": "gonka1j5mp0xw24fcwn5qvawlenpcqndnhz623kmwa94aa5de3lgggm99qtxyyf8",
+          "factory": "gonka1wstt5ctav8v3athvumds5de50hq98c8d9phexm9qkrayz76dwzescuzzh4",
+          "fee_bps": 150,
+          "fee_recipient": "gonka14qqp2qjrkyfsyjaqn58lx09dqq75l2rvtet2nw",
+          "funded_capacity_ngonka": "10000000000",
+          "host": "gonka1u9utqwzev7hrwv4y0qtg0cgdplpsf0as7v58vg",
+          "pinned_gonka_sha": "379bebced638aeb5e6077bfd51c986f898443832",
+          "price_micro_usdt_per_gnk": "1000000",
+          "settlement_cw20": "gonka1ze8c802vjqx96gu0vyjxhzrpxhjhjakfc8w7hqrkw52tltr96eysf08y4u",
+          "target_epoch": 5
+        },
+        "deal_state": {
+          "buyer": "gonka1vvy0l84m7nd6pxxjsk58d39ggl2swc9xdtg5sz",
+          "buyer_entitlement_ngonka": "0",
+          "buyer_refund_usdt": "0",
+          "buyer_released_ngonka": "0",
+          "fee_usdt": "0",
+          "gnk_release_policy": "unset",
+          "gross_usdt": "0",
+          "host_entitlement_ngonka": "0",
+          "host_net_usdt": "0",
+          "host_released_ngonka": "0",
+          "recipient_locked": false,
+          "refund_reason": null,
+          "released_total_ngonka": "0",
+          "reward_ngonka": "0",
+          "status": "funded",
+          "total_claim_ngonka": "0",
+          "work_ngonka": "0"
+        },
+        "fund_tx": {
+          "code": 0,
+          "events": [
+            {
+              "attributes": [
+                {
+                  "index": true,
+                  "key": "_contract_address",
+                  "value": "gonka1ze8c802vjqx96gu0vyjxhzrpxhjhjakfc8w7hqrkw52tltr96eysf08y4u"
+                },
+                {
+                  "index": true,
+                  "key": "msg_index",
+                  "value": "0"
+                }
+              ],
+              "type": "execute"
+            },
+            {
+              "attributes": [
+                {
+                  "index": true,
+                  "key": "_contract_address",
+                  "value": "gonka1ze8c802vjqx96gu0vyjxhzrpxhjhjakfc8w7hqrkw52tltr96eysf08y4u"
+                },
+                {
+                  "index": true,
+                  "key": "action",
+                  "value": "send"
+                },
+                {
+                  "index": true,
+                  "key": "from",
+                  "value": "gonka1vvy0l84m7nd6pxxjsk58d39ggl2swc9xdtg5sz"
+                },
+                {
+                  "index": true,
+                  "key": "to",
+                  "value": "gonka1j5mp0xw24fcwn5qvawlenpcqndnhz623kmwa94aa5de3lgggm99qtxyyf8"
+                },
+                {
+                  "index": true,
+                  "key": "amount",
+                  "value": "10000000"
+                },
+                {
+                  "index": true,
+                  "key": "msg_index",
+                  "value": "0"
+                }
+              ],
+              "type": "wasm"
+            },
+            {
+              "attributes": [
+                {
+                  "index": true,
+                  "key": "_contract_address",
+                  "value": "gonka1j5mp0xw24fcwn5qvawlenpcqndnhz623kmwa94aa5de3lgggm99qtxyyf8"
+                },
+                {
+                  "index": true,
+                  "key": "msg_index",
+                  "value": "0"
+                }
+              ],
+              "type": "execute"
+            },
+            {
+              "attributes": [
+                {
+                  "index": true,
+                  "key": "_contract_address",
+                  "value": "gonka1j5mp0xw24fcwn5qvawlenpcqndnhz623kmwa94aa5de3lgggm99qtxyyf8"
+                },
+                {
+                  "index": true,
+                  "key": "buyer",
+                  "value": "gonka1vvy0l84m7nd6pxxjsk58d39ggl2swc9xdtg5sz"
+                },
+                {
+                  "index": true,
+                  "key": "buyer_budget_micro_usdt",
+                  "value": "10000000"
+                },
+                {
+                  "index": true,
+                  "key": "deal",
+                  "value": "gonka1j5mp0xw24fcwn5qvawlenpcqndnhz623kmwa94aa5de3lgggm99qtxyyf8"
+                },
+                {
+                  "index": true,
+                  "key": "host",
+                  "value": "gonka1u9utqwzev7hrwv4y0qtg0cgdplpsf0as7v58vg"
+                },
+                {
+                  "index": true,
+                  "key": "target_epoch",
+                  "value": "5"
+                },
+                {
+                  "index": true,
+                  "key": "msg_index",
+                  "value": "0"
+                }
+              ],
+              "type": "wasm-deal_funded"
+            }
+          ],
+          "gas_used": "197904",
+          "gas_wanted": "944635",
+          "height": "80",
+          "tx_hash": "0132064AC838817A15B21C4D7D901E3225B4ABDE64DF85A6286087355514EA0A"
+        },
+        "offer_tx": {
+          "code": 0,
+          "events": [
+            {
+              "attributes": [
+                {
+                  "index": true,
+                  "key": "_contract_address",
+                  "value": "gonka1wstt5ctav8v3athvumds5de50hq98c8d9phexm9qkrayz76dwzescuzzh4"
+                },
+                {
+                  "index": true,
+                  "key": "msg_index",
+                  "value": "0"
+                }
+              ],
+              "type": "execute"
+            },
+            {
+              "attributes": [
+                {
+                  "index": true,
+                  "key": "_contract_address",
+                  "value": "gonka1wstt5ctav8v3athvumds5de50hq98c8d9phexm9qkrayz76dwzescuzzh4"
+                },
+                {
+                  "index": true,
+                  "key": "action",
+                  "value": "create_offer"
+                },
+                {
+                  "index": true,
+                  "key": "msg_index",
+                  "value": "0"
+                }
+              ],
+              "type": "wasm"
+            },
+            {
+              "attributes": [
+                {
+                  "index": true,
+                  "key": "_contract_address",
+                  "value": "gonka1j5mp0xw24fcwn5qvawlenpcqndnhz623kmwa94aa5de3lgggm99qtxyyf8"
+                },
+                {
+                  "index": true,
+                  "key": "code_id",
+                  "value": "1"
+                },
+                {
+                  "index": true,
+                  "key": "msg_index",
+                  "value": "0"
+                }
+              ],
+              "type": "instantiate"
+            },
+            {
+              "attributes": [
+                {
+                  "index": true,
+                  "key": "_contract_address",
+                  "value": "gonka1j5mp0xw24fcwn5qvawlenpcqndnhz623kmwa94aa5de3lgggm99qtxyyf8"
+                },
+                {
+                  "index": true,
+                  "key": "action",
+                  "value": "instantiate"
+                },
+                {
+                  "index": true,
+                  "key": "buyer_budget_micro_usdt",
+                  "value": "10000000"
+                },
+                {
+                  "index": true,
+                  "key": "deal",
+                  "value": "gonka1j5mp0xw24fcwn5qvawlenpcqndnhz623kmwa94aa5de3lgggm99qtxyyf8"
+                },
+                {
+                  "index": true,
+                  "key": "factory",
+                  "value": "gonka1wstt5ctav8v3athvumds5de50hq98c8d9phexm9qkrayz76dwzescuzzh4"
+                },
+                {
+                  "index": true,
+                  "key": "fee_bps",
+                  "value": "150"
+                },
+                {
+                  "index": true,
+                  "key": "fee_recipient",
+                  "value": "gonka14qqp2qjrkyfsyjaqn58lx09dqq75l2rvtet2nw"
+                },
+                {
+                  "index": true,
+                  "key": "funded_capacity_ngonka",
+                  "value": "10000000000"
+                },
+                {
+                  "index": true,
+                  "key": "host",
+                  "value": "gonka1u9utqwzev7hrwv4y0qtg0cgdplpsf0as7v58vg"
+                },
+                {
+                  "index": true,
+                  "key": "price_micro_usdt_per_gnk",
+                  "value": "1000000"
+                },
+                {
+                  "index": true,
+                  "key": "settlement_cw20",
+                  "value": "gonka1ze8c802vjqx96gu0vyjxhzrpxhjhjakfc8w7hqrkw52tltr96eysf08y4u"
+                },
+                {
+                  "index": true,
+                  "key": "target_epoch",
+                  "value": "5"
+                },
+                {
+                  "index": true,
+                  "key": "msg_index",
+                  "value": "0"
+                }
+              ],
+              "type": "wasm"
+            },
+            {
+              "attributes": [
+                {
+                  "index": true,
+                  "key": "_contract_address",
+                  "value": "gonka1wstt5ctav8v3athvumds5de50hq98c8d9phexm9qkrayz76dwzescuzzh4"
+                },
+                {
+                  "index": true,
+                  "key": "deal_id",
+                  "value": "2"
+                },
+                {
+                  "index": true,
+                  "key": "deal",
+                  "value": "gonka1j5mp0xw24fcwn5qvawlenpcqndnhz623kmwa94aa5de3lgggm99qtxyyf8"
+                },
+                {
+                  "index": true,
+                  "key": "host",
+                  "value": "gonka1u9utqwzev7hrwv4y0qtg0cgdplpsf0as7v58vg"
+                },
+                {
+                  "index": true,
+                  "key": "target_epoch",
+                  "value": "5"
+                },
+                {
+                  "index": true,
+                  "key": "price_micro_usdt_per_gnk",
+                  "value": "1000000"
+                },
+                {
+                  "index": true,
+                  "key": "buyer_budget_micro_usdt",
+                  "value": "10000000"
+                },
+                {
+                  "index": true,
+                  "key": "msg_index",
+                  "value": "0"
+                }
+              ],
+              "type": "wasm-offer_created"
+            }
+          ],
+          "gas_used": "360814",
+          "gas_wanted": "1757970",
+          "height": "78",
+          "tx_hash": "5544ED5A66472FA9B335CD4518B4C76B7A497A0D0D57C9695F2C2CD20703F138"
+        },
+        "recipient_tx": {
+          "code": 0,
+          "events": [],
+          "gas_used": "38511",
+          "gas_wanted": "147690",
+          "height": "79",
+          "tx_hash": "758FFA2E4D7D764820F32DF9EBB28A1E57A755778C03DA15593D7B4747DFA9D7"
+        }
+      },
+      "terms": {
+        "budget_micro_usdt": "10000000",
+        "fee_bps": 150,
+        "price_micro_usdt_per_gnk": "1000000",
+        "target_epoch": 5
+      }
+    }
+  },
+  "schema_version": "1.0.0",
+  "source": {
+    "a9_contract_sha256": {
+      "deal": "3b3bd8db62b9e870b162c19bedf9d998139845a6e289c193cfad620613626438",
+      "factory": "586cfbe105db230eb5fd0c40df993e0ee4cb7b90a0248050466fb1b9ebd657d2"
+    },
+    "a9_manifest_sha256": "5eeb39b51ce85152fa472d3b34381525dd6504dbef63d7d1e87e163c3b74af65",
+    "gonka_sha": "29a58fcf64b87967cb874b6169ce2c61e1f269b1",
+    "gonka_test_harness_sha": "c5afa458de7eb8affa7020f1d0fcd4635ba1fd42",
+    "marketplace_commit_sha": "f4518654e967b25d1479660115c13f67bace18df",
+    "protobuf_sha": "379bebced638aeb5e6077bfd51c986f898443832",
+    "runtime": {
+      "cosmos_sdk": "v0.53.3-ps19-observability",
+      "go": "go version go1.24.2 linux/amd64",
+      "gonka_source_sha": "29a58fcf64b87967cb874b6169ce2c61e1f269b1",
+      "wasmd": "v0.54.2",
+      "wasmvm": "v2.2.4"
+    },
+    "test_contract_sha256": {
+      "caller": "8b1b7bcbef6f80881b0abe137a2dd198c42ae1bb01ae52ac73634fc76f72555c",
+      "cw20": "80820b5b9b8f05f589b8c134df690f97c2ef3ecb8d0888438dcf4d6c57f11fd6"
+    }
+  },
+  "stores": {
+    "caller": {
+      "code_id": "4",
+      "label": "caller",
+      "local_path": "/synthetic/evidence/test-wasm-target/wasm32-unknown-unknown/release/a8_caller.wasm",
+      "sha256": "8b1b7bcbef6f80881b0abe137a2dd198c42ae1bb01ae52ac73634fc76f72555c",
+      "tx": {
+        "code": 0,
+        "events": [
+          {
+            "attributes": [
+              {
+                "index": true,
+                "key": "code_checksum",
+                "value": "8b1b7bcbef6f80881b0abe137a2dd198c42ae1bb01ae52ac73634fc76f72555c"
+              },
+              {
+                "index": true,
+                "key": "code_id",
+                "value": "4"
+              },
+              {
+                "index": true,
+                "key": "msg_index",
+                "value": "0"
+              }
+            ],
+            "type": "store_code"
+          }
+        ],
+        "gas_used": "1758300",
+        "gas_wanted": "8746585",
+        "height": "70",
+        "tx_hash": "D9A1B58B41813AAEEFACD8BAC5176880A6B085E04786724BE573E295E5842643"
+      }
+    },
+    "cw20": {
+      "code_id": "3",
+      "label": "cw20",
+      "local_path": "/synthetic/evidence/test-wasm-target/wasm32-unknown-unknown/release/a8_cw20.wasm",
+      "sha256": "80820b5b9b8f05f589b8c134df690f97c2ef3ecb8d0888438dcf4d6c57f11fd6",
+      "tx": {
+        "code": 0,
+        "events": [
+          {
+            "attributes": [
+              {
+                "index": true,
+                "key": "code_checksum",
+                "value": "80820b5b9b8f05f589b8c134df690f97c2ef3ecb8d0888438dcf4d6c57f11fd6"
+              },
+              {
+                "index": true,
+                "key": "code_id",
+                "value": "3"
+              },
+              {
+                "index": true,
+                "key": "msg_index",
+                "value": "0"
+              }
+            ],
+            "type": "store_code"
+          }
+        ],
+        "gas_used": "2736355",
+        "gas_wanted": "13636860",
+        "height": "69",
+        "tx_hash": "0D3137349AAC8163DFE9201013A093530523644626E029EBC0148C18E7138D58"
+      }
+    },
+    "deal": {
+      "code_id": "1",
+      "label": "deal",
+      "local_path": "/synthetic/evidence/a9-release/wasm/marketplace_deal.wasm",
+      "sha256": "3b3bd8db62b9e870b162c19bedf9d998139845a6e289c193cfad620613626438",
+      "tx": {
+        "code": 0,
+        "events": [
+          {
+            "attributes": [
+              {
+                "index": true,
+                "key": "code_checksum",
+                "value": "3b3bd8db62b9e870b162c19bedf9d998139845a6e289c193cfad620613626438"
+              },
+              {
+                "index": true,
+                "key": "code_id",
+                "value": "1"
+              },
+              {
+                "index": true,
+                "key": "msg_index",
+                "value": "0"
+              }
+            ],
+            "type": "store_code"
+          }
+        ],
+        "gas_used": "2355737",
+        "gas_wanted": "11733770",
+        "height": "67",
+        "tx_hash": "503AE581AD54E3CE61B1D2938C74FC2505E0ACFB434BCD391CE94BB33C27CA7F"
+      }
+    },
+    "factory": {
+      "code_id": "2",
+      "label": "factory",
+      "local_path": "/synthetic/evidence/a9-release/wasm/marketplace_factory.wasm",
+      "sha256": "586cfbe105db230eb5fd0c40df993e0ee4cb7b90a0248050466fb1b9ebd657d2",
+      "tx": {
+        "code": 0,
+        "events": [
+          {
+            "attributes": [
+              {
+                "index": true,
+                "key": "code_checksum",
+                "value": "586cfbe105db230eb5fd0c40df993e0ee4cb7b90a0248050466fb1b9ebd657d2"
+              },
+              {
+                "index": true,
+                "key": "code_id",
+                "value": "2"
+              },
+              {
+                "index": true,
+                "key": "msg_index",
+                "value": "0"
+              }
+            ],
+            "type": "store_code"
+          }
+        ],
+        "gas_used": "1873070",
+        "gas_wanted": "9320435",
+        "height": "68",
+        "tx_hash": "7BADFC4E2EC440CA265BDE346931C0D7058AF0E5242609DDC6673EA7CE4360FC"
+      }
+    }
+  },
+  "synthetic_fixture": {
+    "document": "lock-exact-epoch-legacy-context",
+    "identities": {
+      "addresses": {
+        "bootstrap_deal": "gonka13pxw9wnpu55c9sfx6ktxkmxqhwu76agdyzc5s78dgdx8fa44qj9q5de86z",
+        "bootstrap_host": "gonka1d4kq5cc2qpx6wz7kdnd6mk2jguxmuneaehs94k",
+        "buyer": "gonka1vvy0l84m7nd6pxxjsk58d39ggl2swc9xdtg5sz",
+        "caller_contract": "gonka1xgh8c69pwreusaan3pk7n3nw8w05z5lwgeqzqya6x3wfxpuhjjmsf93juz",
+        "deal": "gonka1j5mp0xw24fcwn5qvawlenpcqndnhz623kmwa94aa5de3lgggm99qtxyyf8",
+        "deployer": "gonka1qsdj39fkmkdcpke99zld3eemgk23txc55fe6g2",
+        "factory": "gonka1wstt5ctav8v3athvumds5de50hq98c8d9phexm9qkrayz76dwzescuzzh4",
+        "fee_recipient": "gonka14qqp2qjrkyfsyjaqn58lx09dqq75l2rvtet2nw",
+        "foreign_cw20": "gonka1ws7jzwgmwhql8mr3fvq9s8v6lcjrfpf6lawrtpn0vj7yl9q0s2zqxtyu8l",
+        "host": "gonka1u9utqwzev7hrwv4y0qtg0cgdplpsf0as7v58vg",
+        "inactive_host": "gonka120nqgp8409ncdrzqyt643sze6xw05gm86ch5ql",
+        "settlement_cw20": "gonka1ze8c802vjqx96gu0vyjxhzrpxhjhjakfc8w7hqrkw52tltr96eysf08y4u"
+      }
+    },
+    "identity_rules": {
+      "address": "bech32('gonka', seed('<document>:address:<role>')[:20 or 32])",
+      "checked_by": "tests/unit/runner/test_synthetic_evidence.py",
+      "hex40": "seed('<document>:hex40:<n>').hex()[:40], n = order of first appearance",
+      "seed": "sha256('forward-e2e synthetic fixture:' + label)",
+      "sha256": "seed('<document>:sha256:<n>').hex(), n = order of first appearance",
+      "timestamp": "2026-01-01T00:00:00Z + n minutes, preserving relative order",
+      "tx_hash": "seed('<document>:tx:<n>').hex().upper(), n = order of first appearance"
+    },
+    "notice": "Synthetic offline test fixture. Every chain identity is derived from a labelled SHA-256 seed (see identity_rules); this document is not evidence of any executed chain, Docker or Testermint run.",
+    "producer": "scripts/acceptance_harness.py",
+    "producer_functions": [
+      "run_live",
+      "lock_exact_e",
+      "prepare_runtime_snapshot",
+      "write_live_context"
+    ],
+    "producer_revision": "8079c0c274f5252800ee16b9f4fb0148bfcae2fe",
+    "purpose": "Full live-context of a lock-exact-E scenario in the pre-evidence-model (legacy) source shape: bootstrap, stores, deployments and one lock_exact_e phase with its checkpoints",
+    "revision_constants": {
+      "29a58fcf64b87967cb874b6169ce2c61e1f269b1": "GONKA_SOURCE_SHA (real_fixtures.py)",
+      "379bebced638aeb5e6077bfd51c986f898443832": "EXPECTED_PROTO_SHA (scripts/acceptance_harness.py)",
+      "c5afa458de7eb8affa7020f1d0fcd4635ba1fd42": "GONKA_PREPARED_SHA (real_fixtures.py)",
+      "f4518654e967b25d1479660115c13f67bace18df": "MARKETPLACE_SHA (real_fixtures.py)"
+    },
+    "schema": "forward-e2e.synthetic-fixture/2"
+  },
+  "terms": {
+    "budget_micro_usdt": "100000000",
+    "fee_bps": 150,
+    "price_micro_usdt_per_gnk": "1000000",
+    "target_epoch": 5
+  },
+  "test_fixture_only": true
+}

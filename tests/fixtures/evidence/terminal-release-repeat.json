@@ -1,0 +1,141 @@
+{
+  "contracts": {
+    "deal": "gonka1xmhh3r5cfzk0uw3uaqrest0kwy4s22mw8kugdp4hleafd0spwk0quw97fa",
+    "foreign_cw20": "gonka1cc5dx7r234pyn75d62z99pxw2rz5hp9ltthlxyk4xy5fjdtqmrfqzwmyhw",
+    "settlement_cw20": "gonka1sx8vfr30x7w268qcx4zxw9rkr4xj0cynee72q2vwc6cmahdt3chqsexuxe"
+  },
+  "roles": {
+    "all_four_distinct": true,
+    "buyer": "gonka1ujux5dgrapf57dxrvxcdmtq2k6axxng0z3kn5u",
+    "caller": "gonka1ecuu8dfk77vuqu80mzl9xv9rcp962cdg9h9fes",
+    "fee_recipient": "gonka1t2nsvamwxtylfuspkflzkcjwegm6hfa9qhc4gu",
+    "host": "gonka12kdv75yvrqfv6yzyferw5x842lpkvakf70a763"
+  },
+  "run_id": "synthetic-terminal-release-repeat",
+  "synthetic_fixture": {
+    "document": "terminal-release-repeat",
+    "identities": {
+      "addresses": {
+        "buyer": "gonka1ujux5dgrapf57dxrvxcdmtq2k6axxng0z3kn5u",
+        "caller": "gonka1ecuu8dfk77vuqu80mzl9xv9rcp962cdg9h9fes",
+        "deal": "gonka1xmhh3r5cfzk0uw3uaqrest0kwy4s22mw8kugdp4hleafd0spwk0quw97fa",
+        "fee_recipient": "gonka1t2nsvamwxtylfuspkflzkcjwegm6hfa9qhc4gu",
+        "foreign_cw20": "gonka1cc5dx7r234pyn75d62z99pxw2rz5hp9ltthlxyk4xy5fjdtqmrfqzwmyhw",
+        "host": "gonka12kdv75yvrqfv6yzyferw5x842lpkvakf70a763",
+        "settlement_cw20": "gonka1sx8vfr30x7w268qcx4zxw9rkr4xj0cynee72q2vwc6cmahdt3chqsexuxe"
+      }
+    },
+    "identity_rules": {
+      "address": "bech32('gonka', seed('<document>:address:<role>')[:20 or 32])",
+      "checked_by": "tests/unit/runner/test_synthetic_evidence.py",
+      "hex40": "seed('<document>:hex40:<n>').hex()[:40], n = order of first appearance",
+      "seed": "sha256('forward-e2e synthetic fixture:' + label)",
+      "sha256": "seed('<document>:sha256:<n>').hex(), n = order of first appearance",
+      "timestamp": "2026-01-01T00:00:00Z + n minutes, preserving relative order",
+      "tx_hash": "seed('<document>:tx:<n>').hex().upper(), n = order of first appearance"
+    },
+    "notice": "Synthetic offline test fixture. Every chain identity is derived from a labelled SHA-256 seed (see identity_rules); this document is not evidence of any executed chain, Docker or Testermint run.",
+    "producer": "scripts/acceptance_harness.py",
+    "producer_functions": [
+      "terminal_release_repeat",
+      "terminal_release_snapshot"
+    ],
+    "producer_revision": "8079c0c274f5252800ee16b9f4fb0148bfcae2fe",
+    "purpose": "Compact record of a Completed Deal whose repeated ReleaseUnlockedGnk is included and rejected with NothingToRelease while every snapshot stays unchanged",
+    "revision_constants": {},
+    "schema": "forward-e2e.synthetic-fixture/2"
+  },
+  "terminal_preconditions": {
+    "buyer_original_remaining_ngonka": 0,
+    "host_original_remaining_ngonka": 0,
+    "liquid_balance_ngonka": 0,
+    "positive_total_claim_ngonka": 94819671366450,
+    "released_total_ngonka": 94819671366450,
+    "remaining_vesting_ngonka": 0,
+    "scheduled_vesting_ngonka": 0,
+    "status": "completed",
+    "vesting_epoch_amounts": null,
+    "vesting_total_amount": null
+  },
+  "terminal_snapshot": {
+    "bank_balances": {
+      "buyer": {
+        "ngonka": 545730053384282
+      },
+      "caller": {
+        "ngonka": 100000000
+      },
+      "deal": {},
+      "fee_recipient": {},
+      "host": {
+        "ngonka": 474449071346005
+      }
+    },
+    "before_equals_after": true,
+    "caller_ngonka_delta": 0,
+    "deal_transfer_events": 0,
+    "foreign_cw20_balances": {
+      "buyer": 1000000,
+      "caller": 0,
+      "deal": 0,
+      "fee_recipient": 0,
+      "host": 0
+    },
+    "native_status": {
+      "liquid_balance_ngonka": "0",
+      "remaining_vesting_ngonka": "0"
+    },
+    "release_status": {
+      "buyer_original_remaining_ngonka": "0",
+      "buyer_released_ngonka": "100000000000",
+      "host_original_remaining_ngonka": "0",
+      "host_released_ngonka": "94719671366450",
+      "released_total_ngonka": "94819671366450"
+    },
+    "repeat_payout_ngonka": 0,
+    "settlement_cw20_balances": {
+      "buyer": 100000000,
+      "caller": 0,
+      "deal": 0,
+      "fee_recipient": 1500000,
+      "host": 98500000
+    },
+    "state": {
+      "buyer": "gonka1ujux5dgrapf57dxrvxcdmtq2k6axxng0z3kn5u",
+      "buyer_entitlement_ngonka": "100000000000",
+      "buyer_refund_usdt": "0",
+      "buyer_released_ngonka": "100000000000",
+      "fee_usdt": "1500000",
+      "gnk_release_policy": {
+        "proportional": {
+          "buyer_share_numerator": "100000000000",
+          "share_denominator": "94819671366450"
+        }
+      },
+      "gross_usdt": "100000000",
+      "host_entitlement_ngonka": "94719671366450",
+      "host_net_usdt": "98500000",
+      "host_released_ngonka": "94719671366450",
+      "recipient_locked": true,
+      "refund_reason": null,
+      "released_total_ngonka": "94819671366450",
+      "reward_ngonka": "94819671366450",
+      "status": "completed",
+      "total_claim_ngonka": "94819671366450",
+      "work_ngonka": "0"
+    }
+  },
+  "terminal_transaction": {
+    "code": 5,
+    "codespace": "wasm",
+    "epoch": 8,
+    "events": [],
+    "gas_used": 115167,
+    "gas_wanted": 2000000,
+    "height": 214,
+    "layer": "deliver_tx",
+    "raw_log": "failed to execute message; message index: 0: no additional GNK is currently available for release: execute wasm contract failed",
+    "tx_hash": "302604FF6E2EDDDA6D2095374960555F7E473429D6E4BE53C9C02E20B8398313"
+  },
+  "test_fixture_only": true
+}

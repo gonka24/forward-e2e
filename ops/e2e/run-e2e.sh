@@ -4,7 +4,7 @@
 #
 # This wrapper is deliberately thin. It does not parse the acceptance CLI: it
 # forwards arguments verbatim to the single parser inside the runner container
-# (ops/a8/e2e/cli.py), so the documented examples and the implementation can
+# (forward_e2e/execution/cli.py), so the documented examples and the implementation can
 # never drift apart.
 #
 # It does exactly four host-side jobs, because they cannot be done from inside
@@ -32,7 +32,7 @@ set -euo pipefail
 
 SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd -- "${SCRIPT_DIR}/../.." && pwd)"
-COMPOSE_FILE="${REPO_ROOT}/ops/a8/compose.yaml"
+COMPOSE_FILE="${REPO_ROOT}/ops/runner/compose.yaml"
 SERVICE="e2e-runner"
 
 die() {
@@ -210,7 +210,10 @@ RUN_ARG_INDEX=-1
 RUN_ARG_VALUE=""
 RUNNER_IMAGE="${E2E_RUNNER_IMAGE:-a8-runner:local}"
 RUNNER_IMAGE_EXPLICIT=false
-DOCKER_ROOT_VOLUME="${A8_DOCKER_ROOT_VOLUME:-a8-docker-root}"
+if [ -n "${E2E_DOCKER_ROOT_VOLUME:-}" ] && [ -n "${A8_DOCKER_ROOT_VOLUME:-}" ] && [ "$E2E_DOCKER_ROOT_VOLUME" != "$A8_DOCKER_ROOT_VOLUME" ]; then
+    die "Conflicting environment variables E2E_DOCKER_ROOT_VOLUME='${E2E_DOCKER_ROOT_VOLUME}' and A8_DOCKER_ROOT_VOLUME='${A8_DOCKER_ROOT_VOLUME}'; unset the legacy A8_DOCKER_ROOT_VOLUME variable or set both to the same value." 2
+fi
+DOCKER_ROOT_VOLUME="${E2E_DOCKER_ROOT_VOLUME:-${A8_DOCKER_ROOT_VOLUME:-a8-docker-root}}"
 
 while [ "$#" -gt 0 ]; do
     case "$1" in
@@ -393,6 +396,7 @@ export CONTRACTS_DIR="${CONTRACTS_BRIDGE:-$REPO_ROOT}"
 export OUTPUT_DIR="${OUTPUT_DIR_HOST:-${REPO_ROOT}/out}"
 export E2E_PLAN_DIR="${PLAN_DIR_HOST:-$REPO_ROOT}"
 export E2E_SECRETS_DIR="${SECRETS_DIR_HOST:-$REPO_ROOT}"
+export E2E_DOCKER_ROOT_VOLUME="$DOCKER_ROOT_VOLUME"
 export A8_DOCKER_ROOT_VOLUME="$DOCKER_ROOT_VOLUME"
 mkdir -p -- "$OUTPUT_DIR"
 

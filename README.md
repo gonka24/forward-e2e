@@ -1,18 +1,81 @@
-# Gonka24 Forward E2E
+# Forward E2E Acceptance Runner
 
-Independent acceptance runner for the [Forward contracts](https://github.com/gonka24/forward-contracts) and the Gonka blockchain. It builds and tests explicitly selected full commit SHAs without modifying either source snapshot.
+Containerized acceptance runner, harness, boundary probes, and offline grading
+framework for the Gonka Forward Marketplace.
 
-The suite contains 24 checks: 19 native Testermint scenarios and 5 contract-policy, Go and compiled-Wasm boundary checks. Boundary checks retain their actual proof level; they are not native-chain evidence.
+This repository (`gonka24/forward-e2e`) executes full end-to-end validation of an
+**explicitly chosen pair of immutable product commits**:
 
-## Getting started
+- **Gonka chain** (`gonka-ai/gonka`), selected by full 40-character Git SHA.
+- **Forward Marketplace contracts** (`gonka24/forward-contracts`), selected by
+  full 40-character Git SHA.
 
-Clone this repository separately from the contracts repository:
+Both repositories are materialised from Git objects and verified before build,
+after build, and after execution to ensure zero source modifications. All runner
+logic, external Kotlin Testermint scenarios, Compose fragments, boundary probes,
+and verifiers live inside the runner image.
+
+---
+
+## Repository Boundaries
+
+| Repository | Responsibility |
+|---|---|
+| `gonka24/forward-e2e` (this repo) | E2E runner (`forward_e2e/`), live harness (`scripts/`), out-of-tree Testermint & boundary fixtures (`harness/`), runner container (`ops/`), and offline test suites (`tests/`). |
+| `gonka24/forward-contracts` | Production CosmWasm contracts (`deal`, `factory`), contract unit/`cw-multi-test` suites, protobuf bindings, and canonical contract release helper. |
+| `gonka-ai/gonka` | Upstream Gonka chain, `inferenced`, Decentralization API, and upstream Testermint framework. |
+
+---
+
+## Host Prerequisites
+
+- **Docker Engine** with **Docker Compose V2** (`docker compose`) and **Buildx**
+  (`docker buildx`).
+- **Git** on the host when using `--gonka-path` or `--contracts-path` (not
+  required when both sources are fetched via `--gonka-repo` and
+  `--contracts-repo`).
+- **Python 3.11+** on the host only when running the offline unit and local-source
+  integration test suites directly on the host.
+
+No Rust, Go, Java, Gradle, or Node.js installation is required on the host to
+run the E2E suite; all target build and execution toolchains are pinned inside
+the runner container (`ops/runner/Dockerfile`).
+
+---
+
+## Quickstart
+
+### 1. Run offline unit and integration tests
 
 ```bash
-git clone https://github.com/gonka24/forward-e2e.git
-cd forward-e2e
+python3 -B -m unittest discover -s tests/unit/runner -p 'test_*.py' -v
+python3 -B -m unittest discover -s tests/unit/harness -p 'test_*.py' -v
+python3 -B -m unittest discover -s tests/integration/local_sources -p 'test_*.py' -v
+```
+
+### 2. Build the runner image
+
+Select the runner commit by full 40-character SHA:
+
+```bash
 ./ops/e2e/build-runner.sh --runner-sha <RUNNER_FULL_40_HEX_SHA>
+```
+
+PowerShell:
+
+```powershell
+.\ops\e2e\Build-Runner.ps1 -RunnerSha <RUNNER_FULL_40_HEX_SHA>
+```
+
+### 3. List the scenario catalog
+
+```bash
 ./ops/e2e/run-e2e.sh list
+```
+
+### 4. Plan and run an E2E suite
+
+```bash
 ./ops/e2e/run-e2e.sh run \
   --gonka-repo https://github.com/gonka-ai/gonka \
   --gonka-sha <GONKA_FULL_40_HEX_SHA> \
@@ -22,53 +85,74 @@ cd forward-e2e
   --output ./out/e2e
 ```
 
-On Windows, build with `ops/e2e/Build-Runner.ps1 -RunnerSha <RUNNER_FULL_40_HEX_SHA>` and use `ops/e2e/Run-E2E.ps1` for run arguments. Remote runs require Docker with Compose; local-source runs also require Git. For a sibling contracts checkout use `--contracts-path ../forward-contracts`. The runner repository itself is not a contracts source.
+---
 
-The image is built from the selected committed runner sources. Its baked Git
-commit and tree SHAs are recorded in every new plan, together with its immutable
-image ID and asset hashes. Runner, contracts and Gonka are pinned independently.
+## Repository Layout
 
-Read the [operational guide](ops/e2e/README.md) for planning, full runs, replay, reporting and recovery, and the [verification runbook](ops/e2e/RUNBOOK-immutable-sources.md) for validation on a specific source pair. The image includes target build toolchains and uses a private inner Docker daemon for live runs.
-
-## Repository boundary
-
-| Location | Responsibility |
-| --- | --- |
-| `ops/a8/` | Catalog, orchestration, build provenance, evidence collection and verification |
-| `ops/a8/harness/` | External Kotlin tests, network templates, container controller, Go and Wasm probes |
-| `ops/e2e/` | Linux/macOS and Windows host wrappers and runbooks |
-| `scripts/` | Runner-owned acceptance and boundary helpers |
-| `scripts/a9_release.py` | Pinned copy of the reproducible release helper; canonical maintenance belongs to `forward-contracts` |
-| `docs/reviews/` | Preserved review context and recorded fixtures; historical results do not certify new commits |
-
-Production contracts, API/protobuf packages, Rust unit/property/`cw-multi-test` tests, release/deployment tooling and the three small Cargo test-contract fixtures remain in `forward-contracts`. The runner builds those fixtures from the selected contracts commit.
-
-## Development checks
-
-The core runner requires Linux (`fcntl` and POSIX file permissions). Run its offline suites on Linux, or in a Linux tools container, with Python 3.11 and Git:
-
-```bash
-python3 -B -m unittest discover -s scripts/tests -p 'test_*.py' -v
-python3 -B -m unittest discover -s ops/a8/tests -p 'test_*.py' -v
-python3 -B -m unittest discover -s ops/a8/integration_tests -p 'test_*.py' -v
+```text
+forward_e2e/
+  suite/                Suite catalog, orchestrator, runtime snapshots, collector, verifier, reporter
+  execution/            Plan/lock lifecycle, immutable builder, executor, outcome grading, CLI
+scripts/
+  acceptance_harness.py Live acceptance harness and contract deployment driver
+  external_harness.py   Out-of-tree Testermint build, upstream API verifier, network root prep
+  run_go_boundary.py    Go query error classification boundary probe driver
+  test_wasm_query_boundary.mjs  Compiled-Wasm ExternalQuerier ABI probe driver
+harness/
+  testermint/           External Gradle project with Kotlin Marketplace scenarios
+  network/              Runner-owned Compose fragments and B3 genesis provisioner
+  go_boundary/          Standalone Go boundary module
+  wasm_query_allowlist/ Manual live Wasm gRPC allowlist probe
+  container_control.py  Docker container stop/start controller by recorded container ID
+vendor/
+  contract_release/     Pinned copy of canonical contract release helper (release.py)
+ops/
+  runner/               Runner Dockerfile, Compose definition, DinD entrypoint, RUNNER_VERSION
+  e2e/                  Host CLI wrappers (Bash and PowerShell)
+tests/
+  unit/runner/          Offline unit tests for forward_e2e.suite and forward_e2e.execution
+  unit/harness/         Offline unit tests for scripts/ and vendor/contract_release/
+  integration/local_sources/  Local Git object acquisition integration tests
+  fixtures/             Deterministic synthetic test fixtures
+docs/                   Architecture, operations, evidence, coverage, validation, migration, licensing
 ```
 
-Windows wrapper checks have a separate CI job. CI does not start a live chain. Passing offline tests does not prove a full E2E run or production readiness.
+---
 
-Read [AGENTS.md](AGENTS.md) and the [architecture guide](ops/a8/README.md) before changing the runner. New images and changed runner hashes require new plans; old image-bound locks are not rebound to this repository.
+## Documentation Index
 
-## Extraction provenance
+- [`docs/README.md`](docs/README.md) — full documentation map.
+- [`docs/architecture.md`](docs/architecture.md) — runner layers, one-way import rule, and four-zone filesystem isolation.
+- [`docs/operations.md`](docs/operations.md) — CLI reference (`list`, `plan`, `run`, `rerun`, `report`, `recover`), flags, credentials, and Docker volumes.
+- [`docs/evidence.md`](docs/evidence.md) — evidence artifacts, schemas, proof levels, and whole-run verdict rules.
+- [`docs/coverage.md`](docs/coverage.md) — 24-task scenario catalog, legacy aliases, proof levels, and known coverage boundaries.
+- [`docs/validation.md`](docs/validation.md) — step-by-step operator and reviewer runbook.
+- [`docs/development.md`](docs/development.md) — developer guide, test conventions, lock-hashed files, and maintenance rules.
+- [`docs/migration.md`](docs/migration.md) — path, scenario ID, and environment variable migration reference.
+- [`docs/licensing.md`](docs/licensing.md) — licensing terms and publication date policy.
+- [`VERSIONS.md`](VERSIONS.md) — pinned runner toolchain and runtime image digests.
+- [`AGENTS.md`](AGENTS.md) — contributor and coding-agent contract.
 
-This repository was extracted from `forward-contracts` commit `d637eea5432506d60c90c1d8436c67b93802d829` after [PR #1](https://github.com/gonka24/forward-contracts/pull/1). [EXTRACTION.json](EXTRACTION.json) records each source file's original SHA-256. The original development history remains in that repository. At extraction, runner executable assets and recorded evidence retained their original bytes; subsequent runner fixes are tracked in this repository's Git history. The extraction hashes remain a record of the original source bytes.
+---
 
-The copy of `scripts/a9_release.py` is intentionally runner-owned and hashed into every run lock. Updating the canonical helper does not silently update this copy: import a reviewed version, update its source record, run its offline tests, rebuild the runner and create a new plan.
+## Extraction Provenance
 
-## License
+This repository was extracted from `gonka24/forward-contracts` at commit
+`d637eea5432506d60c90c1d8436c67b93802d829`. Exact file-level SHA-256 provenance
+at the extraction boundary is recorded in [`EXTRACTION.json`](EXTRACTION.json).
 
-Original Gonka24 material retains [BUSL-1.1](LICENSE) and its existing publication dates; extraction does not restart them. See [licensing policy](docs/licensing.md) and [third-party scope](THIRD_PARTY.md). Upstream-derived material retains its applicable terms and notices.
+---
 
-## Authors
+## Authors and License
 
-- Mikita Anikiyevich
-- Nikolay Tverdokhlebov
-- Hleb Dapkiunas
+### Authors
+
+- Mikita Anikiyevich (Gonka24)
+
+### License
+
+Original Gonka24 material in this repository is licensed under the Business
+Source License 1.1 (`BUSL-1.1`), changing to `Apache-2.0` after the Change Date
+specified in [`LICENSE`](LICENSE). Third-party materials retain their original
+licenses as documented in [`THIRD_PARTY.md`](THIRD_PARTY.md) and
+[`docs/licensing.md`](docs/licensing.md).

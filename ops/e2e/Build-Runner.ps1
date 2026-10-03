@@ -27,7 +27,7 @@ Set-StrictMode -Version Latest
 
 $ScriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 $RepoRoot = (Resolve-Path (Join-Path $ScriptDir '..\..')).Path
-$ComposeFile = Join-Path $RepoRoot 'ops\a8\compose.yaml'
+$ComposeFile = Join-Path $RepoRoot 'ops\runner\compose.yaml'
 
 function Fail {
     param([string]$Message, [int]$Code = 1)

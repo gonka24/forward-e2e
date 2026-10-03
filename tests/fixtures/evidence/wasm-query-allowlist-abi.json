@@ -1,0 +1,153 @@
+{
+  "cases": [
+    {
+      "envelope": "{",
+      "name": "malformed-envelope",
+      "observed": {
+        "error": {
+          "invalid_response": {
+            "error": "Error parsing into type cosmwasm_std::results::system_result::SystemResult<cosmwasm_std::results::contract_result::ContractResult<cosmwasm_std::binary::Binary>>: EOF while parsing a JSON value.",
+            "response": "ew=="
+          }
+        }
+      },
+      "query_chain_calls": 1,
+      "status": "PASS"
+    },
+    {
+      "envelope": "{\"unexpected\":true}",
+      "name": "invalid-envelope-shape",
+      "observed": {
+        "error": {
+          "invalid_response": {
+            "error": "Error parsing into type cosmwasm_std::results::system_result::SystemResult<cosmwasm_std::results::contract_result::ContractResult<cosmwasm_std::binary::Binary>>: unknown variant `unexpected`, expected `ok` or `error`",
+            "response": "eyJ1bmV4cGVjdGVkIjp0cnVlfQ=="
+          }
+        }
+      },
+      "query_chain_calls": 1,
+      "status": "PASS"
+    },
+    {
+      "envelope": "{\"error\":{\"invalid_request\":{\"error\":\"bad request\",\"request\":\"e30=\"}}}",
+      "name": "invalid_request",
+      "observed": {
+        "error": {
+          "invalid_request": {
+            "error": "bad request",
+            "request": "e30="
+          }
+        }
+      },
+      "query_chain_calls": 1,
+      "status": "PASS"
+    },
+    {
+      "envelope": "{\"error\":{\"unknown\":{}}}",
+      "name": "unknown",
+      "observed": {
+        "error": {
+          "unknown": {}
+        }
+      },
+      "query_chain_calls": 1,
+      "status": "PASS"
+    },
+    {
+      "envelope": "{\"error\":{\"no_such_contract\":{\"addr\":\"missing\"}}}",
+      "name": "no_such_contract",
+      "observed": {
+        "error": {
+          "no_such_contract": {
+            "addr": "missing"
+          }
+        }
+      },
+      "query_chain_calls": 1,
+      "status": "PASS"
+    },
+    {
+      "envelope": "{\"error\":{\"no_such_code\":{\"code_id\":7}}}",
+      "name": "no_such_code",
+      "observed": {
+        "error": {
+          "no_such_code": {
+            "code_id": 7
+          }
+        }
+      },
+      "query_chain_calls": 1,
+      "status": "PASS"
+    },
+    {
+      "envelope": "{\"error\":{\"unsupported_request\":{\"kind\":\"grpc\"}}}",
+      "name": "unsupported_request",
+      "observed": {
+        "error": {
+          "unsupported_request": {
+            "kind": "grpc"
+          }
+        }
+      },
+      "query_chain_calls": 1,
+      "status": "PASS"
+    },
+    {
+      "envelope": "{\"ok\":{\"error\":\"keeper failure\"}}",
+      "name": "contract-error-control",
+      "observed": {
+        "ok": {
+          "error": "keeper failure"
+        }
+      },
+      "query_chain_calls": 1,
+      "status": "PASS"
+    },
+    {
+      "envelope": "{\"ok\":{\"ok\":\"AQI=\"}}",
+      "name": "success-control",
+      "observed": {
+        "ok": {
+          "ok": "AQI="
+        }
+      },
+      "query_chain_calls": 1,
+      "status": "PASS"
+    }
+  ],
+  "level": "compiled-Wasm query_chain ABI; synthetic host",
+  "node": "v24.0.0",
+  "status": "PASS",
+  "synthetic_fixture": {
+    "bindings": {
+      "wasm_sha256": "sha256 of the empty Wasm module 0061736d01000000 (never executed)"
+    },
+    "bound_digests": [
+      "93a44bbb96c751218e4c00d479e4c14358122a389acca16205b1e4d0dc5f9476"
+    ],
+    "document": "wasm-query-allowlist-abi",
+    "identities": {
+      "addresses": {}
+    },
+    "identity_rules": {
+      "address": "bech32('gonka', seed('<document>:address:<role>')[:20 or 32])",
+      "checked_by": "tests/unit/runner/test_synthetic_evidence.py",
+      "hex40": "seed('<document>:hex40:<n>').hex()[:40], n = order of first appearance",
+      "seed": "sha256('forward-e2e synthetic fixture:' + label)",
+      "sha256": "seed('<document>:sha256:<n>').hex(), n = order of first appearance",
+      "timestamp": "2026-01-01T00:00:00Z + n minutes, preserving relative order",
+      "tx_hash": "seed('<document>:tx:<n>').hex().upper(), n = order of first appearance"
+    },
+    "notice": "Synthetic offline test fixture. Every chain identity is derived from a labelled SHA-256 seed (see identity_rules); this document is not evidence of any executed chain, Docker or Testermint run.",
+    "producer": "scripts/test_wasm_query_boundary.mjs",
+    "producer_functions": [
+      "cases",
+      "evidence"
+    ],
+    "producer_revision": "8079c0c274f5252800ee16b9f4fb0148bfcae2fe",
+    "purpose": "9-case compiled-Wasm query_chain envelope decoding report bound to a placeholder Wasm artefact",
+    "schema": "forward-e2e.synthetic-fixture/2"
+  },
+  "test_fixture_only": true,
+  "wasm_sha256": "93a44bbb96c751218e4c00d479e4c14358122a389acca16205b1e4d0dc5f9476"
+}

@@ -5,7 +5,7 @@
 .DESCRIPTION
     A thin wrapper. It does not parse the acceptance CLI: arguments are
     forwarded verbatim to the single parser inside the runner container
-    (ops/a8/e2e/cli.py), so the documented examples cannot drift from the
+    (forward_e2e/execution/cli.py), so the documented examples cannot drift from the
     implementation.
 
     Four host-side jobs that cannot be done from inside the container:
@@ -48,7 +48,7 @@ Set-StrictMode -Version Latest
 
 $ScriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 $RepoRoot = (Resolve-Path (Join-Path $ScriptDir '..\..')).Path
-$ComposeFile = Join-Path $RepoRoot 'ops\a8\compose.yaml'
+$ComposeFile = Join-Path $RepoRoot 'ops\runner\compose.yaml'
 $Service = 'e2e-runner'
 
 function Fail {
@@ -208,7 +208,10 @@ $planDirHost = $null
 $secretsDirHost = $null
 $runArgIndex = -1
 $runArgValue = $null
-$dockerRootVolume = if ($env:A8_DOCKER_ROOT_VOLUME) { $env:A8_DOCKER_ROOT_VOLUME } else { 'a8-docker-root' }
+if ($env:E2E_DOCKER_ROOT_VOLUME -and $env:A8_DOCKER_ROOT_VOLUME -and ($env:E2E_DOCKER_ROOT_VOLUME -ne $env:A8_DOCKER_ROOT_VOLUME)) {
+    Fail "Conflicting environment variables E2E_DOCKER_ROOT_VOLUME='$($env:E2E_DOCKER_ROOT_VOLUME)' and A8_DOCKER_ROOT_VOLUME='$($env:A8_DOCKER_ROOT_VOLUME)'; unset the legacy A8_DOCKER_ROOT_VOLUME variable or set both to the same value." 2
+}
+$dockerRootVolume = if ($env:E2E_DOCKER_ROOT_VOLUME) { $env:E2E_DOCKER_ROOT_VOLUME } elseif ($env:A8_DOCKER_ROOT_VOLUME) { $env:A8_DOCKER_ROOT_VOLUME } else { 'a8-docker-root' }
 
 for ($i = 0; $i -lt $ContainerArgs.Count; $i++) {
     $token = $ContainerArgs[$i]
@@ -381,6 +384,7 @@ $env:CONTRACTS_DIR = if ($contractsBridge) { $contractsBridge } else { $RepoRoot
 $env:OUTPUT_DIR = if ($outputHost) { $outputHost } else { Join-Path $RepoRoot 'out' }
 $env:E2E_PLAN_DIR = if ($planDirHost) { $planDirHost } else { $RepoRoot }
 $env:E2E_SECRETS_DIR = if ($secretsDirHost) { $secretsDirHost } else { $RepoRoot }
+$env:E2E_DOCKER_ROOT_VOLUME = $dockerRootVolume
 $env:A8_DOCKER_ROOT_VOLUME = $dockerRootVolume
 New-Item -ItemType Directory -Path $env:OUTPUT_DIR -Force | Out-Null
 

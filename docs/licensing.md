@@ -1,18 +1,18 @@
-# Licensing and version dates
+# Licensing and Version Dates
 
 The [root LICENSE](../LICENSE) applies BUSL-1.1 to original Gonka24 material,
 with Mikita Anikiyevich as Licensor. The Gonka24 authors are listed in the
-[README](../README.md#authors); this attribution does not transfer copyright or
-establish authority to license another author's contributions. The standard Terms
-and Covenants are preserved; the parameters specify a one-calendar-year period
-for each version and Apache-2.0 as its Change License.
+[README](../README.md#authors-and-license); this attribution does not transfer
+copyright or establish authority to license another author's contributions. The
+standard Terms and Covenants are preserved; the parameters specify a
+one-calendar-year period for each version and Apache-2.0 as its Change License.
 
 The source is available for inspection, modification, redistribution and
 non-production use under BUSL. The Additional Use Grant also permits commercial
 interaction with official deployments, integrations, and Deal instances created
 through a Factory deployed by the Licensor. It does not authorize operating a
 separate production Marketplace before its Change Date without a separate
-license. See the full LICENSE for the controlling terms.
+license. See the full [LICENSE](../LICENSE) for the controlling terms.
 
 ## Version 0.1.0 publication dates
 
@@ -30,8 +30,8 @@ historical local evidence is not rebound to the new public revision.
 
 The Change Date is determined by the first public distribution of each version,
 including public development snapshots. A private PR, private test or private
-build does not start that period. Do not describe this repository as open source before the applicable
-Change Date; use source-available.
+build does not start that period. Do not describe this repository as open source
+before the applicable Change Date; use source-available.
 
 For every public release, publish a record alongside its artifacts containing:
 
@@ -58,12 +58,15 @@ Official deployment records should identify the chain ID, Factory address and
 code checksums so users can identify deployments covered by the Additional Use
 Grant. Normal use of the Factory to create a Deal is expressly permitted.
 
-## Scope and previous permissions
+## Scope and third-party materials
 
-[Third-party materials](../THIRD_PARTY.md) retain their original terms, including
-those applicable to generated bindings. Root Cargo metadata describes original
-code; the mixed gonka-proto package points to the scoped license file instead
-of asserting that every vendored/generated file is BUSL.
+[Third-party materials](../THIRD_PARTY.md) and license texts under
+[`licenses/`](../licenses/) (`Apache-2.0.txt`, `BUSL-1.1.txt`,
+`Gonka-pinned.txt`) retain their original terms, including those applicable to
+upstream Gonka Testermint helpers and protobuf definitions. The preserved notice
+at [`packages/gonka-proto/NOTICE`](../packages/gonka-proto/NOTICE) is retained
+from the extraction provenance ([`EXTRACTION.json`](../EXTRACTION.json)) for
+attribution continuity alongside `THIRD_PARTY.md`.
 
 This change does not revoke any Apache-2.0 or other permissions previously
 granted. Private history cleanup does not withdraw licenses already received.

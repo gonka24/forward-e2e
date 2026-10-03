@@ -8,11 +8,11 @@ Licensor holds the necessary rights. It does not replace third-party terms.
   [provenance](https://github.com/gonka24/forward-contracts/blob/d637eea5432506d60c90c1d8436c67b93802d829/packages/gonka-proto/proto/PROVENANCE.toml) identify the sources.
 - `packages/gonka-proto/src/generated/` contains generated bindings derived from
   that snapshot. Generation does not remove applicable upstream terms.
-- Upstream-derived A8 harness material must be tracked to its individual source
-  revision. `A8UpstreamTestSupport.kt` identifies its verbatim helper source as
+- Upstream-derived harness material must be tracked to its individual source
+  revision. `harness/testermint/src/test/kotlin/UpstreamTestSupport.kt` (formerly `A8UpstreamTestSupport.kt`) identifies its verbatim helper source as
   Gonka commit `c33c9eaa5bc40c53b564159b5e1534bbfdab8a08`,
   `testermint/src/test/kotlin/DevshardTestSupport.kt` lines 340–364. The genesis
-  provisioner identifies the source sequence and its SHA-256 in its header;
+  provisioner (`harness/network/genesis/foreign-native-genesis-provision.sh`) identifies the source sequence and its SHA-256 in its header;
   both refer to `inference-chain/scripts/init-docker-genesis.sh` at that same
   commit. At that commit, GitHub reports `LICENSE.md` blob
   `c65ef755460ee6fedad9669216df820f5c0e29ed` (14,883 bytes), and the complete
