@@ -24,15 +24,17 @@ classpath does not contain the upstream main classes, or if it contains upstream
 test classes.
 
 API stop/start goes through [`src/test/kotlin/ApiContainerControl.kt`](src/test/kotlin/ApiContainerControl.kt),
-which calls [`harness/container_control.py`](../container_control.py). The `stop`
+via `stopOwnedApiContainer()`, which calls
+[`harness/container_control.py`](../container_control.py). Its name deliberately
+differs from upstream `stopApiContainer()` so Kotlin selects the runner-owned
+controller. The `stop`
 command checks the run's ownership label (`io.gonka.a8.run-id`) and saves the
 container ID before it stops anything. The `start` command restarts that same
 container by ID and waits for `admin/v1/config`.
 
 The network state lives under `GONKA_REPO_ROOT=<W>/network-root`, never in the
 source snapshot. The extra Compose files (`ownership.yml`, `nats.yml`, and
-`foreign-native-genesis.yml` for `foreign-native-preservation` /
-`b3-foreign-native` only) are copied from [`harness/network/`](../network/) into
+`foreign-native-genesis.yml` for `foreign-native-preservation` only) are copied from [`harness/network/`](../network/) into
 `<W>/network-root/local-test-net/`.
 
 ## Builds the runner performs

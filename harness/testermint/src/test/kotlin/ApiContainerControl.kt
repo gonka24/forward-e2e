@@ -33,7 +33,7 @@ internal class StoppedApiContainer internal constructor(
     private var started = false
 
     /**
-     * Starts the very container [LocalInferencePair.stopApiContainer]
+     * Starts the very container [LocalInferencePair.stopOwnedApiContainer]
      * stopped (by its saved ID) and waits until its admin API answers.
      */
     fun startSameContainer() {
@@ -63,10 +63,13 @@ internal class StoppedApiContainer internal constructor(
 /**
  * Stops this pair's `<pair>-api` container through the external controller and
  * returns the handle that [StoppedApiContainer.startSameContainer] must use.
+ * Its name must differ from upstream stopApiContainer(): Kotlin members take
+ * precedence over extensions, which would bypass ownership checks and return
+ * Unit instead of this saved-container handle.
  * Scenarios that never restart simply drop the handle; the container is torn
  * down with the rest of the run by the runner's ownership cleanup.
  */
-internal fun LocalInferencePair.stopApiContainer(): StoppedApiContainer {
+internal fun LocalInferencePair.stopOwnedApiContainer(): StoppedApiContainer {
     // Same derivation as upstream TestermintContainers.getApi(): "$name-api"
     // with Docker's leading '/' removed.
     val containerName = "${name.trimStart('/')}-api"

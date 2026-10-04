@@ -49,7 +49,7 @@ class MarketplaceContractAcceptanceTests : TestermintTest() {
         runHarness("lock-scenario", "--context", requiredEnv("E2E_CONTEXT"), "--name", "r2-vested-gift")
         val rewardSeed = cluster.joinPairs.first().api.getConfig().currentSeed
         check(rewardSeed.epochIndex == r2Epoch) { "R2 reward seed epoch must equal its Deal epoch" }
-        val r2StoppedApi = cluster.joinPairs.first().stopApiContainer()
+        val r2StoppedApi = cluster.joinPairs.first().stopOwnedApiContainer()
         genesis.waitForStage(EpochStage.CLAIM_REWARDS, offset = 2)
         runHarness("claim-scenario", "--context", requiredEnv("E2E_CONTEXT"), "--name", "r2-vested-gift", "--reward-seed", rewardSeed.seed.toString(), "--reward-epoch", rewardSeed.epochIndex.toString())
         runHarness("settle-scenario", "--context", requiredEnv("E2E_CONTEXT"), "--name", "r2-vested-gift")
@@ -224,7 +224,7 @@ class MarketplaceContractAcceptanceTests : TestermintTest() {
             genesis.waitForNextEpoch()
         }
         genesis.waitForStage(EpochStage.END_OF_POC_VALIDATION, offset = 0)
-        unclaimedHost.stopApiContainer()
+        unclaimedHost.stopOwnedApiContainer()
 
         logSection("Enter E=$targetEpoch and lock the exact native recipient")
         while (genesis.getEpochData().latestEpoch.index < targetEpoch) {
@@ -305,7 +305,7 @@ class MarketplaceContractAcceptanceTests : TestermintTest() {
             genesis.waitForNextEpoch()
         }
         genesis.waitForStage(EpochStage.END_OF_POC_VALIDATION, offset = 0)
-        unclaimedHost.stopApiContainer()
+        unclaimedHost.stopOwnedApiContainer()
 
         logSection("Enter E=$targetEpoch and lock the exact native recipient")
         while (genesis.getEpochData().latestEpoch.index < targetEpoch) {
@@ -440,7 +440,7 @@ class MarketplaceContractAcceptanceTests : TestermintTest() {
             "Testermint reward seed epoch ${rewardSeed.epochIndex} != Deal epoch $targetEpoch"
         }
 
-        val stoppedApi = participant.stopApiContainer()
+        val stoppedApi = participant.stopOwnedApiContainer()
         logSection("Claim the positive native reward and settle the funded Deal")
         genesis.waitForStage(EpochStage.CLAIM_REWARDS, offset = 2)
         runHarness(
@@ -490,7 +490,7 @@ class MarketplaceContractAcceptanceTests : TestermintTest() {
         runHarness("lock", "--context", requiredEnv("E2E_CONTEXT"))
         val rewardSeed = participant.api.getConfig().currentSeed
         check(rewardSeed.epochIndex == targetEpoch)
-        val stoppedApi = participant.stopApiContainer()
+        val stoppedApi = participant.stopOwnedApiContainer()
         genesis.waitForStage(EpochStage.CLAIM_REWARDS, offset = 2)
         runHarness(
             "claim-settle", "--context", requiredEnv("E2E_CONTEXT"),
@@ -567,7 +567,7 @@ class MarketplaceContractAcceptanceTests : TestermintTest() {
         runHarness("lock", "--context", requiredEnv("E2E_CONTEXT"))
         val rewardSeed = participant.api.getConfig().currentSeed
         check(rewardSeed.epochIndex == targetEpoch)
-        participant.stopApiContainer()
+        participant.stopOwnedApiContainer()
         genesis.waitForStage(EpochStage.CLAIM_REWARDS, offset = 2)
         runHarness(
             "claim-settle", "--context", requiredEnv("E2E_CONTEXT"),
@@ -598,7 +598,7 @@ class MarketplaceContractAcceptanceTests : TestermintTest() {
             "Testermint reward seed ${rewardSeed.epochIndex} != B2 Deal epoch $targetEpoch"
         }
 
-        val stoppedApi = participant.stopApiContainer()
+        val stoppedApi = participant.stopOwnedApiContainer()
         logSection("Claim the positive native reward and settle the funded Deal")
         genesis.waitForStage(EpochStage.CLAIM_REWARDS, offset = 2)
         runHarness(
@@ -664,7 +664,7 @@ class MarketplaceContractAcceptanceTests : TestermintTest() {
             "Testermint reward seed ${rewardSeed.epochIndex} != B3 Deal epoch $targetEpoch"
         }
 
-        val stoppedApi = participant.stopApiContainer()
+        val stoppedApi = participant.stopOwnedApiContainer()
         genesis.waitForStage(EpochStage.CLAIM_REWARDS, offset = 2)
         runHarness(
             "claim-settle",
@@ -716,7 +716,7 @@ class MarketplaceContractAcceptanceTests : TestermintTest() {
             "reward seed epoch ${rewardSeed.epochIndex} != Deal epoch $targetEpoch"
         }
 
-        val stoppedApi = participant.stopApiContainer()
+        val stoppedApi = participant.stopOwnedApiContainer()
         genesis.waitForStage(EpochStage.CLAIM_REWARDS, offset = 2)
         runHarness(
             "claim-settle", "--context", requiredEnv("E2E_CONTEXT"),
@@ -907,7 +907,7 @@ class MarketplaceContractAcceptanceTests : TestermintTest() {
             genesis.waitForNextEpoch()
         }
         genesis.waitForStage(EpochStage.END_OF_POC_VALIDATION, offset = 0)
-        unclaimedHost.stopApiContainer()
+        unclaimedHost.stopOwnedApiContainer()
         while (genesis.getEpochData().latestEpoch.index < targetEpoch) {
             genesis.waitForNextEpoch()
         }
@@ -965,7 +965,7 @@ class MarketplaceContractAcceptanceTests : TestermintTest() {
             "verify-claimed-scenario", "--context", requiredEnv("E2E_CONTEXT"),
             "--name", "no-sale", "--require-positive",
         )
-        participant.stopApiContainer()
+        participant.stopOwnedApiContainer()
         runHarness(
             "lock-scenario", "--context", requiredEnv("E2E_CONTEXT"),
             "--name", "no-sale",
@@ -1071,7 +1071,7 @@ class MarketplaceContractAcceptanceTests : TestermintTest() {
         )
 
         genesis.markNeedsReboot()
-        absentSummaryHost.stopApiContainer()
+        absentSummaryHost.stopOwnedApiContainer()
         logSection("Keep Host offline through E=$targetEpoch and lock its exact recipient")
         while (genesis.getEpochData().latestEpoch.index < targetEpoch) {
             genesis.waitForNextEpoch()

@@ -653,7 +653,7 @@ class ExternalHarnessScenarioSourceTests(unittest.TestCase):
             "fun `marketplace funded claim settles and releases on real Gonka`()", 1
         )[1].split("\n    @Test", 1)[0]
 
-        stopped = funded.index("participant.stopApiContainer()")
+        stopped = funded.index("participant.stopOwnedApiContainer()")
         wait_for_main_summary = funded.index(
             "genesis.waitForStage(EpochStage.CLAIM_REWARDS, offset = 2)", stopped
         )
@@ -699,7 +699,7 @@ class ExternalHarnessScenarioSourceTests(unittest.TestCase):
             scenario,
         )
         self.assertIn("val unclaimedHost = cluster.joinPairs.first()", scenario)
-        self.assertIn("unclaimedHost.stopApiContainer()", scenario)
+        self.assertIn("unclaimedHost.stopOwnedApiContainer()", scenario)
         self.assertEqual(scenario.count('"--name", "no-buyer-expired"'), 5)
         self.assertEqual(scenario.count('"--require-positive"'), 2)
         self.assertIn('"--expect", "failure", "--reason", "too_early"', scenario)
