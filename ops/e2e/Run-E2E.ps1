@@ -5,7 +5,7 @@
 .DESCRIPTION
     A thin wrapper. It does not parse the acceptance CLI: arguments are
     forwarded verbatim to the single parser inside the runner container
-    (ops/a8/e2e/cli.py), so the documented examples cannot drift from the
+    (forward_e2e/execution/cli.py), so the documented examples cannot drift from the
     implementation.
 
     Four host-side jobs that cannot be done from inside the container:
@@ -48,12 +48,12 @@ Set-StrictMode -Version Latest
 
 $ScriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 $RepoRoot = (Resolve-Path (Join-Path $ScriptDir '..\..')).Path
-$ComposeFile = Join-Path $RepoRoot 'ops\a8\compose.yaml'
+$ComposeFile = Join-Path $RepoRoot 'ops\runner\compose.yaml'
 $Service = 'e2e-runner'
 
 function Fail {
     param([string]$Message, [int]$Code = 2)
-    Write-Error $Message -ErrorAction Continue
+    [Console]::Error.WriteLine($Message)
     exit $Code
 }
 
@@ -200,7 +200,8 @@ $gonkaSha = Get-FlagValue -Tokens $ContainerArgs -Flag '--gonka-sha'
 $contractsSha = Get-FlagValue -Tokens $ContainerArgs -Flag '--contracts-sha'
 
 $forward = New-Object System.Collections.Generic.List[string]
-$runnerImage = if ($env:E2E_RUNNER_IMAGE) { $env:E2E_RUNNER_IMAGE } else { 'a8-runner:local' }
+$runnerImage = if ($env:E2E_RUNNER_IMAGE) { $env:E2E_RUNNER_IMAGE } else { 'forward-e2e-runner:local' }
+$runnerImageExplicit = $false
 $gonkaBridge = $null
 $contractsBridge = $null
 $outputHost = $null
@@ -208,7 +209,7 @@ $planDirHost = $null
 $secretsDirHost = $null
 $runArgIndex = -1
 $runArgValue = $null
-$dockerRootVolume = if ($env:A8_DOCKER_ROOT_VOLUME) { $env:A8_DOCKER_ROOT_VOLUME } else { 'a8-docker-root' }
+$dockerRootVolume = if ($env:E2E_DOCKER_ROOT_VOLUME) { $env:E2E_DOCKER_ROOT_VOLUME } else { 'forward-e2e-docker-root' }
 
 for ($i = 0; $i -lt $ContainerArgs.Count; $i++) {
     $token = $ContainerArgs[$i]
@@ -216,6 +217,7 @@ for ($i = 0; $i -lt $ContainerArgs.Count; $i++) {
         '--runner-image' {
             if ($i + 1 -ge $ContainerArgs.Count) { Fail '--runner-image requires a value.' }
             $runnerImage = $ContainerArgs[$i + 1]; $i++
+            $runnerImageExplicit = $true
         }
         '--docker-root-volume' {
             if ($i + 1 -ge $ContainerArgs.Count) { Fail '--docker-root-volume requires a value.' }
@@ -278,6 +280,13 @@ for ($i = 0; $i -lt $ContainerArgs.Count; $i++) {
         }
         default { $forward.Add($token) }
     }
+}
+
+# This host-consumed option is removed from $forward, so the container cannot
+# enforce its semantic-override rule. Preserve that rule here before launching
+# anything, exactly as ops/e2e/run-e2e.sh does.
+if ($planDirHost -and $runnerImageExplicit) {
+    Fail '--from executes a saved plan exactly; --runner-image cannot be combined with --from. Create a new plan instead.'
 }
 
 # -----------------------------------------------------------------------------
@@ -381,7 +390,7 @@ $env:CONTRACTS_DIR = if ($contractsBridge) { $contractsBridge } else { $RepoRoot
 $env:OUTPUT_DIR = if ($outputHost) { $outputHost } else { Join-Path $RepoRoot 'out' }
 $env:E2E_PLAN_DIR = if ($planDirHost) { $planDirHost } else { $RepoRoot }
 $env:E2E_SECRETS_DIR = if ($secretsDirHost) { $secretsDirHost } else { $RepoRoot }
-$env:A8_DOCKER_ROOT_VOLUME = $dockerRootVolume
+$env:E2E_DOCKER_ROOT_VOLUME = $dockerRootVolume
 New-Item -ItemType Directory -Path $env:OUTPUT_DIR -Force | Out-Null
 
 & docker compose -f $ComposeFile run --rm -e "E2E_RUNNER_IMAGE=$runnerImage" $Service @forward

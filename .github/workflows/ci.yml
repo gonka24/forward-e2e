@@ -21,13 +21,13 @@ jobs:
         with:
           python-version: "3.11"
       - name: Run release helper and acceptance harness tests
-        run: python3 -B -m unittest discover -s scripts/tests -p 'test_*.py' -v
+        run: python3 -B -m unittest discover -s tests/unit/harness -p 'test_*.py' -v
       - name: Run suite and E2E runner tests
-        run: python3 -B -m unittest discover -s ops/a8/tests -p 'test_*.py' -v
+        run: python3 -B -m unittest discover -s tests/unit/runner -p 'test_*.py' -v
       - name: Verify local Git source acquisition
-        run: python3 -B -m unittest discover -s ops/a8/integration_tests -p 'test_*.py' -v
+        run: python3 -B -m unittest discover -s tests/integration/local_sources -p 'test_*.py' -v
       - name: Validate Docker Compose configuration
-        run: docker compose -f ops/a8/compose.yaml config --quiet
+        run: docker compose -f ops/runner/compose.yaml config --quiet
 
   windows-host-wrapper:
     runs-on: windows-latest
@@ -39,4 +39,4 @@ jobs:
         with:
           python-version: "3.11"
       - name: Check Windows host-wrapper behavior
-        run: python -B -m unittest discover -s ops/a8/tests -p test_e2e_host_wrappers.py -v
+        run: python -B -m unittest discover -s tests/unit/runner -p test_e2e_host_wrappers.py -v

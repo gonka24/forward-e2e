@@ -1,0 +1,131 @@
+# ==============================================================================
+# Docker Compose: Target E2E Acceptance Runner
+#
+# Target Schema:
+#   Windows / Linux / macOS host
+#     └── Docker Engine or Docker Desktop
+#         └── e2e-runner (privileged, DinD)
+#             ├── Embedded dockerd on private unix:///var/run/docker.sock
+#             ├── Linux workspace with independent Git checkouts (/workspace)
+#             ├── Inner Testermint containers (genesis, join1, join2, DB, testdns)
+#             └── Exported evidence to /out -> host output directory
+#
+# Usage:
+#   docker compose -f ops/runner/compose.yaml build e2e-runner
+#   docker compose -f ops/runner/compose.yaml run --rm e2e-runner list
+#   ./ops/e2e/run-e2e.sh run ...
+# ==============================================================================
+
+# Stable project identity for runner containers and persistent volumes.
+name: forward-e2e
+
+services:
+  # ==========================================================================
+  # E2E runner: unified tools image, explicit-SHA CLI.
+  # ==========================================================================
+  e2e-runner:
+    platform: linux/amd64
+    build:
+      context: ${E2E_RUNNER_REPO:-https://github.com/gonka24/forward-e2e.git}#${E2E_RUNNER_SHA:-}
+      dockerfile: ops/runner/Dockerfile
+      args:
+        E2E_RUNNER_REPO: ${E2E_RUNNER_REPO:-https://github.com/gonka24/forward-e2e.git}
+        E2E_RUNNER_SHA: ${E2E_RUNNER_SHA:-}
+    image: ${E2E_RUNNER_IMAGE:-forward-e2e-runner:local}
+    entrypoint: ["/usr/local/bin/e2e-entrypoint"]
+    command: ["list"]
+    # No container_name: unlike the legacy service this one does not reserve a
+    # fixed name, so a `list` or `plan` can run while nothing else is active.
+    # Concurrency of *executions* is still prevented by the exclusive runtime
+    # flock inside the shared workspace volume.
+    privileged: true
+    init: true
+    stop_grace_period: 120s
+    # A Compose-created user network injects 127.0.0.11 into this container.
+    # The private dockerd must discard that loopback address for its children
+    # and then falls back to public resolvers that may be unreachable.  The
+    # host's default bridge supplies the real upstream resolver instead.
+    network_mode: bridge
+    environment:
+      # Operational paths inside the Linux runner.
+      - E2E_WORKSPACE_DIR=/workspace
+      - E2E_OUTPUT_DIR=/out
+      - DOCKER_HOST=unix:///var/run/docker.sock
+      # Injected by the wrappers after resolving the tag. A tag is only a
+      # locator; this is the immutable identity recorded in the run lock.
+      - E2E_RUNNER_IMAGE=${E2E_RUNNER_IMAGE:-forward-e2e-runner:local}
+      - E2E_RUNNER_IMAGE_ID=${E2E_RUNNER_IMAGE_ID:-}
+      - E2E_RUNNER_IMAGE_DIGEST=${E2E_RUNNER_IMAGE_DIGEST:-}
+      - E2E_CREDENTIAL_FILE=${E2E_CREDENTIAL_FILE:-}
+    volumes:
+      # Optional read-only local sources. Only committed objects of the
+      # requested SHA are ever exported from them; nothing is written back.
+      - type: bind
+        source: ${CONTRACTS_DIR:-../..}
+        target: /input/contracts
+        read_only: true
+      - type: bind
+        source: ${GONKA_DIR:-../..}
+        target: /input/gonka
+        read_only: true
+      # Optional secret for private repositories, mounted separately and never
+      # baked into the image. The default is the repository root purely so that
+      # a bare `docker compose run` does not fail on a missing bind source; the
+      # host wrapper always points this at the real secret's directory, and
+      # nothing is read from here unless --credential-file names a file in it.
+      - type: bind
+        source: ${E2E_SECRETS_DIR:-../..}
+        target: /run/secrets/e2e
+        read_only: true
+      # An existing plan package for `run --from` / `rerun --from`. Read-only:
+      # a replay never rewrites the lock it was given.
+      - type: bind
+        source: ${E2E_PLAN_DIR:-../..}
+        target: /input/plan
+        read_only: true
+      - type: bind
+        source: ${OUTPUT_DIR:-../../out}
+        target: /out
+        read_only: false
+      - type: volume
+        source: forward-e2e-workspace
+        target: /workspace
+      - type: volume
+        source: forward-e2e-docker-root
+        target: /var/lib/docker
+      - type: volume
+        source: forward-e2e-cargo-registry-cache
+        target: /root/.cargo/registry
+      - type: volume
+        source: forward-e2e-cargo-git-cache
+        target: /root/.cargo/git
+      - type: volume
+        source: forward-e2e-gradle-cache
+        target: /root/.gradle
+      - type: volume
+        source: forward-e2e-go-cache
+        target: /root/go
+
+volumes:
+  # Persistent workspace: stores runtime clones, raw evidence, and global flock
+  # Preserved across container deletions (--rm) to ensure raw evidence survival
+  forward-e2e-workspace:
+    name: forward-e2e-workspace
+  # Inner Docker daemon data root: caches downloaded images and container layers
+  forward-e2e-docker-root:
+    # Host wrappers may select a named state explicitly with
+    # --docker-root-volume. The workspace lock remains global, so selecting a
+    # different cache never permits two Testermint clusters at once.
+    name: ${E2E_DOCKER_ROOT_VOLUME:-forward-e2e-docker-root}
+    labels:
+      owner: gonka24-smart
+      purpose: forward-e2e-private-dockerd
+  # Dependency caches for fast sequential execution without re-downloading
+  forward-e2e-cargo-registry-cache:
+    name: forward-e2e-cargo-registry-cache
+  forward-e2e-cargo-git-cache:
+    name: forward-e2e-cargo-git-cache
+  forward-e2e-gradle-cache:
+    name: forward-e2e-gradle-cache
+  forward-e2e-go-cache:
+    name: forward-e2e-go-cache

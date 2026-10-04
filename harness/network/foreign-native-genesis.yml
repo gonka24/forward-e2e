@@ -1,0 +1,22 @@
+# Runner-generated compose overlay for the foreign-native-preservation (b3-foreign-native) scenario only.
+#
+# The genesis chain-node runs the runner's provisioner from a SEPARATE path.
+# Upstream /root/init-docker-genesis.sh inside the image is left untouched and
+# is never mounted over (the old overlay bind-mounted a modified copy on top of
+# it, which is exactly what the immutable-source model forbids).
+#
+# ./a8/genesis resolves against --project-directory = GONKA_REPO_ROOT =
+# <W>/network-root, where prepare_network_root writes
+# a8/genesis/foreign-native-genesis-provision.sh.
+#
+# The fixture values must equal B3_FOREIGN_ADDRESS / B3_FOREIGN_DENOM /
+# B3_FOREIGN_AMOUNT in the Kotlin harness and in scripts/external_harness.py.
+services:
+  chain-node:
+    command: ["/bin/sh", "/a8-provision/foreign-native-genesis-provision.sh"]
+    volumes:
+      - ./a8/genesis:/a8-provision:ro
+    environment:
+      A8_B3_FOREIGN_ADDRESS: gonka1k4swv40ur28fvu54p8mskjj4lxkgsj07u9f8ny
+      A8_B3_FOREIGN_DENOM: ua8b3foreign
+      A8_B3_FOREIGN_AMOUNT: "12345"

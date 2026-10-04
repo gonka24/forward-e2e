@@ -4,7 +4,7 @@
 #
 # This wrapper is deliberately thin. It does not parse the acceptance CLI: it
 # forwards arguments verbatim to the single parser inside the runner container
-# (ops/a8/e2e/cli.py), so the documented examples and the implementation can
+# (forward_e2e/execution/cli.py), so the documented examples and the implementation can
 # never drift apart.
 #
 # It does exactly four host-side jobs, because they cannot be done from inside
@@ -32,7 +32,7 @@ set -euo pipefail
 
 SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd -- "${SCRIPT_DIR}/../.." && pwd)"
-COMPOSE_FILE="${REPO_ROOT}/ops/a8/compose.yaml"
+COMPOSE_FILE="${REPO_ROOT}/ops/runner/compose.yaml"
 SERVICE="e2e-runner"
 
 die() {
@@ -59,13 +59,13 @@ abs_path() {
 }
 
 compose() {
-    if docker compose version >/dev/null 2>&1; then
-        docker compose -f "$COMPOSE_FILE" "$@"
-    elif command -v docker-compose >/dev/null 2>&1; then
-        docker-compose -f "$COMPOSE_FILE" "$@"
-    else
-        die "Neither 'docker compose' nor 'docker-compose' is available."
-    fi
+    # Compose V2 only. ops/runner/compose.yaml relies on a top-level `name:`,
+    # a `URL#SHA` build context, `platform:` and nested `${A:-${B:-c}}`
+    # defaults; the retired Python Compose v1 binary parses none of them, so a
+    # fallback to it could only fail later with a misleading error.
+    docker compose version >/dev/null 2>&1 \
+        || die "Docker Compose V2 ('docker compose') is required on the host but was not found."
+    docker compose -f "$COMPOSE_FILE" "$@"
 }
 
 require_cmd docker
@@ -208,9 +208,9 @@ GONKA_BRIDGE=""
 CONTRACTS_BRIDGE=""
 RUN_ARG_INDEX=-1
 RUN_ARG_VALUE=""
-RUNNER_IMAGE="${E2E_RUNNER_IMAGE:-a8-runner:local}"
+RUNNER_IMAGE="${E2E_RUNNER_IMAGE:-forward-e2e-runner:local}"
 RUNNER_IMAGE_EXPLICIT=false
-DOCKER_ROOT_VOLUME="${A8_DOCKER_ROOT_VOLUME:-a8-docker-root}"
+DOCKER_ROOT_VOLUME="${E2E_DOCKER_ROOT_VOLUME:-forward-e2e-docker-root}"
 
 while [ "$#" -gt 0 ]; do
     case "$1" in
@@ -393,7 +393,7 @@ export CONTRACTS_DIR="${CONTRACTS_BRIDGE:-$REPO_ROOT}"
 export OUTPUT_DIR="${OUTPUT_DIR_HOST:-${REPO_ROOT}/out}"
 export E2E_PLAN_DIR="${PLAN_DIR_HOST:-$REPO_ROOT}"
 export E2E_SECRETS_DIR="${SECRETS_DIR_HOST:-$REPO_ROOT}"
-export A8_DOCKER_ROOT_VOLUME="$DOCKER_ROOT_VOLUME"
+export E2E_DOCKER_ROOT_VOLUME="$DOCKER_ROOT_VOLUME"
 mkdir -p -- "$OUTPUT_DIR"
 
 compose run --rm -e "E2E_RUNNER_IMAGE=$RUNNER_IMAGE" "$SERVICE" ${FORWARD[@]+"${FORWARD[@]}"}

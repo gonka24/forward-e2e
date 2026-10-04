@@ -1,0 +1,88 @@
+{
+  "dependency_versions": {
+    "differences": [],
+    "gonka_modules": 3,
+    "harness_modules": 3,
+    "match": true
+  },
+  "docker_exit": 0,
+  "dockerfile_sha256": "1ad3f082403d0f958827fae865479e8580b210080cd85c36eec95da7fd76b4dc",
+  "go_exit": "0",
+  "go_mod_edit_flags": [
+    "-module=github.com/gonka24/forward-e2e-go-boundary",
+    "-require=github.com/productscience/inference@v0.0.0-00010101000000-000000000000",
+    "-replace=github.com/productscience/inference=../inference-chain"
+  ],
+  "gonka_go_files": {
+    "container_after": {
+      "inference-chain/go.mod": "b6c7eeec3f9cc9ecd04c8f6354a6a2b924e347b903176b07222f53038e1333a5",
+      "inference-chain/go.sum": "c5823237e2eda0575aeec21fc8ee736034eaa120f75acd0ba10af82254b2c4e4"
+    },
+    "container_before": {
+      "inference-chain/go.mod": "b6c7eeec3f9cc9ecd04c8f6354a6a2b924e347b903176b07222f53038e1333a5",
+      "inference-chain/go.sum": "c5823237e2eda0575aeec21fc8ee736034eaa120f75acd0ba10af82254b2c4e4"
+    },
+    "host_after": {
+      "inference-chain/go.mod": "b6c7eeec3f9cc9ecd04c8f6354a6a2b924e347b903176b07222f53038e1333a5",
+      "inference-chain/go.sum": "c5823237e2eda0575aeec21fc8ee736034eaa120f75acd0ba10af82254b2c4e4"
+    },
+    "host_before": {
+      "inference-chain/go.mod": "b6c7eeec3f9cc9ecd04c8f6354a6a2b924e347b903176b07222f53038e1333a5",
+      "inference-chain/go.sum": "c5823237e2eda0575aeec21fc8ee736034eaa120f75acd0ba10af82254b2c4e4"
+    },
+    "unchanged": true
+  },
+  "gonka_sha": "45c8473c3a8e8580d16724422e578bc048ca42e8",
+  "gonka_tree_sha": "d56ba3ac5b09bda8bdc5924c761a29c7025864b7",
+  "harness_module": {
+    "dir": "/app/harness/go_boundary",
+    "files_sha256": {
+      "go.mod": "7a9f52f67044933ad0ba89f7b85554433733799a4f53f91c29512631f857d13f",
+      "query_faults/plan.go": "2be9063c3af7a9432a3172d1c03e6a538eff070b637c28cf2e8525b100b3db9c",
+      "query_faults/plan_test.go": "6f96977230c3f85be68b41c3d0a1ac09ebd2d316410467234abe0f1f74975803"
+    }
+  },
+  "level": "Go classification and JSON roundtrip, not FFI",
+  "source_snapshot": {
+    "after_problems": [],
+    "before_head": "45c8473c3a8e8580d16724422e578bc048ca42e8",
+    "before_tree": "d56ba3ac5b09bda8bdc5924c761a29c7025864b7",
+    "verdict": "UNCHANGED"
+  },
+  "status": "PASS",
+  "synthetic_fixture": {
+    "bindings": {
+      "test_output_sha256": "sha256 of the committed raw/go-test.json bytes"
+    },
+    "bound_digests": [
+      "a49e6ae9dde6bacd36c1a0cec180cf8059ea5934add72c3471253d23793cb2bb"
+    ],
+    "document": "go-query-error-classification",
+    "identities": {
+      "addresses": {}
+    },
+    "identity_rules": {
+      "address": "bech32('gonka', seed('<document>:address:<role>')[:20 or 32]), role declared in identities.addresses",
+      "bound_digests": "sha256 of other committed fixture bytes, recomputed by the check; never a recorded digest",
+      "checked_by": "tests/unit/runner/test_synthetic_evidence.py",
+      "hex40": "seed('<document>:hex40:<n>').hex()[:40], n = order of first appearance",
+      "pubkey": "base64(seed('<document>:pubkey:<label>')), label declared in identities.pubkeys",
+      "seed": "sha256('forward-e2e synthetic fixture:' + label)",
+      "sha256": "seed('<document>:sha256:<n>').hex(), n = order of first appearance",
+      "timestamp": "2026-01-01T00:00:00Z + n minutes, preserving relative order",
+      "tx_hash": "seed('<document>:tx:<n>').hex().upper(), n = order of first appearance"
+    },
+    "notice": "Synthetic offline test fixture generated from code by boundary_fixture_files() in tests/unit/runner/support/synthetic_evidence.py. No value in it was recorded: placeholder hashes are labelled SHA-256 seed derivations (see identity_rules) and the one bound digest is recomputed from the committed bytes it binds. This document is not evidence of any executed chain, Docker or Wasm probe run.",
+    "producer": "scripts/run_go_boundary.py",
+    "producer_functions": [
+      "generate_dockerfile",
+      "main"
+    ],
+    "producer_revision": "refactor/repository-layout (post-relocation scripts/run_go_boundary.py; not the scripts/run_a8_go_boundary.py shape of 8079c0c)",
+    "producer_shape_note": "Generated from the producer shape on refactor/repository-layout: module github.com/gonka24/forward-e2e-go-boundary, harness directory /app/harness/go_boundary, package ./query_faults. At 8079c0c the producer wrote a8-go-boundary, /app/a8-go-boundary and ./a8faults; this fixture does not reproduce that older shape.",
+    "purpose": "Go query-error classification boundary report whose test_output_sha256 binds raw/go-test.json",
+    "schema": "forward-e2e.synthetic-fixture/2"
+  },
+  "test_fixture_only": true,
+  "test_output_sha256": "a49e6ae9dde6bacd36c1a0cec180cf8059ea5934add72c3471253d23793cb2bb"
+}

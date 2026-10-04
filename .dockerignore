@@ -32,13 +32,15 @@ Thumbs.db
 # Secrets and environment files
 .env
 .env.*
-!ops/a8/.env.example
+!ops/runner/.env.example
 
-# Recorded review evidence is a binding input to ops/a8/tests/real_fixtures.py.
-# Keep it in the runner image so the documented Linux offline suite is runnable.
-
-# Preserve recorded fixture bytes even when their suffix resembles a run log.
-!docs/reviews/evidence/**
+# Note on scope: ops/runner/Dockerfile never COPYs or ADDs from the build
+# context (the runner is fetched by Git at E2E_RUNNER_SHA inside a RUN step),
+# so this file only limits what a local-directory build uploads as context;
+# it does not decide what ends up in the image. The negations below keep the
+# context complete for anyone who does COPY it, nothing more.
+# Synthetic evidence fixtures are required by tests/unit/runner/real_fixtures.py.
+!tests/fixtures/**
 # This committed probe is a versioned test fixture, not a local build output.
-!ops/a8/harness/wasm-probe/p0-probe/artifacts/
-!ops/a8/harness/wasm-probe/p0-probe/artifacts/**
+!harness/wasm_query_allowlist/artifacts/
+!harness/wasm_query_allowlist/artifacts/**
