@@ -16,7 +16,7 @@ import unittest
 from unittest.mock import Mock, patch
 
 from forward_e2e.suite.adapters import BoundaryTaskAdapter, NativeTaskAdapter, ProcessExecutionError, SubprocessRunner
-from forward_e2e.suite.catalog import get_task_by_id_or_alias
+from forward_e2e.suite.catalog import get_task_by_id
 from forward_e2e.suite.collector import CollectorSecurityError
 from forward_e2e.suite.runtime import RuntimeSnapshot
 import tests.unit.runner  # noqa: F401
@@ -34,7 +34,7 @@ class NativeTaskAdapterWorkingDirectoryTests(unittest.TestCase):
             snapshot.evidence_dir.mkdir()
             harness = root / "acceptance_harness.py"
             harness.write_text("# synthetic harness\n", encoding="utf-8")
-            task = get_task_by_id_or_alias("lock-exact-e")
+            task = get_task_by_id("lock-exact-e")
             self.assertIsNotNone(task)
 
             context = SimpleNamespace(harness_script=harness)
@@ -75,7 +75,7 @@ class NativeTaskAdapterWorkingDirectoryTests(unittest.TestCase):
                     return True
                 return original_is_file(path)
 
-            task = get_task_by_id_or_alias("lock-exact-e")
+            task = get_task_by_id("lock-exact-e")
             with patch.object(Path, "is_file", swap_after_check):
                 with self.assertRaises(CollectorSecurityError):
                     NativeTaskAdapter(task, snapshot)._collect_junit()
@@ -90,7 +90,7 @@ class NativeTaskAdapterWorkingDirectoryTests(unittest.TestCase):
             snapshot.junit_dir.mkdir(parents=True)
             xml = junit_source / "TEST-scenario.xml"
             xml.write_bytes(b"<testsuite tests='1'/>")
-            task = get_task_by_id_or_alias("lock-exact-e")
+            task = get_task_by_id("lock-exact-e")
 
             NativeTaskAdapter(task, snapshot)._collect_junit()
 
@@ -100,13 +100,13 @@ class NativeTaskAdapterWorkingDirectoryTests(unittest.TestCase):
 class BoundaryTaskAdapterDependencyTests(unittest.TestCase):
     def test_contract_tests_use_locked_dependencies_without_forcing_offline_mode(self):
         """A portable source plan must not fail merely because Cargo's cache is empty."""
-        for task_id in ("ct-network-unconfirmed", "ct-claim-expiry", "ct-package-c-policy"):
+        for task_id in ("contract-network-unconfirmed-policy", "contract-claim-expiry-policy", "contract-query-fault-policy"):
             with self.subTest(task_id=task_id), tempfile.TemporaryDirectory(prefix="a8-boundary-") as temporary:
                 root = Path(temporary)
                 snapshot = RuntimeSnapshot(root, f"{task_id}-001")
                 snapshot.run_dir.mkdir(parents=True)
                 snapshot.marketplace_dir.mkdir()
-                task = get_task_by_id_or_alias(task_id)
+                task = get_task_by_id(task_id)
 
                 with patch("forward_e2e.suite.adapters.SubprocessRunner") as runner_class:
                     runner = runner_class.return_value
@@ -239,7 +239,7 @@ class WasmTaskBudgetTests(unittest.TestCase):
                     return True
                 return original_is_file(path)
 
-            task = get_task_by_id_or_alias("wasm-abi-boundary")
+            task = get_task_by_id("wasm-abi-boundary")
             runner = Mock(timed_out=False)
             runner.run.return_value = 0
             with patch.object(Path, "is_file", swap_after_check), patch(
@@ -257,7 +257,7 @@ class WasmTaskBudgetTests(unittest.TestCase):
                 wasm = snapshot.run_dir / "cargo-target/wasm32-unknown-unknown/release/a8_query_boundary.wasm"
                 wasm.parent.mkdir(parents=True)
                 wasm.write_bytes(b"synthetic wasm")
-                task = get_task_by_id_or_alias("wasm-abi-boundary")
+                task = get_task_by_id("wasm-abi-boundary")
                 callback = Mock()
                 adapter = BoundaryTaskAdapter(task, snapshot, heartbeat_callback=callback)
                 cargo = Mock(timed_out=stage == "cargo")

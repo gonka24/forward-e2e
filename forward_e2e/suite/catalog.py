@@ -179,7 +179,6 @@ NATIVE_TASKS: List[TaskPlan] = [
         scenario_selector="foreign-native-preservation",
         # Exact producer scopes owned by this Kotlin test.
         evidence_scopes=[TOP_LEVEL_SCOPE],
-        aliases=["b3-foreign-native"],
         timeout_minutes=85,
         stage_timeout_seconds=85 * 60,
         expected_artifacts=[
@@ -324,7 +323,6 @@ NATIVE_TASKS: List[TaskPlan] = [
         scenario_selector="refund-boundary-and-vesting-addition",
         # Exact producer scopes owned by this Kotlin test.
         evidence_scopes=["r1-refund-e-plus-5", "r2-vested-gift"],
-        aliases=["package-a-r1-r2"],
         timeout_minutes=85,
         stage_timeout_seconds=85 * 60,
         expected_artifacts=[
@@ -363,7 +361,6 @@ NATIVE_TASKS: List[TaskPlan] = [
         scenario_selector="usdt-withdrawal-failure-recovery",
         # Exact producer scopes owned by this Kotlin test.
         evidence_scopes=[TOP_LEVEL_SCOPE],
-        aliases=["package-b-r6-1"],
         timeout_minutes=85,
         stage_timeout_seconds=85 * 60,
         expected_artifacts=[
@@ -392,7 +389,6 @@ NATIVE_TASKS: List[TaskPlan] = [
         scenario_selector="native-release-rollback-retry",
         # Exact producer scopes owned by this Kotlin test.
         evidence_scopes=[TOP_LEVEL_SCOPE],
-        aliases=["package-b-r7-1"],
         timeout_minutes=85,
         stage_timeout_seconds=85 * 60,
         expected_artifacts=[
@@ -586,7 +582,6 @@ BOUNDARY_TASKS: List[TaskPlan] = [
         proof_level=ProofLevel.GO_BOUNDARY,
         description="Go classification and JSON roundtrip tests in pinned Docker container",
         scenario_selector="go-query-error-classification",
-        aliases=["go-boundary"],
         timeout_minutes=30,
         stage_timeout_seconds=1800,
         expected_artifacts=[
@@ -634,7 +629,6 @@ BOUNDARY_TASKS: List[TaskPlan] = [
         proof_level=ProofLevel.CONTRACT_TEST,
         description="CT: network_unconfirmed_refund_rejects_early_and_unexpected_system_failures",
         scenario_selector="contract-network-unconfirmed-policy",
-        aliases=["ct-network-unconfirmed"],
         timeout_minutes=10,
         stage_timeout_seconds=600,
         expected_artifacts=[
@@ -656,7 +650,6 @@ BOUNDARY_TASKS: List[TaskPlan] = [
         proof_level=ProofLevel.CONTRACT_TEST,
         description="CT: claim_expiry_checks_pristine_locked_accounting_and_epoch_overflow",
         scenario_selector="contract-claim-expiry-policy",
-        aliases=["ct-claim-expiry"],
         timeout_minutes=10,
         stage_timeout_seconds=600,
         expected_artifacts=[
@@ -678,7 +671,6 @@ BOUNDARY_TASKS: List[TaskPlan] = [
         proof_level=ProofLevel.CONTRACT_TEST,
         description="Contract-policy and cw-multi-test replacement for 71 query fault cases",
         scenario_selector="contract-query-fault-policy",
-        aliases=["ct-package-c-policy"],
         timeout_minutes=15,
         stage_timeout_seconds=900,
         expected_artifacts=["contract-query-fault-policy.log"],
@@ -706,66 +698,8 @@ BOUNDARY_TASKS: List[TaskPlan] = [
 _NATIVE_BY_ID: Dict[str, TaskPlan] = {t.task_id: t for t in NATIVE_TASKS}
 _BOUNDARY_BY_ID: Dict[str, TaskPlan] = {t.task_id: t for t in BOUNDARY_TASKS}
 _ALL_TASKS: Dict[str, TaskPlan] = {**_NATIVE_BY_ID, **_BOUNDARY_BY_ID}
-_ALIAS_TO_TASK: Dict[str, TaskPlan] = {}
-for _task in _ALL_TASKS.values():
-    for _alias in _task.aliases:
-        # An alias that is also a canonical ID, or that two tasks both claim,
-        # would make ``--scenario <alias>`` ambiguous; refuse at import time
-        # rather than let the first match win silently.
-        if _alias in _ALL_TASKS or _alias in _ALIAS_TO_TASK:
-            raise ValueError(f"Scenario alias {_alias!r} is ambiguous in the catalog")
-        _ALIAS_TO_TASK[_alias] = _task
-del _task, _alias
-
-#: Pre-rename scenario IDs (left) and the canonical ID that replaced each one
-#: (right). Aliases are accepted only at the user-facing entry points
-#: (``--scenario``, the harness ``run-live`` selector); new plans, suite plans
-#: and reports always carry the canonical ID. They are documented in
-#: ``docs/migration.md`` together with their removal schedule.
-LEGACY_SCENARIO_ALIASES: Dict[str, str] = {
-    alias: task.task_id
-    for alias, task in _ALIAS_TO_TASK.items()
-}
-
-
-def canonical_task_id(identifier: str) -> str:
-    """Map a legacy scenario alias to its canonical task ID.
-
-    Unknown identifiers are returned unchanged so that callers keep their own
-    "unknown task" handling; this function only collapses spelling, it never
-    decides whether a task exists.
-
-    It is the single place where a verifier or adapter reading a document from
-    an older package (whose ``suite-plan.json`` still names the pre-rename task)
-    translates that name. Keeping the translation here instead of in a tuple at
-    every lookup site means a renamed scenario changes exactly one table.
-    """
-    return LEGACY_SCENARIO_ALIASES.get(identifier, identifier)
-
-
-def legacy_aliases_in(scenarios: Optional[Sequence[str]]) -> List[Tuple[str, str]]:
-    """``(alias, canonical_id)`` for every requested name that is a legacy alias.
-
-    The entry points (``plan``/``run`` and the harness ``run-live`` selector)
-    print one deprecation notice per pair so that a user who still types the
-    pre-rename name learns the current one before the alias is removed.
-    ``resolve_e2e_selection`` itself stays silent and pure. Names are split on
-    commas exactly as the resolver splits them, in request order, and a name
-    repeated in the request is reported once.
-    """
-    found: List[Tuple[str, str]] = []
-    for raw in scenarios or ():
-        for part in str(raw or "").split(","):
-            name = part.strip()
-            if name in LEGACY_SCENARIO_ALIASES:
-                pair = (name, LEGACY_SCENARIO_ALIASES[name])
-                if pair not in found:
-                    found.append(pair)
-    return found
-
-
-def get_task_by_id_or_alias(identifier: str) -> Optional[TaskPlan]:
-    return _ALL_TASKS.get(identifier) or _ALIAS_TO_TASK.get(identifier)
+def get_task_by_id(identifier: str) -> Optional[TaskPlan]:
+    return _ALL_TASKS.get(identifier)
 
 
 def get_profile_tasks(profile: str) -> List[TaskPlan]:
@@ -849,7 +783,7 @@ def resolve_e2e_selection(
 
     selected: set[str] = set()
     for name in requested:
-        task = get_task_by_id_or_alias(name)
+        task = get_task_by_id(name)
         if task is None:
             raise ValueError(
                 f"Unknown scenario: {name!r}. Registered scenarios: {sorted(_ALL_TASKS.keys())}"

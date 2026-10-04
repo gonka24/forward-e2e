@@ -61,22 +61,17 @@ Common arguments for every build:
 
 ## Environment read by the Kotlin code
 
-Every variable goes through one resolver, `requiredHarnessEnv(canonicalName,
-legacyName)` in [`ApiContainerControl.kt`](src/test/kotlin/ApiContainerControl.kt)
-(the scenarios reach it through the `requiredEnv(name)` wrapper in
-`MarketplaceContractAcceptanceTests`, which derives the `E2E_*`/`A8_*` pair
-from either spelling). The canonical `E2E_*` value wins; the `A8_*` alias is
-only a fallback; if both are set to **different** values the test fails with
-"Conflicting environment variables" instead of guessing; a blank value counts
-as unset. There is no default for any of them.
+Every variable goes through `requiredHarnessEnv(name)` in
+[`ApiContainerControl.kt`](src/test/kotlin/ApiContainerControl.kt). Only the
+current `E2E_*` names are supported. Missing or blank values fail; there are
+no aliases or defaults.
 
 The variables resolved this way are `E2E_PYTHON`, `E2E_HARNESS`,
 `E2E_MARKETPLACE_DIR`, `E2E_CONTEXT`, `E2E_RUN_ID`, `E2E_DEAL_WASM`,
 `E2E_FACTORY_WASM`, `E2E_CW20_WASM`, `E2E_CALLER_WASM`,
-`E2E_CONTAINER_CONTROL` and `E2E_CONTAINER_CONTROL_STATE_DIR` (each with its
-`A8_*` alias). Upstream Testermint itself reads `GONKA_REPO_ROOT`.
+`E2E_CONTAINER_CONTROL` and `E2E_CONTAINER_CONTROL_STATE_DIR`. Upstream Testermint itself reads `GONKA_REPO_ROOT`.
 
-`build.gradle.kts` forwards the `E2E_*`, `A8_*` and `GONKA_REPO_ROOT` entries
+`build.gradle.kts` forwards the `E2E_*` and `GONKA_REPO_ROOT` entries
 of the build's environment into the test JVM explicitly (on top of the normal
 inheritance), so a Gradle daemon started earlier cannot leave a stale value;
 the runner also passes `--no-daemon`.

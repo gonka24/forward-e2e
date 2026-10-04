@@ -53,7 +53,7 @@ class TestE2EPackageResolution(unittest.TestCase):
         stage_dir = run_stage_dir(self.workspace, run_id)
         setup_baseline_package(
             stage_dir,
-            scenarios=["go-boundary"],
+            scenarios=["go-query-error-classification"],
             run_id=run_id,
             delivery_manifest_relpath=None,
         )
@@ -68,7 +68,7 @@ class TestE2EPackageResolution(unittest.TestCase):
         stage_dir = run_stage_dir(self.workspace, run_id)
         setup_baseline_package(
             stage_dir,
-            scenarios=["go-boundary"],
+            scenarios=["go-query-error-classification"],
             run_id=run_id,
             include_delivery_file=False,
         )
@@ -81,7 +81,7 @@ class TestE2EPackageResolution(unittest.TestCase):
         """A boundary run package missing suite-plan.json fails grading."""
         run_id = "e2e-res-boundary-missing-plan"
         stage_dir = run_stage_dir(self.workspace, run_id)
-        setup_baseline_package(stage_dir, scenarios=["go-boundary"], run_id=run_id)
+        setup_baseline_package(stage_dir, scenarios=["go-query-error-classification"], run_id=run_id)
 
         plan_file = stage_dir / "suite" / run_id / "suite-plan.json"
         plan_file.unlink()
@@ -95,7 +95,7 @@ class TestE2EPackageResolution(unittest.TestCase):
         """A boundary run package with unsupported suite-plan schema fails grading."""
         run_id = "e2e-res-boundary-schema"
         stage_dir = run_stage_dir(self.workspace, run_id)
-        setup_baseline_package(stage_dir, scenarios=["go-boundary"], run_id=run_id)
+        setup_baseline_package(stage_dir, scenarios=["go-query-error-classification"], run_id=run_id)
 
         plan_file = stage_dir / "suite" / run_id / "suite-plan.json"
         data = json.loads(plan_file.read_text(encoding="utf-8"))
@@ -111,7 +111,7 @@ class TestE2EPackageResolution(unittest.TestCase):
         """Boundary-only scenario (go-boundary) passes without deployment evidence."""
         run_id = "e2e-res-boundary-pass"
         stage_dir = run_stage_dir(self.workspace, run_id)
-        setup_baseline_package(stage_dir, scenarios=["go-boundary"], run_id=run_id)
+        setup_baseline_package(stage_dir, scenarios=["go-query-error-classification"], run_id=run_id)
 
         loaded = LoadedRunPackage.load(stage_dir)
         res = evaluate_run(loaded).to_dict()
@@ -121,7 +121,7 @@ class TestE2EPackageResolution(unittest.TestCase):
         """Package missing run.lock.json is graded INCOMPLETE_LOCK_MISSING."""
         run_id = "e2e-res-missing-lock"
         stage_dir = run_stage_dir(self.workspace, run_id)
-        setup_baseline_package(stage_dir, scenarios=["go-boundary"], run_id=run_id)
+        setup_baseline_package(stage_dir, scenarios=["go-query-error-classification"], run_id=run_id)
 
         (stage_dir / RUN_LOCK_FILENAME).unlink()
 
@@ -147,7 +147,7 @@ class TestE2EPackageResolution(unittest.TestCase):
         """Traversal is rejected before opening external files or enumerating external directories."""
         run_id = "e2e-res-unsafe-relpath"
         stage_dir = run_stage_dir(self.workspace, run_id)
-        setup_baseline_package(stage_dir, scenarios=["go-boundary"], run_id=run_id)
+        setup_baseline_package(stage_dir, scenarios=["go-query-error-classification"], run_id=run_id)
 
         (stage_dir / RUN_LOCK_FILENAME).unlink()
         exec_file = stage_dir / EXECUTION_MANIFEST_FILENAME
@@ -208,7 +208,7 @@ class TestE2EPackageResolution(unittest.TestCase):
         """Each surviving provenance marker independently identifies an incomplete E2E package."""
         run_id = "e2e-res-partial-provenance"
         baseline = self.root / "baseline"
-        setup_baseline_package(baseline, scenarios=["go-boundary"], run_id=run_id)
+        setup_baseline_package(baseline, scenarios=["go-query-error-classification"], run_id=run_id)
 
         # Preserve producer bytes for each partial package; do not invent marker documents.
         cases = (
@@ -238,7 +238,7 @@ class TestE2EPackageResolution(unittest.TestCase):
             output_dir=self.output,
             suite_id=suite_id,
             profile=None,
-            scenarios=["go-boundary"],
+            scenarios=["go-query-error-classification"],
             e2e_context=None,
         )
 
@@ -254,13 +254,13 @@ class TestE2EPackageResolution(unittest.TestCase):
         """Passing --run <out>/<run-id> grades the child run and leaves parent plan untouched."""
         out_dir = self.output / "parent_run_path"
         out_dir.mkdir(parents=True, exist_ok=True)
-        parent_lock = make_baseline_lock(["go-boundary"], plan_id="parent-plan-001")
+        parent_lock = make_baseline_lock(["go-query-error-classification"], plan_id="parent-plan-001")
         write_run_lock(parent_lock, out_dir / RUN_LOCK_FILENAME)
         parent_lock_bytes = (out_dir / RUN_LOCK_FILENAME).read_bytes()
 
         run_id = "e2e-child-001"
         child_dir = out_dir / run_id
-        setup_baseline_package(child_dir, scenarios=["go-boundary"], run_id=run_id)
+        setup_baseline_package(child_dir, scenarios=["go-query-error-classification"], run_id=run_id)
 
         argv = ["report", "--run", str(child_dir)]
         _, args = parse_e2e_args(argv)
@@ -278,13 +278,13 @@ class TestE2EPackageResolution(unittest.TestCase):
         """Passing --run <run-id> --output <out> grades the child run and leaves parent plan untouched."""
         out_dir = self.output / "parent_run_id"
         out_dir.mkdir(parents=True, exist_ok=True)
-        parent_lock = make_baseline_lock(["go-boundary"], plan_id="parent-plan-002")
+        parent_lock = make_baseline_lock(["go-query-error-classification"], plan_id="parent-plan-002")
         write_run_lock(parent_lock, out_dir / RUN_LOCK_FILENAME)
         parent_lock_bytes = (out_dir / RUN_LOCK_FILENAME).read_bytes()
 
         run_id = "e2e-child-002"
         child_dir = out_dir / run_id
-        setup_baseline_package(child_dir, scenarios=["go-boundary"], run_id=run_id)
+        setup_baseline_package(child_dir, scenarios=["go-query-error-classification"], run_id=run_id)
 
         argv = ["report", "--run", run_id, "--output", str(out_dir)]
         _, args = parse_e2e_args(argv)
@@ -301,13 +301,13 @@ class TestE2EPackageResolution(unittest.TestCase):
         """Passing nested suite <out>/<run-id>/suite/<run-id> resolves to closest child run, not parent plan."""
         out_dir = self.output / "parent_nested"
         out_dir.mkdir(parents=True, exist_ok=True)
-        parent_lock = make_baseline_lock(["go-boundary"], plan_id="parent-plan-003")
+        parent_lock = make_baseline_lock(["go-query-error-classification"], plan_id="parent-plan-003")
         write_run_lock(parent_lock, out_dir / RUN_LOCK_FILENAME)
         parent_lock_bytes = (out_dir / RUN_LOCK_FILENAME).read_bytes()
 
         run_id = "e2e-child-003"
         child_dir = out_dir / run_id
-        setup_baseline_package(child_dir, scenarios=["go-boundary"], run_id=run_id)
+        setup_baseline_package(child_dir, scenarios=["go-query-error-classification"], run_id=run_id)
 
         nested_suite = child_dir / "suite" / run_id
         messages: list[str] = []
@@ -327,11 +327,11 @@ class TestE2EPackageResolution(unittest.TestCase):
         """Parent lock does not mask a missing lock in the child run."""
         plan_dir = self.workspace / "plan-002"
         plan_dir.mkdir(parents=True, exist_ok=True)
-        lock = make_baseline_lock(["go-boundary"], plan_id="plan-002")
+        lock = make_baseline_lock(["go-query-error-classification"], plan_id="plan-002")
         write_run_lock(lock, plan_dir / RUN_LOCK_FILENAME)
 
         child_dir = plan_dir / "runs" / "run-002"
-        setup_baseline_package(child_dir, scenarios=["go-boundary"], run_id="run-002")
+        setup_baseline_package(child_dir, scenarios=["go-query-error-classification"], run_id="run-002")
         (child_dir / RUN_LOCK_FILENAME).unlink()
 
         parent_lock_bytes = (plan_dir / RUN_LOCK_FILENAME).read_bytes()
@@ -353,7 +353,7 @@ class TestE2EPackageResolution(unittest.TestCase):
         """Reporting directly on an unexecuted plan package produces INCOMPLETE_EXECUTION_MANIFEST_MISSING."""
         plan_dir = self.workspace / "plan-unexecuted"
         plan_dir.mkdir(parents=True, exist_ok=True)
-        lock = make_baseline_lock(["go-boundary"], plan_id="plan-unexecuted")
+        lock = make_baseline_lock(["go-query-error-classification"], plan_id="plan-unexecuted")
         write_run_lock(lock, plan_dir / RUN_LOCK_FILENAME)
 
         _, args = parse_e2e_args(["report", "--run", str(plan_dir)])
@@ -368,7 +368,7 @@ class TestE2EPackageResolution(unittest.TestCase):
         stage_dir = run_stage_dir(self.workspace, run_id)
         setup_baseline_package(
             stage_dir,
-            scenarios=["go-boundary"],
+            scenarios=["go-query-error-classification"],
             run_id=run_id,
             delivery_status=DeliveryStatus.IN_PROGRESS,
         )

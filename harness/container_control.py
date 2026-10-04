@@ -6,7 +6,7 @@ Why this exists
 Six Marketplace scenarios stop a pair's API container and start it again. The
 old overlay did that with a helper patched into Gonka's ``DockerGroup.kt``. In
 the immutable-source model Gonka is never patched, so the external Kotlin
-harness calls this controller instead (``A8_CONTAINER_CONTROL``).
+harness calls this controller instead (``E2E_CONTAINER_CONTROL``).
 
 The controller exists to make "the same container came back" a fact rather
 than an assumption:

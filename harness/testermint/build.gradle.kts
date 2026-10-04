@@ -212,7 +212,7 @@ tasks.test {
     // contract explicitly as well so a daemon started earlier cannot leave a
     // stale value (the runner also uses --no-daemon).
     environment(
-        System.getenv().filterKeys { it.startsWith("E2E_") || it.startsWith("A8_") || it == "GONKA_REPO_ROOT" }
+        System.getenv().filterKeys { it.startsWith("E2E_") || it == "GONKA_REPO_ROOT" }
     )
 
     reports {

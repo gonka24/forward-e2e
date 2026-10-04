@@ -86,7 +86,7 @@ class TestE2EPathSafety(unittest.TestCase):
         malicious_output = symlink_base / "nested" / "dest"
         run_id = "e2e-safety-symlink-ancestor"
         stage_dir = run_stage_dir(self.workspace, run_id)
-        setup_baseline_package(stage_dir, scenarios=["go-boundary"], run_id=run_id, delivery_status=DeliveryStatus.FAILED)
+        setup_baseline_package(stage_dir, scenarios=["go-query-error-classification"], run_id=run_id, delivery_status=DeliveryStatus.FAILED)
 
         messages: list[str] = []
         argv = ["recover", "--run", run_id, "--output", str(malicious_output), "--workspace", str(self.workspace)]
@@ -107,7 +107,7 @@ class TestE2EPathSafety(unittest.TestCase):
 
         run_id = "e2e-safety-symlink-root"
         stage_dir = run_stage_dir(self.workspace, run_id)
-        setup_baseline_package(stage_dir, scenarios=["go-boundary"], run_id=run_id, delivery_status=DeliveryStatus.FAILED)
+        setup_baseline_package(stage_dir, scenarios=["go-query-error-classification"], run_id=run_id, delivery_status=DeliveryStatus.FAILED)
 
         messages: list[str] = []
         argv = ["recover", "--run", run_id, "--output", str(self.output), "--workspace", str(self.workspace)]

@@ -354,8 +354,8 @@ class RunLiveHappyPathTests(SnapshotFixture):
         )
         manifest = json.loads((self.evidence_dir / "network" / "network-manifest.json").read_text("utf-8"))
         self.assertIn(overrides, [item["path"] for item in manifest["upstream_copies"]])
-        self.assertEqual(env["A8_OWNERSHIP_LABEL"], "io.gonka.a8.run-id")
-        self.assertEqual(env["A8_CONTAINER_CONTROL_STATE_DIR"], str(self.evidence_dir / "container-control"))
+        self.assertEqual(env["E2E_OWNERSHIP_LABEL"], "io.gonka.a8.run-id")
+        self.assertEqual(env["E2E_CONTAINER_CONTROL_STATE_DIR"], str(self.evidence_dir / "container-control"))
         self.assertEqual(env["GRADLE_USER_HOME"], str(self.work_root / "gradle-home"))
         self.assertNotIn("GIT_DIR", env)
         self.assertNotIn("GIT_WORK_TREE", env)
@@ -363,18 +363,6 @@ class RunLiveHappyPathTests(SnapshotFixture):
         self.assertEqual(command[0], "env")
         self.assertLessEqual({"GIT_DIR", "GIT_WORK_TREE", "GIT_INDEX_FILE", *a8.LEGACY_OVERLAY_ENVIRONMENT}, unset)
 
-    def test_a_legacy_live_scenario_selector_runs_the_canonical_test_and_announces_itself_on_stderr_only(self):
-        alias, canonical = "package-b-r6-1", "usdt-withdrawal-failure-recovery"
-        self.assertEqual(a8.LEGACY_LIVE_SCENARIO_ALIASES[alias], canonical)
-        runner = fx.ScriptedRunner()
-        with patch("sys.stderr", new_callable=io.StringIO) as stderr, \
-                patch("sys.stdout", new_callable=io.StringIO) as stdout:
-            self.run_live(runner, scenario=alias)
-        self.assertIn(f"live scenario alias {alias!r} is deprecated", stderr.getvalue())
-        self.assertIn(canonical, stderr.getvalue())
-        self.assertNotIn("notice:", stdout.getvalue())
-        command = self.gradle_test_command(runner)
-        self.assertIn(a8.LIVE_SCENARIO_TESTS[canonical], command)
 
     def test_a_canonical_live_scenario_selector_prints_no_deprecation_notice(self):
         with patch("sys.stderr", new_callable=io.StringIO) as stderr:
@@ -385,9 +373,9 @@ class RunLiveHappyPathTests(SnapshotFixture):
         runner = fx.ScriptedRunner()
         self.run_live(runner)
         env = env_pairs(self.gradle_test_command(runner))
-        self.assertEqual(env["A8_HARNESS"], str(MODULE_PATH))
-        self.assertNotEqual(env["A8_HARNESS"], str(self.market / "scripts" / "acceptance_harness.py"))
-        self.assertEqual(env["A8_MARKETPLACE_DIR"], str(self.market))
+        self.assertEqual(env["E2E_HARNESS"], str(MODULE_PATH))
+        self.assertNotEqual(env["E2E_HARNESS"], str(self.market / "scripts" / "acceptance_harness.py"))
+        self.assertEqual(env["E2E_MARKETPLACE_DIR"], str(self.market))
 
     def test_gradle_runs_the_external_project_with_the_upstream_wrapper_jar_and_no_gradlew_copy(self):
         runner = fx.ScriptedRunner()
@@ -670,7 +658,7 @@ class RunLiveApiAndJunitTests(SnapshotFixture):
 
 
 class RunLiveB3GenesisTests(SnapshotFixture):
-    B3 = "b3-foreign-native"
+    B3 = "foreign-native-preservation"
 
     def test_genesis_provisioner_disables_xtrace_before_reading_tgbot_password(self):
         repo = Path(__file__).resolve().parents[3]
@@ -857,6 +845,15 @@ class RemovedCliSurfaceTests(unittest.TestCase):
         self.assertEqual(args.evidence_model, a8.EVIDENCE_MODEL_IMMUTABLE)
         self.assertIsNone(args.work_root)
 
+    def test_removed_live_selector_and_probe_command_are_usage_errors(self):
+        for argv in (
+            [*self.BASE, "--scenario", "package-b-r6-1"],
+            ["p0-probe", "--context", "context.json", "--wasm", "probe.wasm"],
+        ):
+            with self.subTest(argv=argv), patch("sys.stderr"), self.assertRaises(SystemExit) as caught:
+                a8.parser().parse_args(argv)
+            self.assertEqual(caught.exception.code, 2)
+
     def test_every_live_scenario_selector_maps_to_one_external_test(self):
         choices = next(
             action.choices
@@ -865,11 +862,9 @@ class RemovedCliSurfaceTests(unittest.TestCase):
         )
         self.assertEqual(
             set(choices),
-            set(a8.LIVE_SCENARIO_TESTS) | set(a8.LEGACY_LIVE_SCENARIO_ALIASES),
+            set(a8.LIVE_SCENARIO_TESTS),
         )
         self.assertEqual(len(a8.LIVE_SCENARIO_TESTS), 19)
-        for alias, canonical in a8.LEGACY_LIVE_SCENARIO_ALIASES.items():
-            self.assertIn(canonical, a8.LIVE_SCENARIO_TESTS, msg=alias)
         for test in a8.LIVE_SCENARIO_TESTS.values():
             self.assertTrue(test.startswith("MarketplaceContractAcceptanceTests."))
 

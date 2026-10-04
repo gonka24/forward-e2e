@@ -16,15 +16,8 @@
 #   ./ops/e2e/run-e2e.sh run ...
 # ==============================================================================
 
-# The project name is the identity of every piece of Docker state Compose has
-# ever created for this runner: container names, the com.docker.compose.project
-# label and the project recorded on the named volumes below. Compose derives it
-# from the directory holding this file when it is not stated, so moving the
-# file from ops/a8/ to ops/runner/ silently turned the project into "runner"
-# and made Compose v2 warn about volumes "created for project a8". Pin the
-# historical name: renaming existing Docker state is a separate, explicit
-# migration, never a side effect of a repository layout change.
-name: a8
+# Stable project identity for runner containers and persistent volumes.
+name: forward-e2e
 
 services:
   # ==========================================================================
@@ -38,7 +31,7 @@ services:
       args:
         E2E_RUNNER_REPO: ${E2E_RUNNER_REPO:-https://github.com/gonka24/forward-e2e.git}
         E2E_RUNNER_SHA: ${E2E_RUNNER_SHA:-}
-    image: ${E2E_RUNNER_IMAGE:-a8-runner:local}
+    image: ${E2E_RUNNER_IMAGE:-forward-e2e-runner:local}
     entrypoint: ["/usr/local/bin/e2e-entrypoint"]
     command: ["list"]
     # No container_name: unlike the legacy service this one does not reserve a
@@ -54,17 +47,13 @@ services:
     # host's default bridge supplies the real upstream resolver instead.
     network_mode: bridge
     environment:
-      # Only the canonical E2E_* names are baked in. Every reader inside the
-      # image resolves E2E_* first and falls back to A8_* only when the
-      # canonical name is unset, so a baked A8_* twin had no consumer; it only
-      # turned an operator's `-e E2E_WORKSPACE_DIR=...` override into a
-      # phantom "conflicting environment variables" refusal.
+      # Operational paths inside the Linux runner.
       - E2E_WORKSPACE_DIR=/workspace
       - E2E_OUTPUT_DIR=/out
       - DOCKER_HOST=unix:///var/run/docker.sock
       # Injected by the wrappers after resolving the tag. A tag is only a
       # locator; this is the immutable identity recorded in the run lock.
-      - E2E_RUNNER_IMAGE=${E2E_RUNNER_IMAGE:-a8-runner:local}
+      - E2E_RUNNER_IMAGE=${E2E_RUNNER_IMAGE:-forward-e2e-runner:local}
       - E2E_RUNNER_IMAGE_ID=${E2E_RUNNER_IMAGE_ID:-}
       - E2E_RUNNER_IMAGE_DIGEST=${E2E_RUNNER_IMAGE_DIGEST:-}
       - E2E_CREDENTIAL_FILE=${E2E_CREDENTIAL_FILE:-}
@@ -99,44 +88,44 @@ services:
         target: /out
         read_only: false
       - type: volume
-        source: a8-workspace
+        source: forward-e2e-workspace
         target: /workspace
       - type: volume
-        source: a8-docker-root
+        source: forward-e2e-docker-root
         target: /var/lib/docker
       - type: volume
-        source: a8-cargo-registry-cache
+        source: forward-e2e-cargo-registry-cache
         target: /root/.cargo/registry
       - type: volume
-        source: a8-cargo-git-cache
+        source: forward-e2e-cargo-git-cache
         target: /root/.cargo/git
       - type: volume
-        source: a8-gradle-cache
+        source: forward-e2e-gradle-cache
         target: /root/.gradle
       - type: volume
-        source: a8-go-cache
+        source: forward-e2e-go-cache
         target: /root/go
 
 volumes:
   # Persistent workspace: stores runtime clones, raw evidence, and global flock
   # Preserved across container deletions (--rm) to ensure raw evidence survival
-  a8-workspace:
-    name: a8-workspace
+  forward-e2e-workspace:
+    name: forward-e2e-workspace
   # Inner Docker daemon data root: caches downloaded images and container layers
-  a8-docker-root:
+  forward-e2e-docker-root:
     # Host wrappers may select a named state explicitly with
     # --docker-root-volume. The workspace lock remains global, so selecting a
     # different cache never permits two Testermint clusters at once.
-    name: ${E2E_DOCKER_ROOT_VOLUME:-${A8_DOCKER_ROOT_VOLUME:-a8-docker-root}}
+    name: ${E2E_DOCKER_ROOT_VOLUME:-forward-e2e-docker-root}
     labels:
       owner: gonka24-smart
-      purpose: a8-private-dockerd
+      purpose: forward-e2e-private-dockerd
   # Dependency caches for fast sequential execution without re-downloading
-  a8-cargo-registry-cache:
-    name: a8-cargo-registry-cache
-  a8-cargo-git-cache:
-    name: a8-cargo-git-cache
-  a8-gradle-cache:
-    name: a8-gradle-cache
-  a8-go-cache:
-    name: a8-go-cache
+  forward-e2e-cargo-registry-cache:
+    name: forward-e2e-cargo-registry-cache
+  forward-e2e-cargo-git-cache:
+    name: forward-e2e-cargo-git-cache
+  forward-e2e-gradle-cache:
+    name: forward-e2e-gradle-cache
+  forward-e2e-go-cache:
+    name: forward-e2e-go-cache

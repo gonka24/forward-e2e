@@ -1,8 +1,8 @@
 # Scenario Catalog and Coverage Reference
 
 This document maps all 24 automated tasks in
-[`forward_e2e/suite/catalog.py`](../forward_e2e/suite/catalog.py) — their legacy
-scenario aliases, proof levels, drivers, evidence scopes, timeouts, catalog
+[`forward_e2e/suite/catalog.py`](../forward_e2e/suite/catalog.py) — their exact
+scenario IDs, proof levels, drivers, evidence scopes, timeouts, catalog
 descriptions, expected checkpoints, declared limitations and expected
 artifacts — and then maps the contract obligations of the selected
 `forward-contracts` revision onto those tasks, stating for each obligation
@@ -24,10 +24,8 @@ here must come with a new plan.
 | `native` | All 19 live Testermint tasks in `NATIVE_TASKS` (`NATIVE`) | 19 |
 | `all` | `BOUNDARY_TASKS` (ordinals 1–5) followed by `NATIVE_TASKS` (ordinals 6–24) | 24 |
 
-Profiles and single tasks are resolved by `resolve_e2e_selection`; a legacy
-alias (`LEGACY_SCENARIO_ALIASES`, eight entries) is accepted anywhere a task id
-is and is translated to the canonical id by `canonical_task_id` before it is
-frozen into the lock. See [`migration.md`](migration.md) for the alias history.
+Profiles and single tasks are resolved by `resolve_e2e_selection`. Only exact
+catalog IDs are accepted; there is no alias translation.
 
 ---
 
@@ -40,13 +38,13 @@ All five run through `BoundaryTaskAdapter`
 dispatches on the canonical task id. None of them starts a chain, so none owes
 a `live-context.json`.
 
-| # | Canonical `task_id` | Legacy Alias | Proof Level | Driver (what the adapter executes) | Timeout | Coverage IDs (`coverage_ids`) |
-|---:|---|---|---|---|---:|---|
-| 1 | `go-query-error-classification` | `go-boundary` | `GO_BOUNDARY` | `python3 scripts/run_go_boundary.py <gonka_dir> <task evidence dir>`: a `docker build` of a Dockerfile generated from the prefix of Gonka's own `inference-chain/Dockerfile` (pinned `golang:1.24.2-alpine3.21` builder), running `go test -mod=mod -tags=muslc -count=1 -json ./query_faults -run 'TestToQuerierResultClassifiesVMSystemErrors\|TestStrictPlanValidation'` against [`harness/go_boundary/query_faults/`](../harness/go_boundary/query_faults/); the `-run` filter is built from `REQUIRED_TESTS`. There is no host-Go path. | 30m | `R4.4 InvalidResponse`, `R4.5 InvalidRequest / Unknown / NoSuchContract / NoSuchCode` |
-| 2 | `wasm-abi-boundary` | — | `WASM_ABI` | `cargo build --locked --release --target wasm32-unknown-unknown -p a8-query-boundary` in the contracts snapshot (`CARGO_TARGET_DIR` outside the sources), copy of the artefact to `a8_query_boundary.wasm`, then `node scripts/test_wasm_query_boundary.mjs <wasm> <abi.json>` against a synthetic Node.js host. | 15m | `R4.4 InvalidResponse`, `R4.5 InvalidRequest / Unknown / NoSuchContract / NoSuchCode` |
-| 3 | `contract-network-unconfirmed-policy` | `ct-network-unconfirmed` | `CONTRACT_TEST` | `cargo test --locked -p marketplace-deal network_unconfirmed_refund_rejects_early_and_unexpected_system_failures -- --nocapture` | 10m | `R4.6 encoding/overflow/accounting` |
-| 4 | `contract-claim-expiry-policy` | `ct-claim-expiry` | `CONTRACT_TEST` | `cargo test --locked -p marketplace-deal claim_expiry_checks_pristine_locked_accounting_and_epoch_overflow -- --nocapture` | 10m | `R4.6 encoding/overflow/accounting` |
-| 5 | `contract-query-fault-policy` | `ct-package-c-policy` | `CONTRACT_TEST` | `cargo test --locked -p marketplace-deal -p marketplace-factory c_ -- --nocapture --test-threads=1` (18 exact tests in `PACKAGE_C_POLICY_TESTS`, 71 case markers in `PACKAGE_C_POLICY_CASES`) | 15m | `C2 / R3`, `E2 policy / R4.1-4.3`, `E3 policy / R5`, `G1 / R6.3`, `R4.4 UnsupportedRequest` |
+| # | Canonical `task_id` | Proof Level | Driver (what the adapter executes) | Timeout | Coverage IDs (`coverage_ids`) |
+|---:|---|---|---|---:|---|
+| 1 | `go-query-error-classification` | `GO_BOUNDARY` | `python3 scripts/run_go_boundary.py <gonka_dir> <task evidence dir>`: a `docker build` of a Dockerfile generated from the prefix of Gonka's own `inference-chain/Dockerfile` (pinned `golang:1.24.2-alpine3.21` builder), running `go test -mod=mod -tags=muslc -count=1 -json ./query_faults -run 'TestToQuerierResultClassifiesVMSystemErrors\|TestStrictPlanValidation'` against [`harness/go_boundary/query_faults/`](../harness/go_boundary/query_faults/); the `-run` filter is built from `REQUIRED_TESTS`. There is no host-Go path. | 30m | `R4.4 InvalidResponse`, `R4.5 InvalidRequest / Unknown / NoSuchContract / NoSuchCode` |
+| 2 | `wasm-abi-boundary` | `WASM_ABI` | `cargo build --locked --release --target wasm32-unknown-unknown -p a8-query-boundary` in the contracts snapshot (`CARGO_TARGET_DIR` outside the sources), copy of the artefact to `a8_query_boundary.wasm`, then `node scripts/test_wasm_query_boundary.mjs <wasm> <abi.json>` against a synthetic Node.js host. | 15m | `R4.4 InvalidResponse`, `R4.5 InvalidRequest / Unknown / NoSuchContract / NoSuchCode` |
+| 3 | `contract-network-unconfirmed-policy` | `CONTRACT_TEST` | `cargo test --locked -p marketplace-deal network_unconfirmed_refund_rejects_early_and_unexpected_system_failures -- --nocapture` | 10m | `R4.6 encoding/overflow/accounting` |
+| 4 | `contract-claim-expiry-policy` | `CONTRACT_TEST` | `cargo test --locked -p marketplace-deal claim_expiry_checks_pristine_locked_accounting_and_epoch_overflow -- --nocapture` | 10m | `R4.6 encoding/overflow/accounting` |
+| 5 | `contract-query-fault-policy` | `CONTRACT_TEST` | `cargo test --locked -p marketplace-deal -p marketplace-factory c_ -- --nocapture --test-threads=1` (18 exact tests in `PACKAGE_C_POLICY_TESTS`, 71 case markers in `PACKAGE_C_POLICY_CASES`) | 15m | `C2 / R3`, `E2 policy / R4.1-4.3`, `E3 policy / R5`, `G1 / R6.3`, `R4.4 UnsupportedRequest` |
 
 The verifier side of each row
 ([`forward_e2e/suite/verifier.py`](../forward_e2e/suite/verifier.py)):
@@ -79,27 +77,27 @@ sources and executes exactly one JUnit method in
 ([`harness/testermint/`](../harness/testermint/)), which re-enters the harness
 for every chain action.
 
-| # | Canonical `task_id` | Legacy Alias | Exact Kotlin Test Method | Evidence Scopes | Timeout (Gradle) | Coverage IDs (`coverage_ids`) |
-|---:|---|---|---|---|---|---|
-| 6 | `funded-claim` | — | `marketplace funded claim settles and releases on real Gonka` | `<top-level>` | 100m (60m) | `A1`, `A2`, `A3` |
-| 7 | `network-unconfirmed` | — | `marketplace absent native summary refunds only at emergency deadline` | `network-unconfirmed` | 85m (45m) | `E1 missing summary` |
-| 8 | `claim-expiry-positive` | — | `marketplace positive unclaimed summary refunds only at claim expiry` | `claim-expiry-positive` | 85m (45m) | `D1 positive` |
-| 9 | `claim-expiry-zero` | — | `marketplace zero unclaimed summary refunds only at claim expiry` | `claim-expiry-zero` | 85m (45m) | `D1 zero` |
-| 10 | `terminal-release-repeat` | — | `marketplace terminal release repeat is rejected without payout` | `<top-level>` | 85m (45m) | `G3` |
-| 11 | `foreign-native-preservation` | `b3-foreign-native` | `marketplace successful release preserves foreign native denom` | `<top-level>` | 85m (45m) | `B3` |
-| 12 | `late-donation-after-completed` | — | `marketplace late liquid donations after Completed use cumulative GNK rounding` | `<top-level>` | 85m (45m) | `B2 liquid` |
-| 13 | `lock-exact-e` | — | `marketplace funded lock succeeds exactly at E` | `lock-exact-e` | 85m (45m) | `C1 exact E lower boundary` (`smoke` profile) |
-| 14 | `lock-e-plus-4` | — | `marketplace funded lock succeeds exactly at E plus 4` | `lock-e-plus-4` | 85m (45m) | `C1 E+4 Lock` |
-| 15 | `lock-e-plus-5` | — | `marketplace funded lock rejects exactly at E plus 5` | `lock-e-plus-5` | 85m (45m) | `C1 E+5 Lock/pruning` |
-| 16 | `refund-boundary-and-vesting-addition` | `package-a-r1-r2` | `marketplace preserves refund boundary and releases a new vested gift` | `r1-refund-e-plus-5`, `r2-vested-gift` | 85m (45m) | `B2 vesting / R2` |
-| 17 | `usdt-withdrawal-failure-recovery` | `package-b-r6-1` | `marketplace settlement commits once and each rejected USDT withdrawal rolls back atomically` | `<top-level>` | 85m (45m) | `G1 / R6.1` |
-| 18 | `native-release-rollback-retry` | `package-b-r7-1` | `marketplace native release rejects selected second Bank send then retries once` | `<top-level>` | 85m (45m) | `G2 / R7.1` |
-| 19 | `funded-routing-refunds` | — | `marketplace funded routing refunds are isolated and atomic` | `<top-level>`, `routing-mismatch`, `routing-missing` | 85m (45m) | `routing missing/mismatch`, `Factory isolation` |
-| 20 | `unfunded-lock-boundaries` | — | `marketplace unfunded lock boundaries preserve buyer absence` | `lock-e-plus-4`, `lock-e-plus-5` | 85m (45m) | `unfunded Lock E+4/E+5` |
-| 21 | `funded-gas-sweep` | — | `marketplace claimed refund gas sweep is isolated` | `gas-claimed` | 85m (45m) | `claimed refund gas sweep` |
-| 22 | `no-buyer-claim-expiry` | — | `marketplace no buyer claim expiry preserves buyer absence` | `no-buyer-expired` | 85m (45m) | `no-Buyer claim expiry` |
-| 23 | `no-sale-vesting-lifecycle` | — | `marketplace no sale vesting lifecycle preserves every asset` | `no-sale` | 100m (60m) | `no-sale donations / foreign CW20 / non-empty vesting addition` |
-| 24 | `emergency-host-only-recovery` | — | `marketplace emergency refund host only release rolls back and retries` | `network-unconfirmed` | 100m (60m) | `emergency refund HostOnly Bank rollback/retry` |
+| # | Canonical `task_id` | Exact Kotlin Test Method | Evidence Scopes | Timeout (Gradle) | Coverage IDs (`coverage_ids`) |
+|---:|---|---|---|---|---|
+| 6 | `funded-claim` | `marketplace funded claim settles and releases on real Gonka` | `<top-level>` | 100m (60m) | `A1`, `A2`, `A3` |
+| 7 | `network-unconfirmed` | `marketplace absent native summary refunds only at emergency deadline` | `network-unconfirmed` | 85m (45m) | `E1 missing summary` |
+| 8 | `claim-expiry-positive` | `marketplace positive unclaimed summary refunds only at claim expiry` | `claim-expiry-positive` | 85m (45m) | `D1 positive` |
+| 9 | `claim-expiry-zero` | `marketplace zero unclaimed summary refunds only at claim expiry` | `claim-expiry-zero` | 85m (45m) | `D1 zero` |
+| 10 | `terminal-release-repeat` | `marketplace terminal release repeat is rejected without payout` | `<top-level>` | 85m (45m) | `G3` |
+| 11 | `foreign-native-preservation` | `marketplace successful release preserves foreign native denom` | `<top-level>` | 85m (45m) | `B3` |
+| 12 | `late-donation-after-completed` | `marketplace late liquid donations after Completed use cumulative GNK rounding` | `<top-level>` | 85m (45m) | `B2 liquid` |
+| 13 | `lock-exact-e` | `marketplace funded lock succeeds exactly at E` | `lock-exact-e` | 85m (45m) | `C1 exact E lower boundary` (`smoke` profile) |
+| 14 | `lock-e-plus-4` | `marketplace funded lock succeeds exactly at E plus 4` | `lock-e-plus-4` | 85m (45m) | `C1 E+4 Lock` |
+| 15 | `lock-e-plus-5` | `marketplace funded lock rejects exactly at E plus 5` | `lock-e-plus-5` | 85m (45m) | `C1 E+5 Lock/pruning` |
+| 16 | `refund-boundary-and-vesting-addition` | `marketplace preserves refund boundary and releases a new vested gift` | `r1-refund-e-plus-5`, `r2-vested-gift` | 85m (45m) | `B2 vesting / R2` |
+| 17 | `usdt-withdrawal-failure-recovery` | `marketplace settlement commits once and each rejected USDT withdrawal rolls back atomically` | `<top-level>` | 85m (45m) | `G1 / R6.1` |
+| 18 | `native-release-rollback-retry` | `marketplace native release rejects selected second Bank send then retries once` | `<top-level>` | 85m (45m) | `G2 / R7.1` |
+| 19 | `funded-routing-refunds` | `marketplace funded routing refunds are isolated and atomic` | `<top-level>`, `routing-mismatch`, `routing-missing` | 85m (45m) | `routing missing/mismatch`, `Factory isolation` |
+| 20 | `unfunded-lock-boundaries` | `marketplace unfunded lock boundaries preserve buyer absence` | `lock-e-plus-4`, `lock-e-plus-5` | 85m (45m) | `unfunded Lock E+4/E+5` |
+| 21 | `funded-gas-sweep` | `marketplace claimed refund gas sweep is isolated` | `gas-claimed` | 85m (45m) | `claimed refund gas sweep` |
+| 22 | `no-buyer-claim-expiry` | `marketplace no buyer claim expiry preserves buyer absence` | `no-buyer-expired` | 85m (45m) | `no-Buyer claim expiry` |
+| 23 | `no-sale-vesting-lifecycle` | `marketplace no sale vesting lifecycle preserves every asset` | `no-sale` | 100m (60m) | `no-sale donations / foreign CW20 / non-empty vesting addition` |
+| 24 | `emergency-host-only-recovery` | `marketplace emergency refund host only release rolls back and retries` | `network-unconfirmed` | 100m (60m) | `emergency refund HostOnly Bank rollback/retry` |
 
 "Timeout" is `timeout_minutes` (the task budget enforced by the suite runner,
 also exported as `stage_timeout_seconds`); "(Gradle)" is
@@ -234,8 +232,7 @@ execute".
 
 [`harness/wasm_query_allowlist/`](../harness/wasm_query_allowlist/) provides an
 unaudited CosmWasm probe (`artifacts/p0_probe.wasm`) and a harness subcommand
-(`python3 scripts/acceptance_harness.py wasm-query-allowlist`; `p0-probe` is a
-deprecated alias that prints a notice) for regression testing of Gonka's
+(`python3 scripts/acceptance_harness.py wasm-query-allowlist`) for regression testing of Gonka's
 `AcceptListGrpcQuerier`. `wasm_query_allowlist` stores the probe, instantiates
 it as `a8-p0-probe-<run_id>`, checks the four allowed paths (`GetCurrentEpoch`,
 `ListClaimRecipients`, `EpochPerformanceSummaryByParticipant`,
@@ -332,9 +329,8 @@ own — and nothing in either still assumes a settlement that pushes three
 transfers in one transaction. What is historical is only vocabulary: the
 checkpoint names `cw20_three_send_rejections_asserted` /
 `settlement_atomic_rollback_verified` (the catalog keeps wire identifiers in
-their historical spelling on purpose, so existing locks and evidence stay
-comparable), the harness error text "did not roll back atomically for send #",
-and the alias `package-b-r6-1`. Do not "fix" these names in isolation: the
+their protocol spelling across the producer and verifier), the harness error text "did not roll back atomically for send #",
+and the exact selector `usdt-withdrawal-failure-recovery`. Changes to these names require coordination: the
 checkpoint strings are in the catalog hash and in every verifier rule, so
 renaming them is a coordinated catalog, verifier, fixture and documentation
 change. Earlier revisions of this document described a

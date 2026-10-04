@@ -18,7 +18,7 @@ set -euo pipefail
 SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd -- "${SCRIPT_DIR}/../.." && pwd)"
 COMPOSE_FILE="${REPO_ROOT}/ops/runner/compose.yaml"
-IMAGE="${E2E_RUNNER_IMAGE:-a8-runner:local}"
+IMAGE="${E2E_RUNNER_IMAGE:-forward-e2e-runner:local}"
 RUNNER_SHA="${E2E_RUNNER_SHA:-}"
 RUNNER_REPO="${E2E_RUNNER_REPO:-https://github.com/gonka24/forward-e2e.git}"
 

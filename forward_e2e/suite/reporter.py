@@ -13,7 +13,7 @@ import json
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Sequence
 
-from .catalog import get_task_by_id_or_alias
+from .catalog import get_task_by_id
 from .collector import CollectorSecurityError, is_path_safe
 from ..execution.file_safety import atomic_write_bytes
 from .evidence_model import (
@@ -182,7 +182,7 @@ class OfflineReporter:
         gaps: List[Dict[str, Any]] = []
 
         for t in result.tasks:
-            catalog_item = get_task_by_id_or_alias(t.task_id)
+            catalog_item = get_task_by_id(t.task_id)
             cov_ids = catalog_item.coverage_ids if catalog_item else []
             limitations = catalog_item.limitations if catalog_item else []
 

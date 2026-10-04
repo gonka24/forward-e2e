@@ -183,7 +183,7 @@ widen an allowlist to route around a failure.
 | **Cancellation is an interruption, not a verdict.** A signal stops the running build's process group, partial evidence is kept, and the result is `CANCELLED`. | `Cancellation` in `forward_e2e/execution/cancel.py`; the failure path and tail of `execute_plan`; `RUN_CANCELLED` handling in `_status_from_findings` in `forward_e2e/execution/outcome.py`. |
 | **Timeouts are per task and come from the catalog**, and are frozen into the lock. | `timeout_minutes` / `stage_timeout_seconds` / `gradle_timeout_minutes` in `forward_e2e/suite/catalog.py`; `_limits_section` in `forward_e2e/execution/planner.py`; `SubprocessRunner` in `forward_e2e/suite/adapters.py`. |
 | **Acceptance is always `NOT_REVIEWED`.** No automated path may award acceptance. | `AcceptanceStatus.NOT_REVIEWED` is the only value written, in `forward_e2e/suite/orchestrator.py` and `forward_e2e/suite/reporter.py`. |
-| **`EXPECTED_PROTO_SHA` is never derived from the selected Gonka SHA.** It describes ABI/format compatibility, which is a different claim from "this binary is running". | `expected_proto_sha()` in `scripts/acceptance_harness.py`. The E2E layer never sets `E2E_EXPECTED_PROTO_SHA` or `A8_EXPECTED_PROTO_SHA`; both `E2E_*` and `A8_*` are treated as frozen semantic environment variable prefixes (`SEMANTIC_ENV_PREFIXES` in `forward_e2e/execution/planner.py`, `apply_semantic_environment` in `forward_e2e/execution/executor.py`), so an ambient value is cleared rather than silently applied. |
+| **`EXPECTED_PROTO_SHA` is never derived from the selected Gonka SHA.** It describes ABI/format compatibility, which is a different claim from "this binary is running". | `expected_proto_sha()` in `scripts/acceptance_harness.py`. The E2E layer never derives `E2E_EXPECTED_PROTO_SHA` from the selected commit; `E2E_*` is treated as a frozen semantic environment variable prefix (`SEMANTIC_ENV_PREFIXES` in `forward_e2e/execution/planner.py`, `apply_semantic_environment` in `forward_e2e/execution/executor.py`), so an ambient value is cleared rather than silently applied. |
 
 Two further rules that follow from the above:
 
@@ -293,7 +293,14 @@ never copied into the suite and the reporter can only report it as missing.
 
 ---
 
-## 8. House style
+## 8. Current interface policy
+
+Linux is the execution platform. Only current scenario IDs and `E2E_*` configuration
+variables are supported. Do not add aliases, old environment fallbacks, dual
+exports, or migration adapters for earlier runner users. Keep integrity checks
+and rejection of superseded evidence models.
+
+## 9. House style
 
 - Comments and docstrings explain **why**, especially why a check exists and
   what failure it prevents. Do not delete existing rationale while editing

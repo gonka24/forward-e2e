@@ -61,8 +61,7 @@ def _cargo_suite_log(tests, *, filtered_out):
 def task_artifacts(task, gonka_sha):
     """Return ancillary fixtures and require their paths to match the catalog.
 
-    ``task`` is a catalog task, so ``task.task_id`` is always canonical; the
-    legacy aliases are resolved before a plan is built and never reach here.
+    ``task`` is a catalog task and uses its exact current task ID.
     """
     artifacts = {}
     if task.task_id == "wasm-abi-boundary":

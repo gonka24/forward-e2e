@@ -81,7 +81,7 @@ class TestE2ERecovery(unittest.TestCase):
 
         run_id = "e2e-rec-symlink-leaf"
         stage_dir = run_stage_dir(self.workspace, run_id)
-        setup_baseline_package(stage_dir, scenarios=["go-boundary"], run_id=run_id, delivery_status=DeliveryStatus.FAILED)
+        setup_baseline_package(stage_dir, scenarios=["go-query-error-classification"], run_id=run_id, delivery_status=DeliveryStatus.FAILED)
 
         dest_dir = self.output / run_id
         dest_dir.mkdir(parents=True, exist_ok=True)
@@ -101,7 +101,7 @@ class TestE2ERecovery(unittest.TestCase):
         """Recovery refuses a dangling symlink delivery.json in destination."""
         run_id = "e2e-rec-dangling-symlink"
         stage_dir = run_stage_dir(self.workspace, run_id)
-        setup_baseline_package(stage_dir, scenarios=["go-boundary"], run_id=run_id, delivery_status=DeliveryStatus.FAILED)
+        setup_baseline_package(stage_dir, scenarios=["go-query-error-classification"], run_id=run_id, delivery_status=DeliveryStatus.FAILED)
 
         dest_dir = self.output / run_id
         dest_dir.mkdir(parents=True, exist_ok=True)
@@ -126,7 +126,7 @@ class TestE2ERecovery(unittest.TestCase):
 
         run_id = "e2e-rec-symlink-ancestor"
         stage_dir = run_stage_dir(self.workspace, run_id)
-        setup_baseline_package(stage_dir, scenarios=["go-boundary"], run_id=run_id, delivery_status=DeliveryStatus.FAILED)
+        setup_baseline_package(stage_dir, scenarios=["go-query-error-classification"], run_id=run_id, delivery_status=DeliveryStatus.FAILED)
 
         messages: list[str] = []
         argv = ["recover", "--run", run_id, "--output", str(symlink_parent), "--workspace", str(self.workspace)]
@@ -144,7 +144,7 @@ class TestE2ERecovery(unittest.TestCase):
 
         setup_baseline_package(
             stage_dir,
-            scenarios=["go-boundary"],
+            scenarios=["go-query-error-classification"],
             run_id=run_id,
             delivery_status=DeliveryStatus.IN_PROGRESS,
         )
@@ -201,7 +201,7 @@ class TestE2ERecovery(unittest.TestCase):
         """When delivery.json in staging is corrupt, cmd_recover refuses and does not erase history."""
         run_id = "e2e-rec-corrupt-staging-ledger"
         stage_dir = run_stage_dir(self.workspace, run_id)
-        setup_baseline_package(stage_dir, scenarios=["go-boundary"], run_id=run_id, delivery_status=DeliveryStatus.FAILED)
+        setup_baseline_package(stage_dir, scenarios=["go-query-error-classification"], run_id=run_id, delivery_status=DeliveryStatus.FAILED)
 
         (stage_dir / DELIVERY_MANIFEST_FILENAME).write_text("CORRUPTED_JSON_NOT_VALID", encoding="utf-8")
 
@@ -218,7 +218,7 @@ class TestE2ERecovery(unittest.TestCase):
         """Recovery succeeds even if stale tempfiles from hard stops are left behind."""
         run_id = "e2e-rec-stale-tempfile"
         stage_dir = run_stage_dir(self.workspace, run_id)
-        setup_baseline_package(stage_dir, scenarios=["go-boundary"], run_id=run_id, delivery_status=DeliveryStatus.FAILED)
+        setup_baseline_package(stage_dir, scenarios=["go-query-error-classification"], run_id=run_id, delivery_status=DeliveryStatus.FAILED)
 
         stale_stage_tmp = stage_dir / ".delivery.json.tmp.99999"
         stale_stage_tmp.write_text("STALE_STAGE_TMP", encoding="utf-8")
@@ -264,7 +264,7 @@ class TestE2ERecovery(unittest.TestCase):
         """cmd_recover handles relative --output and absolute --workspace without errors."""
         run_id = "e2e-rec-rel-output-abs-ws"
         stage_dir = run_stage_dir(self.workspace, run_id)
-        setup_baseline_package(stage_dir, scenarios=["go-boundary"], run_id=run_id, delivery_status=DeliveryStatus.FAILED)
+        setup_baseline_package(stage_dir, scenarios=["go-query-error-classification"], run_id=run_id, delivery_status=DeliveryStatus.FAILED)
 
         cwd_rel = os.path.relpath(str(self.output), os.getcwd())
         messages: list[str] = []
@@ -280,7 +280,7 @@ class TestE2ERecovery(unittest.TestCase):
         """cmd_recover handles relative --output and relative --workspace."""
         run_id = "e2e-rec-rel-output-rel-ws"
         stage_dir = run_stage_dir(self.workspace, run_id)
-        setup_baseline_package(stage_dir, scenarios=["go-boundary"], run_id=run_id, delivery_status=DeliveryStatus.FAILED)
+        setup_baseline_package(stage_dir, scenarios=["go-query-error-classification"], run_id=run_id, delivery_status=DeliveryStatus.FAILED)
 
         cwd_rel_out = os.path.relpath(str(self.output), os.getcwd())
         cwd_rel_ws = os.path.relpath(str(self.workspace), os.getcwd())
@@ -299,7 +299,7 @@ class TestE2ERecovery(unittest.TestCase):
         stage_dir = run_stage_dir(self.workspace, run_id)
         setup_baseline_package(
             stage_dir,
-            scenarios=["go-boundary"],
+            scenarios=["go-query-error-classification"],
             run_id=run_id,
             delivery_status=DeliveryStatus.FAILED,
             export_error="Network down",
@@ -328,7 +328,7 @@ class TestE2ERecovery(unittest.TestCase):
         """Repeated recovery into the same output directory succeeds without conflict."""
         run_id = "e2e-rec-idempotent-repeat"
         stage_dir = run_stage_dir(self.workspace, run_id)
-        setup_baseline_package(stage_dir, scenarios=["go-boundary"], run_id=run_id, delivery_status=DeliveryStatus.COMPLETED)
+        setup_baseline_package(stage_dir, scenarios=["go-query-error-classification"], run_id=run_id, delivery_status=DeliveryStatus.COMPLETED)
 
         for _ in range(2):
             messages: list[str] = []
@@ -341,7 +341,7 @@ class TestE2ERecovery(unittest.TestCase):
         """When an immutable destination artifact has different bytes, recovery refuses with conflict."""
         run_id = "e2e-rec-tampered-conflict"
         stage_dir = run_stage_dir(self.workspace, run_id)
-        setup_baseline_package(stage_dir, scenarios=["go-boundary"], run_id=run_id, delivery_status=DeliveryStatus.FAILED)
+        setup_baseline_package(stage_dir, scenarios=["go-query-error-classification"], run_id=run_id, delivery_status=DeliveryStatus.FAILED)
 
         # 1. First recovery succeeds
         argv = ["recover", "--run", run_id, "--output", str(self.output), "--workspace", str(self.workspace)]
@@ -363,7 +363,7 @@ class TestE2ERecovery(unittest.TestCase):
         """Temporary files created by aborted exports do not block subsequent recovery."""
         run_id = "e2e-rec-leftover-tmp"
         stage_dir = run_stage_dir(self.workspace, run_id)
-        setup_baseline_package(stage_dir, scenarios=["go-boundary"], run_id=run_id, delivery_status=DeliveryStatus.FAILED)
+        setup_baseline_package(stage_dir, scenarios=["go-query-error-classification"], run_id=run_id, delivery_status=DeliveryStatus.FAILED)
 
         dest_dir = self.output / run_id
         dest_dir.mkdir(parents=True, exist_ok=True)
@@ -451,7 +451,7 @@ class TestE2ERecovery(unittest.TestCase):
     def test_partial_run_missing_execution_manifest_recovers_as_incomplete_with_nonzero_exit(self):
         run_id = "e2e-20260101-000000-r12noexec"
         stage = run_stage_dir(self.workspace, run_id)
-        setup_baseline_package(stage, scenarios=["go-boundary"], run_id=run_id)
+        setup_baseline_package(stage, scenarios=["go-query-error-classification"], run_id=run_id)
         (stage / EXECUTION_MANIFEST_FILENAME).unlink()
 
         _, rec_args = parse_e2e_args([
@@ -476,7 +476,7 @@ class TestE2ERecovery(unittest.TestCase):
         """
         run_id = "e2e-rec-dual-failure"
         stage_dir = run_stage_dir(self.workspace, run_id)
-        setup_baseline_package(stage_dir, scenarios=["go-boundary"], run_id=run_id, delivery_status=DeliveryStatus.FAILED)
+        setup_baseline_package(stage_dir, scenarios=["go-query-error-classification"], run_id=run_id, delivery_status=DeliveryStatus.FAILED)
 
         export_err = OSError("Destination disk write failed")
         ledger_err = OSError("Staging disk readonly")
@@ -520,7 +520,7 @@ class TestE2ERecovery(unittest.TestCase):
         """Safe destination creation failure is recorded and recover can retry. All fixtures are synthetic. No network, Docker, or live chain calls."""
         run_id = "e2e-rec-mkdir-fail"
         stage_dir = run_stage_dir(self.workspace, run_id)
-        setup_baseline_package(stage_dir, scenarios=["go-boundary"], run_id=run_id, delivery_status=DeliveryStatus.FAILED)
+        setup_baseline_package(stage_dir, scenarios=["go-query-error-classification"], run_id=run_id, delivery_status=DeliveryStatus.FAILED)
 
         run_dir = self.output / run_id
         real_ensure = delivery_module.ensure_directory_safe
@@ -562,7 +562,7 @@ class TestE2ERecovery(unittest.TestCase):
         """When writing initial destination marker fails during recovery, attempt is marked FAILED in staging and repeat recovery succeeds."""
         run_id = "e2e-rec-first-marker-fail"
         stage_dir = run_stage_dir(self.workspace, run_id)
-        setup_baseline_package(stage_dir, scenarios=["go-boundary"], run_id=run_id, delivery_status=DeliveryStatus.FAILED)
+        setup_baseline_package(stage_dir, scenarios=["go-query-error-classification"], run_id=run_id, delivery_status=DeliveryStatus.FAILED)
 
         run_dir = self.output / run_id
         real_write = DeliveryManifest.write

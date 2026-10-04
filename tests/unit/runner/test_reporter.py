@@ -15,7 +15,7 @@ from unittest.mock import patch
 
 from forward_e2e.suite import reporter as reporter_module
 from forward_e2e.suite.collector import CollectorSecurityError
-from forward_e2e.suite.catalog import get_task_by_id_or_alias
+from forward_e2e.suite.catalog import get_task_by_id
 from forward_e2e.execution.errors import PathSafetyError
 from forward_e2e.suite.models import (
     make_task_run_id,
@@ -448,7 +448,7 @@ class ReporterTests(unittest.TestCase):
         run_dir = self._write_passed_suite(suite_id)
         plan_file = self.suite_dir / "suite-plan.json"
         plan = SuitePlan.from_dict(json.loads(plan_file.read_text(encoding="utf-8")))
-        second_task = get_task_by_id_or_alias("lock-e-plus-4")
+        second_task = get_task_by_id("lock-e-plus-4")
         self.assertIsNotNone(second_task)
         plan.tasks.append(replace(second_task, ordinal=2))
         plan_file.write_text(json.dumps(plan.to_dict()), encoding="utf-8")

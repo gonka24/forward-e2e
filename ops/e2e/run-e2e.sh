@@ -208,12 +208,9 @@ GONKA_BRIDGE=""
 CONTRACTS_BRIDGE=""
 RUN_ARG_INDEX=-1
 RUN_ARG_VALUE=""
-RUNNER_IMAGE="${E2E_RUNNER_IMAGE:-a8-runner:local}"
+RUNNER_IMAGE="${E2E_RUNNER_IMAGE:-forward-e2e-runner:local}"
 RUNNER_IMAGE_EXPLICIT=false
-if [ -n "${E2E_DOCKER_ROOT_VOLUME:-}" ] && [ -n "${A8_DOCKER_ROOT_VOLUME:-}" ] && [ "$E2E_DOCKER_ROOT_VOLUME" != "$A8_DOCKER_ROOT_VOLUME" ]; then
-    die "Conflicting environment variables E2E_DOCKER_ROOT_VOLUME='${E2E_DOCKER_ROOT_VOLUME}' and A8_DOCKER_ROOT_VOLUME='${A8_DOCKER_ROOT_VOLUME}'; unset the legacy A8_DOCKER_ROOT_VOLUME variable or set both to the same value." 2
-fi
-DOCKER_ROOT_VOLUME="${E2E_DOCKER_ROOT_VOLUME:-${A8_DOCKER_ROOT_VOLUME:-a8-docker-root}}"
+DOCKER_ROOT_VOLUME="${E2E_DOCKER_ROOT_VOLUME:-forward-e2e-docker-root}"
 
 while [ "$#" -gt 0 ]; do
     case "$1" in
@@ -397,7 +394,6 @@ export OUTPUT_DIR="${OUTPUT_DIR_HOST:-${REPO_ROOT}/out}"
 export E2E_PLAN_DIR="${PLAN_DIR_HOST:-$REPO_ROOT}"
 export E2E_SECRETS_DIR="${SECRETS_DIR_HOST:-$REPO_ROOT}"
 export E2E_DOCKER_ROOT_VOLUME="$DOCKER_ROOT_VOLUME"
-export A8_DOCKER_ROOT_VOLUME="$DOCKER_ROOT_VOLUME"
 mkdir -p -- "$OUTPUT_DIR"
 
 compose run --rm -e "E2E_RUNNER_IMAGE=$RUNNER_IMAGE" "$SERVICE" ${FORWARD[@]+"${FORWARD[@]}"}

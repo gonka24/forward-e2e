@@ -77,7 +77,7 @@ class TestE2EDelivery(unittest.TestCase):
     def test_identity_read_rejects_a_destination_link_inserted_after_check(self):
         """A late link cannot make an external file satisfy destination identity. All fixtures are synthetic. No network, Docker, or live chain calls."""
         stage, dest = self.workspace / "identity-stage", self.output / "identity-dest"
-        setup_baseline_package(stage, scenarios=["go-boundary"], run_id="source")
+        setup_baseline_package(stage, scenarios=["go-query-error-classification"], run_id="source")
         dest.mkdir()
         identity_path = dest / "run.lock.json"
         external = self.outside / "matching-lock.json"
@@ -103,7 +103,7 @@ class TestE2EDelivery(unittest.TestCase):
     def test_recovery_ledger_read_rejects_a_link_inserted_after_leaf_check(self):
         """A late ledger link cannot supply recovery history from outside staging. All fixtures are synthetic. No network, Docker, or live chain calls."""
         stage, dest = self.workspace / "ledger-stage", self.output / "ledger-dest"
-        setup_baseline_package(stage, scenarios=["go-boundary"], run_id="source")
+        setup_baseline_package(stage, scenarios=["go-query-error-classification"], run_id="source")
         ledger = stage / DELIVERY_MANIFEST_FILENAME
         external = self.outside / "matching-ledger.json"
         external.write_bytes(ledger.read_bytes())
@@ -128,7 +128,7 @@ class TestE2EDelivery(unittest.TestCase):
     def test_destination_parent_swap_cannot_create_outside_directory(self):
         """A swapped output parent must not receive a new run directory. All fixtures are synthetic. No network, Docker, or live chain calls."""
         stage = self.workspace / "directory-stage"
-        setup_baseline_package(stage, scenarios=["go-boundary"], run_id="source")
+        setup_baseline_package(stage, scenarios=["go-query-error-classification"], run_id="source")
         swappable = self.root / "swappable-output"
         swappable.mkdir()
         run_dir = swappable / "source"
@@ -165,7 +165,7 @@ class TestE2EDelivery(unittest.TestCase):
         stage_dir = run_stage_dir(self.workspace, run_id)
         setup_baseline_package(
             stage_dir,
-            scenarios=["go-boundary"],
+            scenarios=["go-query-error-classification"],
             run_id=run_id,
             include_delivery_file=False,
         )
@@ -187,7 +187,7 @@ class TestE2EDelivery(unittest.TestCase):
         stage_dir = run_stage_dir(self.workspace, run_id)
         setup_baseline_package(
             stage_dir,
-            scenarios=["go-boundary"],
+            scenarios=["go-query-error-classification"],
             run_id=run_id,
             delivery_status=DeliveryStatus.COMPLETED,
         )
@@ -214,7 +214,7 @@ class TestE2EDelivery(unittest.TestCase):
         stage_dir = run_stage_dir(self.workspace, run_id)
         setup_baseline_package(
             stage_dir,
-            scenarios=["go-boundary"],
+            scenarios=["go-query-error-classification"],
             run_id=run_id,
             delivery_status=DeliveryStatus.COMPLETED,
         )
@@ -241,7 +241,7 @@ class TestE2EDelivery(unittest.TestCase):
         stage_dir = run_stage_dir(self.workspace, run_id)
         setup_baseline_package(
             stage_dir,
-            scenarios=["go-boundary"],
+            scenarios=["go-query-error-classification"],
             run_id=run_id,
             delivery_status=DeliveryStatus.COMPLETED,
         )
@@ -268,7 +268,7 @@ class TestE2EDelivery(unittest.TestCase):
         stage_dir = run_stage_dir(self.workspace, run_id)
         setup_baseline_package(
             stage_dir,
-            scenarios=["go-boundary"],
+            scenarios=["go-query-error-classification"],
             run_id=run_id,
             delivery_status=DeliveryStatus.COMPLETED,
         )
@@ -295,7 +295,7 @@ class TestE2EDelivery(unittest.TestCase):
         stage_dir = run_stage_dir(self.workspace, run_id)
         setup_baseline_package(
             stage_dir,
-            scenarios=["go-boundary"],
+            scenarios=["go-query-error-classification"],
             run_id=run_id,
             delivery_status=DeliveryStatus.COMPLETED,
         )
@@ -362,7 +362,7 @@ class TestE2EDelivery(unittest.TestCase):
 
         setup_baseline_package(
             stage_dir,
-            scenarios=["go-boundary"],
+            scenarios=["go-query-error-classification"],
             run_id=run_id,
             delivery_status=DeliveryStatus.IN_PROGRESS,
         )
@@ -443,7 +443,7 @@ class TestE2EDelivery(unittest.TestCase):
 
         setup_baseline_package(
             stage_dir,
-            scenarios=["go-boundary"],
+            scenarios=["go-query-error-classification"],
             run_id=run_id,
             delivery_status=DeliveryStatus.IN_PROGRESS,
         )
@@ -621,7 +621,7 @@ class TestE2EDelivery(unittest.TestCase):
 
         setup_baseline_package(
             stage_dir,
-            scenarios=["go-boundary"],
+            scenarios=["go-query-error-classification"],
             run_id=run_id,
             delivery_status=DeliveryStatus.IN_PROGRESS,
         )
@@ -658,7 +658,7 @@ class TestE2EDelivery(unittest.TestCase):
         fail_run_dir = self.output / f"{run_id}-fail"
         fail_stage_dir = run_stage_dir(self.workspace, f"{run_id}-fail")
         setup_baseline_package(
-            fail_stage_dir, scenarios=["go-boundary"], run_id=f"{run_id}-fail",
+            fail_stage_dir, scenarios=["go-query-error-classification"], run_id=f"{run_id}-fail",
             delivery_status=DeliveryStatus.IN_PROGRESS,
         )
         fail_delivery = DeliveryManifest.from_dict(
@@ -689,7 +689,7 @@ class TestE2EDelivery(unittest.TestCase):
         stage = self.workspace / "recovery-failure"
         destination = self.output / "recovery-failure"
         setup_baseline_package(
-            stage, scenarios=["go-boundary"], run_id="recovery-failure",
+            stage, scenarios=["go-query-error-classification"], run_id="recovery-failure",
             delivery_status=DeliveryStatus.COMPLETED,
         )
         ledger_path = stage / DELIVERY_MANIFEST_FILENAME
@@ -724,7 +724,7 @@ class TestE2EDelivery(unittest.TestCase):
         stage_dir = run_stage_dir(self.workspace, run_id)
         run_dir = self.output / run_id
 
-        setup_baseline_package(stage_dir, scenarios=["go-boundary"], run_id=run_id, delivery_status=DeliveryStatus.IN_PROGRESS)
+        setup_baseline_package(stage_dir, scenarios=["go-query-error-classification"], run_id=run_id, delivery_status=DeliveryStatus.IN_PROGRESS)
 
         delivery_stage_path = stage_dir / DELIVERY_MANIFEST_FILENAME
         delivery = DeliveryManifest.from_dict(json.loads(delivery_stage_path.read_text(encoding="utf-8")))
@@ -758,7 +758,7 @@ class TestE2EDelivery(unittest.TestCase):
         stage_dir = run_stage_dir(self.workspace, run_id)
         run_dir = self.output / run_id
 
-        setup_baseline_package(stage_dir, scenarios=["go-boundary"], run_id=run_id, delivery_status=DeliveryStatus.IN_PROGRESS)
+        setup_baseline_package(stage_dir, scenarios=["go-query-error-classification"], run_id=run_id, delivery_status=DeliveryStatus.IN_PROGRESS)
 
         delivery_stage_path = stage_dir / DELIVERY_MANIFEST_FILENAME
         delivery = DeliveryManifest.from_dict(json.loads(delivery_stage_path.read_text(encoding="utf-8")))
@@ -796,7 +796,7 @@ class TestE2EDelivery(unittest.TestCase):
         stage_dir = run_stage_dir(self.workspace, run_id)
         run_dir = self.output / run_id
 
-        setup_baseline_package(stage_dir, scenarios=["go-boundary"], run_id=run_id, delivery_status=DeliveryStatus.IN_PROGRESS)
+        setup_baseline_package(stage_dir, scenarios=["go-query-error-classification"], run_id=run_id, delivery_status=DeliveryStatus.IN_PROGRESS)
 
         delivery_stage_path = stage_dir / DELIVERY_MANIFEST_FILENAME
         delivery = DeliveryManifest.from_dict(json.loads(delivery_stage_path.read_text(encoding="utf-8")))
@@ -831,7 +831,7 @@ class TestE2EDelivery(unittest.TestCase):
         stage_dir = run_stage_dir(self.workspace, run_id)
         run_dir = self.output / run_id
 
-        setup_baseline_package(stage_dir, scenarios=["go-boundary"], run_id=run_id, delivery_status=DeliveryStatus.IN_PROGRESS)
+        setup_baseline_package(stage_dir, scenarios=["go-query-error-classification"], run_id=run_id, delivery_status=DeliveryStatus.IN_PROGRESS)
 
         delivery_stage_path = stage_dir / DELIVERY_MANIFEST_FILENAME
         delivery = DeliveryManifest.from_dict(json.loads(delivery_stage_path.read_text(encoding="utf-8")))
@@ -867,10 +867,10 @@ class TestE2EDelivery(unittest.TestCase):
                 stage = self.workspace / f"stage-{initial}"
                 dest = self.output / f"dest-{initial}"
                 setup_baseline_package(
-                    stage, scenarios=["go-boundary"], run_id="source",
+                    stage, scenarios=["go-query-error-classification"], run_id="source",
                     delivery_status=DeliveryStatus.IN_PROGRESS if initial else DeliveryStatus.COMPLETED,
                 )
-                setup_baseline_package(dest, scenarios=["go-boundary"], run_id="foreign", delivery_status=DeliveryStatus.COMPLETED)
+                setup_baseline_package(dest, scenarios=["go-query-error-classification"], run_id="foreign", delivery_status=DeliveryStatus.COMPLETED)
                 before = {p.relative_to(dest): p.read_bytes() for p in dest.rglob("*") if p.is_file()}
                 self.assertEqual(evaluate_run(LoadedRunPackage.load(dest)).status, "PASSED")
                 if initial:
@@ -887,7 +887,7 @@ class TestE2EDelivery(unittest.TestCase):
 
     def test_matching_run_id_does_not_allow_replacing_a_ledger_when_execution_identity_differs(self):
         stage, dest = self.workspace / "stage", self.output / "dest"
-        setup_baseline_package(stage, scenarios=["go-boundary"], run_id="source", delivery_status=DeliveryStatus.COMPLETED)
+        setup_baseline_package(stage, scenarios=["go-query-error-classification"], run_id="source", delivery_status=DeliveryStatus.COMPLETED)
         self.assertTrue(DeliveryService.deliver_recovery(stage, dest, suite_id="source").success)
         execution_path = dest / EXECUTION_MANIFEST_FILENAME
         execution = json.loads(execution_path.read_text())
@@ -902,7 +902,7 @@ class TestE2EDelivery(unittest.TestCase):
 
     def test_recovery_publishes_a_completed_operational_status_after_copying_evidence(self):
         stage, dest = self.workspace / "stage-status", self.output / "dest-status"
-        setup_baseline_package(stage, scenarios=["go-boundary"], run_id="source", delivery_status=DeliveryStatus.FAILED)
+        setup_baseline_package(stage, scenarios=["go-query-error-classification"], run_id="source", delivery_status=DeliveryStatus.FAILED)
         (stage / "status.json").write_text(json.dumps({
             "schema_version": "e2e/run-status/1",
             "run_id": "source",
@@ -920,7 +920,7 @@ class TestE2EDelivery(unittest.TestCase):
 
     def test_a_foreign_ledger_in_an_otherwise_empty_destination_is_preserved(self):
         stage, dest = self.workspace / "stage", self.output / "dest"
-        setup_baseline_package(stage, scenarios=["go-boundary"], run_id="source", delivery_status=DeliveryStatus.COMPLETED)
+        setup_baseline_package(stage, scenarios=["go-query-error-classification"], run_id="source", delivery_status=DeliveryStatus.COMPLETED)
         manifest = DeliveryManifest.from_dict(json.loads((stage / DELIVERY_MANIFEST_FILENAME).read_text()))
         manifest.run_id = "foreign"
         dest.mkdir()
@@ -934,7 +934,7 @@ class TestE2EDelivery(unittest.TestCase):
     def test_recovery_rejects_a_foreign_ledger_inside_the_staging_package(self):
         """A staging ledger from another run must not acquire a recovery attempt. All fixtures are synthetic. No network, Docker, or live chain calls."""
         stage, dest = self.workspace / "foreign-stage", self.output / "foreign-stage-dest"
-        setup_baseline_package(stage, scenarios=["go-boundary"], run_id="source")
+        setup_baseline_package(stage, scenarios=["go-query-error-classification"], run_id="source")
         ledger_path = stage / DELIVERY_MANIFEST_FILENAME
         ledger = DeliveryManifest.from_dict(json.loads(ledger_path.read_text(encoding="utf-8")))
         ledger.run_id = "foreign"
@@ -953,7 +953,7 @@ class TestE2EDelivery(unittest.TestCase):
                 dest = self.output / f"dest-{initial}"
                 retry_dest = self.output / f"retry-{initial}"
                 setup_baseline_package(
-                    stage, scenarios=["go-boundary"], run_id="source",
+                    stage, scenarios=["go-query-error-classification"], run_id="source",
                     delivery_status=DeliveryStatus.IN_PROGRESS if initial else DeliveryStatus.COMPLETED,
                 )
                 manifest = DeliveryManifest.from_dict(json.loads((stage / DELIVERY_MANIFEST_FILENAME).read_text()))

@@ -2,12 +2,10 @@
 
 Uses standard Linux flock. Production callers always pass an explicit path
 (``<workspace>/exclusive.lock`` from the supervisor, ``<runtime_root>/exclusive.lock``
-from the orchestrator); ``~/a8-runtime/exclusive.lock`` is only the fallback
+from the orchestrator); ``~/forward-e2e-runtime/exclusive.lock`` is only the fallback
 for a process without a configured workspace, mirroring
-``get_default_runtime_root`` in ``runtime.py``. The historical ``a8-runtime``
-directory name is kept on purpose: a renamed fallback would be a second lock
-domain next to the one older runners on the same host still take.
-Provides fail-fast semantics on contention without deleting lock files.
+``get_default_runtime_root`` in ``runtime.py``. Provides fail-fast semantics
+on contention without deleting lock files.
 Supports re-entrant / shared usage within the same orchestrator process to
 prevent self-deadlock when calling underlying runtime actions.
 """
@@ -39,14 +37,13 @@ class RuntimeLock:
     """Non-blocking exclusive lock for suite runtime operations.
 
     Ensures that only one process at a time can prepare, run, or clean up
-    the ``~/a8-runtime`` environment (historical directory name, see the
-    module docstring).
+    the ``~/forward-e2e-runtime`` environment.
     """
 
     def __init__(self, lock_path: Optional[Path] = None):
         if lock_path is None:
             home = Path.home()
-            self.lock_path = home / "a8-runtime" / "exclusive.lock"
+            self.lock_path = home / "forward-e2e-runtime" / "exclusive.lock"
         else:
             self.lock_path = Path(lock_path).resolve()
         self._fd: Optional[int] = None

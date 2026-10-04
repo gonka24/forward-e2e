@@ -18,7 +18,7 @@ from dataclasses import dataclass
 from typing import Any, Callable, Dict, Iterable, List, Mapping, Optional, Sequence, Set, Tuple
 import xml.etree.ElementTree as ET
 
-from .catalog import canonical_task_id, get_task_by_id_or_alias
+from .catalog import get_task_by_id
 from .collector import validate_artifact_index_record
 from .evidence_model import (
     EvidenceModelError,
@@ -4333,7 +4333,7 @@ def extract_and_validate_scenario_predicates(
     if (
         # An older package's suite plan names the pre-rename selector; translate
         # it through the catalog's alias table rather than listing spellings here.
-        canonical_task_id(scenario_selector or "") == "native-release-rollback-retry"
+        (scenario_selector or "") == "native-release-rollback-retry"
         and TOP_LEVEL_SCOPE in evidence_scopes
         and _validate_r7_1_bank_sequence(data)
     ):
@@ -4650,7 +4650,7 @@ def verify_immutable_source_section(
     """Validate the ``source`` provenance of immutable-source live evidence.
 
     Returns ``None`` when every mandatory fact is present and agrees, else a
-    one-line reason. The rules (contract §5):
+    one-line reason. The rules (contract В§5):
 
     * no retired prepared-build / overlay field may be present at all;
     * ``gonka_sha`` and ``marketplace_commit_sha`` are full commit SHAs and
@@ -5141,8 +5141,7 @@ def verify_package_c_policy_log(
 
 
 #: Exact upstream Rust test each contract-test task must prove, keyed by the
-#: canonical task ID. A document from an older package is looked up through
-#: ``canonical_task_id`` so the pre-rename spelling needs no second entry.
+#: canonical task ID. Old task IDs are not translated.
 CONTRACT_BOUNDARY_TESTS = {
     "contract-network-unconfirmed-policy": (
         "network_unconfirmed_refund_rejects_early_and_unexpected_system_failures",
@@ -5338,7 +5337,7 @@ def evaluate_task_evidence(
             evidence_dir / (run_id or "") / f"{task.task_id}.log",
         ]
         log_file = next((p for p in log_candidates if p.exists()), log_candidates[0])
-        contract_task_id = canonical_task_id(task.task_id)
+        contract_task_id = task.task_id
         if contract_task_id == "contract-query-fault-policy":
             ok, observed, err = verify_package_c_policy_log(
                 log_file, artifact_reader=artifact_reader,
@@ -5960,7 +5959,7 @@ def verify_suite_artifacts_integrity(
                     )
 
             # 2. Mandatory expected artifacts from task_plan or catalog
-            cat_task = get_task_by_id_or_alias(task_plan.task_id)
+            cat_task = get_task_by_id(task_plan.task_id)
             expected_arts = task_plan.expected_artifacts or (cat_task.expected_artifacts if cat_task else [])
             for exp_art in expected_arts:
                 art_name = Path(exp_art).name

@@ -114,7 +114,7 @@ def _make_lock(**overrides):
         "build": {"gonka": {"targets": ["inferenced"]}, "contracts": {"targets": ["marketplace"]}},
         "source_policy": _source_policy_section(),
         "external_tests": {"trees": {}, "tests_hash": "a" * 64},
-        "semantic_inputs": {"A8_PROOF_LEVEL": "native"},
+        "semantic_inputs": {"E2E_PROOF_LEVEL": "native"},
         "source_package": {"bundles": ["bundles/gonka.bundle", "bundles/contracts.bundle"]},
         "notes": ["synthetic fixture"],
     }

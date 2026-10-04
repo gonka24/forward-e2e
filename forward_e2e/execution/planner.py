@@ -41,7 +41,6 @@ from typing import Any, Callable, Dict, List, Mapping, Optional, Sequence, Tuple
 from ..suite.catalog import (
     CATALOG_SCHEMA_VERSION,
     compute_catalog_hash,
-    legacy_aliases_in,
     resolve_e2e_selection,
 )
 from ..suite.models import TaskPlan
@@ -140,16 +139,12 @@ EXTERNAL_TEST_DIRS: Tuple[Tuple[str, str], ...] = (
 #: Environment variables that carry *semantic* meaning: they can change the
 #: outcome of a run. They are frozen into the lock so that a replay cannot be
 #: quietly re-parameterised from a different shell.
-SEMANTIC_ENV_PREFIXES: Tuple[str, ...] = ("A8_", "E2E_", "GONKA_", "TESTERMINT_")
+SEMANTIC_ENV_PREFIXES: Tuple[str, ...] = ("E2E_", "GONKA_", "TESTERMINT_")
 
 #: Operational variables matching the prefixes above that say *where* things
 #: live rather than *what* is proven. They are recorded as operational and are
 #: allowed to differ on replay.
 OPERATIONAL_ENV_NAMES: Tuple[str, ...] = (
-    "A8_APP_ROOT",
-    "A8_DOCKER_ROOT_VOLUME",
-    "A8_OUTPUT_DIR",
-    "A8_WORKSPACE_DIR",
     "E2E_APP_ROOT",
     "E2E_CREDENTIAL_FILE",
     "E2E_DOCKER_ROOT_VOLUME",
@@ -159,44 +154,6 @@ OPERATIONAL_ENV_NAMES: Tuple[str, ...] = (
     "E2E_RUNNER_IMAGE_ID",
     "E2E_WORKSPACE_DIR",
 )
-
-LEGACY_SEMANTIC_ENV_ALIASES: Mapping[str, str] = {
-    "A8_EXPECTED_GONKA_SHA": "E2E_EXPECTED_GONKA_SHA",
-    "A8_EXPECTED_PROTO_SHA": "E2E_EXPECTED_PROTO_SHA",
-    "A8_EXPECTED_RUNTIME": "E2E_EXPECTED_RUNTIME",
-    "A8_EVIDENCE_MODEL": "E2E_EVIDENCE_MODEL",
-}
-
-LEGACY_OPERATIONAL_ENV_ALIASES: Mapping[str, str] = {
-    "A8_APP_ROOT": "E2E_APP_ROOT",
-    "A8_DOCKER_ROOT_VOLUME": "E2E_DOCKER_ROOT_VOLUME",
-    "A8_OUTPUT_DIR": "E2E_OUTPUT_DIR",
-    "A8_WORKSPACE_DIR": "E2E_WORKSPACE_DIR",
-}
-
-
-def resolve_operational_env(
-    canonical: str,
-    legacy: str,
-    default: Optional[str] = None,
-    *,
-    env: Optional[Mapping[str, str]] = None,
-) -> Optional[str]:
-    """Read an operational environment variable with legacy ``A8_*`` fallback.
-
-    Thin wrapper over the suite's ``resolve_suite_env`` -- the one place the
-    "equal values normalise, different values are refused" rule is written --
-    that reports a conflict as the E2E layer's structured ``UsageError`` naming
-    both variables.
-    """
-    from ..suite.runtime import SuiteRuntimeError, resolve_suite_env
-
-    try:
-        return resolve_suite_env(canonical, legacy, default, env=env)
-    except SuiteRuntimeError as exc:
-        raise UsageError(str(exc), {"canonical": canonical, "legacy": legacy}) from exc
-
-
 
 def _reject_runner_asset_symlinks(root: Path, relpath: str) -> None:
     """Refuse links in an asset or any parent below the runner root."""
@@ -328,29 +285,15 @@ def hash_runner_tree(root: Path, reldir: str) -> Dict[str, Any]:
 def collect_semantic_environment(env: Optional[Mapping[str, str]] = None) -> Dict[str, Any]:
     """Split the relevant environment into semantic and operational halves."""
     environ = dict(env if env is not None else os.environ)
-    for legacy, canonical in (
-        *LEGACY_SEMANTIC_ENV_ALIASES.items(),
-        *LEGACY_OPERATIONAL_ENV_ALIASES.items(),
-    ):
-        if legacy in environ and canonical in environ and environ[legacy] != environ[canonical]:
-            raise UsageError(
-                f"Conflicting environment variables {canonical}={environ[canonical]!r} and "
-                f"{legacy}={environ[legacy]!r}; unset the legacy {legacy} variable or set both "
-                "to the same value.",
-                {"canonical": canonical, "legacy": legacy},
-            )
     semantic: Dict[str, str] = {}
     operational: List[str] = []
     for name in sorted(environ):
         if not name.startswith(SEMANTIC_ENV_PREFIXES):
             continue
         if name in OPERATIONAL_ENV_NAMES:
-            canonical_op = LEGACY_OPERATIONAL_ENV_ALIASES.get(name, name)
-            if canonical_op not in operational:
-                operational.append(canonical_op)
+            operational.append(name)
             continue
-        canonical_sem = LEGACY_SEMANTIC_ENV_ALIASES.get(name, name)
-        semantic[canonical_sem] = environ[name]
+        semantic[name] = environ[name]
     operational.sort()
     return {
         "semantic_environment": semantic,
@@ -440,14 +383,6 @@ def build_plan(
         )
     except ValueError as exc:
         raise SelectionError(str(exc)) from exc
-    # The lock records canonical IDs only, so this is the last point at which
-    # the pre-rename spelling the user typed is still visible. Say so once per
-    # alias; the removal schedule lives in docs/migration.md.
-    for alias, canonical in legacy_aliases_in(request.scenarios):
-        say(
-            f"notice: scenario alias {alias!r} is deprecated; it selects {canonical!r} and "
-            "the plan records the canonical ID (see docs/migration.md for removal)."
-        )
     scenario_ids = [task.task_id for task in tasks]
     selection_label = resolved_profile and f"--profile {resolved_profile}" or "--scenario selection"
 

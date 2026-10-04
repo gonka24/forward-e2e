@@ -395,12 +395,12 @@ class ScriptedRunner:
                     junit_xml(self.junit_test or test_name, outcome=self.junit_outcome), "utf-8"
                 )
             if self.write_context:
-                Path(env["A8_CONTEXT"]).write_text(
+                Path(env["E2E_CONTEXT"]).write_text(
                     json.dumps(
                         {
                             "schema_version": "1.0.0",
                             "kind": "gonka-marketplace-a8-live-context",
-                            "run_id": env["A8_RUN_ID"],
+                            "run_id": env["E2E_RUN_ID"],
                             "level": "live_network",
                             "source": {
                                 "evidence_model": env[a8.ENV_EVIDENCE_MODEL],

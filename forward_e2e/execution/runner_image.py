@@ -32,7 +32,7 @@ from .gitio import redact
 
 from .errors import RunnerImageError
 
-DEFAULT_RUNNER_IMAGE_LOCATOR = "a8-runner:local"
+DEFAULT_RUNNER_IMAGE_LOCATOR = "forward-e2e-runner:local"
 
 #: Environment variable used by the host wrappers and by compose to select the
 #: runner image. ``--runner-image`` on the CLI overrides it.

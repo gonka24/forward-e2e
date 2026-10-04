@@ -215,7 +215,7 @@ def tasks_from_lock(lock: Any) -> "List[Any]":
     function reconstructs the TaskPlan objects for execution without re-running
     any selection policy, and refuses if the catalog or plan is incompatible.
     """
-    from ..suite.catalog import _CATALOG_ORDER, get_task_by_id_or_alias
+    from ..suite.catalog import _CATALOG_ORDER, get_task_by_id
     from ..suite.models import TaskPlan
 
     selected = selected_tasks_from_lock(lock)
@@ -228,7 +228,7 @@ def tasks_from_lock(lock: Any) -> "List[Any]":
     result: List[TaskPlan] = []
     last_idx = -1
     for s in selected:
-        cat_task = get_task_by_id_or_alias(s.task_id)
+        cat_task = get_task_by_id(s.task_id)
         if cat_task is None or cat_task.task_id != s.task_id or s.task_id not in order_map:
             raise EvidencePolicyError(
                 f"The lock selected {s.task_id!r}, which is not a canonical task in this runner's catalog."
@@ -297,9 +297,9 @@ def catalog_expected_artifacts(task_id: str) -> Tuple[str, ...]:
     an error here: the requirement that matters (live context / deployment) comes
     from the recorded proof level, not from this list.
     """
-    from ..suite.catalog import get_task_by_id_or_alias
+    from ..suite.catalog import get_task_by_id
 
-    task = get_task_by_id_or_alias(task_id)
+    task = get_task_by_id(task_id)
     if task is None:
         return ()
     return tuple(str(name) for name in task.expected_artifacts)

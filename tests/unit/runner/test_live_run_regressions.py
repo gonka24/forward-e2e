@@ -10,7 +10,7 @@ import subprocess
 import tempfile
 import unittest
 
-from forward_e2e.suite.catalog import get_task_by_id_or_alias
+from forward_e2e.suite.catalog import get_task_by_id
 from forward_e2e.execution.builder import Builder, verify_running_images
 from forward_e2e.execution.compat import BuildRecipe
 from forward_e2e.execution.runlock import BuildManifest
@@ -23,10 +23,10 @@ from forward_e2e.suite.verifier import evaluate_task_evidence
 
 class BoundaryCheckpointTests(unittest.TestCase):
     def test_each_boundary_proves_its_catalog_checkpoints_and_rejects_an_unknown_one(self):
-        for name in ('go-boundary', 'wasm-abi-boundary', 'ct-network-unconfirmed', 'ct-claim-expiry', 'ct-package-c-policy'):
+        for name in ('go-query-error-classification', 'wasm-abi-boundary', 'contract-network-unconfirmed-policy', 'contract-claim-expiry-policy', 'contract-query-fault-policy'):
             with self.subTest(name=name), tempfile.TemporaryDirectory() as folder:
                 root = Path(folder)
-                task = get_task_by_id_or_alias(name)
+                task = get_task_by_id(name)
                 for relative, data in task_artifacts(task, 'a' * 40).items():
                     path = root / relative
                     path.parent.mkdir(parents=True, exist_ok=True)
@@ -39,7 +39,7 @@ class BoundaryCheckpointTests(unittest.TestCase):
                 self.assertEqual(result[0], ExecutionStatus.FAILED)
 
     def test_unrelated_or_ignored_cargo_case_cannot_prove_claim_expiry(self):
-        task = get_task_by_id_or_alias('ct-claim-expiry')
+        task = get_task_by_id('contract-claim-expiry-policy')
         log_name = f'{task.task_id}.log'
         positive = task_artifacts(task, 'a' * 40)[log_name].decode()
         for changed in (positive.replace('claim_expiry_checks_pristine_locked_accounting_and_epoch_overflow', 'unrelated'),

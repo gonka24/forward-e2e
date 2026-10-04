@@ -327,20 +327,6 @@ class PlannerPackageTests(unittest.TestCase):
         self.assertEqual(self.git_runner.calls, [])
         self.assertEqual(self.request.output_dir.read_text(), "existing user data\n")
 
-    def test_a_legacy_scenario_alias_is_announced_once_and_the_lock_records_only_the_canonical_id(self):
-        self.request.profile = None
-        self.request.scenarios = [
-            "package-b-r6-1", "usdt-withdrawal-failure-recovery", "package-b-r6-1",
-        ]
-        result = self.plan()
-        lock = load_run_lock(result.lock_path)
-        self.assertEqual(lock.scenarios, ["usdt-withdrawal-failure-recovery"])
-        self.assertNotIn("package-b-r6-1", json.dumps(lock.to_dict()))
-        notices = [m for m in self.emitted if m.startswith("notice: scenario alias")]
-        self.assertEqual(len(notices), 1, self.emitted)
-        self.assertIn("'package-b-r6-1'", notices[0])
-        self.assertIn("'usdt-withdrawal-failure-recovery'", notices[0])
-        self.assertIn("docs/migration.md", notices[0])
 
     def test_a_canonical_scenario_request_produces_no_deprecation_notice(self):
         self.request.profile = None

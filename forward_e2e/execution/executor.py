@@ -422,7 +422,7 @@ def apply_semantic_environment(
       had;
     * **removes** ambient semantic variables the lock does not carry, because a
       variable that did not exist at plan time must not appear at replay time
-      and silently change what is proven (``A8_EXPECTED_PROTO_SHA`` is the
+      and silently change what is proven (``E2E_EXPECTED_PROTO_SHA`` is the
       dangerous example: it moves the recorded ABI provenance);
     * leaves operational variables alone, since they only say where things live.
 
@@ -1433,9 +1433,6 @@ def suite_export_dir(run_dir: Path, suite_id: str) -> Path:
 def suite_workspace_root(workspace_dir: Path) -> Path:
     """What is handed to the orchestrator as its workspace directory."""
     return Path(workspace_dir) / SUITE_EXPORT_DIRNAME
-
-
-
 
 
 def _a9_manifest_path(manifest: BuildManifest) -> Optional[Path]:

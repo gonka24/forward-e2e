@@ -540,7 +540,7 @@ class OrchestratorSourceIdentityTests(unittest.TestCase):
 # Finding B: the harness that judges is the runner's own
 # ---------------------------------------------------------------------------
 class HarnessBindingTests(unittest.TestCase):
-    """The Kotlin consumer of ``A8_HARNESS``.
+    """The Kotlin consumer of ``E2E_HARNESS``.
 
     The producer side (``run-live`` exporting the runner's own script) is
     covered in ``tests/unit/harness/test_acceptance_harness.py``; this reads the
@@ -563,16 +563,16 @@ class HarnessBindingTests(unittest.TestCase):
         start = body.index("private fun runHarness(")
         snippet = body[start : body.index("private fun ", start + len("private fun "))]
 
-        # The script that is executed comes from E2E_HARNESS (with A8_HARNESS alias)...
+        # The script that is executed comes from E2E_HARNESS...
         self.assertIn('requiredEnv("E2E_PYTHON")', snippet)
         self.assertIn('requiredEnv("E2E_HARNESS")', snippet)
         # ...while the target checkout is only the working directory.
         self.assertIn('File(requiredEnv("E2E_MARKETPLACE_DIR"))', snippet)
         self.assertNotIn('E2E_MARKETPLACE_DIR") + "/scripts', snippet)
-        self.assertNotIn('A8_MARKETPLACE_DIR") + "/scripts', snippet)
+        self.assertNotIn('E2E_MARKETPLACE_DIR") + "/scripts', snippet)
         self.assertNotIn("a8_acceptance.py", snippet)
         self.assertNotIn("acceptance_harness.py", snippet)
-        self.assertIn("requiredHarnessEnv(canonicalName, legacyName)", body)
+        self.assertIn("requiredHarnessEnv(name)", body)
 
 
 # ---------------------------------------------------------------------------

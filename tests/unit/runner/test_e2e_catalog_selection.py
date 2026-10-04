@@ -18,13 +18,10 @@ import unittest
 
 from forward_e2e.suite.catalog import (
     BOUNDARY_TASKS,
-    LEGACY_SCENARIO_ALIASES,
     NATIVE_TASKS,
     _CATALOG_ORDER,
-    canonical_task_id,
     get_profile_tasks,
-    get_task_by_id_or_alias,
-    legacy_aliases_in,
+    get_task_by_id,
     resolve_e2e_selection,
 )
 from forward_e2e.execution.compat import (
@@ -42,7 +39,7 @@ class E2ESelectionTests(unittest.TestCase):
         tasks, profile, scenarios = resolve_e2e_selection(
             scenarios=[
                 "lock-exact-e",
-                "go-boundary",
+                "go-query-error-classification",
                 "lock-exact-e",
                 "funded-claim",
                 "go-query-error-classification",
@@ -59,7 +56,7 @@ class E2ESelectionTests(unittest.TestCase):
             scenarios=["go-query-error-classification", "funded-claim"]
         )
         backwards, _profile, _scenarios = resolve_e2e_selection(
-            scenarios=["funded-claim", "go-boundary"]
+            scenarios=["funded-claim", "go-query-error-classification"]
         )
         self.assertEqual(
             [task.task_id for task in forwards], [task.task_id for task in backwards]
@@ -188,58 +185,6 @@ class E2ESelectionTests(unittest.TestCase):
             "not declared as supported by this compatibility adapter",
         )
         self.assertEqual(caught.exception.exit_code, 1)
-
-
-class LegacyScenarioAliasTests(unittest.TestCase):
-    """Pre-rename scenario IDs are accepted as input and nowhere else."""
-
-    def test_every_alias_maps_to_a_canonical_id_that_is_itself_not_an_alias(self):
-        self.assertTrue(LEGACY_SCENARIO_ALIASES)
-        for alias, canonical in LEGACY_SCENARIO_ALIASES.items():
-            with self.subTest(alias=alias):
-                self.assertNotEqual(alias, canonical)
-                self.assertIn(canonical, _CATALOG_ORDER)
-                self.assertNotIn(alias, _CATALOG_ORDER)
-                self.assertEqual(get_task_by_id_or_alias(alias).task_id, canonical)
-
-    def test_an_alias_and_its_canonical_id_in_one_request_select_the_task_once_with_identical_budgets(self):
-        for alias, canonical in LEGACY_SCENARIO_ALIASES.items():
-            with self.subTest(alias=alias):
-                mixed, _profile, normalised = resolve_e2e_selection(scenarios=[alias, canonical, alias])
-                canonical_only, _profile, _ = resolve_e2e_selection(scenarios=[canonical])
-                self.assertEqual(len(mixed), 1)
-                self.assertEqual(normalised, [canonical])
-                # The whole frozen task -- proof level, timeouts, Gradle budget,
-                # checkpoints, artifacts, exact test method -- must be the same
-                # object the canonical spelling selects.
-                self.assertEqual(mixed[0].to_dict(), canonical_only[0].to_dict())
-                self.assertEqual(mixed[0].task_id, canonical)
-                self.assertEqual(mixed[0].ordinal, 1)
-
-    def test_the_normalised_scenario_list_never_contains_an_alias(self):
-        tasks, _profile, normalised = resolve_e2e_selection(
-            scenarios=list(LEGACY_SCENARIO_ALIASES)
-        )
-        self.assertEqual(normalised, [task.task_id for task in tasks])
-        self.assertEqual(set(normalised) & set(LEGACY_SCENARIO_ALIASES), set())
-        self.assertEqual(set(normalised), set(LEGACY_SCENARIO_ALIASES.values()))
-
-    def test_canonical_task_id_collapses_aliases_and_leaves_canonical_and_unknown_names_alone(self):
-        for alias, canonical in LEGACY_SCENARIO_ALIASES.items():
-            self.assertEqual(canonical_task_id(alias), canonical)
-            self.assertEqual(canonical_task_id(canonical), canonical)
-        self.assertEqual(canonical_task_id("not-a-task"), "not-a-task")
-
-    def test_legacy_aliases_in_reports_each_alias_once_in_request_order_and_ignores_canonical_names(self):
-        self.assertEqual(legacy_aliases_in(None), [])
-        self.assertEqual(legacy_aliases_in(["lock-exact-e", "funded-claim,go-query-error-classification"]), [])
-        self.assertEqual(
-            legacy_aliases_in(["package-b-r7-1, go-boundary", "package-b-r7-1", "lock-exact-e"]),
-            [
-                ("package-b-r7-1", "native-release-rollback-retry"),
-                ("go-boundary", "go-query-error-classification"),
-            ],
-        )
 
 
 if __name__ == "__main__":

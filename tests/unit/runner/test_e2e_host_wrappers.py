@@ -12,8 +12,7 @@ from the documented ``<output>/runs/<run-id>`` layout -- and a run that does not
 live under that root has to be refused rather than silently mounted away.
 
 Two host-side rules that the container cannot enforce are pinned here as well:
-the ``E2E_DOCKER_ROOT_VOLUME`` / ``A8_DOCKER_ROOT_VOLUME`` alias matrix
-(conflict, equal, legacy-only, canonical-only, absent) and the refusal of
+current ``E2E_DOCKER_ROOT_VOLUME`` selection and default behavior and the refusal of
 ``--runner-image`` next to ``--from``. ``HostWrapperParityTests`` checks the
 facts both wrappers and ``ops/runner/compose.yaml`` must agree on textually:
 the pinned Compose project name and the absence of any Compose v1 fallback.
@@ -223,8 +222,8 @@ class BashWrapperRunTranslationTests(unittest.TestCase):
         (plan / "run.lock.json").write_text("{}", encoding="utf-8")
         for command in ("run", "rerun"):
             for flags in (
-                ["--from", str(plan), "--runner-image", "a8-runner:local"],
-                ["--runner-image=a8-runner:local", f"--from={plan}"],
+                ["--from", str(plan), "--runner-image", "forward-e2e-runner:local"],
+                ["--runner-image=forward-e2e-runner:local", f"--from={plan}"],
             ):
                 with self.subTest(command=command, flags=flags):
                     result = self._invoke(command, *flags)
@@ -238,7 +237,7 @@ class BashWrapperRunTranslationTests(unittest.TestCase):
                 result = self._invoke("list", "--runner-image", locator)
                 self.assertEqual(self._container_arguments(result), ["list"])
                 self.assertNotIn("mutable tag", result.stderr)
-        result = self._invoke("list", "--runner-image", "a8-runner:local")
+        result = self._invoke("list", "--runner-image", "forward-e2e-runner:local")
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertIn("mutable tag", result.stderr)
 
@@ -254,7 +253,7 @@ class BashWrapperRunTranslationTests(unittest.TestCase):
         self.assertEqual(self._recorded_environment("E2E_RUNNER_IMAGE_DIGEST"),
                          "registry.invalid/a8-runner@sha256:" + "2" * 64)
         compose = (REPO_ROOT / COMPOSE_RELPATH).read_text(encoding="utf-8")
-        self.assertIn("    image: ${E2E_RUNNER_IMAGE:-a8-runner:local}", compose)
+        self.assertIn("    image: ${E2E_RUNNER_IMAGE:-forward-e2e-runner:local}", compose)
 
     def test_an_output_with_missing_ancestors_is_created_before_path_translation(self):
         output = self.root / "new parent" / "nested" / "output"
@@ -264,14 +263,9 @@ class BashWrapperRunTranslationTests(unittest.TestCase):
         self.assertEqual(self._recorded_environment("OUTPUT_DIR"), str(output))
 
     def _assert_docker_root_volume_exported_as(self, expected):
-        """Both spellings must reach Compose with the same value.
-
-        ``ops/runner/compose.yaml`` interpolates ``E2E_DOCKER_ROOT_VOLUME``
-        first and ``A8_DOCKER_ROOT_VOLUME`` second, so exporting only one of
-        them would let a stale ambient value of the other win on some hosts.
-        """
+        """Compose receives the current name without generating an old alias."""
         self.assertEqual(self._recorded_environment("E2E_DOCKER_ROOT_VOLUME"), expected)
-        self.assertEqual(self._recorded_environment("A8_DOCKER_ROOT_VOLUME"), expected)
+        self.assertEqual(self._recorded_environment("A8_DOCKER_ROOT_VOLUME"), "")
 
     def test_equals_style_run_and_output_options_translate_like_separate_arguments(self):
         result = self._invoke("report", f"--run={self.run_dir}", f"--output={self.output_dir}",
@@ -424,7 +418,7 @@ class BashWrapperRunTranslationTests(unittest.TestCase):
     def test_named_docker_state_is_host_only_and_exported_to_compose(self):
         result = self._invoke(
             "report", "--run", RUN_ID,
-            "--docker-root-volume", "a8-docker-root-test-001",
+            "--docker-root-volume", "forward-e2e-docker-root-test-001",
             "--output", str(self.output_dir),
         )
 
@@ -434,7 +428,7 @@ class BashWrapperRunTranslationTests(unittest.TestCase):
         # the command that would be executed inside the container.
         parse_e2e_args(forwarded)
         self.assertEqual(self._recorded_environment("OUTPUT_DIR"), str(self.output_dir))
-        self._assert_docker_root_volume_exported_as("a8-docker-root-test-001")
+        self._assert_docker_root_volume_exported_as("forward-e2e-docker-root-test-001")
 
     def test_unsafe_docker_state_name_is_refused_before_compose(self):
         result = self._invoke("list", "--docker-root-volume", "../foreign")
@@ -443,62 +437,20 @@ class BashWrapperRunTranslationTests(unittest.TestCase):
         self.assertIn("must be a plain Docker volume name", result.stderr)
         self.assertFalse(self.argv_file.exists())
 
-    # -- E2E_DOCKER_ROOT_VOLUME / A8_DOCKER_ROOT_VOLUME alias matrix --------
-    # The same five cases every other alias reader is held to (see
-    # ``resolve_suite_env``): the wrapper is the one reader that cannot share
-    # that Python implementation, so its copy of the rule is pinned here.
-    def test_conflicting_canonical_and_legacy_docker_root_volume_values_exit_2_before_compose(self):
-        result = self._invoke("list", env={
-            "E2E_DOCKER_ROOT_VOLUME": "canonical-cache",
-            "A8_DOCKER_ROOT_VOLUME": "legacy-cache",
-        })
-        self.assertEqual(result.returncode, 2, msg=result.stderr)
-        self.assertIn("Conflicting environment variables", result.stderr)
-        self.assertIn("E2E_DOCKER_ROOT_VOLUME='canonical-cache'", result.stderr)
-        self.assertIn("A8_DOCKER_ROOT_VOLUME='legacy-cache'", result.stderr)
-        self.assertFalse(self.argv_file.exists(), "a conflict must never launch the runner")
-        self.assertFalse(self.env_file.exists())
-
-    def test_a_conflict_is_refused_even_when_an_explicit_flag_would_have_decided_the_value(self):
-        # Precedence is never used to paper over an ambiguous shell; the
-        # operator has to remove the stale legacy value first.
-        result = self._invoke("list", "--docker-root-volume", "flag-cache", env={
-            "E2E_DOCKER_ROOT_VOLUME": "canonical-cache",
-            "A8_DOCKER_ROOT_VOLUME": "legacy-cache",
-        })
-        self.assertEqual(result.returncode, 2, msg=result.stderr)
-        self.assertIn("Conflicting environment variables", result.stderr)
-        self.assertFalse(self.argv_file.exists())
-
-    def test_equal_canonical_and_legacy_docker_root_volume_values_normalise_to_one_export(self):
-        result = self._invoke("list", env={
-            "E2E_DOCKER_ROOT_VOLUME": "shared-cache",
-            "A8_DOCKER_ROOT_VOLUME": "shared-cache",
-        })
-        self.assertEqual(self._container_arguments(result), ["list"])
-        self.assertNotIn("Conflicting", result.stderr)
-        self._assert_docker_root_volume_exported_as("shared-cache")
-
-    def test_a_legacy_only_docker_root_volume_is_honoured_and_exported_under_both_names(self):
-        result = self._invoke("list", env={"A8_DOCKER_ROOT_VOLUME": "legacy-cache"})
-        self.assertEqual(self._container_arguments(result), ["list"])
-        self._assert_docker_root_volume_exported_as("legacy-cache")
-
-    def test_a_canonical_only_docker_root_volume_is_exported_under_both_names(self):
+    # -- Current Docker state selection ------------------------------------
+    def test_a_canonical_only_docker_root_volume_is_exported_under_the_current_name(self):
         result = self._invoke("list", env={"E2E_DOCKER_ROOT_VOLUME": "canonical-cache"})
         self.assertEqual(self._container_arguments(result), ["list"])
         self._assert_docker_root_volume_exported_as("canonical-cache")
 
-    def test_an_absent_docker_root_volume_falls_back_to_the_historical_default_volume_name(self):
+    def test_an_absent_docker_root_volume_falls_back_to_the_default_volume_name(self):
         result = self._invoke("list")
         self.assertEqual(self._container_arguments(result), ["list"])
-        # The default is the preserved volume name from docs/migration.md §4;
-        # a different default would silently start from an empty cache.
-        self._assert_docker_root_volume_exported_as("a8-docker-root")
+        self._assert_docker_root_volume_exported_as("forward-e2e-docker-root")
 
-    def test_an_explicit_flag_overrides_a_consistent_environment_under_both_names(self):
+    def test_an_explicit_flag_overrides_a_consistent_environment_under_the_current_name(self):
         result = self._invoke("list", "--docker-root-volume", "flag-cache",
-                              env={"A8_DOCKER_ROOT_VOLUME": "legacy-cache"})
+                              env={"E2E_DOCKER_ROOT_VOLUME": "environment-cache"})
         self.assertEqual(self._container_arguments(result), ["list"])
         self._assert_docker_root_volume_exported_as("flag-cache")
 
@@ -634,27 +586,7 @@ class PowerShellWrapperSourceStructureTests(unittest.TestCase):
     def test_the_source_contains_the_docker_volume_case_and_environment_assignment(self):
         self._assert_code_line("'--docker-root-volume' {")
         self._assert_code_line("$env:E2E_DOCKER_ROOT_VOLUME = $dockerRootVolume")
-        self._assert_code_line("$env:A8_DOCKER_ROOT_VOLUME = $dockerRootVolume")
 
-    def test_the_source_refuses_a_canonical_legacy_docker_volume_conflict_with_exit_code_2(self):
-        # The Bash twin dies before Compose with exit 2 and a message naming
-        # both variables; the same three facts are pinned here textually.
-        self._assert_code_line(
-            "if ($env:E2E_DOCKER_ROOT_VOLUME -and $env:A8_DOCKER_ROOT_VOLUME "
-            "-and ($env:E2E_DOCKER_ROOT_VOLUME -ne $env:A8_DOCKER_ROOT_VOLUME)) {"
-        )
-        self._assert_source_line(
-            "Fail \"Conflicting environment variables "
-            "E2E_DOCKER_ROOT_VOLUME='$($env:E2E_DOCKER_ROOT_VOLUME)' and "
-            "A8_DOCKER_ROOT_VOLUME='$($env:A8_DOCKER_ROOT_VOLUME)'; "
-            "unset the legacy A8_DOCKER_ROOT_VOLUME variable or set both to the same value.\" 2"
-        )
-
-    def test_the_source_resolves_the_docker_volume_canonical_first_then_legacy_then_the_historical_default(self):
-        self._assert_code_line(
-            "$dockerRootVolume = if ($env:E2E_DOCKER_ROOT_VOLUME) { $env:E2E_DOCKER_ROOT_VOLUME } "
-            "elseif ($env:A8_DOCKER_ROOT_VOLUME) { $env:A8_DOCKER_ROOT_VOLUME } else { 'a8-docker-root' }"
-        )
 
     def test_the_source_refuses_an_explicit_runner_image_together_with_from(self):
         # Parity with run-e2e.sh: --runner-image is consumed on the host and
@@ -704,12 +636,12 @@ class HostWrapperParityTests(unittest.TestCase):
             with self.subTest(wrapper=wrapper.name):
                 self.assertIn(message, wrapper.read_text(encoding="utf-8"))
 
-    def test_the_compose_file_pins_the_historical_project_name_at_top_level(self):
+    def test_the_compose_file_pins_the_current_project_name_at_top_level(self):
         # Compose derives the project name from the directory of the file when
         # it is not stated; the move from ops/a8/ to ops/runner/ would rename
         # every container and volume label. Only the file may say the name.
         compose = (REPO_ROOT / COMPOSE_RELPATH).read_text(encoding="utf-8")
-        self.assertRegex(compose, r"(?m)^name:[ \t]*a8[ \t]*(?:#.*)?$")
+        self.assertRegex(compose, r"(?m)^name:[ \t]*forward-e2e[ \t]*(?:#.*)?$")
 
     def test_no_wrapper_sets_the_compose_project_name_itself(self):
         for wrapper in self.WRAPPERS:
@@ -746,8 +678,7 @@ class HostWrapperParityTests(unittest.TestCase):
                 self.assertIn("Docker Compose V2 ('docker compose') is required on the host", source)
 
     def test_the_image_only_bakes_the_canonical_workspace_and_output_variables(self):
-        # A baked A8_* twin had no reader (every consumer resolves E2E_* first)
-        # and turned an operator's E2E_* override into a phantom conflict.
+        # The image and Compose expose exactly the same current configuration names.
         compose = (REPO_ROOT / COMPOSE_RELPATH).read_text(encoding="utf-8")
         dockerfile = (REPO_ROOT / "ops/runner/Dockerfile").read_text(encoding="utf-8")
         self.assertRegex(compose, r"(?m)^      - E2E_WORKSPACE_DIR=/workspace[ \t]*$")
@@ -819,7 +750,7 @@ exit $LASTEXITCODE
     def _assert_docker_root_volume_exported_as(self, expected):
         recorded = self._recorded()
         self.assertEqual(recorded["docker_root"], expected)
-        self.assertEqual(recorded["docker_root_legacy"], expected)
+        self.assertFalse(recorded["docker_root_legacy"])
 
     def test_a_nested_suite_keeps_the_enclosing_package_inside_the_evidence_mount(self):
         package = self.root / "out" / "runs" / RUN_ID
@@ -901,52 +832,27 @@ exit $LASTEXITCODE
         (self.root / "run.lock.json").write_text("{}", encoding="utf-8")
         for command in ("run", "rerun"):
             with self.subTest(command=command):
-                result = self.invoke(command, "--from", "run.lock.json", "--runner-image", "a8-runner:local")
+                result = self.invoke(command, "--from", "run.lock.json", "--runner-image", "forward-e2e-runner:local")
                 self.assertEqual(result.returncode, 2, result.stderr)
                 # Write-Error renders through the host; which stream carries the
                 # text is a host detail, the wording is the contract.
                 self.assertIn("--runner-image cannot be combined with --from", result.stderr + result.stdout)
                 self.assertFalse(self.record.exists())
 
-    # -- E2E_DOCKER_ROOT_VOLUME / A8_DOCKER_ROOT_VOLUME alias matrix --------
-    def test_conflicting_canonical_and_legacy_docker_root_volume_values_exit_2_before_compose(self):
-        result = self.invoke("list", env={
-            "E2E_DOCKER_ROOT_VOLUME": "canonical-cache",
-            "A8_DOCKER_ROOT_VOLUME": "legacy-cache",
-        })
-        self.assertEqual(result.returncode, 2, result.stderr)
-        diagnostics = result.stderr + result.stdout
-        self.assertIn("Conflicting environment variables", diagnostics)
-        self.assertIn("E2E_DOCKER_ROOT_VOLUME='canonical-cache'", diagnostics)
-        self.assertIn("A8_DOCKER_ROOT_VOLUME='legacy-cache'", diagnostics)
-        self.assertFalse(self.record.exists())
-
-    def test_equal_canonical_and_legacy_docker_root_volume_values_normalise_to_one_export(self):
-        result = self.invoke("list", env={
-            "E2E_DOCKER_ROOT_VOLUME": "shared-cache",
-            "A8_DOCKER_ROOT_VOLUME": "shared-cache",
-        })
-        self.assertEqual(result.returncode, 0, result.stderr)
-        self._assert_docker_root_volume_exported_as("shared-cache")
-
-    def test_a_legacy_only_docker_root_volume_is_honoured_and_exported_under_both_names(self):
-        result = self.invoke("list", env={"A8_DOCKER_ROOT_VOLUME": "legacy-cache"})
-        self.assertEqual(result.returncode, 0, result.stderr)
-        self._assert_docker_root_volume_exported_as("legacy-cache")
-
-    def test_a_canonical_only_docker_root_volume_is_exported_under_both_names(self):
+    # -- Current Docker state selection ------------------------------------
+    def test_a_canonical_only_docker_root_volume_is_exported_under_the_current_name(self):
         result = self.invoke("list", env={"E2E_DOCKER_ROOT_VOLUME": "canonical-cache"})
         self.assertEqual(result.returncode, 0, result.stderr)
         self._assert_docker_root_volume_exported_as("canonical-cache")
 
-    def test_an_absent_docker_root_volume_falls_back_to_the_historical_default_volume_name(self):
+    def test_an_absent_docker_root_volume_falls_back_to_the_default_volume_name(self):
         result = self.invoke("list")
         self.assertEqual(result.returncode, 0, result.stderr)
-        self._assert_docker_root_volume_exported_as("a8-docker-root")
+        self._assert_docker_root_volume_exported_as("forward-e2e-docker-root")
 
-    def test_an_explicit_flag_overrides_a_consistent_environment_under_both_names(self):
+    def test_an_explicit_flag_overrides_a_consistent_environment_under_the_current_name(self):
         result = self.invoke("list", "--docker-root-volume", "flag-cache",
-                             env={"A8_DOCKER_ROOT_VOLUME": "legacy-cache"})
+                             env={"E2E_DOCKER_ROOT_VOLUME": "environment-cache"})
         self.assertEqual(result.returncode, 0, result.stderr)
         self._assert_docker_root_volume_exported_as("flag-cache")
 

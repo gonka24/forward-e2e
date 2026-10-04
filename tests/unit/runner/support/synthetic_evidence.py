@@ -220,7 +220,7 @@ FORBIDDEN_SUBSTRINGS = (
     "/var/folders/",
     "/workspace/",
     "/out/",
-    "a8-runtime",
+    "forward-e2e-runtime",
     "docs/reviews",
     "2026-09-",
     "20260910",

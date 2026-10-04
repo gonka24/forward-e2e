@@ -17,7 +17,7 @@
 #>
 [CmdletBinding()]
 param(
-    [string]$Image = $(if ($env:E2E_RUNNER_IMAGE) { $env:E2E_RUNNER_IMAGE } else { 'a8-runner:local' }),
+    [string]$Image = $(if ($env:E2E_RUNNER_IMAGE) { $env:E2E_RUNNER_IMAGE } else { 'forward-e2e-runner:local' }),
     [string]$RunnerSha = $env:E2E_RUNNER_SHA,
     [string]$RunnerRepo = $(if ($env:E2E_RUNNER_REPO) { $env:E2E_RUNNER_REPO } else { 'https://github.com/gonka24/forward-e2e.git' })
 )
@@ -31,7 +31,7 @@ $ComposeFile = Join-Path $RepoRoot 'ops\runner\compose.yaml'
 
 function Fail {
     param([string]$Message, [int]$Code = 1)
-    Write-Error $Message -ErrorAction Continue
+    [Console]::Error.WriteLine($Message)
     exit $Code
 }
 

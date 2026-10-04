@@ -24,8 +24,7 @@ Owns task definitions, per-task runtime lifecycle, artifact collection, task
 verification, and suite reporting:
 
 - [`catalog.py`](../forward_e2e/suite/catalog.py) — the 24-task scenario catalog,
-  legacy task-ID alias resolution (`LEGACY_SCENARIO_ALIASES`, `canonical_task_id`,
-  `get_task_by_id_or_alias`), profiles (`smoke`, `native`, `boundary`, `all`),
+  exact task-ID lookup (`get_task_by_id`), profiles (`smoke`, `native`, `boundary`, `all`),
   per-task timeouts, and `compute_catalog_hash()`.
 - [`orchestrator.py`](../forward_e2e/suite/orchestrator.py) — executes the
   selected catalog tasks in canonical catalog order, writes `suite-plan.json`,
@@ -147,7 +146,7 @@ flowchart TD
   `<gonka>/testermint` against [`harness/testermint/required-upstream-api.json`](../harness/testermint/required-upstream-api.json)
   and fails fast with `TESTERMINT_API_MISSING` if a required symbol is absent.
 - **Foreign-Native Genesis Provisioning (coverage id `B3`):** Only
-  `foreign-native-preservation` (legacy alias `b3-foreign-native`) mounts [`harness/network/genesis/foreign-native-genesis-provision.sh`](../harness/network/genesis/foreign-native-genesis-provision.sh)
+  `foreign-native-preservation` mounts [`harness/network/genesis/foreign-native-genesis-provision.sh`](../harness/network/genesis/foreign-native-genesis-provision.sh)
   via `foreign-native-genesis.yml` to add `12345ua8b3foreign` at genesis. `verify_b3_genesis_delta`
   verifies that no other account balance or supply entry changed. The `b3`
   spelling survives in the evidence file names (`genesis/genesis-before-b3.json`,

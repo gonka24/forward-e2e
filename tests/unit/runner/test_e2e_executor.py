@@ -117,7 +117,6 @@ POLICY_LIVE_CONTEXT_RELPATH = "live-context.json"
 PRODUCER_LIVE_CONTEXT_RELPATH = "evidence/live-context.json"
 
 
-
 # ---------------------------------------------------------------------------
 # synthetic fixtures
 # ---------------------------------------------------------------------------
@@ -182,7 +181,7 @@ class E2EExecutorTests(unittest.TestCase):
     # -- helpers -------------------------------------------------------
     def observed_image(self, image_id: str = RUNNER_IMAGE_ID) -> RunnerImageIdentity:
         return RunnerImageIdentity(
-            locator="a8-runner:local",
+            locator="forward-e2e-runner:local",
             image_id=image_id,
             repo_digest=None,
             locator_is_immutable=False,
@@ -291,7 +290,7 @@ class E2EExecutorTests(unittest.TestCase):
     def test_the_executor_persists_the_environment_record_even_when_runtime_preparation_fails(self):
         payload = self.lock.to_dict()
         payload["semantic_inputs"] = {
-            "semantic_environment": {"A8_PROOF_LEVEL": "native"},
+            "semantic_environment": {"E2E_PROOF_LEVEL": "native"},
             "operational_environment_names": [],
         }
         self.lock = RunLock.from_dict(payload)
@@ -301,7 +300,7 @@ class E2EExecutorTests(unittest.TestCase):
         primary = BuildProvenanceError("Synthetic preparation failure")
         with patch.dict(
             os.environ,
-            {"A8_PROOF_LEVEL": "smoke", "A8_EXPECTED_PROTO_SHA": "0" * 64},
+            {"E2E_PROOF_LEVEL": "smoke", "E2E_EXPECTED_PROTO_SHA": "0" * 64},
             clear=True,
         ):
             with self.assertRaises(BuildProvenanceError) as caught:
@@ -310,9 +309,9 @@ class E2EExecutorTests(unittest.TestCase):
         for root in (self.workspace_dir / run_id / "run", self.output_dir / run_id):
             with self.subTest(root=root):
                 record = self.read_json(root / BUILD_MANIFEST_FILENAME)["execution_environment"]
-                self.assertEqual(record["restored"], ["A8_PROOF_LEVEL"])
-                self.assertEqual(record["overridden_from_shell"], ["A8_PROOF_LEVEL"])
-                self.assertEqual(record["cleared_ambient"], ["A8_EXPECTED_PROTO_SHA"])
+                self.assertEqual(record["restored"], ["E2E_PROOF_LEVEL"])
+                self.assertEqual(record["overridden_from_shell"], ["E2E_PROOF_LEVEL"])
+                self.assertEqual(record["cleared_ambient"], ["E2E_EXPECTED_PROTO_SHA"])
 
     def test_a_nonzero_suite_exit_remains_a_failure_after_report_and_recovery_even_with_green_evidence(self):
         from forward_e2e.execution.cli import cmd_recover, cmd_report, parse_e2e_args
@@ -1317,7 +1316,7 @@ class E2EExecutorTests(unittest.TestCase):
             contracts_bundle_sha256=hashlib.sha256(self.contracts_bundle_bytes).hexdigest(),
             scenarios=(NATIVE_TASK_ID, BOUNDARY_TASK_ID, "go-query-error-classification"),
         )
-        requested = [NATIVE_TASK_ID, BOUNDARY_TASK_ID, "go-boundary"]
+        requested = [NATIVE_TASK_ID, BOUNDARY_TASK_ID, "go-query-error-classification"]
         tasks, profile, normalised = resolve_e2e_selection(scenarios=requested)
         # Use the normalized selection that the planner actually records.
         self.lock.selection = _selection_section(profile, normalised, tasks)

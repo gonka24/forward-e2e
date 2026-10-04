@@ -77,18 +77,6 @@ ENV_EXPECTED_PROTO_SHA = "E2E_EXPECTED_PROTO_SHA"
 ENV_EXPECTED_RUNTIME = "E2E_EXPECTED_RUNTIME"
 ENV_EVIDENCE_MODEL = "E2E_EVIDENCE_MODEL"
 
-LEGACY_ENV_EXPECTED_GONKA_SHA = "A8_EXPECTED_GONKA_SHA"
-LEGACY_ENV_EXPECTED_PROTO_SHA = "A8_EXPECTED_PROTO_SHA"
-LEGACY_ENV_EXPECTED_RUNTIME = "A8_EXPECTED_RUNTIME"
-LEGACY_ENV_EVIDENCE_MODEL = "A8_EVIDENCE_MODEL"
-
-LEGACY_ENV_ALIASES: dict[str, str] = {
-    ENV_EXPECTED_GONKA_SHA: LEGACY_ENV_EXPECTED_GONKA_SHA,
-    ENV_EXPECTED_PROTO_SHA: LEGACY_ENV_EXPECTED_PROTO_SHA,
-    ENV_EXPECTED_RUNTIME: LEGACY_ENV_EXPECTED_RUNTIME,
-    ENV_EVIDENCE_MODEL: LEGACY_ENV_EVIDENCE_MODEL,
-}
-
 #: Variables of the removed overlay / prepared-tree model. They are refused, not
 #: ignored: a caller still setting them is asking for a tree that differs from
 #: the selected commit, which the immutable-source model never grants.
@@ -123,29 +111,13 @@ KNOWN_EVIDENCE_MODELS = (*HISTORICAL_EVIDENCE_MODELS, EVIDENCE_MODEL_IMMUTABLE)
 _FULL_SHA_CHARS = set("0123456789abcdef")
 
 
-def _read_env_with_legacy_alias(canonical: str) -> tuple[str, str]:
-    """Read an expectation variable from ``E2E_*`` or its legacy ``A8_*`` alias.
-
-    Returns ``(value, source_var_name)``. If both are set and non-empty with
-    different values, fails closed with ``AcceptanceError`` naming both variables.
-    """
-    legacy = LEGACY_ENV_ALIASES.get(canonical, "")
-    c_val = (os.environ.get(canonical) or "").strip()
-    l_val = (os.environ.get(legacy) or "").strip() if legacy else ""
-    if c_val and l_val and c_val != l_val:
-        raise AcceptanceError(
-            f"conflicting environment variables {canonical}={c_val!r} and {legacy}={l_val!r}; "
-            f"set only {canonical} (or set both to the exact same value)"
-        )
-    if c_val:
-        return c_val, canonical
-    if l_val:
-        return l_val, legacy
-    return "", canonical
+def _read_expectation_env(name: str) -> tuple[str, str]:
+    """Read the current expectation variable and its diagnostic name."""
+    return (os.environ.get(name) or "").strip(), name
 
 
 def _env_sha(name: str, default: str | None = None) -> str:
-    raw, source_name = _read_env_with_legacy_alias(name)
+    raw, source_name = _read_expectation_env(name)
     value = raw.lower()
     if not value:
         if default is not None:
@@ -195,7 +167,7 @@ def evidence_model() -> str:
     Unset defaults to EVIDENCE_MODEL_IMMUTABLE. A historical (overlay or
     prepared-build) declaration or an unknown model is refused.
     """
-    value, source_name = _read_env_with_legacy_alias(ENV_EVIDENCE_MODEL)
+    value, source_name = _read_expectation_env(ENV_EVIDENCE_MODEL)
     if not value:
         return EVIDENCE_MODEL_IMMUTABLE
     return _refuse_evidence_model(value, source_name)
@@ -219,7 +191,7 @@ def expected_runtime_versions() -> dict[str, str]:
     historical SHA fallback). An E2E plan overrides ``wasmd`` / ``wasmvm`` and
     ``gonka_source_sha`` with values measured from the selected sources.
     """
-    raw, _ = _read_env_with_legacy_alias(ENV_EXPECTED_RUNTIME)
+    raw, _ = _read_expectation_env(ENV_EXPECTED_RUNTIME)
     overrides: dict[str, str] = {}
     for chunk in raw.replace("\n", ",").split(","):
         item = chunk.strip()
@@ -1616,7 +1588,6 @@ def apply_expectation_overrides(args: argparse.Namespace) -> dict[str, str]:
     for attribute, variable in simple:
         value = (getattr(args, attribute, None) or "").strip()
         if value:
-            os.environ.pop(LEGACY_ENV_ALIASES[variable], None)
             os.environ[variable] = value
             validated = _env_sha(variable)
             os.environ[variable] = validated
@@ -1629,7 +1600,6 @@ def apply_expectation_overrides(args: argparse.Namespace) -> dict[str, str]:
                 f"--expected-runtime expects FIELD=VALUE, got {pair!r}"
             )
     if pairs:
-        os.environ.pop(LEGACY_ENV_ALIASES[ENV_EXPECTED_RUNTIME], None)
         os.environ[ENV_EXPECTED_RUNTIME] = ",".join(pairs)
         exported[ENV_EXPECTED_RUNTIME] = os.environ[ENV_EXPECTED_RUNTIME]
 
@@ -1647,7 +1617,6 @@ def apply_expectation_overrides(args: argparse.Namespace) -> dict[str, str]:
             raise AcceptanceError(
                 f"--evidence-model expects {EVIDENCE_MODEL_IMMUTABLE!r}, got {model!r}"
             )
-        os.environ.pop(LEGACY_ENV_ALIASES[ENV_EVIDENCE_MODEL], None)
         os.environ[ENV_EVIDENCE_MODEL] = model
         exported[ENV_EVIDENCE_MODEL] = model
     return exported
@@ -1733,12 +1702,6 @@ LIVE_SCENARIO_TESTS: dict[str, str] = {
         "MarketplaceContractAcceptanceTests.marketplace native release rejects selected "
         "second Bank send then retries once"
     ),
-}
-LEGACY_LIVE_SCENARIO_ALIASES: dict[str, str] = {
-    "b3-foreign-native": "foreign-native-preservation",
-    "package-a-r1-r2": "refund-boundary-and-vesting-addition",
-    "package-b-r6-1": "usdt-withdrawal-failure-recovery",
-    "package-b-r7-1": "native-release-rollback-retry",
 }
 B3_SCENARIO = "foreign-native-preservation"
 SOURCE_IMMUTABILITY_SCHEMA = "a8.source-immutability-set/1"
@@ -1986,14 +1949,7 @@ def run_live(args: argparse.Namespace) -> None:
         raise AcceptanceError(
             "--manifest is required by the E2E runner; standalone A9 release build in run-live is not supported"
         )
-    scenario = LEGACY_LIVE_SCENARIO_ALIASES.get(args.scenario, args.scenario)
-    if scenario != args.scenario:
-        # stderr on purpose: stdout carries the JSON lines Testermint parses.
-        print(
-            f"notice: live scenario alias {args.scenario!r} is deprecated; running "
-            f"{scenario!r} (see docs/migration.md for the removal schedule)",
-            file=sys.stderr,
-        )
+    scenario = args.scenario
     if scenario not in LIVE_SCENARIO_TESTS:
         raise AcceptanceError(f"unknown live scenario {args.scenario!r}")
     test_name = LIVE_SCENARIO_TESTS[scenario]
@@ -2113,43 +2069,29 @@ def run_live(args: argparse.Namespace) -> None:
         write_harness_inputs(gonka_dir, harness_dir, layout, external_dir)
 
         # 6. The external harness test run.
-        runtime_override, _ = _read_env_with_legacy_alias(ENV_EXPECTED_RUNTIME)
+        runtime_override, _ = _read_expectation_env(ENV_EXPECTED_RUNTIME)
         proto_sha = expected_proto_sha()
         env = {
             "E2E_PYTHON": "/usr/bin/python3",
-            "A8_PYTHON": "/usr/bin/python3",
             # Testermint re-enters this harness for bootstrap and for every
             # scenario phase. It must re-enter *this* script - the one the
             # runner image owns and the lock records - and never a copy that
             # happens to sit in the checkout under test.
             "E2E_HARNESS": str(HARNESS_SCRIPT_PATH),
-            "A8_HARNESS": str(HARNESS_SCRIPT_PATH),
             "E2E_MARKETPLACE_DIR": str(repo),
-            "A8_MARKETPLACE_DIR": str(repo),
             "E2E_GONKA_DIR": str(gonka_dir),
-            "A8_GONKA_DIR": str(gonka_dir),
             "E2E_CONTEXT": str(context),
-            "A8_CONTEXT": str(context),
             "E2E_RUN_ID": run_id,
-            "A8_RUN_ID": run_id,
             "E2E_DEAL_WASM": str(deal),
-            "A8_DEAL_WASM": str(deal),
             "E2E_FACTORY_WASM": str(factory),
-            "A8_FACTORY_WASM": str(factory),
             "E2E_CW20_WASM": str(cw20),
-            "A8_CW20_WASM": str(cw20),
             "E2E_CALLER_WASM": str(caller),
-            "A8_CALLER_WASM": str(caller),
             ENV_EXPECTED_GONKA_SHA: requested_gonka_sha,
-            LEGACY_ENV_EXPECTED_GONKA_SHA: requested_gonka_sha,
             ENV_EXPECTED_PROTO_SHA: proto_sha,
-            LEGACY_ENV_EXPECTED_PROTO_SHA: proto_sha,
             ENV_EVIDENCE_MODEL: model,
-            LEGACY_ENV_EVIDENCE_MODEL: model,
             **(
                 {
                     ENV_EXPECTED_RUNTIME: runtime_override,
-                    LEGACY_ENV_EXPECTED_RUNTIME: runtime_override,
                 }
                 if runtime_override
                 else {}
@@ -2158,11 +2100,8 @@ def run_live(args: argparse.Namespace) -> None:
             # from the Gonka snapshot. Provenance is proven separately.
             "GONKA_REPO_ROOT": str(layout.network_root),
             "E2E_CONTAINER_CONTROL": str(external_harness.CONTAINER_CONTROL_PATH),
-            "A8_CONTAINER_CONTROL": str(external_harness.CONTAINER_CONTROL_PATH),
             "E2E_CONTAINER_CONTROL_STATE_DIR": str(container_control_dir),
-            "A8_CONTAINER_CONTROL_STATE_DIR": str(container_control_dir),
             "E2E_OWNERSHIP_LABEL": external_harness.OWNERSHIP_LABEL,
-            "A8_OWNERSHIP_LABEL": external_harness.OWNERSHIP_LABEL,
             **external_harness.gradle_environment(layout),
         }
         try:
@@ -6517,22 +6456,6 @@ def wasm_query_allowlist(args: argparse.Namespace) -> None:
     )
 
 
-def p0_probe(args: argparse.Namespace) -> None:
-    """Deprecated alias of ``wasm-query-allowlist``.
-
-    Kept so operator notes that still say ``p0-probe`` keep working; the notice
-    goes to stderr because stdout carries the JSON result. The on-chain labels
-    the probe stores under (``p0-probe``, ``a8-p0-probe-<run_id>``) are not
-    renamed: they are wire-visible identifiers, not command names.
-    """
-    print(
-        "notice: the 'p0-probe' subcommand is a deprecated alias of "
-        "'wasm-query-allowlist' (see docs/migration.md for the removal schedule)",
-        file=sys.stderr,
-    )
-    wasm_query_allowlist(args)
-
-
 def parser() -> argparse.ArgumentParser:
     root = argparse.ArgumentParser(description=__doc__)
     commands = root.add_subparsers(dest="command", required=True)
@@ -6826,12 +6749,6 @@ def parser() -> argparse.ArgumentParser:
     allowlist_parser.add_argument("--wasm", required=True)
     allowlist_parser.set_defaults(handler=wasm_query_allowlist)
 
-    p0_parser = commands.add_parser(
-        "p0-probe", help="deprecated alias of wasm-query-allowlist (prints a notice)",
-    )
-    p0_parser.add_argument("--context", required=True)
-    p0_parser.add_argument("--wasm", required=True)
-    p0_parser.set_defaults(handler=p0_probe)
 
     run_parser = commands.add_parser("run-live")
     run_parser.add_argument("--marketplace-dir", default=".")
@@ -6900,10 +6817,7 @@ def parser() -> argparse.ArgumentParser:
     run_parser.add_argument("--run-id")
     run_parser.add_argument(
         "--scenario",
-        choices=(
-            *LIVE_SCENARIO_TESTS.keys(),
-            *LEGACY_LIVE_SCENARIO_ALIASES.keys(),
-        ),
+        choices=tuple(LIVE_SCENARIO_TESTS),
         default="funded-claim",
         help="run the single funded happy-path test or one isolated acceptance scenario",
     )

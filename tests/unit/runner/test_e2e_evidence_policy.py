@@ -38,7 +38,7 @@ from pathlib import Path
 
 from forward_e2e.suite.catalog import (
     BOUNDARY_TASKS,
-    get_task_by_id_or_alias,
+    get_task_by_id,
     resolve_e2e_selection,
 )
 from forward_e2e.suite.collector import classify_artifact_kind, collect_snapshot_artifacts, update_artifact_index
@@ -327,7 +327,7 @@ class SelectionDerivesPerTaskRunIdsTests(unittest.TestCase):
     def test_a_mixed_lock_selection_yields_each_tasks_own_catalog_ordered_run_id(self):
         """Boundary tasks come first because the catalog says so, not the CLI."""
         selection, tasks = selection_section(
-            scenarios=["lock-exact-e", "go-boundary", "funded-claim"]
+            scenarios=["lock-exact-e", "go-query-error-classification", "funded-claim"]
         )
         lock = make_lock(selection)
 
@@ -364,7 +364,7 @@ class SelectionDerivesPerTaskRunIdsTests(unittest.TestCase):
         ``-01-lock-exact-e`` and find nothing, which is precisely the class of
         bug that made the runner unable to say what a task owed.
         """
-        requested = ["lock-exact-e", "go-boundary", "funded-claim", "lock-exact-e"]
+        requested = ["lock-exact-e", "go-query-error-classification", "funded-claim", "lock-exact-e"]
         selection, _ = selection_section(scenarios=requested)
 
         run_ids = [task.run_id(SUITE_ID) for task in selected_tasks_from_lock(make_lock(selection))]
@@ -401,7 +401,7 @@ class SelectionDerivesPerTaskRunIdsTests(unittest.TestCase):
 
     def test_a_suite_plan_derives_the_run_ids_the_suite_itself_used(self):
         """The producer's own record wins for *locating* evidence."""
-        _, tasks = selection_section(scenarios=["go-boundary", "lock-exact-e"])
+        _, tasks = selection_section(scenarios=["go-query-error-classification", "lock-exact-e"])
         plan = suite_plan_for(tasks)
 
         selected = selected_tasks_from_suite_plan(plan.to_dict())
@@ -428,7 +428,7 @@ class SelectionDerivesPerTaskRunIdsTests(unittest.TestCase):
         but the disagreement itself is a finding: a suite that quietly ran
         something else must not be graded against the set nobody ran.
         """
-        lock_selection, _ = selection_section(scenarios=["go-boundary", "lock-exact-e"])
+        lock_selection, _ = selection_section(scenarios=["go-query-error-classification", "lock-exact-e"])
         _, planned_tasks = selection_section(scenarios=["lock-exact-e"])
 
         requirements, disagreements = requirements_from_documents(
@@ -512,7 +512,7 @@ class UnreadableSelectionIsAHardErrorTests(unittest.TestCase):
         A runner that shrugged here would demand nothing of that task and grade
         the run green on no evidence at all.
         """
-        selection, _ = selection_section(scenarios=["go-boundary", "lock-exact-e"])
+        selection, _ = selection_section(scenarios=["go-query-error-classification", "lock-exact-e"])
         selection["proof_levels"]["lock-exact-e"] = "NATIVE_LITE"
 
         with self.assertRaises(EvidencePolicyError) as caught:
@@ -523,7 +523,7 @@ class UnreadableSelectionIsAHardErrorTests(unittest.TestCase):
 
     def test_a_selection_that_records_no_proof_level_for_a_selected_task_raises(self):
         """Negative case: the proof level of one selected task is simply absent."""
-        selection, _ = selection_section(scenarios=["go-boundary", "lock-exact-e"])
+        selection, _ = selection_section(scenarios=["go-query-error-classification", "lock-exact-e"])
         del selection["proof_levels"]["lock-exact-e"]
 
         with self.assertRaises(EvidencePolicyError) as caught:
@@ -534,7 +534,7 @@ class UnreadableSelectionIsAHardErrorTests(unittest.TestCase):
 
     def test_a_suite_plan_task_entry_with_an_unknown_proof_level_raises(self):
         """Negative case: the same corruption, in the producer's own document."""
-        _, tasks = selection_section(scenarios=["go-boundary"])
+        _, tasks = selection_section(scenarios=["go-query-error-classification"])
         payload = suite_plan_for(tasks).to_dict()
         payload["tasks"][0]["proof_level"] = "GO_BOUNDARY_LITE"
 
@@ -609,7 +609,7 @@ class PerProofLevelRequirementsTests(unittest.TestCase):
         # The declared artefacts come from the real catalog entry.
         self.assertEqual(
             list(requirement.expected_artifacts),
-            list(get_task_by_id_or_alias("lock-exact-e").expected_artifacts),
+            list(get_task_by_id("lock-exact-e").expected_artifacts),
         )
         self.assertIn(LIVE_CONTEXT_FILENAME, requirement.expected_artifacts)
 
@@ -728,7 +728,7 @@ class PerProofLevelRequirementsTests(unittest.TestCase):
 
     def test_a_boundary_task_that_did_write_a_live_context_is_recorded_rather_than_ignored(self):
         """An unexpected artefact is reported, not quietly treated as proof."""
-        selection, _ = selection_section(scenarios=["go-boundary"])
+        selection, _ = selection_section(scenarios=["go-query-error-classification"])
         lock = make_lock(selection)
         requirements = requirements_for(
             selected_tasks_from_lock(lock),
@@ -738,7 +738,7 @@ class PerProofLevelRequirementsTests(unittest.TestCase):
         write_live_context(
             self.suite_dir,
             requirements[0].run_id,
-            live_context_payload(task_id="go-boundary", run_id=requirements[0].run_id),
+            live_context_payload(task_id="go-query-error-classification", run_id=requirements[0].run_id),
         )
 
         located = locate_task_evidence(requirements, suite_dir=self.suite_dir)
@@ -1282,10 +1282,10 @@ class GoBoundaryArtifactsAreCollectedTests(unittest.TestCase):
     def setUp(self):
         self.tmp_dir = tempfile.TemporaryDirectory(prefix=TEMP_PREFIX)
         self.root = Path(self.tmp_dir.name)
-        self.runtime_root = self.root / "a8-runtime"
+        self.runtime_root = self.root / "forward-e2e-runtime"
         self.suite_dir = self.root / "suite" / SUITE_ID
         self.suite_dir.mkdir(parents=True)
-        self.catalog_task = get_task_by_id_or_alias("go-boundary")
+        self.catalog_task = get_task_by_id("go-query-error-classification")
         self.run_id = make_task_run_id(SUITE_ID, self.catalog_task.ordinal, self.catalog_task.task_id)
 
     def tearDown(self):

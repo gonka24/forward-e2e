@@ -29,7 +29,7 @@ from typing import Any, Callable, Dict, List, Optional, Sequence, Tuple
 from .adapters import BoundaryTaskAdapter, NativeTaskAdapter
 from .catalog import (
     compute_catalog_hash,
-    get_task_by_id_or_alias,
+    get_task_by_id,
 )
 from .collector import (
     ALLOWED_ARTIFACT_PATTERNS,
@@ -442,9 +442,7 @@ class SuiteOrchestrator:
         self.marketplace_dir = Path(marketplace_dir).resolve()
         self.gonka_dir = Path(gonka_dir).resolve() if gonka_dir else None
 
-        from forward_e2e.suite.runtime import resolve_suite_env
-
-        env_workspace = resolve_suite_env("E2E_WORKSPACE_DIR", "A8_WORKSPACE_DIR")
+        env_workspace = os.environ.get("E2E_WORKSPACE_DIR", "").strip()
         if workspace_dir:
             self.workspace_dir: Optional[Path] = Path(workspace_dir).resolve()
         elif env_workspace:
@@ -452,7 +450,7 @@ class SuiteOrchestrator:
         else:
             self.workspace_dir = None
 
-        env_output = resolve_suite_env("E2E_OUTPUT_DIR", "A8_OUTPUT_DIR")
+        env_output = os.environ.get("E2E_OUTPUT_DIR", "").strip()
         if output_dir:
             self.output_dir = Path(output_dir).resolve()
         elif env_output:
@@ -499,7 +497,7 @@ class SuiteOrchestrator:
             if not isinstance(task, TaskPlan):
                 print(f"Parameter validation error: invalid task entry at index {idx}", file=sys.stderr)
                 return 2
-            cat_task = get_task_by_id_or_alias(task.task_id)
+            cat_task = get_task_by_id(task.task_id)
             if cat_task is None or cat_task.task_id != task.task_id:
                 print(f"Parameter validation error: unknown task {task.task_id!r}", file=sys.stderr)
                 return 2

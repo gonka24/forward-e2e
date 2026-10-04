@@ -177,11 +177,7 @@ RUN git config --system --add safe.directory /input/marketplace \
 RUN cp /app/ops/runner/entrypoint.sh /usr/local/bin/e2e-entrypoint \
     && chmod +x /usr/local/bin/e2e-entrypoint
 
-# Default runtime environment variables. Only the canonical E2E_* names are
-# baked in: every reader inside the image resolves E2E_* first and falls back
-# to A8_* only when the canonical name is unset, so a baked A8_* twin had no
-# consumer and only turned an operator's `-e E2E_WORKSPACE_DIR=...` override
-# into a phantom "conflicting environment variables" refusal.
+# Default operational paths inside the Linux runner.
 ENV E2E_WORKSPACE_DIR=/workspace \
     E2E_OUTPUT_DIR=/out \
     DOCKER_HOST=unix:///var/run/docker.sock \

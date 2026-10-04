@@ -72,9 +72,9 @@ class RunnerImageResolutionTests(unittest.TestCase):
             docker_runner=docker, env={}, emit=self.emitted.append
         )
 
-        self.assertEqual(DEFAULT_RUNNER_IMAGE_LOCATOR, "a8-runner:local")
-        self.assertEqual(identity.locator, "a8-runner:local")
-        self.assertEqual(docker.calls, [["docker", "image", "inspect", "a8-runner:local"]])
+        self.assertEqual(DEFAULT_RUNNER_IMAGE_LOCATOR, "forward-e2e-runner:local")
+        self.assertEqual(identity.locator, "forward-e2e-runner:local")
+        self.assertEqual(docker.calls, [["docker", "image", "inspect", "forward-e2e-runner:local"]])
         self.assertEqual(identity.image_id, IMAGE_ID)
         self.assertEqual(identity.resolved_by, "docker-inspect")
         self.assertFalse(identity.locator_is_immutable)
@@ -153,7 +153,7 @@ class RunnerImageResolutionTests(unittest.TestCase):
     def test_a_local_build_digest_is_a_retrieval_hint_not_proof_of_publication(self):
         local_digest = "a8-runner@sha256:" + "d" * 64
         identity = resolve_runner_image(
-            "a8-runner:local", env={},
+            "forward-e2e-runner:local", env={},
             docker_runner=FakeDockerRunner(entries=one_entry(repo_digests=[local_digest])),
         )
         self.assertEqual(identity.repo_digest, local_digest)
@@ -163,7 +163,7 @@ class RunnerImageResolutionTests(unittest.TestCase):
         docker = FakeDockerRunner(entries=one_entry())
 
         resolve_runner_image(
-            "a8-runner:local", docker_runner=docker, env={}, emit=self.emitted.append
+            "forward-e2e-runner:local", docker_runner=docker, env={}, emit=self.emitted.append
         )
 
         self.assertTrue(any("is a mutable tag" in message for message in self.emitted))
@@ -216,7 +216,7 @@ class RunnerImageResolutionTests(unittest.TestCase):
         self.assertTrue(identity.locator_is_immutable)
         self.assertTrue(locator_is_immutable(REPO_DIGEST))
         self.assertTrue(locator_is_immutable("sha256:" + "d" * 64))
-        self.assertFalse(locator_is_immutable("a8-runner:local"))
+        self.assertFalse(locator_is_immutable("forward-e2e-runner:local"))
         self.assertFalse(any("is a mutable tag" in message for message in self.emitted))
 
     def test_missing_image_produces_an_actionable_error_not_a_traceback(self):
@@ -231,7 +231,7 @@ class RunnerImageResolutionTests(unittest.TestCase):
         self.assertIn("--runner-image", message)
         self.assertEqual(cm.exception.code, "RUNNER_IMAGE_MISMATCH")
         self.assertEqual(cm.exception.exit_code, 1)
-        self.assertEqual(cm.exception.details["locator"], "a8-runner:local")
+        self.assertEqual(cm.exception.details["locator"], "forward-e2e-runner:local")
         self.assertIn("No such image", cm.exception.details["stderr"])
 
     def test_failure_to_launch_docker_is_reported_as_a_structured_runner_error(self):
@@ -280,7 +280,7 @@ class RunnerImageResolutionTests(unittest.TestCase):
             resolve_runner_image(docker_runner=docker, env={})
 
         self.assertIn("docker image inspect did not return JSON", str(cm.exception))
-        self.assertEqual(cm.exception.details["locator"], "a8-runner:local")
+        self.assertEqual(cm.exception.details["locator"], "forward-e2e-runner:local")
 
     def test_inspect_returning_no_entries_is_reported(self):
         docker = FakeDockerRunner(entries=[])
@@ -346,7 +346,7 @@ class RunnerImageResolutionTests(unittest.TestCase):
 class RunnerImageLockEnforcementTests(unittest.TestCase):
     def setUp(self):
         self.locked = {
-            "locator": "a8-runner:local",
+            "locator": "forward-e2e-runner:local",
             "image_id": IMAGE_ID,
             "repo_digest": None,
             "locator_is_immutable": False,
@@ -356,7 +356,7 @@ class RunnerImageLockEnforcementTests(unittest.TestCase):
 
     def observed(self, image_id=IMAGE_ID, repo_digest=None):
         return RunnerImageIdentity(
-            locator="a8-runner:local",
+            locator="forward-e2e-runner:local",
             image_id=image_id,
             repo_digest=repo_digest,
             locator_is_immutable=False,
@@ -428,7 +428,7 @@ class RunnerImageLockEnforcementTests(unittest.TestCase):
 
     def test_lock_without_a_recorded_image_id_is_refused(self):
         with self.assertRaises(RunnerImageError) as cm:
-            assert_runner_image_matches({"locator": "a8-runner:local"}, self.observed())
+            assert_runner_image_matches({"locator": "forward-e2e-runner:local"}, self.observed())
 
         self.assertIn("The lock does not record a runner image id", str(cm.exception))
 

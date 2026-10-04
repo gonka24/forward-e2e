@@ -9,7 +9,7 @@ from pathlib import Path
 import tempfile
 import unittest
 
-from forward_e2e.suite.catalog import get_task_by_id_or_alias
+from forward_e2e.suite.catalog import get_task_by_id
 from forward_e2e.suite.models import (
     CleanupStatus, EvidenceStatus, ExecutionStatus, SuiteResult, TaskPlan,
     calculate_suite_outcome,
@@ -89,7 +89,7 @@ class SuiteOutcomeTests(unittest.TestCase):
                 ), (ExecutionStatus.CANCELLED, code))
 
     def test_timeout_fallback_converts_minutes_before_multiplying(self):
-        positive = get_task_by_id_or_alias("wasm-abi-boundary").to_dict()
+        positive = get_task_by_id("wasm-abi-boundary").to_dict()
         for minutes in (15, "15"):
             with self.subTest(minutes=minutes):
                 document = dict(positive, timeout_minutes=minutes)

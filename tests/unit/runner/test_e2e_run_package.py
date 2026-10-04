@@ -233,7 +233,7 @@ class RunPackageCase(unittest.TestCase):
     # -- helpers ---------------------------------------------------------
     def observed_image(self) -> RunnerImageIdentity:
         return RunnerImageIdentity(
-            locator="a8-runner:local",
+            locator="forward-e2e-runner:local",
             image_id=RUNNER_IMAGE_ID,
             repo_digest=None,
             locator_is_immutable=False,

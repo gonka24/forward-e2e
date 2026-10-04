@@ -48,7 +48,7 @@ internal class StoppedApiContainer internal constructor(
             timeoutSeconds = START_PROCESS_TIMEOUT_SECONDS,
             "start",
             "--state-file", stateFile.absolutePath,
-            "--run-id", requiredHarnessEnv("E2E_RUN_ID", "A8_RUN_ID"),
+            "--run-id", requiredHarnessEnv("E2E_RUN_ID"),
             "--ready-url", readyUrl,
             "--ready-timeout-seconds", READY_TIMEOUT_SECONDS.toString(),
         )
@@ -70,7 +70,7 @@ internal fun LocalInferencePair.stopApiContainer(): StoppedApiContainer {
     // Same derivation as upstream TestermintContainers.getApi(): "$name-api"
     // with Docker's leading '/' removed.
     val containerName = "${name.trimStart('/')}-api"
-    val stateDir = File(requiredHarnessEnv("E2E_CONTAINER_CONTROL_STATE_DIR", "A8_CONTAINER_CONTROL_STATE_DIR"))
+    val stateDir = File(requiredHarnessEnv("E2E_CONTAINER_CONTROL_STATE_DIR"))
     check(stateDir.isDirectory || stateDir.mkdirs()) {
         "E2E_CONTAINER_CONTROL_STATE_DIR cannot be created: $stateDir"
     }
@@ -85,7 +85,7 @@ internal fun LocalInferencePair.stopApiContainer(): StoppedApiContainer {
         timeoutSeconds = STOP_PROCESS_TIMEOUT_SECONDS,
         "stop",
         "--container-name", containerName,
-        "--run-id", requiredHarnessEnv("E2E_RUN_ID", "A8_RUN_ID"),
+        "--run-id", requiredHarnessEnv("E2E_RUN_ID"),
         "--state-file", stateFile.absolutePath,
     )
     check(stateFile.isFile) {
@@ -126,10 +126,10 @@ private fun awaitApiConfig(pair: LocalInferencePair) {
 
 private fun runContainerControl(phase: String, timeoutSeconds: Long, vararg args: String) {
     val command = listOf(
-        requiredHarnessEnv("E2E_PYTHON", "A8_PYTHON"),
-        requiredHarnessEnv("E2E_CONTAINER_CONTROL", "A8_CONTAINER_CONTROL"),
+        requiredHarnessEnv("E2E_PYTHON"),
+        requiredHarnessEnv("E2E_CONTAINER_CONTROL"),
     ) + args
-    val stateDir = File(requiredHarnessEnv("E2E_CONTAINER_CONTROL_STATE_DIR", "A8_CONTAINER_CONTROL_STATE_DIR"))
+    val stateDir = File(requiredHarnessEnv("E2E_CONTAINER_CONTROL_STATE_DIR"))
     // A non-zero exit (refusal: not owned, ID mismatch, not ready, ...) fails
     // the scenario with the controller's JSON error line in the message.
     val output = runMarketplaceHarnessProcess(
@@ -142,17 +142,9 @@ private fun runContainerControl(phase: String, timeoutSeconds: Long, vararg args
     println(output.trim())
 }
 
-internal fun requiredHarnessEnv(canonicalName: String, legacyName: String): String {
-    val canonicalValue = System.getenv(canonicalName)?.takeIf { it.isNotBlank() }
-    val legacyValue = System.getenv(legacyName)?.takeIf { it.isNotBlank() }
-    if (canonicalValue != null && legacyValue != null && canonicalValue != legacyValue) {
-        error(
-            "Conflicting environment variables $canonicalName and $legacyName: " +
-                "$canonicalName=$canonicalValue != $legacyName=$legacyValue",
-        )
-    }
-    return canonicalValue ?: legacyValue
-        ?: error("Required environment variable $canonicalName (or legacy alias $legacyName) is missing")
+internal fun requiredHarnessEnv(name: String): String {
+    return System.getenv(name)?.takeIf { it.isNotBlank() }
+        ?: error("Required environment variable $name is missing")
 }
 
 private val CONTAINER_CONTROL_SEQUENCE = AtomicInteger(0)

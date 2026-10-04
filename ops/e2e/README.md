@@ -82,4 +82,4 @@ validation steps live in [`docs/`](../../docs/README.md):
 - [`docs/architecture.md`](../../docs/architecture.md) — runner vs target separation and the four isolated filesystem zones.
 - [`docs/evidence.md`](../../docs/evidence.md) — run package layout, `e2e-run-result.json`, and `a8.evidence/e2e-immutable-source/2`.
 - [`docs/validation.md`](../../docs/validation.md) — step-by-step operator and reviewer runbook.
-- [`docs/migration.md`](../../docs/migration.md) — scenario ID and `E2E_*` / `A8_*` environment variable aliases.
+- [`docs/migration.md`](../../docs/migration.md) — repository refactor and current interface policy.

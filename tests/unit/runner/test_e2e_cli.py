@@ -74,8 +74,8 @@ class E2ECliTests(unittest.TestCase):
         # Shell credentials and output defaults must not affect offline fixtures.
         environment = patch.dict(os.environ, {
             "E2E_CREDENTIAL_FILE": "",
-            "A8_OUTPUT_DIR": str(self.output),
-            "A8_WORKSPACE_DIR": str(self.workspace),
+            "E2E_OUTPUT_DIR": str(self.output),
+            "E2E_WORKSPACE_DIR": str(self.workspace),
         })
         environment.start()
         self.addCleanup(environment.stop)
@@ -225,7 +225,7 @@ class E2ECliTests(unittest.TestCase):
     def test_recovery_manifest_lookup_does_not_read_an_external_symlink(self):
         """Recovery must not take its run identity from a linked external manifest. All fixtures are synthetic. No network, Docker, or live chain calls."""
         pkg, _, _, _ = setup_baseline_package(
-            self.root / "e2e-linked-manifest", scenarios=["go-boundary"]
+            self.root / "e2e-linked-manifest", scenarios=["go-query-error-classification"]
         )
         manifest_path = pkg / "execution-manifest.json"
         external = self.root / "external-execution-manifest.json"
@@ -719,7 +719,7 @@ class E2ECliTests(unittest.TestCase):
         stage_dir = run_stage_dir(self.workspace, run_id)
         setup_baseline_package(
             stage_dir,
-            scenarios=["go-boundary"],
+            scenarios=["go-query-error-classification"],
             run_id=run_id,
             delivery_status=DeliveryStatus.COMPLETED,
         )
@@ -748,7 +748,7 @@ class E2ECliTests(unittest.TestCase):
         stage_dir = run_stage_dir(self.workspace, run_id)
         setup_baseline_package(
             stage_dir,
-            scenarios=["go-boundary"],
+            scenarios=["go-query-error-classification"],
             run_id=run_id,
             delivery_status=DeliveryStatus.COMPLETED,
         )

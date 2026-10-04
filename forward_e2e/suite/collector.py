@@ -163,7 +163,7 @@ _BOUNDARY_RUN_MARKERS: Tuple[str, ...] = tuple(
     dict.fromkeys(
         name[:TASK_RUN_ID_TASK_CHARS]
         for task in BOUNDARY_TASKS
-        for name in (task.task_id, *task.aliases)
+        for name in (task.task_id,)
     )
 )
 

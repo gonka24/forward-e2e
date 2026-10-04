@@ -1277,11 +1277,7 @@ class MarketplaceContractAcceptanceTests : TestermintTest() {
         return key.name
     }
 
-    private fun requiredEnv(name: String): String {
-        val canonicalName = if (name.startsWith("A8_")) "E2E_" + name.removePrefix("A8_") else name
-        val legacyName = if (name.startsWith("E2E_")) "A8_" + name.removePrefix("E2E_") else name
-        return requiredHarnessEnv(canonicalName, legacyName)
-    }
+    private fun requiredEnv(name: String): String = requiredHarnessEnv(name)
 
     private companion object {
         const val B3_FOREIGN_KEY = "a8-b3-foreign"

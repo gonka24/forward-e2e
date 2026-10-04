@@ -10,7 +10,7 @@ import tempfile
 import unittest
 from xml.etree import ElementTree as ET
 
-from forward_e2e.suite.catalog import get_task_by_id_or_alias
+from forward_e2e.suite.catalog import get_task_by_id
 from tests.unit.runner.real_fixtures import (
     EVIDENCE_DIR,
     GO_BOUNDARY_EVIDENCE_DIR,
@@ -46,7 +46,7 @@ class ArtifactFixtureTests(unittest.TestCase):
         """
         for scenario, relative, committed_name in (
             ("wasm-abi-boundary", "abi.json", WASM_ABI_EVIDENCE),
-            ("go-boundary", "report.json", f"{GO_BOUNDARY_EVIDENCE_DIR}/report.json"),
+            ("go-query-error-classification", "report.json", f"{GO_BOUNDARY_EVIDENCE_DIR}/report.json"),
         ):
             with self.subTest(scenario=scenario):
                 staged = json.loads(self.artifact(scenario, relative).read_text(encoding="utf-8"))
@@ -76,7 +76,7 @@ class ArtifactFixtureTests(unittest.TestCase):
         self.assertIn("expected exactly 9", error)
 
     def test_go_fixture_passes_real_validator_and_missing_test_is_rejected(self):
-        path = self.artifact("go-boundary", "report.json")
+        path = self.artifact("go-query-error-classification", "report.json")
         self.assertTrue(verify_go_boundary_report(path)[0])
         events = path.parent / "raw/go-test.json"
         recorded = EVIDENCE_DIR / GO_BOUNDARY_EVIDENCE_DIR / "raw/go-test.json"
@@ -101,7 +101,7 @@ class ArtifactFixtureTests(unittest.TestCase):
 
     def test_native_fixture_names_actual_test_and_zero_testcases_is_rejected(self):
         path = self.artifact("lock-exact-e", "junit/TEST-MarketplaceContractAcceptanceTests.xml")
-        method = get_task_by_id_or_alias("lock-exact-e").exact_test_method
+        method = get_task_by_id("lock-exact-e").exact_test_method
         self.assertTrue(verify_junit_xml(path, method)[0])
         tree = ET.parse(path)
         root = tree.getroot()

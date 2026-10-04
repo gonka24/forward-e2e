@@ -24,11 +24,7 @@ git config --system --add safe.directory '/out/*' 2>/dev/null || true
 export GIT_TERMINAL_PROMPT=0
 
 # Ensure the application root is on sys.path even when invoked from another cwd.
-if [ -n "${E2E_APP_ROOT:-}" ] && [ -n "${A8_APP_ROOT:-}" ] && [ "$E2E_APP_ROOT" != "$A8_APP_ROOT" ]; then
-    printf 'error: conflicting environment variables E2E_APP_ROOT=%s and A8_APP_ROOT=%s; unset the legacy A8_APP_ROOT variable or set both to the same value.\n' "$E2E_APP_ROOT" "$A8_APP_ROOT" >&2
-    exit 2
-fi
-APP_ROOT="${E2E_APP_ROOT:-${A8_APP_ROOT:-/app}}"
+APP_ROOT="${E2E_APP_ROOT:-/app}"
 cd "$APP_ROOT" || {
     printf 'error: the runner application root %s is missing from this image.\n' "$APP_ROOT" >&2
     exit 1

@@ -89,7 +89,7 @@ class BootstrapSourceProvenanceTests(unittest.TestCase):
 
 
 class HarnessSelectionTests(unittest.TestCase):
-    """``A8_HARNESS`` must name the runner's own harness, never the target's.
+    """``E2E_HARNESS`` must name the runner's own harness, never the target's.
 
     The run-live behaviour (the env Testermint receives) is exercised end to
     end in ``test_acceptance_harness_run_live.py``; this pins the constant itself.

@@ -9,11 +9,10 @@ import unittest
 from unittest.mock import patch
 
 from forward_e2e.suite.catalog import (
-    LEGACY_SCENARIO_ALIASES,
     NATIVE_TASKS,
     compute_catalog_hash,
     get_profile_tasks,
-    get_task_by_id_or_alias,
+    get_task_by_id,
     resolve_e2e_selection,
 )
 from forward_e2e.suite.models import ProofLevel
@@ -53,32 +52,14 @@ class CatalogTests(unittest.TestCase):
             self.assertEqual(t.proof_level, ProofLevel.NATIVE)
 
     def test_funded_claim_exact_id_resolution_and_rejection_of_legacy_full_alias(self):
-        t1 = get_task_by_id_or_alias("funded-claim")
+        t1 = get_task_by_id("funded-claim")
         self.assertIsNotNone(t1)
         self.assertEqual(t1.task_id, "funded-claim")
 
-        self.assertIsNone(get_task_by_id_or_alias("full"))
+        self.assertIsNone(get_task_by_id("full"))
         with self.assertRaisesRegex(ValueError, "Unknown scenario: 'full'"):
             resolve_e2e_selection(scenarios=["full"])
 
-    def test_legacy_scenario_aliases_resolve_to_canonical_tasks(self):
-        expected_aliases = {
-            "b3-foreign-native": "foreign-native-preservation",
-            "package-a-r1-r2": "refund-boundary-and-vesting-addition",
-            "package-b-r6-1": "usdt-withdrawal-failure-recovery",
-            "package-b-r7-1": "native-release-rollback-retry",
-            "go-boundary": "go-query-error-classification",
-            "ct-network-unconfirmed": "contract-network-unconfirmed-policy",
-            "ct-claim-expiry": "contract-claim-expiry-policy",
-            "ct-package-c-policy": "contract-query-fault-policy",
-        }
-        self.assertEqual(dict(LEGACY_SCENARIO_ALIASES), expected_aliases)
-        for alias, canonical in expected_aliases.items():
-            with self.subTest(alias=alias):
-                task = get_task_by_id_or_alias(alias)
-                self.assertIsNotNone(task)
-                self.assertEqual(task.task_id, canonical)
-                self.assertIn(alias, task.aliases)
 
     def test_smoke_profile_is_lock_exact_e_only(self):
         tasks = get_profile_tasks("smoke")
@@ -127,7 +108,7 @@ class CatalogTests(unittest.TestCase):
         baseline = compute_catalog_hash()
         for task_id in ("funded-claim", "go-query-error-classification"):
             with self.subTest(task_id=task_id):
-                task = get_task_by_id_or_alias(task_id)
+                task = get_task_by_id(task_id)
                 self.assertIsNotNone(task)
                 # Change one fact on a real catalog entry: a lock must detect
                 # a changed execution budget in either part of the catalog.
@@ -136,6 +117,19 @@ class CatalogTests(unittest.TestCase):
                 ):
                     self.assertNotEqual(compute_catalog_hash(), baseline)
                 self.assertEqual(compute_catalog_hash(), baseline)
+
+
+class CurrentScenarioNamesTests(unittest.TestCase):
+    def test_removed_scenario_names_are_unknown_instead_of_selecting_another_task(self):
+        for old_name in (
+            "b3-foreign-native", "package-a-r1-r2", "package-b-r6-1",
+            "package-b-r7-1", "go-boundary", "ct-network-unconfirmed",
+            "ct-claim-expiry", "ct-package-c-policy",
+        ):
+            with self.subTest(scenario=old_name):
+                self.assertIsNone(get_task_by_id(old_name))
+                with self.assertRaisesRegex(ValueError, "Unknown scenario"):
+                    resolve_e2e_selection(scenarios=[old_name])
 
 
 if __name__ == "__main__":

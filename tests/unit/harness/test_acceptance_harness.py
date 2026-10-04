@@ -378,7 +378,7 @@ class AcceptanceHarnessTests(unittest.TestCase):
                     a8.refuse_legacy_overlay_environment()
 
     def test_prepared_package_selectors_are_available(self):
-        for scenario in ("package-a-r1-r2", "package-b-r6-1", "package-b-r7-1"):
+        for scenario in ("refund-boundary-and-vesting-addition", "usdt-withdrawal-failure-recovery", "native-release-rollback-retry"):
             parsed = a8.parser().parse_args(
                 [
                     "run-live",
@@ -1999,9 +1999,9 @@ class AcceptanceHarnessTests(unittest.TestCase):
             "--expected-gonka-sha",
             "1" * 40,
             "--scenario",
-            "package-a-r1-r2",
+            "refund-boundary-and-vesting-addition",
         ])
-        self.assertEqual(live.scenario, "package-a-r1-r2")
+        self.assertEqual(live.scenario, "refund-boundary-and-vesting-addition")
 
         checkpoint = a8.parser().parse_args([
             "r2-gift-checkpoint", "--context", "evidence.json", "--name", "r2",
@@ -2235,27 +2235,6 @@ class AcceptanceHarnessTests(unittest.TestCase):
         self.assertFalse(hasattr(a8, "EXPECTED_GONKA_SHA"))
         self.assertFalse(hasattr(a8, "EXPECTED_GONKA_BASE_SHA"))
 
-    def test_p0_probe_command_requires_context_and_wasm(self):
-        args = a8.parser().parse_args(
-            ["p0-probe", "--context", "evidence.json", "--wasm", "probe.wasm"]
-        )
-        self.assertIs(args.handler, a8.p0_probe)
-        self.assertEqual(args.context, "evidence.json")
-        self.assertEqual(args.wasm, "probe.wasm")
-
-    def test_the_p0_probe_alias_announces_its_deprecation_on_stderr_and_delegates_to_wasm_query_allowlist(self):
-        canonical = a8.parser().parse_args(
-            ["wasm-query-allowlist", "--context", "evidence.json", "--wasm", "probe.wasm"]
-        )
-        self.assertIs(canonical.handler, a8.wasm_query_allowlist)
-        args = SimpleNamespace(context="evidence.json", wasm="probe.wasm")
-        with patch.object(a8, "wasm_query_allowlist") as delegate, \
-                patch("sys.stderr", new_callable=io.StringIO) as stderr, \
-                patch("sys.stdout", new_callable=io.StringIO) as stdout:
-            a8.p0_probe(args)
-        delegate.assert_called_once_with(args)
-        self.assertIn("'p0-probe' subcommand is a deprecated alias of 'wasm-query-allowlist'", stderr.getvalue())
-        self.assertEqual(stdout.getvalue(), "")
 
     def test_p0_probe_exercises_allowed_queries_and_requires_the_broad_route_to_be_denied(self):
         class ProbeGonka:
@@ -2302,7 +2281,7 @@ class AcceptanceHarnessTests(unittest.TestCase):
         ), patch.object(a8, "assert_chain"), patch.object(
             a8, "append_phase", side_effect=lambda _path, phase: phases.append(phase)
         ):
-            a8.p0_probe(args)
+            a8.wasm_query_allowlist(args)
 
         self.assertEqual(runner.stored, (Path("probe.wasm"), "p0-probe"))
         self.assertEqual(runner.asserted_code_id, "17")
@@ -2365,7 +2344,7 @@ class AcceptanceHarnessTests(unittest.TestCase):
                     a8, "DockerGonka", return_value=runner
                 ), patch.object(a8, "assert_chain"), patch.object(a8, "append_phase"):
                     with self.assertRaisesRegex(a8.AcceptanceError, expected_error):
-                        a8.p0_probe(args)
+                        a8.wasm_query_allowlist(args)
 
     def test_b3_release_command_requires_explicit_native_fixture_inputs(self):
         args = a8.parser().parse_args(
@@ -2431,7 +2410,6 @@ class AcceptanceHarnessTests(unittest.TestCase):
                 with contextlib.redirect_stderr(io.StringIO()):
                     with self.assertRaises(SystemExit):
                         a8.parser().parse_args(legacy_argv)
-
 
 
 class WithdrawalKeeperTests(unittest.TestCase):

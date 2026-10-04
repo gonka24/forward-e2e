@@ -5,7 +5,7 @@ planner freezes variables matching ``SEMANTIC_ENV_PREFIXES``, except operational
 variables, into the lock; execution is where that promise is either kept or
 quietly broken. These tests pin the three parts of the contract: saved values
 are restored over whatever the caller's shell held, ambient semantic variables
-the lock never saw are *removed* (``A8_EXPECTED_PROTO_SHA`` is the dangerous
+the lock never saw are *removed* (``E2E_EXPECTED_PROTO_SHA`` is the dangerous
 one -- it moves the recorded ABI provenance), and operational variables, which
 only say where things live, are left alone. A lock that cannot describe an
 environment faithfully -- a ``semantic_environment`` that is not a mapping, or a
@@ -40,7 +40,7 @@ from tests.unit.runner.support.fakes import make_test_lock as _make_lock
 
 #: A variable that carries proof-relevant meaning and matches a semantic
 #: prefix, but is not operational: exactly the class that must not survive.
-DANGEROUS_AMBIENT = "A8_EXPECTED_PROTO_SHA"
+DANGEROUS_AMBIENT = "E2E_EXPECTED_PROTO_SHA"
 
 
 def _lock_with_environment(saved):
@@ -58,45 +58,45 @@ class ApplySemanticEnvironmentTests(unittest.TestCase):
 
     def test_every_saved_semantic_value_is_restored_over_the_current_shell(self):
         lock = _lock_with_environment(
-            {"A8_PROOF_LEVEL": "native", "GONKA_CHAIN_ID": "gonka-e2e"}
+            {"E2E_PROOF_LEVEL": "native", "GONKA_CHAIN_ID": "gonka-e2e"}
         )
-        environ = {"A8_PROOF_LEVEL": "smoke", "GONKA_CHAIN_ID": "somebody-elses-chain"}
+        environ = {"E2E_PROOF_LEVEL": "smoke", "GONKA_CHAIN_ID": "somebody-elses-chain"}
 
         record = apply_semantic_environment(lock, environ=environ)
 
-        self.assertEqual(environ["A8_PROOF_LEVEL"], "native")
+        self.assertEqual(environ["E2E_PROOF_LEVEL"], "native")
         self.assertEqual(environ["GONKA_CHAIN_ID"], "gonka-e2e")
-        self.assertEqual(record["restored"], ["A8_PROOF_LEVEL", "GONKA_CHAIN_ID"])
+        self.assertEqual(record["restored"], ["E2E_PROOF_LEVEL", "GONKA_CHAIN_ID"])
         self.assertEqual(
             sorted(record["overridden_from_shell"]),
-            ["A8_PROOF_LEVEL", "GONKA_CHAIN_ID"],
+            ["E2E_PROOF_LEVEL", "GONKA_CHAIN_ID"],
         )
         self.assertEqual(record["cleared_ambient"], [])
 
     def test_a_value_the_shell_never_had_is_restored_without_being_called_an_override(self):
-        lock = _lock_with_environment({"A8_PROOF_LEVEL": "native"})
+        lock = _lock_with_environment({"E2E_PROOF_LEVEL": "native"})
         environ = {}
 
         record = apply_semantic_environment(lock, environ=environ)
 
-        self.assertEqual(environ, {"A8_PROOF_LEVEL": "native"})
-        self.assertEqual(record["restored"], ["A8_PROOF_LEVEL"])
+        self.assertEqual(environ, {"E2E_PROOF_LEVEL": "native"})
+        self.assertEqual(record["restored"], ["E2E_PROOF_LEVEL"])
         self.assertEqual(record["overridden_from_shell"], [])
 
     def test_a_shell_value_that_already_matches_the_plan_is_not_reported_as_overridden(self):
-        lock = _lock_with_environment({"A8_PROOF_LEVEL": "native"})
-        environ = {"A8_PROOF_LEVEL": "native"}
+        lock = _lock_with_environment({"E2E_PROOF_LEVEL": "native"})
+        environ = {"E2E_PROOF_LEVEL": "native"}
 
         record = apply_semantic_environment(lock, environ=environ)
 
-        self.assertEqual(environ["A8_PROOF_LEVEL"], "native")
-        self.assertEqual(record["restored"], ["A8_PROOF_LEVEL"])
+        self.assertEqual(environ["E2E_PROOF_LEVEL"], "native")
+        self.assertEqual(record["restored"], ["E2E_PROOF_LEVEL"])
         self.assertEqual(record["overridden_from_shell"], [])
 
     def test_an_ambient_semantic_variable_absent_from_the_lock_is_deleted(self):
-        lock = _lock_with_environment({"A8_PROOF_LEVEL": "native"})
+        lock = _lock_with_environment({"E2E_PROOF_LEVEL": "native"})
         environ = {
-            "A8_PROOF_LEVEL": "native",
+            "E2E_PROOF_LEVEL": "native",
             DANGEROUS_AMBIENT: "0" * 64,
             "TESTERMINT_EXTRA_FLAGS": "--go-wild",
         }
@@ -120,7 +120,7 @@ class ApplySemanticEnvironmentTests(unittest.TestCase):
         self.assertEqual(record["cleared_ambient"], expected)
 
     def test_operational_variables_are_left_untouched(self):
-        lock = _lock_with_environment({"A8_PROOF_LEVEL": "native"})
+        lock = _lock_with_environment({"E2E_PROOF_LEVEL": "native"})
         environ = {name: f"value-of-{name}" for name in OPERATIONAL_ENV_NAMES}
 
         record = apply_semantic_environment(lock, environ=environ)
@@ -131,7 +131,7 @@ class ApplySemanticEnvironmentTests(unittest.TestCase):
             self.assertNotIn(name, record["restored"])
 
     def test_variables_outside_the_semantic_prefixes_are_left_untouched(self):
-        lock = _lock_with_environment({"A8_PROOF_LEVEL": "native"})
+        lock = _lock_with_environment({"E2E_PROOF_LEVEL": "native"})
         environ = {"PATH": "/usr/bin", "HOME": "/synthetic/home", "LANG": "C.UTF-8"}
 
         record = apply_semantic_environment(lock, environ=environ)
@@ -154,10 +154,10 @@ class ApplySemanticEnvironmentTests(unittest.TestCase):
         self.assertEqual(record["cleared_ambient"], [DANGEROUS_AMBIENT])
 
     def test_a_semantic_environment_that_is_not_a_mapping_is_a_lock_integrity_error(self):
-        for saved in (["A8_PROOF_LEVEL=native"], [], "", 0, False, None):
+        for saved in (["E2E_PROOF_LEVEL=native"], [], "", 0, False, None):
             with self.subTest(saved=saved):
                 lock = _lock_with_environment(saved)
-                environ = {"A8_PROOF_LEVEL": "smoke", DANGEROUS_AMBIENT: "0" * 64}
+                environ = {"E2E_PROOF_LEVEL": "smoke", DANGEROUS_AMBIENT: "0" * 64}
                 before = dict(environ)
                 messages = []
 
@@ -173,9 +173,9 @@ class ApplySemanticEnvironmentTests(unittest.TestCase):
         # Stringifying it would write something like "7" or "{'a': 1}" into a
         # child's environment and present it as the planned value.
         lock = _lock_with_environment(
-            {"A8_PROOF_LEVEL": "native", "GONKA_BLOCK_BUDGET": 7}
+            {"E2E_PROOF_LEVEL": "native", "GONKA_BLOCK_BUDGET": 7}
         )
-        environ = {"A8_PROOF_LEVEL": "smoke", DANGEROUS_AMBIENT: "0" * 64}
+        environ = {"E2E_PROOF_LEVEL": "smoke", DANGEROUS_AMBIENT: "0" * 64}
         before = dict(environ)
         messages = []
 
@@ -192,9 +192,9 @@ class ApplySemanticEnvironmentTests(unittest.TestCase):
         self.assertEqual(messages, [])
 
     def test_invalid_names_and_nul_values_are_rejected_before_any_process_environment_changes(self):
-        positive = {"A8_PROOF_LEVEL": "native", "GONKA_CHAIN_ID": "gonka-e2e"}
+        positive = {"E2E_PROOF_LEVEL": "native", "GONKA_CHAIN_ID": "gonka-e2e"}
         cases = [
-            ({"A8_PROOF_LEVEL": "native", name: positive["GONKA_CHAIN_ID"]}, "name")
+            ({"E2E_PROOF_LEVEL": "native", name: positive["GONKA_CHAIN_ID"]}, "name")
             for name in ("", "GONKA_BAD=NAME", "GONKA_BAD\0NAME", 7)
         ]
         cases.append(({**positive, "GONKA_CHAIN_ID": "bad\0value"}, "value"))
@@ -206,7 +206,7 @@ class ApplySemanticEnvironmentTests(unittest.TestCase):
                 # process mapping so the fixture cannot hide an OS-level error.
                 with mock.patch.dict(
                     os.environ,
-                    {"A8_PROOF_LEVEL": "smoke", DANGEROUS_AMBIENT: "0" * 64},
+                    {"E2E_PROOF_LEVEL": "smoke", DANGEROUS_AMBIENT: "0" * 64},
                     clear=True,
                 ):
                     before = dict(os.environ)
@@ -217,18 +217,18 @@ class ApplySemanticEnvironmentTests(unittest.TestCase):
                     self.assertEqual(messages, [])
 
     def test_every_restoration_and_every_clearing_is_explained_to_the_operator(self):
-        lock = _lock_with_environment({"A8_PROOF_LEVEL": "native"})
-        environ = {"A8_PROOF_LEVEL": "smoke", DANGEROUS_AMBIENT: "0" * 64}
+        lock = _lock_with_environment({"E2E_PROOF_LEVEL": "native"})
+        environ = {"E2E_PROOF_LEVEL": "smoke", DANGEROUS_AMBIENT: "0" * 64}
 
         messages = []
         apply_semantic_environment(lock, environ=environ, emit=messages.append)
 
         joined = "\n".join(messages)
-        self.assertIn("Restoring semantic variable A8_PROOF_LEVEL", joined)
+        self.assertIn("Restoring semantic variable E2E_PROOF_LEVEL", joined)
         self.assertIn(f"Clearing ambient semantic variable {DANGEROUS_AMBIENT}", joined)
 
     def test_the_returned_record_explains_why_the_shell_was_overruled(self):
-        lock = _lock_with_environment({"A8_PROOF_LEVEL": "native"})
+        lock = _lock_with_environment({"E2E_PROOF_LEVEL": "native"})
 
         record = apply_semantic_environment(lock, environ={})
 
@@ -242,18 +242,18 @@ class ApplySemanticEnvironmentDefaultTargetTests(unittest.TestCase):
     """Without an explicit mapping the function works on the real environment."""
 
     def test_the_default_environment_target_is_the_process_environment(self):
-        lock = _lock_with_environment({"A8_PROOF_LEVEL": "native"})
+        lock = _lock_with_environment({"E2E_PROOF_LEVEL": "native"})
 
         with mock.patch.dict(
             os.environ,
-            {"A8_PROOF_LEVEL": "smoke", DANGEROUS_AMBIENT: "0" * 64},
+            {"E2E_PROOF_LEVEL": "smoke", DANGEROUS_AMBIENT: "0" * 64},
             clear=False,
         ):
             record = apply_semantic_environment(lock)
 
-            self.assertEqual(os.environ["A8_PROOF_LEVEL"], "native")
+            self.assertEqual(os.environ["E2E_PROOF_LEVEL"], "native")
             self.assertNotIn(DANGEROUS_AMBIENT, os.environ)
-            self.assertIn("A8_PROOF_LEVEL", record["overridden_from_shell"])
+            self.assertIn("E2E_PROOF_LEVEL", record["overridden_from_shell"])
             self.assertIn(DANGEROUS_AMBIENT, record["cleared_ambient"])
 
 
@@ -261,9 +261,9 @@ class ExecutionEnvironmentRecordTests(unittest.TestCase):
     """The record has to reach the evidence, and reach it early enough."""
 
     def test_the_record_survives_the_build_manifest_round_trip(self):
-        lock = _lock_with_environment({"A8_PROOF_LEVEL": "native"})
+        lock = _lock_with_environment({"E2E_PROOF_LEVEL": "native"})
         record = apply_semantic_environment(
-            lock, environ={"A8_PROOF_LEVEL": "smoke", DANGEROUS_AMBIENT: "0" * 64}
+            lock, environ={"E2E_PROOF_LEVEL": "smoke", DANGEROUS_AMBIENT: "0" * 64}
         )
         manifest = BuildManifest.start(lock=lock, run_id="20240101-000000-abcdef")
         manifest.execution_environment = record
@@ -282,11 +282,11 @@ class ExecutionEnvironmentRecordTests(unittest.TestCase):
         class ProcessBoundaryReached(Exception):
             pass
 
-        lock = _lock_with_environment({"A8_PROOF_LEVEL": "native"})
+        lock = _lock_with_environment({"E2E_PROOF_LEVEL": "native"})
 
         def inspect_image(argv):
             self.assertEqual(argv[:3], ["docker", "image", "inspect"])
-            self.assertEqual(os.environ["A8_PROOF_LEVEL"], "native")
+            self.assertEqual(os.environ["E2E_PROOF_LEVEL"], "native")
             self.assertNotIn(DANGEROUS_AMBIENT, os.environ)
             raise ProcessBoundaryReached
 
@@ -317,7 +317,7 @@ class ExecutionEnvironmentRecordTests(unittest.TestCase):
             )
             with mock.patch.dict(
                 os.environ,
-                {"A8_PROOF_LEVEL": "smoke", DANGEROUS_AMBIENT: "0" * 64},
+                {"E2E_PROOF_LEVEL": "smoke", DANGEROUS_AMBIENT: "0" * 64},
                 clear=True,
             ):
                 with self.assertRaises(ProcessBoundaryReached):
@@ -333,74 +333,23 @@ class ExecutionEnvironmentRecordTests(unittest.TestCase):
         suite_runner.assert_not_called()
 
 
-class LegacyEnvironmentAliasNormalizationTests(unittest.TestCase):
-    """Canonical ``E2E_*`` variables and legacy ``A8_*`` aliases normalize or refuse on conflict."""
+class CurrentEnvironmentTests(unittest.TestCase):
+    """Current ``E2E_*`` variables are frozen by their names."""
 
-    def test_legacy_semantic_and_operational_aliases_normalize_to_canonical_e2e_names(self):
+
+    def test_old_environment_names_do_not_override_or_enter_a_new_run_lock(self):
         from forward_e2e.execution.planner import collect_semantic_environment
 
-        collected = collect_semantic_environment(
-            {
-                "A8_EXPECTED_PROTO_SHA": "a" * 64,
-                "A8_EVIDENCE_MODEL": "a8.evidence/e2e-immutable-source/2",
-                "A8_WORKSPACE_DIR": "/workspace",
-                "A8_OUTPUT_DIR": "/out",
-            }
-        )
-        self.assertEqual(
-            collected["semantic_environment"],
-            {
-                "E2E_EVIDENCE_MODEL": "a8.evidence/e2e-immutable-source/2",
-                "E2E_EXPECTED_PROTO_SHA": "a" * 64,
-            },
-        )
-        self.assertEqual(
-            collected["operational_environment_names"],
-            ["E2E_OUTPUT_DIR", "E2E_WORKSPACE_DIR"],
-        )
-
-    def test_conflicting_canonical_and_legacy_environment_variables_are_refused(self):
-        from forward_e2e.execution.errors import UsageError
-        from forward_e2e.execution.planner import (
-            collect_semantic_environment,
-            resolve_operational_env,
-        )
-
-        with self.assertRaises(UsageError) as sem_err:
-            collect_semantic_environment(
-                {
-                    "E2E_EXPECTED_PROTO_SHA": "a" * 64,
-                    "A8_EXPECTED_PROTO_SHA": "b" * 64,
-                }
-            )
-        self.assertIn("E2E_EXPECTED_PROTO_SHA", str(sem_err.exception))
-        self.assertIn("A8_EXPECTED_PROTO_SHA", str(sem_err.exception))
-
-        with self.assertRaises(UsageError) as op_err:
-            resolve_operational_env(
-                "E2E_WORKSPACE_DIR",
-                "A8_WORKSPACE_DIR",
-                "/workspace",
-                env={
-                    "E2E_WORKSPACE_DIR": "/workspace-a",
-                    "A8_WORKSPACE_DIR": "/workspace-b",
-                },
-            )
-        self.assertIn("E2E_WORKSPACE_DIR", str(op_err.exception))
-        self.assertIn("A8_WORKSPACE_DIR", str(op_err.exception))
-
-        self.assertEqual(
-            resolve_operational_env(
-                "E2E_WORKSPACE_DIR",
-                "A8_WORKSPACE_DIR",
-                "/workspace",
-                env={
-                    "E2E_WORKSPACE_DIR": "/same",
-                    "A8_WORKSPACE_DIR": "/same",
-                },
-            ),
-            "/same",
-        )
+        collected = collect_semantic_environment({
+            "A8_EXPECTED_PROTO_SHA": "old-value",
+            "E2E_EXPECTED_PROTO_SHA": "a" * 64,
+            "A8_WORKSPACE_DIR": "/old-workspace",
+            "E2E_WORKSPACE_DIR": "/workspace",
+        })
+        self.assertEqual(collected["semantic_environment"], {
+            "E2E_EXPECTED_PROTO_SHA": "a" * 64,
+        })
+        self.assertEqual(collected["operational_environment_names"], ["E2E_WORKSPACE_DIR"])
 
     def test_canonical_only_semantic_names_are_recorded_unchanged(self):
         from forward_e2e.execution.planner import collect_semantic_environment
@@ -425,50 +374,6 @@ class LegacyEnvironmentAliasNormalizationTests(unittest.TestCase):
         collected = collect_semantic_environment({"HOME": "/home/synthetic", "PATH": "/usr/bin"})
         self.assertEqual(collected["semantic_environment"], {})
         self.assertEqual(collected["operational_environment_names"], [])
-
-    def test_equal_canonical_and_legacy_semantic_values_collapse_to_one_canonical_entry(self):
-        from forward_e2e.execution.planner import (
-            LEGACY_SEMANTIC_ENV_ALIASES,
-            collect_semantic_environment,
-        )
-
-        self.assertTrue(LEGACY_SEMANTIC_ENV_ALIASES)
-        for legacy, canonical in LEGACY_SEMANTIC_ENV_ALIASES.items():
-            with self.subTest(legacy=legacy):
-                collected = collect_semantic_environment({legacy: "same-value", canonical: "same-value"})
-                self.assertEqual(collected["semantic_environment"], {canonical: "same-value"})
-
-    def test_each_legacy_semantic_alias_conflicting_with_its_canonical_name_is_refused(self):
-        from forward_e2e.execution.errors import UsageError
-        from forward_e2e.execution.planner import (
-            LEGACY_SEMANTIC_ENV_ALIASES,
-            collect_semantic_environment,
-        )
-
-        for legacy, canonical in LEGACY_SEMANTIC_ENV_ALIASES.items():
-            with self.subTest(legacy=legacy):
-                with self.assertRaises(UsageError) as caught:
-                    collect_semantic_environment({legacy: "one", canonical: "two"})
-                self.assertEqual(caught.exception.details, {"canonical": canonical, "legacy": legacy})
-                self.assertEqual(caught.exception.exit_code, 2)
-
-    def test_a_lock_recorded_under_the_legacy_proto_sha_name_restores_it_and_clears_the_ambient_canonical_name(self):
-        """The plan's value wins even when it was frozen under the pre-rename name.
-
-        The harness reads ``A8_EXPECTED_PROTO_SHA`` as the legacy alias of
-        ``E2E_EXPECTED_PROTO_SHA``; if the ambient canonical variable survived,
-        the two would conflict and the replay would be re-parameterised by the
-        shell instead of the lock.
-        """
-        lock = _lock_with_environment({"A8_EXPECTED_PROTO_SHA": "f" * 64})
-        environ = {"E2E_EXPECTED_PROTO_SHA": "0" * 64, "E2E_OUTPUT_DIR": "/out", "HOME": "/home/synthetic"}
-        record = apply_semantic_environment(lock, environ=environ)
-        self.assertEqual(environ["A8_EXPECTED_PROTO_SHA"], "f" * 64)
-        self.assertNotIn("E2E_EXPECTED_PROTO_SHA", environ)
-        self.assertEqual(environ["E2E_OUTPUT_DIR"], "/out")
-        self.assertEqual(record["restored"], ["A8_EXPECTED_PROTO_SHA"])
-        self.assertEqual(record["cleared_ambient"], ["E2E_EXPECTED_PROTO_SHA"])
-        self.assertEqual(record["overridden_from_shell"], [])
 
 
 if __name__ == "__main__":

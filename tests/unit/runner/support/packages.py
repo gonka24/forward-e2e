@@ -161,7 +161,7 @@ def make_baseline_lock(
                 "submodules": [],
             },
             "runner": {
-                "locator": "a8-runner:local",
+                "locator": "forward-e2e-runner:local",
                 "image_id": runner_image_id,
                 "repo_digest": None,
                 "runner_version": "a8-runner/2.0.0",

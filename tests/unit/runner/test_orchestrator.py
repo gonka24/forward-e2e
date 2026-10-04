@@ -320,8 +320,8 @@ class OrchestratorTests(unittest.TestCase):
         mock_reporter_write_reports.return_value = MagicMock(overall_status=ExecutionStatus.PASSED)
 
         sid = "suite-boundary-complete"
-        tasks, _, _ = resolve_e2e_selection(scenarios=["go-boundary"])
-        self.orch.run_suite(tasks=tasks, requested_scenarios=["go-boundary"], suite_id=sid)
+        tasks, _, _ = resolve_e2e_selection(scenarios=["go-query-error-classification"])
+        self.orch.run_suite(tasks=tasks, requested_scenarios=["go-query-error-classification"], suite_id=sid)
         task = json.loads(
             (self.output_dir / sid / "suite-result.json").read_text(encoding="utf-8")
         )["tasks"][0]
@@ -525,10 +525,10 @@ class OrchestratorTests(unittest.TestCase):
         )
 
         sid = "suite-direct-evidence"
-        tasks, _, _ = resolve_e2e_selection(scenarios=["go-boundary"])
+        tasks, _, _ = resolve_e2e_selection(scenarios=["go-query-error-classification"])
         code = orch_with_ws.run_suite(
             tasks=tasks,
-            requested_scenarios=["go-boundary"],
+            requested_scenarios=["go-query-error-classification"],
             suite_id=sid,
         )
         self.assertEqual(code, 0)
@@ -624,10 +624,10 @@ class OrchestratorTests(unittest.TestCase):
         )
 
         sid = "suite-direct-sources"
-        tasks, _, _ = resolve_e2e_selection(scenarios=["go-boundary"])
+        tasks, _, _ = resolve_e2e_selection(scenarios=["go-query-error-classification"])
         code = orch_direct.run_suite(
             tasks=tasks,
-            requested_scenarios=["go-boundary"],
+            requested_scenarios=["go-query-error-classification"],
             suite_id=sid,
         )
         self.assertEqual(code, 1)

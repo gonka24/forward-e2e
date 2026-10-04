@@ -78,7 +78,6 @@ def make_task_run_id(suite_id: str, ordinal: int, task_id: str) -> str:
 TOP_LEVEL_SCOPE = "<top-level>"
 
 
-
 #: Fields that only historical (overlay / prepared-build) documents carry. They
 #: are still parsed so that an old ``suite-plan.json`` stays readable, but the
 #: immutable-source path never sets them, and ``to_dict`` omits them when unset
@@ -149,13 +148,10 @@ class TaskPlan:
     # harness-level context["phases"] list. An empty list means the task has no
     # live-context evidence and keeps the selector-only behaviour.
     evidence_scopes: List[str] = field(default_factory=list)
-    aliases: List[str] = field(default_factory=list)
 
     def to_dict(self) -> Dict[str, Any]:
         d = asdict(self)
         d["proof_level"] = self.proof_level.value
-        if not self.aliases:
-            d.pop("aliases", None)
         return d
 
     @classmethod
@@ -176,7 +172,6 @@ class TaskPlan:
             exact_test_method=data.get("exact_test_method"),
             gradle_timeout_minutes=int(data.get("gradle_timeout_minutes", 45)),
             evidence_scopes=list(data.get("evidence_scopes", [])),
-            aliases=list(data.get("aliases", [])),
         )
 
 

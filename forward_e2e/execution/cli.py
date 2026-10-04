@@ -123,7 +123,6 @@ def _add_selection_arguments(parser: argparse.ArgumentParser) -> None:
 
 def _add_operational_arguments(parser: argparse.ArgumentParser, *, with_run_id: bool) -> None:
     group = parser.add_argument_group("operational")
-    from .planner import resolve_operational_env
 
     group.add_argument(
         "--output",
@@ -133,7 +132,7 @@ def _add_operational_arguments(parser: argparse.ArgumentParser, *, with_run_id: 
     )
     group.add_argument(
         "--workspace",
-        default=resolve_operational_env("E2E_WORKSPACE_DIR", "A8_WORKSPACE_DIR", "/workspace"),
+        default=((os.environ.get("E2E_WORKSPACE_DIR") or "").strip() or "/workspace"),
         metavar="DIR",
     )
     group.add_argument("--runtime-root", default=None, metavar="DIR")
@@ -196,13 +195,11 @@ def build_parser(subcommand: str) -> argparse.ArgumentParser:
         return parser
 
     if subcommand in ("report", "recover"):
-        from .planner import resolve_operational_env
-
         parser.add_argument("--run", required=True, metavar="PATH_OR_ID")
         parser.add_argument("--output", default=None, metavar="DIR")
         parser.add_argument(
             "--workspace",
-            default=resolve_operational_env("E2E_WORKSPACE_DIR", "A8_WORKSPACE_DIR", "/workspace"),
+            default=((os.environ.get("E2E_WORKSPACE_DIR") or "").strip() or "/workspace"),
             metavar="DIR",
         )
         return parser
@@ -308,7 +305,6 @@ def cmd_list(args: argparse.Namespace, *, out=None) -> int:
     stream = out or sys.stdout
     from ..suite.catalog import (
         BOUNDARY_TASKS,
-        LEGACY_SCENARIO_ALIASES,
         NATIVE_TASKS,
         compute_catalog_hash,
     )
@@ -321,7 +317,6 @@ def cmd_list(args: argparse.Namespace, *, out=None) -> int:
             "catalog_hash": compute_catalog_hash(),
             "boundary": [t.to_dict() for t in BOUNDARY_TASKS],
             "native": [t.to_dict() for t in NATIVE_TASKS],
-            "legacy_aliases": dict(LEGACY_SCENARIO_ALIASES),
             "profiles": ["smoke", "native", "boundary", "all"],
             "adapters": [a.declaration() for a in adapters],
         }
@@ -332,16 +327,14 @@ def cmd_list(args: argparse.Namespace, *, out=None) -> int:
     print(f"catalog hash: {compute_catalog_hash()}", file=stream)
     print("\n-- Boundary tasks (no Testermint network) --", file=stream)
     for task in BOUNDARY_TASKS:
-        alias_suffix = f" (aliases: {', '.join(task.aliases)})" if task.aliases else ""
         print(
-            f"  {task.task_id:<24} {task.proof_level.value:<16} limit {task.timeout_minutes}m{alias_suffix}",
+            f"  {task.task_id:<24} {task.proof_level.value:<16} limit {task.timeout_minutes}m",
             file=stream,
         )
     print("\n-- Native tasks (owned local network per task) --", file=stream)
     for task in NATIVE_TASKS:
-        alias_suffix = f" (aliases: {', '.join(task.aliases)})" if task.aliases else ""
         print(
-            f"  {task.task_id:<24} {task.proof_level.value:<16} limit {task.timeout_minutes}m{alias_suffix}",
+            f"  {task.task_id:<24} {task.proof_level.value:<16} limit {task.timeout_minutes}m",
             file=stream,
         )
     print("\n-- Profiles --", file=stream)
@@ -370,9 +363,7 @@ def default_output_root() -> Path:
     directory would therefore try to write into a read-only mount, so the
     writable output root is the only correct default.
     """
-    from .planner import resolve_operational_env
-
-    return Path(resolve_operational_env("E2E_OUTPUT_DIR", "A8_OUTPUT_DIR", "/out") or "/out")
+    return Path((os.environ.get("E2E_OUTPUT_DIR") or "").strip() or "/out")
 
 
 def _plan_from_args(
@@ -943,7 +934,6 @@ def _resolve_recovery_target(args: argparse.Namespace, *, emit) -> Tuple[str, Pa
         "with the --workspace that produced its durable run package.",
         {"run": target, "searched": searched},
     )
-
 
 
 # ---------------------------------------------------------------------------

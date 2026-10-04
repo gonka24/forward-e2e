@@ -430,8 +430,7 @@ class BoundaryTaskAdapter:
     def execute(self) -> Tuple[ExecutionStatus, Optional[int], Optional[str]]:
         # ``run_suite`` rejects any task whose ID is not the catalog's canonical
         # ID before an adapter is constructed, so exactly one spelling reaches
-        # this dispatch. Legacy aliases are an input convenience of the planner;
-        # a plan that still names one is not executable by this runner.
+        # this dispatch. A plan containing an unknown task ID is not executable.
         if self.task.task_id == "go-query-error-classification":
             return self._run_go_boundary()
         elif self.task.task_id == "wasm-abi-boundary":

@@ -22,11 +22,10 @@ import unittest
 
 from forward_e2e.suite.catalog import (
     BOUNDARY_TASKS,
-    LEGACY_SCENARIO_ALIASES,
     NATIVE_TASKS,
     _CATALOG_ORDER,
     get_profile_tasks,
-    get_task_by_id_or_alias,
+    get_task_by_id,
 )
 
 FIXTURE = (
@@ -72,7 +71,7 @@ class BaselineCatalogEquivalenceTests(unittest.TestCase):
         for old in self.baseline["tasks"]:
             new_id = self.canonical(old["task_id"])
             with self.subTest(task=old["task_id"]):
-                task = get_task_by_id_or_alias(new_id)
+                task = get_task_by_id(new_id)
                 self.assertIsNotNone(task, f"baseline task {old['task_id']!r} has no counterpart {new_id!r}")
                 self.assertEqual(task.task_id, new_id)
                 current = task.to_dict()
@@ -88,14 +87,6 @@ class BaselineCatalogEquivalenceTests(unittest.TestCase):
                     elif field == "exact_test_method":
                         expected = self.method_renames.get(expected, expected)
                     self.assertEqual(current[field], expected, f"{field} drifted for {new_id}")
-
-    def test_live_aliases_never_retarget_a_baseline_rename(self):
-        """An alias may be retired on schedule, but while it exists it must mean what it meant."""
-        for old, new in self.renames.items():
-            if old in LEGACY_SCENARIO_ALIASES:
-                self.assertEqual(LEGACY_SCENARIO_ALIASES[old], new)
-        for alias, target in LEGACY_SCENARIO_ALIASES.items():
-            self.assertEqual(self.renames.get(alias), target, f"alias {alias!r} is unknown to the baseline record")
 
 
 if __name__ == "__main__":

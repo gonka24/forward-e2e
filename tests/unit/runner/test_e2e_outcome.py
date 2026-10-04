@@ -12,7 +12,7 @@ import tempfile
 import unittest
 from unittest.mock import MagicMock, patch
 
-from forward_e2e.suite.catalog import get_task_by_id_or_alias
+from forward_e2e.suite.catalog import get_task_by_id
 from forward_e2e.execution.cli import cmd_recover, cmd_report, parse_e2e_args
 from forward_e2e.execution.executor import ExecutionRequest, execute_plan, grade_run_package
 from forward_e2e.execution.errors import ExportConflict
@@ -114,7 +114,7 @@ class TestE2EOutcomeVerification(unittest.TestCase):
 
     def test_go_boundary_raw_results_cannot_be_relocated_to_unrelated_directory(self):
         run_id = "e2e-go-boundary-relocated-raw"
-        setup_baseline_package(self.pkg_dir, scenarios=["go-boundary"], run_id=run_id)
+        setup_baseline_package(self.pkg_dir, scenarios=["go-query-error-classification"], run_id=run_id)
         self.assertEqual(grade_run_package(self.pkg_dir).status, RunStatus.PASSED)
 
         suite_dir = self.pkg_dir / "suite" / run_id
@@ -149,7 +149,7 @@ class TestE2EOutcomeVerification(unittest.TestCase):
 
     def test_go_boundary_report_cannot_name_a_different_raw_event_hash(self):
         run_id = "e2e-go-boundary-foreign-raw-hash"
-        setup_baseline_package(self.pkg_dir, scenarios=["go-boundary"], run_id=run_id)
+        setup_baseline_package(self.pkg_dir, scenarios=["go-query-error-classification"], run_id=run_id)
         self.assertEqual(grade_run_package(self.pkg_dir).status, RunStatus.PASSED)
 
         suite_dir = self.pkg_dir / "suite" / run_id
@@ -276,7 +276,7 @@ class TestE2EOutcomeVerification(unittest.TestCase):
         setup_baseline_package(self.pkg_dir, scenarios=["lock-exact-e"], run_id=run_id)
         plan_file = self.pkg_dir / "suite" / run_id / "suite-plan.json"
         plan_data = json.loads(plan_file.read_text(encoding="utf-8"))
-        boundary_task = get_task_by_id_or_alias("wasm-abi-boundary")
+        boundary_task = get_task_by_id("wasm-abi-boundary")
         plan_data["tasks"] = [boundary_task.to_dict()]
         plan_data["requested_scenarios"] = ["wasm-abi-boundary"]
         plan_file.write_text(json.dumps(plan_data, indent=2), encoding="utf-8")
@@ -330,7 +330,7 @@ class TestE2EOutcomeVerification(unittest.TestCase):
         with patch("forward_e2e.execution.delivery.export_run_package", side_effect=OSError("Disk write failed")), \
              patch("forward_e2e.execution.executor.rebuild_adapter", side_effect=make_test_adapter), \
              patch("forward_e2e.execution.executor.RunnerLayout", return_value=StubLayout(self.root)), \
-             patch("forward_e2e.execution.executor.resolve_runner_image", return_value=RunnerImageIdentity(locator="a8-runner:local", image_id=RUNNER_IMAGE_ID, repo_digest=None, locator_is_immutable=False, portability="local-image-only", resolved_by="launcher-injected")), \
+             patch("forward_e2e.execution.executor.resolve_runner_image", return_value=RunnerImageIdentity(locator="forward-e2e-runner:local", image_id=RUNNER_IMAGE_ID, repo_digest=None, locator_is_immutable=False, portability="local-image-only", resolved_by="launcher-injected")), \
              patch("forward_e2e.execution.executor.assert_runner_matches_lock", return_value=None), \
              patch("forward_e2e.execution.executor.SourceAcquirer", FakeAcquirer):
             req = ExecutionRequest(

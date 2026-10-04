@@ -26,7 +26,7 @@ Optional flags:
   the Git repository URL from which the Dockerfile fetches `<RUNNER_FULL_40_HEX_SHA>`
   (default: `https://github.com/gonka24/forward-e2e.git`).
 - `--image <TAG>` (PowerShell: `-Image <TAG>`) — local tag for the built image
-  (default: `a8-runner:local`).
+  (default: `forward-e2e-runner:local`).
 
 How the build works:
 
@@ -98,7 +98,7 @@ exclusive):
   - `boundary`: the 5 non-native boundary and contract-policy tasks (`BOUNDARY_TASKS`: `go-query-error-classification`, `wasm-abi-boundary`, `contract-network-unconfirmed-policy`, `contract-claim-expiry-policy`, `contract-query-fault-policy`)
   - `all`: all 24 catalog tasks (`BOUNDARY_TASKS` followed by `NATIVE_TASKS`)
 - `--scenario <ID>` (repeatable): accepts canonical scenario IDs (e.g.
-  `refund-boundary-and-vesting-addition`) or legacy aliases (e.g. `package-a-r1-r2`);
+  `refund-boundary-and-vesting-addition`); old scenario aliases are not accepted;
   see [`docs/coverage.md`](coverage.md) and [`docs/migration.md`](migration.md).
   Duplicate flags are deduplicated, and execution order always follows the
   canonical catalog order.
@@ -133,7 +133,7 @@ an error that lists the flags a replay *does* accept (`ALLOWED_WITH_FROM`):
 | `--parent-run-id <ID>` | `run`, `rerun`; allowed with `--from` | Explicit parent run identifier. |
 | `--plan-id <ID>` | `plan`, `run` without `--from` | Explicit plan identifier. **Refused with `--from`** (the plan id comes from the lock; name the execution with `--run-id` instead). |
 | `--run <PATH_OR_ID>` | `report`, `recover` | The run to grade or recover: an exported run directory (or a nested suite path, which resolves upwards to the package), or a bare run id, which the container resolves against the output root (`<output>/<id>`, `<output>/runs/<id>`; `_candidate_run_dirs`) and, for `recover`, the durable stage under `--workspace` (`_resolve_recovery_target`). The wrappers translate a host directory to its location under the single `/out` mount, so a directory given with `--output` must live under that `--output`. |
-| `--docker-root-volume <NAME>` | host wrappers only | Selects the named Docker volume mounted at `/var/lib/docker` inside the runner (default `a8-docker-root`, or `E2E_DOCKER_ROOT_VOLUME`). |
+| `--docker-root-volume <NAME>` | host wrappers only | Selects the named Docker volume mounted at `/var/lib/docker` inside the runner (default `forward-e2e-docker-root`, or `E2E_DOCKER_ROOT_VOLUME`). |
 | `--keep-resources` | — | Accepted by the parser for parity with the suite runner but **always rejected inside the runner container** (`cmd_run`): the inner `dockerd` and its containers end with the container, so there is nothing to keep. |
 
 The host wrappers require **Docker Compose V2** (`docker compose`); the retired
@@ -306,7 +306,7 @@ the re-derived verdict is written beside it as
 - **Private Inner `dockerd`:** The host `/var/run/docker.sock` is never mounted
   into the runner container. During `run` and `rerun`, `DinDSupervisor` starts an
   isolated `dockerd` inside the container backed by the named volume mounted at
-  `/var/lib/docker` (`a8-docker-root` by default, or overridden via
+  `/var/lib/docker` (`forward-e2e-docker-root` by default, or overridden via
   `--docker-root-volume`).
 - **Single-Cluster Exclusivity (`/workspace/exclusive.lock`):** Every `run` and
   `rerun` acquires an exclusive flock on `/workspace/exclusive.lock` before

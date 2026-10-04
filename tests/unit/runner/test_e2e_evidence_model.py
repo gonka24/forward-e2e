@@ -851,7 +851,6 @@ class DuplicatedLiteralsArePinnedTests(unittest.TestCase):
             set(a8_acceptance.KNOWN_EVIDENCE_MODELS), set(KNOWN_EVIDENCE_MODELS)
         )
         self.assertEqual(a8_acceptance.ENV_EVIDENCE_MODEL, "E2E_EVIDENCE_MODEL")
-        self.assertEqual(a8_acceptance.LEGACY_ENV_EVIDENCE_MODEL, "A8_EVIDENCE_MODEL")
 
         # What drift would look like, and that it cannot pass unnoticed: a value
         # the shared module does not know is an error on the consumer side.

@@ -14,7 +14,7 @@ import tempfile
 import unittest
 from unittest.mock import patch
 
-from forward_e2e.suite.catalog import NATIVE_TASKS, get_task_by_id_or_alias
+from forward_e2e.suite.catalog import NATIVE_TASKS, get_task_by_id
 from forward_e2e.suite.evidence_model import EVIDENCE_MODEL_E2E, EVIDENCE_MODEL_IMMUTABLE
 from forward_e2e.suite.models import EvidenceStatus, ExecutionStatus, SourceIdentity, TaskPlan, TOP_LEVEL_SCOPE
 from tests.unit.runner.real_fixtures import (
@@ -328,7 +328,7 @@ class VerifierTests(unittest.TestCase):
         self.assertEqual(len(obs), 1)
 
     def test_native_exit_0_without_junit_fails_verification(self):
-        task = get_task_by_id_or_alias("lock-exact-e")
+        task = get_task_by_id("lock-exact-e")
         assert task is not None
         (self.evidence_dir / "live-context.json").write_text("{}", encoding="utf-8")
 
@@ -661,7 +661,7 @@ class VerifierTests(unittest.TestCase):
         self.assertIn("Funded->Locked", obs)
 
     def test_boundary_missing_artifacts_yields_incomplete_status(self):
-        task = get_task_by_id_or_alias("go-boundary")
+        task = get_task_by_id("go-query-error-classification")
         assert task is not None
         rep = self.evidence_dir / "report.json"
         rep.write_text(json.dumps({"status": "PASS", "docker_exit": 0, "go_exit": 0}), encoding="utf-8")
@@ -824,7 +824,7 @@ class VerifierTests(unittest.TestCase):
             "release_completed",
         ]
 
-        observed = extract_and_validate_scenario_predicates(base, "b3-foreign-native")
+        observed = extract_and_validate_scenario_predicates(base, "foreign-native-preservation")
         for checkpoint in expected_cps:
             self.assertIn(checkpoint, observed)
 
@@ -832,7 +832,7 @@ class VerifierTests(unittest.TestCase):
         drained = copy.deepcopy(base)
         drained["phases"][0]["release"]["after"]["foreign_native"]["deal"] = 0
         drained["phases"][0]["release"]["actual"]["foreign_native_deal_after"] = 0
-        observed = extract_and_validate_scenario_predicates(drained, "b3-foreign-native")
+        observed = extract_and_validate_scenario_predicates(drained, "foreign-native-preservation")
         self.assertNotIn("foreign_native_balance_preserved", observed)
         self.assertNotIn("release_completed", observed)
 
@@ -840,27 +840,27 @@ class VerifierTests(unittest.TestCase):
         unfunded = copy.deepcopy(base)
         unfunded["phases"][0]["fixture"]["amount"] = 0
         unfunded["phases"][0]["foreign_native_funding"]["after"]["deal"] = 0
-        observed = extract_and_validate_scenario_predicates(unfunded, "b3-foreign-native")
+        observed = extract_and_validate_scenario_predicates(unfunded, "foreign-native-preservation")
         self.assertNotIn("foreign_native_funding_verified", observed)
         self.assertNotIn("foreign_native_balance_preserved", observed)
 
         # A failed funding transaction must be rejected.
         bad_funding = copy.deepcopy(base)
         bad_funding["phases"][0]["foreign_native_funding"]["tx"]["code"] = 5
-        observed = extract_and_validate_scenario_predicates(bad_funding, "b3-foreign-native")
+        observed = extract_and_validate_scenario_predicates(bad_funding, "foreign-native-preservation")
         self.assertNotIn("foreign_native_funding_verified", observed)
 
         # GNK must still be fully released: a non-zero Deal ngonka balance fails.
         gnk_left = copy.deepcopy(base)
         gnk_left["phases"][0]["release"]["after"]["ngonka"]["deal"] = 1
-        observed = extract_and_validate_scenario_predicates(gnk_left, "b3-foreign-native")
+        observed = extract_and_validate_scenario_predicates(gnk_left, "foreign-native-preservation")
         self.assertNotIn("release_completed", observed)
         self.assertIn("foreign_native_balance_preserved", observed)
 
         # Broken conservation of the released amount must fail.
         bad_math = copy.deepcopy(base)
         bad_math["phases"][0]["release"]["actual"]["buyer_delta"] += 1
-        observed = extract_and_validate_scenario_predicates(bad_math, "b3-foreign-native")
+        observed = extract_and_validate_scenario_predicates(bad_math, "foreign-native-preservation")
         self.assertNotIn("release_completed", observed)
 
         # Claimed totals must be derived from the bank snapshots, not merely
@@ -883,56 +883,56 @@ class VerifierTests(unittest.TestCase):
                 inconsistent = copy.deepcopy(base)
                 mutate(inconsistent["phases"][0])
                 observed = extract_and_validate_scenario_predicates(
-                    inconsistent, "b3-foreign-native"
+                    inconsistent, "foreign-native-preservation"
                 )
                 self.assertNotIn("release_completed", observed)
 
     def test_r1_refund_boundary_binds_to_the_produced_phase_name(self):
         """Round 4 issue 2: the phase is r1_1_refund_e_plus_5_rejected."""
-        task = get_task_by_id_or_alias("package-a-r1-r2")
+        task = get_task_by_id("refund-boundary-and-vesting-addition")
         assert task is not None
         self.assertIn("phase:r1_1_refund_e_plus_5_rejected", task.expected_checkpoints)
         self.assertNotIn("phase:r1_refund_e_plus_5", task.expected_checkpoints)
 
         base = real_r1_scenario_context()
-        observed = extract_and_validate_scenario_predicates(base, "package-a-r1-r2", PACKAGE_A_SCOPES)
+        observed = extract_and_validate_scenario_predicates(base, "refund-boundary-and-vesting-addition", PACKAGE_A_SCOPES)
         self.assertIn("phase:r1_1_refund_e_plus_5_rejected", observed)
         self.assertIn("r1_refund_boundary_asserted", observed)
 
         # Simulation-only rejection (no DeliverTx layer) must not count.
         simulated = copy.deepcopy(base)
         simulated["scenarios"]["r1-refund-e-plus-5"]["phases"][0]["attempt"]["layer"] = "simulation"
-        observed = extract_and_validate_scenario_predicates(simulated, "package-a-r1-r2", PACKAGE_A_SCOPES)
+        observed = extract_and_validate_scenario_predicates(simulated, "refund-boundary-and-vesting-addition", PACKAGE_A_SCOPES)
         self.assertNotIn("r1_refund_boundary_asserted", observed)
 
         # An accepted refund must not count as a proven boundary.
         accepted = copy.deepcopy(base)
         accepted["scenarios"]["r1-refund-e-plus-5"]["phases"][0]["attempt"]["code"] = 0
-        observed = extract_and_validate_scenario_predicates(accepted, "package-a-r1-r2", PACKAGE_A_SCOPES)
+        observed = extract_and_validate_scenario_predicates(accepted, "refund-boundary-and-vesting-addition", PACKAGE_A_SCOPES)
         self.assertNotIn("r1_refund_boundary_asserted", observed)
 
         # A rejection outside the E+5 bracket must not count.
         wrong_epoch = copy.deepcopy(base)
         wrong_epoch["scenarios"]["r1-refund-e-plus-5"]["phases"][0]["epoch_bracket"]["epoch"] = 9
-        observed = extract_and_validate_scenario_predicates(wrong_epoch, "package-a-r1-r2", PACKAGE_A_SCOPES)
+        observed = extract_and_validate_scenario_predicates(wrong_epoch, "refund-boundary-and-vesting-addition", PACKAGE_A_SCOPES)
         self.assertNotIn("r1_refund_boundary_asserted", observed)
 
         # Changed state or balances after a rejected refund must not count.
         changed_state = copy.deepcopy(base)
         changed_state["scenarios"]["r1-refund-e-plus-5"]["phases"][0]["after"]["state"]["status"] = "refunded"
-        observed = extract_and_validate_scenario_predicates(changed_state, "package-a-r1-r2", PACKAGE_A_SCOPES)
+        observed = extract_and_validate_scenario_predicates(changed_state, "refund-boundary-and-vesting-addition", PACKAGE_A_SCOPES)
         self.assertNotIn("r1_refund_boundary_asserted", observed)
 
         moved_funds = copy.deepcopy(base)
         after = moved_funds["scenarios"]["r1-refund-e-plus-5"]["phases"][0]["after"]
         after["cw20"]["deal"] = int(after["cw20"]["deal"]) - 1
-        observed = extract_and_validate_scenario_predicates(moved_funds, "package-a-r1-r2", PACKAGE_A_SCOPES)
+        observed = extract_and_validate_scenario_predicates(moved_funds, "refund-boundary-and-vesting-addition", PACKAGE_A_SCOPES)
         self.assertNotIn("r1_refund_boundary_asserted", observed)
 
         # The target epoch of the owning scenario is mandatory.
         no_terms = copy.deepcopy(base)
         no_terms["scenarios"]["r1-refund-e-plus-5"]["terms"] = {}
-        observed = extract_and_validate_scenario_predicates(no_terms, "package-a-r1-r2", PACKAGE_A_SCOPES)
+        observed = extract_and_validate_scenario_predicates(no_terms, "refund-boundary-and-vesting-addition", PACKAGE_A_SCOPES)
         self.assertNotIn("r1_refund_boundary_asserted", observed)
 
     def test_cw20_fault_rollbacks_reject_empty_or_partial_entries(self):
@@ -948,7 +948,7 @@ class VerifierTests(unittest.TestCase):
             "terms": {}, "phases": [phase], "accounts": accounts,
             "contracts": {"deal": deal, "cw20": faults[0]["fault"]["contract"]},
         }
-        observed = extract_and_validate_scenario_predicates(context, "package-b-r6-1")
+        observed = extract_and_validate_scenario_predicates(context, "usdt-withdrawal-failure-recovery")
         self.assertIn("single_settlement_succeeds", observed)
         self.assertIn("cw20_three_send_rejections_asserted", observed)
         self.assertIn("settlement_atomic_rollback_verified", observed)
@@ -960,19 +960,19 @@ class VerifierTests(unittest.TestCase):
                 {"key": "action", "value": "unrelated"},
             ],
         })
-        observed = extract_and_validate_scenario_predicates(unrelated_wasm, "package-b-r6-1")
+        observed = extract_and_validate_scenario_predicates(unrelated_wasm, "usdt-withdrawal-failure-recovery")
         self.assertIn("cw20_three_send_rejections_asserted", observed)
 
         extra_transfer = copy.deepcopy(context)
         events = extra_transfer["phases"][0]["withdrawal_txs"]["host"]["events"]
         events.append(copy.deepcopy(next(event for event in events
                                          if event["type"] == "wasm")))
-        observed = extract_and_validate_scenario_predicates(extra_transfer, "package-b-r6-1")
+        observed = extract_and_validate_scenario_predicates(extra_transfer, "usdt-withdrawal-failure-recovery")
         self.assertNotIn("cw20_three_send_rejections_asserted", observed)
 
         missing_withdrawal = copy.deepcopy(context)
         missing_withdrawal["phases"][0]["withdrawal_txs"].pop("buyer")
-        observed = extract_and_validate_scenario_predicates(missing_withdrawal, "package-b-r6-1")
+        observed = extract_and_validate_scenario_predicates(missing_withdrawal, "usdt-withdrawal-failure-recovery")
         self.assertNotIn("cw20_three_send_rejections_asserted", observed)
 
         for mutation in ("wrong_paid_recipient", "wrong_paid_amount",
@@ -992,14 +992,14 @@ class VerifierTests(unittest.TestCase):
                     claim.pop("settle_repeat")
                 else:
                     claim["settle_repeat"]["proof"]["contract_error"] = "OtherError"
-                observed = extract_and_validate_scenario_predicates(bad, "package-b-r6-1")
+                observed = extract_and_validate_scenario_predicates(bad, "usdt-withdrawal-failure-recovery")
                 self.assertNotIn("cw20_three_send_rejections_asserted", observed)
 
         swapped_positions = copy.deepcopy(context)
         swapped_faults = swapped_positions["phases"][0]["cw20_fault_rollbacks"]
         swapped_faults[0]["fault"]["outgoing_transfer_index"] = 2
         swapped_faults[1]["fault"]["outgoing_transfer_index"] = 1
-        observed = extract_and_validate_scenario_predicates(swapped_positions, "package-b-r6-1")
+        observed = extract_and_validate_scenario_predicates(swapped_positions, "usdt-withdrawal-failure-recovery")
         self.assertNotIn("cw20_three_send_rejections_asserted", observed)
 
         for mutation in ("wrong_amount", "wrong_contract", "wrong_role_address",
@@ -1026,12 +1026,12 @@ class VerifierTests(unittest.TestCase):
                     attr["value"] = "other-deal" if mutation == "other_settle_deal" else "1"
                 else:
                     bad["phases"][0]["after"]["deal_state"]["fee_usdt"] = "1"
-                observed = extract_and_validate_scenario_predicates(bad, "package-b-r6-1")
+                observed = extract_and_validate_scenario_predicates(bad, "usdt-withdrawal-failure-recovery")
                 self.assertNotIn("cw20_three_send_rejections_asserted", observed)
 
         empty = copy.deepcopy(context)
         empty["phases"][0]["cw20_fault_rollbacks"] = [{}, {}, {}]
-        observed = extract_and_validate_scenario_predicates(empty, "package-b-r6-1")
+        observed = extract_and_validate_scenario_predicates(empty, "usdt-withdrawal-failure-recovery")
         self.assertNotIn("single_settlement_succeeds", observed)
         self.assertNotIn("cw20_three_send_rejections_asserted", observed)
         self.assertNotIn("settlement_atomic_rollback_verified", observed)
@@ -1041,39 +1041,39 @@ class VerifierTests(unittest.TestCase):
         host = same_target["phases"][0]["deal_config"]["host"]
         for entry in same_target["phases"][0]["cw20_fault_rollbacks"]:
             entry["fault"]["recipient"] = host
-        observed = extract_and_validate_scenario_predicates(same_target, "package-b-r6-1")
+        observed = extract_and_validate_scenario_predicates(same_target, "usdt-withdrawal-failure-recovery")
         self.assertNotIn("cw20_three_send_rejections_asserted", observed)
 
         # The same receipt reused for several targets must be rejected.
         same_receipt = copy.deepcopy(context)
         hashes = same_receipt["phases"][0]["cw20_fault_rollbacks"]
         hashes[1]["attempt"]["tx_hash"] = hashes[0]["attempt"]["tx_hash"]
-        observed = extract_and_validate_scenario_predicates(same_receipt, "package-b-r6-1")
+        observed = extract_and_validate_scenario_predicates(same_receipt, "usdt-withdrawal-failure-recovery")
         self.assertNotIn("cw20_three_send_rejections_asserted", observed)
 
         # A non-rejected attempt must be rejected.
         accepted = copy.deepcopy(context)
         accepted["phases"][0]["cw20_fault_rollbacks"][2]["attempt"]["code"] = 0
-        observed = extract_and_validate_scenario_predicates(accepted, "package-b-r6-1")
+        observed = extract_and_validate_scenario_predicates(accepted, "usdt-withdrawal-failure-recovery")
         self.assertNotIn("cw20_three_send_rejections_asserted", observed)
 
         # A non-atomic rollback must be rejected.
         non_atomic = copy.deepcopy(context)
         entry = non_atomic["phases"][0]["cw20_fault_rollbacks"][0]
         entry["after"]["cw20"]["deal"] = int(entry["after"]["cw20"]["deal"]) - 1
-        observed = extract_and_validate_scenario_predicates(non_atomic, "package-b-r6-1")
+        observed = extract_and_validate_scenario_predicates(non_atomic, "usdt-withdrawal-failure-recovery")
         self.assertNotIn("settlement_atomic_rollback_verified", observed)
 
         # Lost pending obligations must be rejected.
         lost_pending = copy.deepcopy(context)
         lost_pending["phases"][0]["cw20_fault_rollbacks"][1]["pending_after"] = {"payments": []}
-        observed = extract_and_validate_scenario_predicates(lost_pending, "package-b-r6-1")
+        observed = extract_and_validate_scenario_predicates(lost_pending, "usdt-withdrawal-failure-recovery")
         self.assertNotIn("settlement_atomic_rollback_verified", observed)
 
         # Deleted pending snapshots must be rejected.
         no_pending = copy.deepcopy(context)
         del no_pending["phases"][0]["cw20_fault_rollbacks"][0]["pending_before"]
-        observed = extract_and_validate_scenario_predicates(no_pending, "package-b-r6-1")
+        observed = extract_and_validate_scenario_predicates(no_pending, "usdt-withdrawal-failure-recovery")
         self.assertNotIn("settlement_atomic_rollback_verified", observed)
 
     def test_mandatory_runtime_shas_cannot_be_deleted(self):
@@ -1172,7 +1172,7 @@ class ScenarioPredicateTestCase(unittest.TestCase):
     def observed(self, context, task_id: str | None = None):
         resolved_id = task_id or self.DEFAULT_TASK_ID
         assert resolved_id is not None
-        task = get_task_by_id_or_alias(resolved_id)
+        task = get_task_by_id(resolved_id)
         assert task is not None
         return extract_and_validate_scenario_predicates(
             context, task.scenario_selector, task.evidence_scopes
@@ -1181,7 +1181,7 @@ class ScenarioPredicateTestCase(unittest.TestCase):
     def assert_all_expected_checkpoints(self, context, task_id: str | None = None):
         resolved_id = task_id or self.DEFAULT_TASK_ID
         assert resolved_id is not None
-        task = get_task_by_id_or_alias(resolved_id)
+        task = get_task_by_id(resolved_id)
         assert task is not None
         observed = self.observed(context, resolved_id)
         for checkpoint in task.expected_checkpoints:
@@ -1464,7 +1464,7 @@ class NoSaleVestingLifecyclePredicateTests(ScenarioPredicateTestCase):
         self.assertNotIn("no_sale_vesting_lifecycle_verified", observed)
 
     def test_catalog_requires_cross_phase_semantic_proof(self):
-        task = get_task_by_id_or_alias("no-sale-vesting-lifecycle")
+        task = get_task_by_id("no-sale-vesting-lifecycle")
         assert task is not None
         self.assertIn("no_sale_vesting_lifecycle_verified", task.expected_checkpoints)
         self.assertIn("early_release_unavailable_verified", task.expected_checkpoints)
@@ -1694,7 +1694,7 @@ class Round5EvidenceTests(ScenarioPredicateTestCase):
         for phase in context["scenarios"][R2_SCENARIO]["phases"]:
             if (stage and phase.get("stage") == stage) or (name and phase.get("name") == name):
                 mutate(phase)
-        self.assertNotIn(checkpoint, self.observed(context, "package-a-r1-r2"))
+        self.assertNotIn(checkpoint, self.observed(context, "refund-boundary-and-vesting-addition"))
 
     # -- Issue 1: D1 / E1 refund boundaries ---------------------------------
 
@@ -1902,7 +1902,7 @@ class Round5EvidenceTests(ScenarioPredicateTestCase):
     # -- Issue 3: R2 vested gift and vesting addition -----------------------
 
     def test_real_package_a_context_is_accepted(self):
-        self.assert_all_expected_checkpoints(real_package_a_context(), "package-a-r1-r2")
+        self.assert_all_expected_checkpoints(real_package_a_context(), "refund-boundary-and-vesting-addition")
 
     def test_name_and_stage_alone_prove_no_r2_boundary(self):
         """Round 5 issue 3: {name, stage} used to be enough."""
@@ -1913,7 +1913,7 @@ class Round5EvidenceTests(ScenarioPredicateTestCase):
             {"name": "r2_gift_checkpoint", "stage": "final"},
             {"name": "vesting_addition"},
         ]
-        observed = self.observed(context, "package-a-r1-r2")
+        observed = self.observed(context, "refund-boundary-and-vesting-addition")
         for cp in ("r2_gift_fully_locked", "r2_gift_first_unlocked", "r2_gift_final_released", "vesting_addition_verified"):
             self.assertNotIn(cp, observed)
 
@@ -1921,7 +1921,7 @@ class Round5EvidenceTests(ScenarioPredicateTestCase):
         context = real_package_a_context()
         phases = context["scenarios"][R2_SCENARIO]["phases"]
         context["scenarios"][R2_SCENARIO]["phases"] = [p for p in phases if p.get("stage") != "pre_gift"]
-        observed = self.observed(context, "package-a-r1-r2")
+        observed = self.observed(context, "refund-boundary-and-vesting-addition")
         self.assertNotIn("r2_gift_fully_locked", observed)
         self.assertNotIn("r2_gift_final_released", observed)
 
@@ -2012,7 +2012,7 @@ class Round5EvidenceTests(ScenarioPredicateTestCase):
         """Round 5 issue 4: renaming the key used to keep every checkpoint."""
         context = real_lock_exact_e_context()
         context["scenarios"]["other"] = context["scenarios"].pop("lock-exact-e")
-        task = get_task_by_id_or_alias("lock-exact-e")
+        task = get_task_by_id("lock-exact-e")
         observed = extract_and_validate_scenario_predicates(
             context, task.scenario_selector, task.evidence_scopes
         )
@@ -2023,7 +2023,7 @@ class Round5EvidenceTests(ScenarioPredicateTestCase):
     def test_missing_declared_scope_is_reported(self):
         context = real_package_a_context()
         del context["scenarios"]["r1-refund-e-plus-5"]
-        task = get_task_by_id_or_alias("package-a-r1-r2")
+        task = get_task_by_id("refund-boundary-and-vesting-addition")
         error = validate_evidence_scopes(context, task.evidence_scopes)
         self.assertIsNotNone(error)
         self.assertIn("r1-refund-e-plus-5", error)
@@ -2110,7 +2110,7 @@ class Round5EvidenceTests(ScenarioPredicateTestCase):
         missing["phases"] = [{"name": "routing_mutation"}]
         context["scenarios"]["routing-missing"] = missing
         context["phases"] = [{"name": "factory_isolation"}]
-        task = get_task_by_id_or_alias("funded-routing-refunds")
+        task = get_task_by_id("funded-routing-refunds")
         self.assertIsNone(validate_evidence_scopes(context, task.evidence_scopes))
         observed = extract_and_validate_scenario_predicates(
             context, task.scenario_selector, task.evidence_scopes
@@ -2194,7 +2194,7 @@ class Round5EvidenceTests(ScenarioPredicateTestCase):
             "scenarios": {},
         }
         observed = extract_and_validate_scenario_predicates(
-            context, "package-b-r7-1", ["<top-level>"]
+            context, "native-release-rollback-retry", ["<top-level>"]
         )
         self.assertNotIn("bank_send_rejection_asserted", observed)
         self.assertNotIn("bank_rollback_atomic", observed)
@@ -2230,12 +2230,12 @@ class Round5EvidenceTests(ScenarioPredicateTestCase):
             "scenarios": {},
         }
         observed = extract_and_validate_scenario_predicates(
-            context, "package-b-r7-1", ["<top-level>"]
+            context, "native-release-rollback-retry", ["<top-level>"]
         )
         self.assertIn("bank_send_rejection_asserted", observed)
         self.assertIn("bank_rollback_atomic", observed)
         self.assertIn("bank_send_retry_succeeds", observed)
-        task = get_task_by_id_or_alias("package-b-r7-1")
+        task = get_task_by_id("native-release-rollback-retry")
         self.assertFalse(set(task.expected_checkpoints).issubset(observed))
 
         for mutation in ("unrelated_fault", "other_deal", "different_balance"):
@@ -2250,7 +2250,7 @@ class Round5EvidenceTests(ScenarioPredicateTestCase):
                         bad["phases"][1][key]["bank_ngonka"]["deal"] += 1
                     bad["phases"][2]["fault"] = copy.deepcopy(bad["phases"][1])
                 bad_observed = extract_and_validate_scenario_predicates(
-                    bad, "package-b-r7-1", ["<top-level>"]
+                    bad, "native-release-rollback-retry", ["<top-level>"]
                 )
                 self.assertNotIn("bank_send_retry_succeeds", bad_observed)
 
@@ -2413,7 +2413,7 @@ class Round5EvidenceTests(ScenarioPredicateTestCase):
     def test_emptied_declared_scope_is_reported(self):
         context = real_package_a_context()
         context["scenarios"][R2_SCENARIO]["phases"] = []
-        task = get_task_by_id_or_alias("package-a-r1-r2")
+        task = get_task_by_id("refund-boundary-and-vesting-addition")
         self.assertIsNotNone(validate_evidence_scopes(context, task.evidence_scopes))
 
     def test_top_level_phases_are_ignored_for_a_scenario_scoped_task(self):
@@ -2422,7 +2422,7 @@ class Round5EvidenceTests(ScenarioPredicateTestCase):
         scenario = context["scenarios"].pop("lock-exact-e")
         context["scenarios"]["other"] = scenario
         context["phases"] = copy.deepcopy(scenario["phases"])
-        task = get_task_by_id_or_alias("lock-exact-e")
+        task = get_task_by_id("lock-exact-e")
         observed = extract_and_validate_scenario_predicates(
             context, task.scenario_selector, task.evidence_scopes
         )
@@ -2441,7 +2441,7 @@ class Round5EvidenceTests(ScenarioPredicateTestCase):
         self.assertNotIn("terminal_rejection_nothing_to_release", self.observed(context, "terminal-release-repeat"))
 
     def test_declared_scopes_survive_plan_serialization(self):
-        task = get_task_by_id_or_alias("package-a-r1-r2")
+        task = get_task_by_id("refund-boundary-and-vesting-addition")
         restored = TaskPlan.from_dict(task.to_dict())
         self.assertEqual(restored.evidence_scopes, task.evidence_scopes)
 
@@ -2454,7 +2454,7 @@ class Round5EvidenceTests(ScenarioPredicateTestCase):
         context["scenarios"]["renamed"] = context["scenarios"].pop("claim-expiry-positive")
         path = Path(tmp.name) / "live-context.json"
         path.write_text(json.dumps(context), encoding="utf-8")
-        task = get_task_by_id_or_alias("claim-expiry-positive")
+        task = get_task_by_id("claim-expiry-positive")
         ok, _, err = verify_live_context(
             path,
             expected_checkpoints=task.expected_checkpoints,
@@ -2543,7 +2543,7 @@ class Round6EvidenceTests(ScenarioPredicateTestCase):
     )
 
     def r2_observed(self, context):
-        return self.observed(context, "package-a-r1-r2")
+        return self.observed(context, "refund-boundary-and-vesting-addition")
 
     def test_real_r2_sequence_is_accepted(self):
         observed = self.r2_observed(real_package_a_context())
@@ -2780,7 +2780,7 @@ class Round7EvidenceTests(ScenarioPredicateTestCase):
     R2_PAYOUT_CHECKPOINTS = ("r2_gift_payout_receipts_verified", "r2_gift_final_released")
 
     def r2_observed(self, context):
-        return self.observed(context, "package-a-r1-r2")
+        return self.observed(context, "refund-boundary-and-vesting-addition")
 
     def assert_payout_denied(self, context):
         observed = self.r2_observed(context)
@@ -2816,7 +2816,7 @@ class Round7EvidenceTests(ScenarioPredicateTestCase):
             self.assertIn("bank_after", release)
 
     def test_real_receipts_prove_the_payout(self):
-        self.assert_all_expected_checkpoints(real_package_a_context(), "package-a-r1-r2")
+        self.assert_all_expected_checkpoints(real_package_a_context(), "refund-boundary-and-vesting-addition")
 
     # -- Criterion 1: a missing release phase or receipt breaks the proof ----
 
@@ -3279,7 +3279,7 @@ class Round8ReleaseSchemaTests(ScenarioPredicateTestCase):
     def test_reduced_receipt_cannot_join_the_r2_gift_chain(self):
         context = real_package_a_context()
         r2_releases(context)[3].pop("epoch_bracket")
-        observed = self.observed(context, "package-a-r1-r2")
+        observed = self.observed(context, "refund-boundary-and-vesting-addition")
         self.assertNotIn("r2_gift_payout_receipts_verified", observed)
         self.assertNotIn("r2_gift_final_released", observed)
 
@@ -3288,21 +3288,21 @@ class Round8ReleaseSchemaTests(ScenarioPredicateTestCase):
             with self.subTest(field=field):
                 context = real_package_a_context()
                 r2_releases(context)[3].pop(field)
-                self.assertNotIn("r2_gift_final_released", self.observed(context, "package-a-r1-r2"))
+                self.assertNotIn("r2_gift_final_released", self.observed(context, "refund-boundary-and-vesting-addition"))
 
     def test_gift_chain_still_requires_the_recorded_address_delta(self):
         context = real_package_a_context()
         r2_releases(context)[3]["actual"].pop("address_delta")
-        self.assertNotIn("r2_gift_final_released", self.observed(context, "package-a-r1-r2"))
+        self.assertNotIn("r2_gift_final_released", self.observed(context, "refund-boundary-and-vesting-addition"))
 
     def test_r2_positive_evidence_is_unaffected(self):
-        self.assert_all_expected_checkpoints(real_package_a_context(), "package-a-r1-r2")
+        self.assert_all_expected_checkpoints(real_package_a_context(), "refund-boundary-and-vesting-addition")
 
     def test_historical_gonka_shas_are_not_exempt_when_plan_identity_differs(self):
         import forward_e2e.suite.verifier as verifier_mod
 
         self.assertFalse(hasattr(verifier_mod, "APPROVED_GONKA_BASE_SHAS"))
-        task = get_task_by_id_or_alias("lock-exact-e")
+        task = get_task_by_id("lock-exact-e")
         assert task is not None
         context = real_lock_exact_e_context()
         # Context has gonka_sha = 29a58fcf64b87967cb874b6169ce2c61e1f269b1;
@@ -3485,7 +3485,7 @@ class IndexedTaskEvidenceTests(unittest.TestCase):
             suite_dir = write_suite_output(
                 suite_dir=Path(tmp) / "suite-go-boundary",
                 suite_id="suite-go-boundary",
-                scenarios=["go-boundary"],
+                scenarios=["go-query-error-classification"],
             )
             report_path = next(suite_dir.rglob("report.json"))
             passing_bytes = report_path.read_bytes()
@@ -3578,7 +3578,7 @@ class FundedClaimPathEvidenceTests(unittest.TestCase):
     def test_producer_shaped_resumed_claim_fault_delivery_and_repeat_are_verified(self):
         self.assertIn(
             "funded_claim_path_verified",
-            get_task_by_id_or_alias("funded-claim").expected_checkpoints,
+            get_task_by_id("funded-claim").expected_checkpoints,
         )
         self.assertIn("funded_claim_path_verified", self.observed(self.context()))
 
@@ -3749,7 +3749,7 @@ class FundedReleaseLifecycleEvidenceTests(unittest.TestCase):
         first = unified_funded_claim_release_phase()
         context = self.context(first, self.second_payout(first))
         self.assertIn("funded_release_lifecycle_verified",
-                      get_task_by_id_or_alias("funded-claim").expected_checkpoints)
+                      get_task_by_id("funded-claim").expected_checkpoints)
         self.assertIn("funded_release_lifecycle_verified", self.observed(context))
         context["phases"].pop()
         self.assertNotIn("funded_release_lifecycle_verified", self.observed(context))

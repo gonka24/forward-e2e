@@ -2,7 +2,7 @@
 
 Ensures:
 - Preflight guards: native POSIX filesystem check (rejects /mnt/c and symlinks), mount probe (2 cycles), tool versions (cosmwasm-check 2.2.2).
-- Immutable snapshots in $HOME/a8-runtime/<run_id>/
+- Immutable snapshots in $HOME/forward-e2e-runtime/<run_id>/
 - Single-use snapshots (one native selector = one snapshot)
 - Re-use of fixed Git bundles across the suite
 - Global flock protection via exclusive.lock
@@ -48,43 +48,11 @@ class SuiteRuntimeError(RuntimeError):
     """Base exception for runtime environment errors raised by the suite runner."""
 
 
-def resolve_suite_env(
-    canonical: str,
-    legacy: str,
-    default: Optional[str] = None,
-    *,
-    env: Optional[Mapping[str, str]] = None,
-) -> Optional[str]:
-    """Read an operational environment variable with legacy ``A8_*`` fallback.
-
-    This is the single implementation of the rule "equal values normalise,
-    different values are refused". The E2E planner wraps it
-    (``resolve_operational_env``) to raise its own structured ``UsageError``;
-    keeping one body here means the two layers cannot drift on what counts as
-    a conflict. Whitespace-only values are treated as unset.
-    """
-    environ = env if env is not None else os.environ
-    canonical_val = environ.get(canonical, "").strip()
-    legacy_val = environ.get(legacy, "").strip()
-    if canonical_val and legacy_val and canonical_val != legacy_val:
-        raise SuiteRuntimeError(
-            f"Conflicting environment variables {canonical}={canonical_val!r} and "
-            f"{legacy}={legacy_val!r}; unset the legacy {legacy} variable or set both "
-            "to the same value."
-        )
-    if canonical_val:
-        return canonical_val
-    if legacy_val:
-        return legacy_val
-    return default
-
-
 def get_default_runtime_root() -> Path:
-    workspace = resolve_suite_env("E2E_WORKSPACE_DIR", "A8_WORKSPACE_DIR")
+    workspace = os.environ.get("E2E_WORKSPACE_DIR", "").strip()
     if workspace:
         return Path(workspace).resolve() / "runtime"
-    return Path.home() / "a8-runtime"
-
+    return Path.home() / "forward-e2e-runtime"
 
 
 def sha256_file(path: Path) -> str:

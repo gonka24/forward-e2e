@@ -182,7 +182,7 @@ docs/                   Architecture, operations, evidence, coverage, validation
 - [`docs/architecture.md`](docs/architecture.md) — runner layers, one-way import rule, and four-zone filesystem isolation.
 - [`docs/operations.md`](docs/operations.md) — CLI reference (`list`, `plan`, `run`, `rerun`, `report`, `recover`), flags, credentials, and Docker volumes.
 - [`docs/evidence.md`](docs/evidence.md) — evidence artifacts, schemas, proof levels, and whole-run verdict rules.
-- [`docs/coverage.md`](docs/coverage.md) — 24-task scenario catalog, legacy aliases, proof levels, and known coverage boundaries.
+- [`docs/coverage.md`](docs/coverage.md) — 24-task scenario catalog, exact scenario IDs, proof levels, and known coverage boundaries.
 - [`docs/validation.md`](docs/validation.md) — step-by-step operator and reviewer runbook.
 - [`docs/development.md`](docs/development.md) — developer guide, test conventions, lock-hashed files, and maintenance rules.
 - [`docs/migration.md`](docs/migration.md) — path, scenario ID, and environment variable migration reference.

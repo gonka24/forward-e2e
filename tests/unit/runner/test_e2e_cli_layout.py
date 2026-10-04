@@ -81,8 +81,8 @@ class E2ECliOutputDefaultsTests(unittest.TestCase):
         self.env = patch.dict(
             os.environ,
             {
-                "A8_OUTPUT_DIR": str(self.output_root),
-                "A8_WORKSPACE_DIR": str(self.workspace),
+                "E2E_OUTPUT_DIR": str(self.output_root),
+                "E2E_WORKSPACE_DIR": str(self.workspace),
                 # The parser defaults --credential-file from the environment;
                 # an empty value keeps a developer's real token out of the test.
                 "E2E_CREDENTIAL_FILE": "",
@@ -318,11 +318,11 @@ class E2ECliOutputDefaultsTests(unittest.TestCase):
     # -- the default root itself -----------------------------------------
     def test_default_output_root_follows_the_environment_variable(self):
         self.assertEqual(default_output_root(), self.output_root)
-        with patch.dict(os.environ, {"A8_OUTPUT_DIR": str(self.root / "elsewhere")}):
+        with patch.dict(os.environ, {"E2E_OUTPUT_DIR": str(self.root / "elsewhere")}):
             self.assertEqual(default_output_root(), self.root / "elsewhere")
 
     def test_default_output_root_falls_back_to_the_writable_out_mount(self):
-        for value in ({}, {"A8_OUTPUT_DIR": ""}):
+        for value in ({}, {"E2E_OUTPUT_DIR": ""}):
             with self.subTest(environment=value):
                 with patch.dict(os.environ, value, clear=True):
                     self.assertEqual(default_output_root(), Path("/out"))
@@ -358,8 +358,8 @@ class E2ECliRunLayoutTests(unittest.TestCase):
         self.env = patch.dict(
             os.environ,
             {
-                "A8_OUTPUT_DIR": str(self.output_root),
-                "A8_WORKSPACE_DIR": str(self.workspace),
+                "E2E_OUTPUT_DIR": str(self.output_root),
+                "E2E_WORKSPACE_DIR": str(self.workspace),
             },
         )
         self.env.start()
@@ -617,7 +617,7 @@ class E2ECliRunLayoutTests(unittest.TestCase):
             with self.subTest(execution_status=status):
                 run_dir = self.output_root / status.value / self.RUN_ID
                 setup_baseline_package(
-                    run_dir, scenarios=["go-boundary"], run_id=self.RUN_ID,
+                    run_dir, scenarios=["go-query-error-classification"], run_id=self.RUN_ID,
                     execution_status=status,
                 )
                 code = cmd_report(self._args(run_dir), emit=self._emit)
@@ -661,7 +661,7 @@ class E2ECliRunLayoutTests(unittest.TestCase):
         stage_dir = run_stage_dir(self.workspace, self.RUN_ID)
         setup_baseline_package(
             stage_dir,
-            scenarios=["go-boundary"],
+            scenarios=["go-query-error-classification"],
             run_id=self.RUN_ID,
             delivery_status=DeliveryStatus.COMPLETED,
         )

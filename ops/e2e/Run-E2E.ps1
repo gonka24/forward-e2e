@@ -53,7 +53,7 @@ $Service = 'e2e-runner'
 
 function Fail {
     param([string]$Message, [int]$Code = 2)
-    Write-Error $Message -ErrorAction Continue
+    [Console]::Error.WriteLine($Message)
     exit $Code
 }
 
@@ -200,7 +200,7 @@ $gonkaSha = Get-FlagValue -Tokens $ContainerArgs -Flag '--gonka-sha'
 $contractsSha = Get-FlagValue -Tokens $ContainerArgs -Flag '--contracts-sha'
 
 $forward = New-Object System.Collections.Generic.List[string]
-$runnerImage = if ($env:E2E_RUNNER_IMAGE) { $env:E2E_RUNNER_IMAGE } else { 'a8-runner:local' }
+$runnerImage = if ($env:E2E_RUNNER_IMAGE) { $env:E2E_RUNNER_IMAGE } else { 'forward-e2e-runner:local' }
 $runnerImageExplicit = $false
 $gonkaBridge = $null
 $contractsBridge = $null
@@ -209,10 +209,7 @@ $planDirHost = $null
 $secretsDirHost = $null
 $runArgIndex = -1
 $runArgValue = $null
-if ($env:E2E_DOCKER_ROOT_VOLUME -and $env:A8_DOCKER_ROOT_VOLUME -and ($env:E2E_DOCKER_ROOT_VOLUME -ne $env:A8_DOCKER_ROOT_VOLUME)) {
-    Fail "Conflicting environment variables E2E_DOCKER_ROOT_VOLUME='$($env:E2E_DOCKER_ROOT_VOLUME)' and A8_DOCKER_ROOT_VOLUME='$($env:A8_DOCKER_ROOT_VOLUME)'; unset the legacy A8_DOCKER_ROOT_VOLUME variable or set both to the same value." 2
-}
-$dockerRootVolume = if ($env:E2E_DOCKER_ROOT_VOLUME) { $env:E2E_DOCKER_ROOT_VOLUME } elseif ($env:A8_DOCKER_ROOT_VOLUME) { $env:A8_DOCKER_ROOT_VOLUME } else { 'a8-docker-root' }
+$dockerRootVolume = if ($env:E2E_DOCKER_ROOT_VOLUME) { $env:E2E_DOCKER_ROOT_VOLUME } else { 'forward-e2e-docker-root' }
 
 for ($i = 0; $i -lt $ContainerArgs.Count; $i++) {
     $token = $ContainerArgs[$i]
@@ -394,7 +391,6 @@ $env:OUTPUT_DIR = if ($outputHost) { $outputHost } else { Join-Path $RepoRoot 'o
 $env:E2E_PLAN_DIR = if ($planDirHost) { $planDirHost } else { $RepoRoot }
 $env:E2E_SECRETS_DIR = if ($secretsDirHost) { $secretsDirHost } else { $RepoRoot }
 $env:E2E_DOCKER_ROOT_VOLUME = $dockerRootVolume
-$env:A8_DOCKER_ROOT_VOLUME = $dockerRootVolume
 New-Item -ItemType Directory -Path $env:OUTPUT_DIR -Force | Out-Null
 
 & docker compose -f $ComposeFile run --rm -e "E2E_RUNNER_IMAGE=$runnerImage" $Service @forward
