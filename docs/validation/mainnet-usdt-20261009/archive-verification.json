@@ -1,0 +1,13 @@
+{
+  "schema_version": "forward-usdt/archive-integrity/1",
+  "status": "PASSED",
+  "run_id": "e2e-usdt-exact-r2-20261009",
+  "archive_name": "native-usdt-evidence.tar.gz",
+  "archive_size_bytes": 1264872818,
+  "archive_sha256": "22cf6a59831bfd0b2f875e019f9e7e213f08b9382f4af07512cc02997fa93513",
+  "file_count": 9587,
+  "package_file_count": 9559,
+  "all_member_bytes_verified": true,
+  "original_package_modified": false,
+  "scope": "Original native R2 package plus separately labelled review, runner and token provenance"
+}

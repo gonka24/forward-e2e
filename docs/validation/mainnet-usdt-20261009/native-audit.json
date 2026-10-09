@@ -1,0 +1,269 @@
+{
+  "classification": "independent-local-native-evidence-audit; acceptance NOT_REVIEWED",
+  "status": "PASSED",
+  "errors": [],
+  "artifacts_checked": 221,
+  "tasks_checked": 6,
+  "junit": [
+    {
+      "path": "runs/e2e-usdt-exact-r2-20261009-01-network-unconfirmed/junit/TEST-MarketplaceContractAcceptanceTests.xml",
+      "names": [
+        "marketplace absent native summary refunds only at emergency deadline()"
+      ]
+    },
+    {
+      "path": "runs/e2e-usdt-exact-r2-20261009-02-claim-expiry-positive/junit/TEST-MarketplaceContractAcceptanceTests.xml",
+      "names": [
+        "marketplace positive unclaimed summary refunds only at claim expiry()"
+      ]
+    },
+    {
+      "path": "runs/e2e-usdt-exact-r2-20261009-03-terminal-release-repeat/junit/TEST-MarketplaceContractAcceptanceTests.xml",
+      "names": [
+        "marketplace terminal release repeat is rejected without payout()"
+      ]
+    },
+    {
+      "path": "runs/e2e-usdt-exact-r2-20261009-04-lock-exact-e/junit/TEST-MarketplaceContractAcceptanceTests.xml",
+      "names": [
+        "marketplace funded lock succeeds exactly at E()"
+      ]
+    },
+    {
+      "path": "runs/e2e-usdt-exact-r2-20261009-05-refund-boundary-and-vesti/junit/TEST-MarketplaceContractAcceptanceTests.xml",
+      "names": [
+        "marketplace preserves refund boundary and releases a new vested gift()"
+      ]
+    },
+    {
+      "path": "runs/e2e-usdt-exact-r2-20261009-06-native-release-rollback-r/junit/TEST-MarketplaceContractAcceptanceTests.xml",
+      "names": [
+        "marketplace native release rejects selected second Bank send then retries once()"
+      ]
+    }
+  ],
+  "contexts": [
+    {
+      "path": "runs/e2e-usdt-exact-r2-20261009-01-network-unconfirmed/evidence/e2e-usdt-exact-r2-20261009-01-network-unconfirmed/live-context.json",
+      "runtime": {
+        "cosmos_sdk": "v0.53.3-ps19-observability",
+        "go": "go version go1.24.2 linux/amd64",
+        "gonka_source_sha": "136041c81ea8ff38e7620d76af66a7c7fe7eec50",
+        "wasmd": "v0.54.2",
+        "wasmvm": "v2.2.4"
+      },
+      "token_code_id": "3"
+    },
+    {
+      "path": "runs/e2e-usdt-exact-r2-20261009-02-claim-expiry-positive/evidence/e2e-usdt-exact-r2-20261009-02-claim-expiry-positive/live-context.json",
+      "runtime": {
+        "cosmos_sdk": "v0.53.3-ps19-observability",
+        "go": "go version go1.24.2 linux/amd64",
+        "gonka_source_sha": "136041c81ea8ff38e7620d76af66a7c7fe7eec50",
+        "wasmd": "v0.54.2",
+        "wasmvm": "v2.2.4"
+      },
+      "token_code_id": "3"
+    },
+    {
+      "path": "runs/e2e-usdt-exact-r2-20261009-03-terminal-release-repeat/evidence/e2e-usdt-exact-r2-20261009-03-terminal-release-repeat/live-context.json",
+      "runtime": {
+        "cosmos_sdk": "v0.53.3-ps19-observability",
+        "go": "go version go1.24.2 linux/amd64",
+        "gonka_source_sha": "136041c81ea8ff38e7620d76af66a7c7fe7eec50",
+        "wasmd": "v0.54.2",
+        "wasmvm": "v2.2.4"
+      },
+      "token_code_id": "3"
+    },
+    {
+      "path": "runs/e2e-usdt-exact-r2-20261009-04-lock-exact-e/evidence/e2e-usdt-exact-r2-20261009-04-lock-exact-e/live-context.json",
+      "runtime": {
+        "cosmos_sdk": "v0.53.3-ps19-observability",
+        "go": "go version go1.24.2 linux/amd64",
+        "gonka_source_sha": "136041c81ea8ff38e7620d76af66a7c7fe7eec50",
+        "wasmd": "v0.54.2",
+        "wasmvm": "v2.2.4"
+      },
+      "token_code_id": "3"
+    },
+    {
+      "path": "runs/e2e-usdt-exact-r2-20261009-05-refund-boundary-and-vesti/evidence/e2e-usdt-exact-r2-20261009-05-refund-boundary-and-vesti/live-context.json",
+      "runtime": {
+        "cosmos_sdk": "v0.53.3-ps19-observability",
+        "go": "go version go1.24.2 linux/amd64",
+        "gonka_source_sha": "136041c81ea8ff38e7620d76af66a7c7fe7eec50",
+        "wasmd": "v0.54.2",
+        "wasmvm": "v2.2.4"
+      },
+      "token_code_id": "3"
+    },
+    {
+      "path": "runs/e2e-usdt-exact-r2-20261009-06-native-release-rollback-r/evidence/e2e-usdt-exact-r2-20261009-06-native-release-rollback-r/live-context.json",
+      "runtime": {
+        "cosmos_sdk": "v0.53.3-ps19-observability",
+        "go": "go version go1.24.2 linux/amd64",
+        "gonka_source_sha": "136041c81ea8ff38e7620d76af66a7c7fe7eec50",
+        "wasmd": "v0.54.2",
+        "wasmvm": "v2.2.4"
+      },
+      "token_code_id": "3"
+    }
+  ],
+  "funding_rejections": [
+    {
+      "run_id": "e2e-usdt-exact-r2-20261009-01-network-unconfirmed",
+      "case": "wrong_amount",
+      "tx_hash": "5464C67FA72AF50C465E4026C7C712E54A0913CF8A6829AF5D89C61A28BCAAE9"
+    },
+    {
+      "run_id": "e2e-usdt-exact-r2-20261009-01-network-unconfirmed",
+      "case": "duplicate",
+      "tx_hash": "EA77CE40D121AD7A083A4F79467E25C5F1E0DE2E1247ADCD464F4BB2BC31A8C0"
+    },
+    {
+      "run_id": "e2e-usdt-exact-r2-20261009-02-claim-expiry-positive",
+      "case": "wrong_amount",
+      "tx_hash": "E6549BD23200F4E6593BE03507FAC2880B43C733BB47D723847CE16DCD23FEA7"
+    },
+    {
+      "run_id": "e2e-usdt-exact-r2-20261009-02-claim-expiry-positive",
+      "case": "duplicate",
+      "tx_hash": "A9D24DDE0018620920B00970ED3F3B215D213147348D5602FE749C5DEAE34C41"
+    },
+    {
+      "run_id": "e2e-usdt-exact-r2-20261009-03-terminal-release-repeat",
+      "case": "wrong_amount",
+      "tx_hash": "69F11F4B7209EAFE1CAEB7A5F25CF54B03F1D408122A2476F4F4538A24ECBA4B"
+    },
+    {
+      "run_id": "e2e-usdt-exact-r2-20261009-03-terminal-release-repeat",
+      "case": "duplicate",
+      "tx_hash": "466312265A5FC2CA3C2B8C5ED59BEF3FC213475762FE092A903D40FB4CC5B38E"
+    },
+    {
+      "run_id": "e2e-usdt-exact-r2-20261009-04-lock-exact-e",
+      "case": "wrong_amount",
+      "tx_hash": "E04C375F10DBF3F94596689A32B3312FCD35B245801D616DC1C05CE69118945A"
+    },
+    {
+      "run_id": "e2e-usdt-exact-r2-20261009-04-lock-exact-e",
+      "case": "duplicate",
+      "tx_hash": "EB0584EF8951442645E5D59D1DC46640BD30034EAD1DAB9BEE350EAA4E8E1DE5"
+    },
+    {
+      "run_id": "e2e-usdt-exact-r2-20261009-05-refund-boundary-and-vesti",
+      "case": "wrong_amount",
+      "tx_hash": "246C0B5CAEB605D3D41FE07A3955C2D716215B2AC32AE61F872C58BDE3805A3B"
+    },
+    {
+      "run_id": "e2e-usdt-exact-r2-20261009-05-refund-boundary-and-vesti",
+      "case": "duplicate",
+      "tx_hash": "F06FFAFFF37ADDDBCDD1467EA24749EDADB772F488F497EE2C0983134B30F050"
+    },
+    {
+      "run_id": "e2e-usdt-exact-r2-20261009-06-native-release-rollback-r",
+      "case": "wrong_amount",
+      "tx_hash": "32FEF14EEC755E017950859C14FCF45F5CA38586555111F214B2F7980641C19D"
+    },
+    {
+      "run_id": "e2e-usdt-exact-r2-20261009-06-native-release-rollback-r",
+      "case": "duplicate",
+      "tx_hash": "1DD3BEF50B850604E2B54C092565B7AAA1096DA410110D96F4E5686EDCF22121"
+    }
+  ],
+  "settlements": [
+    {
+      "run_id": "e2e-usdt-exact-r2-20261009-03-terminal-release-repeat",
+      "scope": "bootstrap",
+      "tx_hash": "191C8810BECC46F9AA9DA386FEDDB2E8B39816011C93C639DD4C160D9B0F247C",
+      "recomputed": {
+        "work_ngonka": 0,
+        "reward_ngonka": 94774642717702,
+        "total_claim_ngonka": 94774642717702,
+        "buyer_entitlement_ngonka": 94774642717702,
+        "host_entitlement_ngonka": 0,
+        "gross_usdt": 94774642,
+        "fee_usdt": 1421619,
+        "host_net_usdt": 93353023,
+        "buyer_refund_usdt": 5225358
+      }
+    },
+    {
+      "run_id": "e2e-usdt-exact-r2-20261009-06-native-release-rollback-r",
+      "scope": "bootstrap",
+      "tx_hash": "6E1D4D99116D834A1EEF74680AE6E13FE76BB581B3346EF733DFF78294C34910",
+      "recomputed": {
+        "work_ngonka": 0,
+        "reward_ngonka": 94774642717702,
+        "total_claim_ngonka": 94774642717702,
+        "buyer_entitlement_ngonka": 100000000000,
+        "host_entitlement_ngonka": 94674642717702,
+        "gross_usdt": 100000000,
+        "fee_usdt": 1500000,
+        "host_net_usdt": 98500000,
+        "buyer_refund_usdt": 0
+      }
+    }
+  ],
+  "payouts": [
+    {
+      "run_id": "e2e-usdt-exact-r2-20261009-03-terminal-release-repeat",
+      "scope": "bootstrap",
+      "role": "host",
+      "tx_hash": "1C8F123750160E93D88FD00E2D7547B38E66CF33C2BB87588836CA920EDA12E7",
+      "amount": 93353023
+    },
+    {
+      "run_id": "e2e-usdt-exact-r2-20261009-03-terminal-release-repeat",
+      "scope": "bootstrap",
+      "role": "fee_recipient",
+      "tx_hash": "FA64B89127CDF0537EAB6365063956E211263504EA70898EFABA1E8ABEEAC269",
+      "amount": 1421619
+    },
+    {
+      "run_id": "e2e-usdt-exact-r2-20261009-03-terminal-release-repeat",
+      "scope": "bootstrap",
+      "role": "buyer",
+      "tx_hash": "1A3A67C035055BEAAF765B9FA3C523C2E6B723D040BC6D3D28805683C7DE2A8E",
+      "amount": 5225358
+    },
+    {
+      "run_id": "e2e-usdt-exact-r2-20261009-06-native-release-rollback-r",
+      "scope": "bootstrap",
+      "role": "host",
+      "tx_hash": "220671BC1F98ABCCC8678220E334AF28CA38ACA551DA2938A991EEF1D49FD35E",
+      "amount": 98500000
+    },
+    {
+      "run_id": "e2e-usdt-exact-r2-20261009-06-native-release-rollback-r",
+      "scope": "bootstrap",
+      "role": "fee_recipient",
+      "tx_hash": "18150949FF98799BD34702DE5208D620DCEE677509C799067F089CB2AABAC4D8",
+      "amount": 1500000
+    }
+  ],
+  "refunds": [
+    {
+      "run_id": "e2e-usdt-exact-r2-20261009-01-network-unconfirmed",
+      "scope": "network-unconfirmed",
+      "tx_hash": "A2777E86C905331AFF1BCD76A376266CC4D8C6FD0C43414C70EE94D8A7B1C993",
+      "buyer_refund": 10000000
+    },
+    {
+      "run_id": "e2e-usdt-exact-r2-20261009-02-claim-expiry-positive",
+      "scope": "claim-expiry-positive",
+      "tx_hash": "3F6FA5DDC9493D3574F4DF3D31A50B50C463541A53280094CD3ABAAC98AD88FA",
+      "buyer_refund": 10000000
+    }
+  ],
+  "native_retries": [
+    {
+      "run_id": "e2e-usdt-exact-r2-20261009-06-native-release-rollback-r",
+      "scope": "bootstrap",
+      "failed_tx": "19AE8B83B3110095E8B58ED039C7748301EE3F99BEBCD10E608390CCDDF6672A",
+      "retry_tx": "213975D700337E4E898D3E424EC07B2F0D8DC3ADEAC12F5FDFD8D7ACDAFEE12E",
+      "delivered_ngonka": 94774642717702
+    }
+  ]
+}
