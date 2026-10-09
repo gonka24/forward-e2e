@@ -37,13 +37,13 @@ Offline validation passed: runner 1398 tests with 12 skips, harness 235 tests, l
 
 ## Evidence package
 
-- [Evidence release](https://github.com/gonka24/forward-e2e/releases/tag/evidence-mainnet-usdt-20261009)
-- [Full archive](https://github.com/gonka24/forward-e2e/releases/download/evidence-mainnet-usdt-20261009/native-usdt-evidence.tar.gz)
 - [Independent audit](native-audit.json)
 - [Full-package regrade](offline-regrade.json)
 - [Archive integrity receipt](archive-verification.json)
 
 Archive: 1,264,872,818 bytes, 9,587 files including the complete original run package's 9,559 files. SHA256: `22cf6a59831bfd0b2f875e019f9e7e213f08b9382f4af07512cc02997fa93513`.
+
+The full archive is retained locally. Public publication requires separate authorization and has not occurred; there is no public download URL yet. The compact receipts below support review of the recorded outcome, while independent regrading requires the full package.
 
 Every archive member was compared with the input file's size and SHA256, and the copied archive's SHA256 matched. The archive includes raw receipts, JUnit, manifests, immutable lock, source bundles, separate review code/results, runner build provenance and offline test logs. These live receipts are validation records, not synthetic test fixtures.
 
