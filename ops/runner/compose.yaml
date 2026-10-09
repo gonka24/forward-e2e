@@ -57,6 +57,8 @@ services:
       - E2E_RUNNER_IMAGE_ID=${E2E_RUNNER_IMAGE_ID:-}
       - E2E_RUNNER_IMAGE_DIGEST=${E2E_RUNNER_IMAGE_DIGEST:-}
       - E2E_CREDENTIAL_FILE=${E2E_CREDENTIAL_FILE:-}
+      # Semantic token selection is sealed into each new plan; replay restores it.
+      - E2E_SETTLEMENT_TOKEN=${E2E_SETTLEMENT_TOKEN:-test-cw20}
     volumes:
       # Optional read-only local sources. Only committed objects of the
       # requested SHA are ever exported from them; nothing is written back.

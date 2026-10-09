@@ -994,7 +994,7 @@ class LoadedRunPackage:
                                 )
                 if not requirement.requires_deployment_evidence:
                     continue
-                report = evidence_policy_verify_deployment(payload, build=build)
+                report = evidence_policy_verify_deployment(payload, build=build, lock=self.lock)
                 if report["mismatches"]:
                     findings.append(
                         Finding(
@@ -1139,7 +1139,7 @@ class LoadedRunPackage:
 
 
 def evidence_policy_verify_deployment(
-    payload: Mapping[str, Any], *, build: BuildManifest
+    payload: Mapping[str, Any], *, build: BuildManifest, lock: Optional[RunLock] = None,
 ) -> Dict[str, Any]:
     """Offline form of the executor's deployment check.
 
@@ -1153,6 +1153,10 @@ def evidence_policy_verify_deployment(
         payload,
         built_wasm=build.wasm,
         expected_manifest_sha256=(build.deployment or {}).get("a9_manifest_sha256"),
+        expected_settlement_token_mode=(
+            lock.semantic_inputs.get("semantic_environment", {}).get("E2E_SETTLEMENT_TOKEN", "test-cw20")
+            if lock is not None else None
+        ),
     )
 
 

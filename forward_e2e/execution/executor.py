@@ -1078,6 +1078,7 @@ def execute_plan(
         findings = _verify_post_run_provenance(
             suite_root,
             manifest=manifest,
+            expected_settlement_token_mode=lock.semantic_inputs.get("semantic_environment", {}).get("E2E_SETTLEMENT_TOKEN", "test-cw20"),
             adapter=gonka_adapter,
             sources_root=gonka_src.worktree,
             selected_sha=gonka_src.commit_sha,
@@ -1598,6 +1599,7 @@ def _verify_post_run_provenance(
     emit: Callable[[str], None],
     platform: Optional[str] = None,
     marketplace_sha: Optional[str] = None,
+    expected_settlement_token_mode: Optional[str] = None,
 ) -> Dict[str, Any]:
     """Re-check, offline, that the network really ran what was built.
 
@@ -1709,6 +1711,7 @@ def _verify_post_run_provenance(
             payload,
             built_wasm=manifest.wasm,
             expected_manifest_sha256=(manifest.deployment or {}).get("a9_manifest_sha256"),
+            expected_settlement_token_mode=expected_settlement_token_mode,
         )
         report["task_id"] = requirement.task_id
         report["path"] = relative

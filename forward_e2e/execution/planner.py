@@ -44,6 +44,7 @@ from ..suite.catalog import (
     resolve_e2e_selection,
 )
 from ..suite.models import TaskPlan
+from ..suite import settlement_token
 from .runner_source import read_runner_source
 from .compat import (
     AdapterMatch,
@@ -91,6 +92,8 @@ HARNESS_FILES: Tuple[str, ...] = (
     # Stops/starts the *same* API container by id and ownership label; it
     # replaces the helper the old overlay patched into LocalInferencePair.kt.
     "harness/container_control.py",
+    # Shared binary and initialization policy, also loaded standalone by path.
+    "forward_e2e/suite/settlement_token.py",
 )
 
 #: Evidence collection, verification and reporting. Same rule: runner-owned.
@@ -134,6 +137,7 @@ EXTERNAL_TEST_DIRS: Tuple[Tuple[str, str], ...] = (
     ("network_templates", "harness/network"),
     ("go_boundary", "harness/go_boundary"),
     ("wasm_probe", "harness/wasm_query_allowlist"),
+    ("settlement_token", "harness/settlement_token"),
 )
 
 #: Environment variables that carry *semantic* meaning: they can change the
@@ -383,6 +387,14 @@ def build_plan(
         )
     except ValueError as exc:
         raise SelectionError(str(exc)) from exc
+    try:
+        mode = settlement_token.validate_selection(
+            env if env is not None else os.environ, [task.task_id for task in tasks]
+        )
+        if mode == settlement_token.MAINNET_MODE:
+            settlement_token.verify_mainnet_assets(layout.root / "harness/settlement_token")
+    except settlement_token.SettlementTokenError as exc:
+        raise SelectionError(str(exc), {"token_error_code": exc.code}) from exc
     scenario_ids = [task.task_id for task in tasks]
     selection_label = resolved_profile and f"--profile {resolved_profile}" or "--scenario selection"
 

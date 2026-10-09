@@ -1,0 +1,44 @@
+{
+  "schema_version": "forward-usdt/publication/1",
+  "verification": "PASSED",
+  "release_url": "https://github.com/gonka24/forward-e2e/releases/tag/evidence-mainnet-usdt-20261009",
+  "runner_commit": "06fb0bec12ff23d12c0189805ddaf82fdf26bd6b",
+  "prerelease": true,
+  "assets": [
+    {
+      "name": "archive-verification.json",
+      "size_bytes": 525,
+      "github_digest": "sha256:281115ad505a9eaf494836c2171ad699ea3607403dce8978bd69dfd2fb81afd0",
+      "url": "https://github.com/gonka24/forward-e2e/releases/download/evidence-mainnet-usdt-20261009/archive-verification.json",
+      "state": "uploaded"
+    },
+    {
+      "name": "native-audit.json",
+      "size_bytes": 10012,
+      "github_digest": "sha256:4cee443c3ddef48b2e6535d6f5dc77073289676d25f84c20d7a4f3adb2dd9190",
+      "url": "https://github.com/gonka24/forward-e2e/releases/download/evidence-mainnet-usdt-20261009/native-audit.json",
+      "state": "uploaded"
+    },
+    {
+      "name": "native-usdt-evidence.tar.gz",
+      "size_bytes": 1264872818,
+      "github_digest": "sha256:22cf6a59831bfd0b2f875e019f9e7e213f08b9382f4af07512cc02997fa93513",
+      "url": "https://github.com/gonka24/forward-e2e/releases/download/evidence-mainnet-usdt-20261009/native-usdt-evidence.tar.gz",
+      "state": "uploaded"
+    },
+    {
+      "name": "offline-regrade.json",
+      "size_bytes": 16998,
+      "github_digest": "sha256:a59c0f71cad241343838f9d72e6e1a46356ea7c0d793b53b605e9c63e7000f39",
+      "url": "https://github.com/gonka24/forward-e2e/releases/download/evidence-mainnet-usdt-20261009/offline-regrade.json",
+      "state": "uploaded"
+    },
+    {
+      "name": "REPORT.md",
+      "size_bytes": 11972,
+      "github_digest": "sha256:fc124ce5e5a931bc8ebd0d144db774ced37e16332308114b83329a5457a87c54",
+      "url": "https://github.com/gonka24/forward-e2e/releases/download/evidence-mainnet-usdt-20261009/REPORT.md",
+      "state": "uploaded"
+    }
+  ]
+}

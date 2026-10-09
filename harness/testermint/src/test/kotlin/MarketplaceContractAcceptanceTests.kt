@@ -427,7 +427,8 @@ class MarketplaceContractAcceptanceTests : TestermintTest() {
         val targetEpoch = genesis.getEpochData().latestEpoch.index + 3
 
         logSection("Deploy one funded G3 Deal with independent financial roles")
-        bootstrap(targetEpoch)
+        // The mainnet-token run must deliver positive amounts to all three roles.
+        bootstrap(targetEpoch, price = if (System.getenv("E2E_SETTLEMENT_TOKEN") == "mainnet-usdt") 1000L else null)
 
         genesis.markNeedsReboot()
         logSection("Reach E=$targetEpoch and lock the exact native recipient")

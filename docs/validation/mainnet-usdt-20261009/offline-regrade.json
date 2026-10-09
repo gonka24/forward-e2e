@@ -1,0 +1,399 @@
+{
+  "schema_version": "e2e/run-result/2",
+  "status": "PASSED",
+  "exit_code": 0,
+  "run_id": "e2e-usdt-exact-r2-20261009",
+  "plan_id": "usdt-exact-r2-20261009",
+  "lock_sha256": "c98f98a3af0a3f3da9a0f263a7401f37d2ea3c1354e7a48019eeb67ab37e96b0",
+  "suite_id": "e2e-usdt-exact-r2-20261009",
+  "suite_status": "PASSED",
+  "build_status": "COMPLETE",
+  "evaluated_at_utc": "2026-10-09T16:02:37.933836+00:00",
+  "documents": {
+    "run.lock.json": {
+      "present": true,
+      "sha256": "9972ac5600516998504941f3e217363c113f506ad6584f21583d33861c20931e",
+      "size_bytes": 49425
+    },
+    "build-manifest.json": {
+      "present": true,
+      "sha256": "4909c0e7ac3f7abac8f3d5bf72b86316c0ab2b5ff06efd3a27de909de5fb8073",
+      "size_bytes": 93299
+    },
+    "execution-manifest.json": {
+      "present": true,
+      "sha256": "c4079c7d277b7326d630e143d856792844186a9ce6ec8ff30666b2fc2bf80072",
+      "size_bytes": 2908
+    },
+    "delivery.json": {
+      "present": true,
+      "sha256": "cca2ac394a853dfe658fe83ab6eff46a01f691e42650406b498a11690149e8b1",
+      "size_bytes": 433
+    },
+    "suite-result.json": {
+      "present": true,
+      "sha256": "9cb5cc3145dbaff0cccb2e07bc85ddbd4b58ccfe333515d78be89ae53c3e29bc",
+      "size_bytes": 13336
+    },
+    "suite-plan.json": {
+      "present": true,
+      "sha256": "ae7a1b82d88d5c9c27aa33c48d26d214fc5b09f84a69cdbbc8fe3c8b384f5c2a",
+      "size_bytes": 7630
+    },
+    "e2e-context.json": {
+      "present": true,
+      "sha256": "07d2542ec6c3f62d2b2d123c9b80242472f90edd22fdac4889f714dd1078ad7c",
+      "size_bytes": 3158
+    }
+  },
+  "task_evidence": [
+    {
+      "task_id": "network-unconfirmed",
+      "ordinal": 1,
+      "proof_level": "NATIVE",
+      "run_id": "e2e-usdt-exact-r2-20261009-01-network-unconfirmed",
+      "requires_live_context": true,
+      "requires_deployment_evidence": true,
+      "requires_source_immutability": true,
+      "expected_artifacts": [
+        "live-context.json",
+        "junit/TEST-MarketplaceContractAcceptanceTests.xml",
+        "testermint.log"
+      ],
+      "live_context_path": "runs/e2e-usdt-exact-r2-20261009-01-network-unconfirmed/evidence/e2e-usdt-exact-r2-20261009-01-network-unconfirmed/live-context.json",
+      "live_context_present": true,
+      "source_immutability_path": "runs/e2e-usdt-exact-r2-20261009-01-network-unconfirmed/evidence/e2e-usdt-exact-r2-20261009-01-network-unconfirmed/source-immutability.json",
+      "source_immutability_present": true,
+      "status": "SATISFIED",
+      "problems": []
+    },
+    {
+      "task_id": "claim-expiry-positive",
+      "ordinal": 2,
+      "proof_level": "NATIVE",
+      "run_id": "e2e-usdt-exact-r2-20261009-02-claim-expiry-positive",
+      "requires_live_context": true,
+      "requires_deployment_evidence": true,
+      "requires_source_immutability": true,
+      "expected_artifacts": [
+        "live-context.json",
+        "junit/TEST-MarketplaceContractAcceptanceTests.xml",
+        "testermint.log"
+      ],
+      "live_context_path": "runs/e2e-usdt-exact-r2-20261009-02-claim-expiry-positive/evidence/e2e-usdt-exact-r2-20261009-02-claim-expiry-positive/live-context.json",
+      "live_context_present": true,
+      "source_immutability_path": "runs/e2e-usdt-exact-r2-20261009-02-claim-expiry-positive/evidence/e2e-usdt-exact-r2-20261009-02-claim-expiry-positive/source-immutability.json",
+      "source_immutability_present": true,
+      "status": "SATISFIED",
+      "problems": []
+    },
+    {
+      "task_id": "terminal-release-repeat",
+      "ordinal": 3,
+      "proof_level": "NATIVE",
+      "run_id": "e2e-usdt-exact-r2-20261009-03-terminal-release-repeat",
+      "requires_live_context": true,
+      "requires_deployment_evidence": true,
+      "requires_source_immutability": true,
+      "expected_artifacts": [
+        "live-context.json",
+        "junit/TEST-MarketplaceContractAcceptanceTests.xml",
+        "testermint.log"
+      ],
+      "live_context_path": "runs/e2e-usdt-exact-r2-20261009-03-terminal-release-repeat/evidence/e2e-usdt-exact-r2-20261009-03-terminal-release-repeat/live-context.json",
+      "live_context_present": true,
+      "source_immutability_path": "runs/e2e-usdt-exact-r2-20261009-03-terminal-release-repeat/evidence/e2e-usdt-exact-r2-20261009-03-terminal-release-repeat/source-immutability.json",
+      "source_immutability_present": true,
+      "status": "SATISFIED",
+      "problems": []
+    },
+    {
+      "task_id": "lock-exact-e",
+      "ordinal": 4,
+      "proof_level": "NATIVE",
+      "run_id": "e2e-usdt-exact-r2-20261009-04-lock-exact-e",
+      "requires_live_context": true,
+      "requires_deployment_evidence": true,
+      "requires_source_immutability": true,
+      "expected_artifacts": [
+        "live-context.json",
+        "junit/TEST-MarketplaceContractAcceptanceTests.xml",
+        "testermint.log"
+      ],
+      "live_context_path": "runs/e2e-usdt-exact-r2-20261009-04-lock-exact-e/evidence/e2e-usdt-exact-r2-20261009-04-lock-exact-e/live-context.json",
+      "live_context_present": true,
+      "source_immutability_path": "runs/e2e-usdt-exact-r2-20261009-04-lock-exact-e/evidence/e2e-usdt-exact-r2-20261009-04-lock-exact-e/source-immutability.json",
+      "source_immutability_present": true,
+      "status": "SATISFIED",
+      "problems": []
+    },
+    {
+      "task_id": "refund-boundary-and-vesting-addition",
+      "ordinal": 5,
+      "proof_level": "NATIVE",
+      "run_id": "e2e-usdt-exact-r2-20261009-05-refund-boundary-and-vesti",
+      "requires_live_context": true,
+      "requires_deployment_evidence": true,
+      "requires_source_immutability": true,
+      "expected_artifacts": [
+        "live-context.json",
+        "junit/TEST-MarketplaceContractAcceptanceTests.xml",
+        "testermint.log"
+      ],
+      "live_context_path": "runs/e2e-usdt-exact-r2-20261009-05-refund-boundary-and-vesti/evidence/e2e-usdt-exact-r2-20261009-05-refund-boundary-and-vesti/live-context.json",
+      "live_context_present": true,
+      "source_immutability_path": "runs/e2e-usdt-exact-r2-20261009-05-refund-boundary-and-vesti/evidence/e2e-usdt-exact-r2-20261009-05-refund-boundary-and-vesti/source-immutability.json",
+      "source_immutability_present": true,
+      "status": "SATISFIED",
+      "problems": []
+    },
+    {
+      "task_id": "native-release-rollback-retry",
+      "ordinal": 6,
+      "proof_level": "NATIVE",
+      "run_id": "e2e-usdt-exact-r2-20261009-06-native-release-rollback-r",
+      "requires_live_context": true,
+      "requires_deployment_evidence": true,
+      "requires_source_immutability": true,
+      "expected_artifacts": [
+        "live-context.json",
+        "junit/TEST-MarketplaceContractAcceptanceTests.xml",
+        "testermint.log"
+      ],
+      "live_context_path": "runs/e2e-usdt-exact-r2-20261009-06-native-release-rollback-r/evidence/e2e-usdt-exact-r2-20261009-06-native-release-rollback-r/live-context.json",
+      "live_context_present": true,
+      "source_immutability_path": "runs/e2e-usdt-exact-r2-20261009-06-native-release-rollback-r/evidence/e2e-usdt-exact-r2-20261009-06-native-release-rollback-r/source-immutability.json",
+      "source_immutability_present": true,
+      "status": "SATISFIED",
+      "problems": []
+    }
+  ],
+  "findings": [],
+  "provenance": {
+    "source_fingerprint": "c5addf1688e19e99805d1875a284742e445cc35ae5043d7235daaafc14799a78",
+    "source_immutability": {
+      "after_build_verdict": "UNCHANGED",
+      "after_execution_verdict": "UNCHANGED",
+      "model": "immutable-source",
+      "pristine_before_build": true,
+      "roles": {
+        "contracts": {
+          "after_build": {
+            "forbidden": [],
+            "head": "4092b665c97b87f937d4c4c230870cebb038a4d8",
+            "index_matches_head": true,
+            "missing_tracked": [],
+            "schema": "a8.source-snapshot/1",
+            "status": [],
+            "submodules": [],
+            "tracked_digest": "aeda7f5ad6a449fd2bf893d9a651428a4db92c6aeffb3e31020dbf66419cd9ae",
+            "tracked_files": 163,
+            "tree": "ba8be3f9f5052b7407cb5a7ad3d34b105614ed71"
+          },
+          "after_execution": {
+            "forbidden": [],
+            "head": "4092b665c97b87f937d4c4c230870cebb038a4d8",
+            "index_matches_head": true,
+            "missing_tracked": [],
+            "schema": "a8.source-snapshot/1",
+            "status": [],
+            "submodules": [],
+            "tracked_digest": "aeda7f5ad6a449fd2bf893d9a651428a4db92c6aeffb3e31020dbf66419cd9ae",
+            "tracked_files": 163,
+            "tree": "ba8be3f9f5052b7407cb5a7ad3d34b105614ed71"
+          },
+          "before_build": {
+            "forbidden": [],
+            "head": "4092b665c97b87f937d4c4c230870cebb038a4d8",
+            "index_matches_head": true,
+            "missing_tracked": [],
+            "schema": "a8.source-snapshot/1",
+            "status": [],
+            "submodules": [],
+            "tracked_digest": "aeda7f5ad6a449fd2bf893d9a651428a4db92c6aeffb3e31020dbf66419cd9ae",
+            "tracked_files": 163,
+            "tree": "ba8be3f9f5052b7407cb5a7ad3d34b105614ed71"
+          },
+          "expected_sha": "4092b665c97b87f937d4c4c230870cebb038a4d8",
+          "expected_tree": "ba8be3f9f5052b7407cb5a7ad3d34b105614ed71"
+        },
+        "gonka": {
+          "after_build": {
+            "forbidden": [],
+            "head": "136041c81ea8ff38e7620d76af66a7c7fe7eec50",
+            "index_matches_head": true,
+            "missing_tracked": [],
+            "schema": "a8.source-snapshot/1",
+            "status": [],
+            "submodules": [
+              {
+                "checked_out": "d8fc7e364de491984466e2ce776a2e13b0ae2fe0",
+                "materialized": true,
+                "path": "mlnode/packages/train/third_party/gorilla",
+                "pinned": "d8fc7e364de491984466e2ce776a2e13b0ae2fe0",
+                "snapshot": {
+                  "forbidden": [],
+                  "head": "d8fc7e364de491984466e2ce776a2e13b0ae2fe0",
+                  "index_matches_head": true,
+                  "missing_tracked": [],
+                  "schema": "a8.source-snapshot/1",
+                  "status": [],
+                  "submodules": [],
+                  "tracked_digest": "66d98bec9f2e77c28eb64dbb646fd9c1405f6c76e95e66a7f0276e89785b0b15",
+                  "tracked_files": 480,
+                  "tree": "3e0b06fd7599025469a1fb7a7e4d80e827850fae"
+                }
+              }
+            ],
+            "tracked_digest": "9c78f2bc626a644a507edab14debfb2caa68b19a55b4c2470c5fe239a2146e32",
+            "tracked_files": 3842,
+            "tree": "2208b147eaaeafbdc30043b19f6a1e4ca6d056dc"
+          },
+          "after_execution": {
+            "forbidden": [],
+            "head": "136041c81ea8ff38e7620d76af66a7c7fe7eec50",
+            "index_matches_head": true,
+            "missing_tracked": [],
+            "schema": "a8.source-snapshot/1",
+            "status": [],
+            "submodules": [
+              {
+                "checked_out": "d8fc7e364de491984466e2ce776a2e13b0ae2fe0",
+                "materialized": true,
+                "path": "mlnode/packages/train/third_party/gorilla",
+                "pinned": "d8fc7e364de491984466e2ce776a2e13b0ae2fe0",
+                "snapshot": {
+                  "forbidden": [],
+                  "head": "d8fc7e364de491984466e2ce776a2e13b0ae2fe0",
+                  "index_matches_head": true,
+                  "missing_tracked": [],
+                  "schema": "a8.source-snapshot/1",
+                  "status": [],
+                  "submodules": [],
+                  "tracked_digest": "66d98bec9f2e77c28eb64dbb646fd9c1405f6c76e95e66a7f0276e89785b0b15",
+                  "tracked_files": 480,
+                  "tree": "3e0b06fd7599025469a1fb7a7e4d80e827850fae"
+                }
+              }
+            ],
+            "tracked_digest": "9c78f2bc626a644a507edab14debfb2caa68b19a55b4c2470c5fe239a2146e32",
+            "tracked_files": 3842,
+            "tree": "2208b147eaaeafbdc30043b19f6a1e4ca6d056dc"
+          },
+          "before_build": {
+            "forbidden": [],
+            "head": "136041c81ea8ff38e7620d76af66a7c7fe7eec50",
+            "index_matches_head": true,
+            "missing_tracked": [],
+            "schema": "a8.source-snapshot/1",
+            "status": [],
+            "submodules": [
+              {
+                "checked_out": "d8fc7e364de491984466e2ce776a2e13b0ae2fe0",
+                "materialized": true,
+                "path": "mlnode/packages/train/third_party/gorilla",
+                "pinned": "d8fc7e364de491984466e2ce776a2e13b0ae2fe0",
+                "snapshot": {
+                  "forbidden": [],
+                  "head": "d8fc7e364de491984466e2ce776a2e13b0ae2fe0",
+                  "index_matches_head": true,
+                  "missing_tracked": [],
+                  "schema": "a8.source-snapshot/1",
+                  "status": [],
+                  "submodules": [],
+                  "tracked_digest": "66d98bec9f2e77c28eb64dbb646fd9c1405f6c76e95e66a7f0276e89785b0b15",
+                  "tracked_files": 480,
+                  "tree": "3e0b06fd7599025469a1fb7a7e4d80e827850fae"
+                }
+              }
+            ],
+            "tracked_digest": "9c78f2bc626a644a507edab14debfb2caa68b19a55b4c2470c5fe239a2146e32",
+            "tracked_files": 3842,
+            "tree": "2208b147eaaeafbdc30043b19f6a1e4ca6d056dc"
+          },
+          "expected_sha": "136041c81ea8ff38e7620d76af66a7c7fe7eec50",
+          "expected_tree": "2208b147eaaeafbdc30043b19f6a1e4ca6d056dc"
+        }
+      },
+      "verdict": "UNCHANGED"
+    },
+    "build_inputs": {
+      "contracts_sha": "4092b665c97b87f937d4c4c230870cebb038a4d8",
+      "goarch": "amd64",
+      "gonka_sha": "136041c81ea8ff38e7620d76af66a7c7fe7eec50",
+      "gonka_version": "136041c8",
+      "platform": "linux/amd64",
+      "runner_image_id": "sha256:fc87be23ef32678eb260fa167a863c8bfe57bdcce199f1e0d24c813dd51aa075"
+    },
+    "staged_contexts": [
+      {
+        "destination": "/workspace/e2e-usdt-exact-r2-20261009/run/build/docker-context/inferenced/inference-chain",
+        "digest": {
+          "files": 1176,
+          "kind": "tree",
+          "sha256": "3a8158d8bb71bc908c6747fe293823747745d134ce3a887aa9828fdac6aefac0"
+        },
+        "source": "/workspace/e2e-usdt-exact-r2-20261009/src/gonka/inference-chain",
+        "step_id": "stage-inferenced-context",
+        "what": "inference-chain sources"
+      },
+      {
+        "destination": "/workspace/e2e-usdt-exact-r2-20261009/run/build/docker-context/inferenced/cosmovisor",
+        "digest": {
+          "files": 4,
+          "kind": "tree",
+          "sha256": "5242840f8663d744fad86338e7c10ce8ca00b9d6c64c3261db0378eadaf5bbcf"
+        },
+        "source": "/workspace/e2e-usdt-exact-r2-20261009/src/gonka/cosmovisor",
+        "step_id": "stage-inferenced-context",
+        "what": "pinned cosmovisor binaries"
+      },
+      {
+        "destination": "/workspace/e2e-usdt-exact-r2-20261009/run/build/docker-context/mock-server/mock_server/build/libs/mock_server-all.jar",
+        "digest": {
+          "files": 1,
+          "kind": "file",
+          "mode": "644",
+          "sha256": "0d678554c53b0ddc23b94e943f01dbcf20be6a4652aa4414cef46809af4db45d"
+        },
+        "source": "/workspace/e2e-usdt-exact-r2-20261009/run/build/mock-server-build/mock_server/libs/mock_server-all.jar",
+        "step_id": "stage-mock-server-context",
+        "what": "mock server jar built from the selected commit"
+      }
+    ],
+    "component_identities": {},
+    "instrumented": false,
+    "deployment": {
+      "a9_manifest_path": "/workspace/e2e-usdt-exact-r2-20261009/run/build/a9-release/build-manifest.json",
+      "a9_manifest_sha256": "e6572e942a5e0f33a39a14ba04180b11adf5267a7c245069e033a46646889187",
+      "fixture_wasm": [
+        {
+          "role": "test-wasm-target/wasm32-unknown-unknown/release/a8_caller.wasm",
+          "sha256": "6318771451ff24c57964a451d52270e4b0830a8fd732536166a7f13cb9ed73ea"
+        },
+        {
+          "role": "test-wasm-target/wasm32-unknown-unknown/release/a8_cw20.wasm",
+          "sha256": "b00a5ce8fc6e5f0cf94e39655b498a6276bb053606f4f92bb77210f26374bc09"
+        }
+      ],
+      "note": "The suite is given --manifest, so it deploys these production artefacts instead of starting a second release build. The fixtures are harness-side contracts and are never presented as production evidence.",
+      "production_wasm": [
+        {
+          "role": "a9-release/wasm/marketplace_deal.wasm",
+          "sha256": "24b2a721632f23c25f543721553701a465064e05b78eb48fb9667e46fe967027"
+        },
+        {
+          "role": "a9-release/wasm/marketplace_factory.wasm",
+          "sha256": "8366a874619c03e54ed36edf6b0ebbde4001afcf6c1b02ed40f9762350e6d82b"
+        }
+      ]
+    },
+    "observed_runtime_summary": {
+      "live_contexts": 6,
+      "containers": 6,
+      "source_immutability": 6
+    }
+  },
+  "cancellation_exit_code": null,
+  "provenance_model": "immutable-source"
+}

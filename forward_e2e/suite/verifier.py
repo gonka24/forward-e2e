@@ -44,6 +44,7 @@ from .models import (
 )
 from .runtime import sha256_file
 from . import source_snapshot
+from .settlement_token import MAINNET_MODE, verify_local_token_evidence, _rejected
 from ..execution.file_safety import read_checked_file_bytes, sha256_size_checked_file
 
 
@@ -1183,8 +1184,9 @@ def _validate_r6_delivery(
     if set(withdrawals) != {"host", "fee", "buyer"}:
         return False
     last_height = max(
-        _as_int(_obj(entry.get("clear_tx")).get("height")) or 0
-        for entry in phase["cw20_fault_rollbacks"]
+        (_as_int(_obj(entry.get("clear_tx")).get("height")) or 0
+         for entry in phase["cw20_fault_rollbacks"]),
+        default=_as_int(_obj(phase.get("settle_tx")).get("height")) or 0,
     )
     for key, role, event_type in (
         ("host", "host", "wasm-usdt_paid"),
@@ -1227,6 +1229,112 @@ def _validate_r6_delivery(
         and _as_int(proof.get("height")) == _as_int(attempt.get("height"))
         and proof.get("matched_contract_error") == "cannot settle claim in state"
     )
+
+
+def _validate_mainnet_usdt_settlement(scope: Mapping[str, Any]) -> bool:
+    """Verify real-token payouts without crediting test-only transfer fault proof."""
+    phases = _scope_phases(scope, "claim_settle")
+    if len(phases) != 1:
+        return False
+    phase = phases[0]
+    accounts, contracts, terms = (_obj(scope.get(key)) for key in ("accounts", "contracts", "terms"))
+    summary = _obj(_obj(phase.get("summary")).get("epochPerformanceSummary"))
+    work, reward = _as_int(summary.get("earned_coins", 0)), _as_int(summary.get("rewarded_coins", 0))
+    price, budget, fee_bps = (_as_int(terms.get(key)) for key in ("price_micro_usdt_per_gnk", "budget_micro_usdt", "fee_bps"))
+    if (
+        work is None or reward is None or not 0 <= work < 2**64 or not 0 <= reward < 2**64
+        or work + reward <= 0 or price is None or price <= 0 or budget is None or budget <= 0
+        or fee_bps != 150 or summary.get("claimed") is not True
+        or summary.get("participant_id") != accounts.get("host")
+        or _as_int(summary.get("epoch_index")) != _as_int(terms.get("target_epoch"))
+        or not _tx_included(_obj(phase.get("settle_tx")))
+        # Native rewards must already have been claimed when settlement reads
+        # their summary; a later successful claim cannot prove that precondition.
+        or not _tx_included(_obj(phase.get("claim_tx")))
+        or _as_int(phase["claim_tx"].get("height")) > _as_int(phase["settle_tx"].get("height"))
+        or phase.get("cw20_fault_rollbacks") != []
+    ):
+        return False
+    total = work + reward
+    capacity = budget * 10**9 // price
+    buyer_entitlement = min(total, capacity)
+    gross = buyer_entitlement * price // 10**9
+    fee = gross * fee_bps // 10000
+    amounts = {"host": gross - fee, "fee_recipient": fee, "buyer": budget - gross}
+    if any(amount <= 0 for amount in amounts.values()):
+        return False
+    oracle = {
+        "status": "releasing", "work_ngonka": work, "reward_ngonka": reward,
+        "total_claim_ngonka": total, "buyer_entitlement_ngonka": buyer_entitlement,
+        "host_entitlement_ngonka": total - buyer_entitlement,
+        "gnk_release_policy": {"proportional": {"buyer_share_numerator": buyer_entitlement, "share_denominator": total}},
+        "gross_usdt": gross, "fee_usdt": fee, "host_net_usdt": gross - fee,
+        "buyer_refund_usdt": budget - gross,
+    }
+    state = _obj(_obj(phase.get("after")).get("deal_state"))
+    before = _obj(phase.get("before"))
+    expected, actual = _obj(phase.get("expected")), _obj(phase.get("actual"))
+    pre_balances, post_balances = _int_map(before.get("cw20")), _int_map(_obj(phase.get("after")).get("cw20"))
+    config = _obj(phase.get("deal_config"))
+    if (
+        not pre_balances or not post_balances or post_balances.get("deal") != 0
+        or pre_balances.get("deal") != budget
+        or not {"host", "fee_recipient", "buyer", "deal"} <= set(pre_balances)
+        or not {"host", "fee_recipient", "buyer", "deal"} <= set(post_balances)
+        or _obj(before.get("deal_state")).get("status") != "locked"
+        or _obj(before.get("deal_state")).get("buyer") != accounts.get("buyer")
+        or _obj(before.get("deal_state")).get("recipient_locked") is not True
+        or config.get("host") != accounts.get("host") or config.get("deal_address") != contracts.get("deal")
+        or config.get("settlement_cw20") != contracts.get("cw20")
+        or config.get("fee_recipient") != accounts.get("fee_recipient")
+        or _as_int(config.get("target_epoch")) != _as_int(terms.get("target_epoch"))
+        or _as_int(config.get("buyer_budget_micro_usdt")) != budget
+        or _as_int(config.get("price_micro_usdt_per_gnk")) != price
+        or _as_int(config.get("funded_capacity_ngonka")) != capacity or _as_int(config.get("fee_bps")) != fee_bps
+        or _int_map(expected.get("cw20_deltas")) != amounts
+        or _int_map(actual.get("cw20_deltas")) != amounts
+        or _as_int(expected.get("deal_outflow")) != budget or _as_int(actual.get("deal_outflow")) != budget
+        or any(_normalized(state.get(key)) != _normalized(value) or _normalized(expected.get(key)) != _normalized(value)
+               for key, value in oracle.items())
+        or any(post_balances.get(role, -1) - pre_balances.get(role, -1) != amount for role, amount in amounts.items())
+    ):
+        return False
+    for key, role in (("host", "host"), ("fee", "fee_recipient"), ("buyer", "buyer")):
+        payment = _obj(_obj(phase.get("settlement_payments")).get(key))
+        if (payment.get("recipient") != accounts.get(role) or _as_int(payment.get("pending_micro_usdt")) != amounts[role]
+            or _as_int(payment.get("paid_micro_usdt")) != 0 or _as_int(payment.get("accrued_micro_usdt")) != amounts[role]):
+            return False
+    event = _event_attributes(_obj(phase.get("settle_tx")), "wasm-claim_settled")
+    if (
+        not event or event.get("_contract_address") != contracts.get("deal")
+        or event.get("host") != accounts.get("host") or event.get("buyer") != accounts.get("buyer")
+        or any(_as_int(event.get(key)) != oracle[key] for key in ("gross_usdt", "fee_usdt", "host_net_usdt", "buyer_refund_usdt"))
+        or not _validate_r6_delivery(phase, accounts, contracts, amounts, {str(phase["settle_tx"]["tx_hash"])})
+    ):
+        return False
+    repeats = phase.get("withdrawal_repeats")
+    if not isinstance(repeats, list) or len(repeats) != 3:
+        return False
+    hashes = {str(tx["tx_hash"]) for tx in phase["withdrawal_txs"].values()}
+    hashes.update((str(phase["claim_tx"]["tx_hash"]), str(phase["settle_tx"]["tx_hash"]), str(phase["settle_repeat"]["attempt"]["tx_hash"])))
+    for entry, key in zip(repeats, ("host", "fee", "buyer")):
+        before = _obj(entry.get("before"))
+        attempt = _obj(entry.get("attempt"))
+        if (
+            entry.get("role") != key or not _rejected(attempt, "no usdt remains payable for this role")
+            or before != entry.get("after") or before.get("state") != state
+            or attempt.get("tx_hash") in hashes
+            or (_as_int(attempt.get("height")) or 0) < (_as_int(phase["settle_repeat"]["attempt"].get("height")) or 0)
+            or any(_as_int(_obj(before.get("cw20")).get(role)) != post_balances.get(role) for role in (*amounts, "deal"))
+        ):
+            return False
+        for payment_key, role in (("host", "host"), ("fee", "fee_recipient"), ("buyer", "buyer")):
+            payment = _obj(_obj(before.get("payments")).get(payment_key))
+            if (payment.get("recipient") != accounts.get(role) or _as_int(payment.get("paid_micro_usdt")) != amounts[role]
+                or _as_int(payment.get("pending_micro_usdt")) != 0 or _as_int(payment.get("accrued_micro_usdt")) != amounts[role]):
+                return False
+        hashes.add(str(attempt["tx_hash"]))
+    return True
 
 
 def _validate_funded_claim_path(scope: Mapping[str, Any]) -> bool:
@@ -4830,6 +4938,10 @@ def verify_live_context(
     if data.get("test_fixture_only") is True:
         return False, [], "test-only fixture cannot be verified as live evidence"
 
+    token_error = verify_local_token_evidence(data)
+    if token_error is not None:
+        return False, [], token_error
+
     # 1. Run ID validation
     actual_run_id = data.get("run_id")
     if expected_run_id is not None:
@@ -4884,6 +4996,9 @@ def verify_live_context(
     observed = extract_and_validate_scenario_predicates(
         data, scenario_selector, evidence_scopes
     )
+    if source.get("settlement_token_mode") == MAINNET_MODE and scenario_selector == "terminal-release-repeat":
+        if not _validate_mainnet_usdt_settlement(data) or not _validate_funded_release_lifecycle(data):
+            return False, sorted(observed), "mainnet USDT settlement, repeated withdrawals or native release lifecycle is unproven"
 
     missing_cp = [cp for cp in expected_checkpoints if cp not in observed]
     if missing_cp:
