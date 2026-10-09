@@ -77,10 +77,18 @@ class SettlementTokenTests(unittest.TestCase):
             },
             "bootstrap": {"fund_tx": tx(5), "cw20_before": before, "cw20_after": after, "deal_state": funded, "funding_rejections": {}},
         }
-        payload["bootstrap"]["fund_tx"]["events"] = [{"type": kind, "attributes": [{"key": key, "value": value} for key, value in attributes.items()]} for kind, attributes in (
+        def events(*entries):
+            return [{"type": kind, "attributes": [{"key": key, "value": value} for key, value in attributes.items()]} for kind, attributes in entries]
+        payload["stores"]["cw20"]["tx"]["events"] = events(("store_code", {"code_id": "3", "code_checksum": self.digest}))
+        payload["deployments"]["cw20"]["tx"]["events"] = events(("instantiate", {"_contract_address": self.contract, "code_id": "3"}))
+        payload["settlement_token"]["metadata_tx"]["events"] = events(
+            ("execute", {"_contract_address": self.contract}),
+            ("wasm", {"_contract_address": self.contract, "method": "update_metadata", **{key: str(value) for key, value in token.TOKEN_METADATA.items()}}),
+        )
+        payload["bootstrap"]["fund_tx"]["events"] = events(*(
             ("wasm-deal_funded", {"_contract_address": deal, "deal": deal, "buyer": self.buyer, "buyer_budget_micro_usdt": "100000000"}),
             ("wasm", {"_contract_address": self.contract, "action": "send", "from": self.buyer, "to": deal, "amount": "100000000"}),
-        )]
+        ))
         for name, index, status, balances, amount, marker in (
             ("wrong_amount", 4, "open", before, 99999999, "funding amount must be exactly"),
             ("duplicate", 6, "funded", after, 100000000, "cannot fund deal in state"),
@@ -99,6 +107,31 @@ class SettlementTokenTests(unittest.TestCase):
 
     def test_local_receipts_bind_code_metadata_and_two_atomic_send_rejections(self):
         self.assertIsNone(self.verify_local(self.local_context()))
+
+    def test_a_store_receipt_cannot_substitute_for_the_token_instantiation(self):
+        value = copy.deepcopy(self.local_context())
+        value["deployments"]["cw20"]["tx"] = copy.deepcopy(value["stores"]["cw20"]["tx"])
+        self.assertIn("operation receipts", self.verify_local(value))
+
+    def test_a_store_receipt_cannot_substitute_for_the_metadata_update(self):
+        value = copy.deepcopy(self.local_context())
+        value["settlement_token"]["metadata_tx"] = copy.deepcopy(value["stores"]["cw20"]["tx"])
+        self.assertIn("operation receipts", self.verify_local(value))
+
+    def test_metadata_for_a_different_token_does_not_prove_this_tokens_initialization(self):
+        value = copy.deepcopy(self.local_context())
+        value["settlement_token"]["metadata_tx"]["events"][1]["attributes"][0]["value"] = self.buyer
+        self.assertIn("operation receipts", self.verify_local(value))
+
+    def test_a_metadata_update_after_funding_is_rejected_as_inconsistent_bootstrap_evidence(self):
+        value = copy.deepcopy(self.local_context())
+        value["settlement_token"]["metadata_tx"]["height"] = "100"
+        self.assertIn("operation receipts", self.verify_local(value))
+
+    def test_a_store_event_for_another_code_is_not_compensated_by_the_code_query(self):
+        value = copy.deepcopy(self.local_context())
+        value["stores"]["cw20"]["tx"]["events"][0]["attributes"][0]["value"] = "4"
+        self.assertIn("operation receipts", self.verify_local(value))
 
     def test_a_missing_mode_declaration_cannot_downgrade_a_locked_mainnet_token_run(self):
         value = copy.deepcopy(self.local_context())

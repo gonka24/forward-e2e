@@ -103,7 +103,7 @@ def _rejected(attempt: Mapping[str, Any], marker: str) -> bool:
     )
 
 
-def _event(tx: Mapping[str, Any], kind: str, address: str) -> dict[str, str] | None:
+def _event(tx: Mapping[str, Any], kind: str, address: str | None = None) -> dict[str, str] | None:
     found = []
     for event in tx.get("events", []):
         if event.get("type") != kind:
@@ -112,7 +112,7 @@ def _event(tx: Mapping[str, Any], kind: str, address: str) -> dict[str, str] | N
         values = {entry["key"]: str(entry["value"]) for entry in attributes}
         if len(values) != len(attributes):
             return None
-        if values.get("_contract_address") == address:
+        if address is None or values.get("_contract_address") == address:
             found.append(values)
     return found[0] if len(found) == 1 else None
 
@@ -215,6 +215,25 @@ def verify_local_token_evidence(
             or code_checksum(receipt["code_info"]) != MAINNET_WASM_SHA256
         ):
             return "local USDT deployment does not prove the pinned Wasm"
+        # Success alone cannot identify an operation: a store receipt must not
+        # substitute for instantiation or metadata execution in offline proof.
+        store_tx, instantiate_tx, metadata_tx = store["tx"], deployment["tx"], receipt["metadata_tx"]
+        transactions = (store_tx, instantiate_tx, metadata_tx, payload["bootstrap"]["fund_tx"])
+        store_event = _event(store_tx, "store_code")
+        instantiate_event = _event(instantiate_tx, "instantiate", token_address)
+        metadata_event = _event(metadata_tx, "wasm", token_address)
+        if (
+            not all(_included(tx) for tx in transactions)
+            or len({tx["tx_hash"].lower() for tx in transactions}) != len(transactions)
+            or [int(tx["height"]) for tx in transactions] != sorted(int(tx["height"]) for tx in transactions)
+            or not store_event or store_event.get("code_checksum", "").lower() != MAINNET_WASM_SHA256
+            or store_event.get("code_id") != str(payload["code_ids"]["cw20"])
+            or not instantiate_event or instantiate_event.get("code_id") != str(payload["code_ids"]["cw20"])
+            or not _event(metadata_tx, "execute", token_address)
+            or not metadata_event or metadata_event.get("method") != "update_metadata"
+            or any(metadata_event.get(key) != str(value) for key, value in TOKEN_METADATA.items())
+        ):
+            return "local USDT operation receipts are not bound to ordered store, instantiate and metadata transactions"
         info = deployment["contract_info"]
         info = info.get("contract_info", info)
         code = receipt["code_info"]

@@ -48,6 +48,12 @@ class MainnetUsdtSettlementTests(unittest.TestCase):
     def test_native_summary_three_payouts_and_three_rejected_repeats_reconcile(self):
         self.assertTrue(_validate_mainnet_usdt_settlement(settlement_context()))
 
+    def test_a_native_claim_after_settlement_cannot_prove_the_settlement_precondition(self):
+        value = copy.deepcopy(settlement_context())
+        phase = value["phases"][0]
+        phase["claim_tx"]["height"] = str(int(phase["settle_tx"]["height"]) + 1)
+        self.assertFalse(_validate_mainnet_usdt_settlement(value))
+
     def test_a_changed_native_reward_is_not_compensated_by_matching_reported_totals(self):
         value = copy.deepcopy(settlement_context())
         value["phases"][0]["summary"]["epochPerformanceSummary"]["rewarded_coins"] = "1"

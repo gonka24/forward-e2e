@@ -1248,6 +1248,10 @@ def _validate_mainnet_usdt_settlement(scope: Mapping[str, Any]) -> bool:
         or summary.get("participant_id") != accounts.get("host")
         or _as_int(summary.get("epoch_index")) != _as_int(terms.get("target_epoch"))
         or not _tx_included(_obj(phase.get("settle_tx")))
+        # Native rewards must already have been claimed when settlement reads
+        # their summary; a later successful claim cannot prove that precondition.
+        or not _tx_included(_obj(phase.get("claim_tx")))
+        or _as_int(phase["claim_tx"].get("height")) > _as_int(phase["settle_tx"].get("height"))
         or phase.get("cw20_fault_rollbacks") != []
     ):
         return False
