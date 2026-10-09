@@ -70,7 +70,7 @@ class SettlementTokenTests(unittest.TestCase):
                 "asset_identity": token.verify_mainnet_assets(self.root),
                 "local_differences": dict(token.LOCAL_DIFFERENCES), "local_controller": self.admin,
                 "instantiate_message": token.local_instantiate_message(self.buyer, 200000000, self.admin),
-                "code_info": {"code_id": "3", "data_hash": self.digest.upper()},
+                "code_info": {"code_id": "3", "checksum": self.digest.upper()},
                 "metadata_tx": tx(3), "bridge_info": dict(token.BRIDGE_IDENTITY),
                 "token_info": {**token.TOKEN_METADATA, "total_supply": "200000000"},
                 "minter_query": {"data": None}, "initial_buyer_balance": "200000000",
@@ -107,7 +107,7 @@ class SettlementTokenTests(unittest.TestCase):
 
     def test_a_changed_local_code_checksum_is_not_compensated_by_the_mainnet_download(self):
         value = copy.deepcopy(self.local_context())
-        value["settlement_token"]["code_info"]["data_hash"] = hashlib.sha256(b"different local code").hexdigest()
+        value["settlement_token"]["code_info"]["checksum"] = hashlib.sha256(b"different local code").hexdigest()
         self.assertIn("pinned Wasm", self.verify_local(value))
 
     def test_a_changed_local_initial_supply_is_rejected(self):
@@ -137,7 +137,12 @@ class SettlementTokenTests(unittest.TestCase):
             token.validate_selection(environment, ["funded-claim"])
 
     def test_protobuf_base64_code_checksums_are_decoded_without_changing_identity(self):
-        self.assertEqual(token.code_checksum({"code_info": {"data_hash": base64.b64encode(bytes.fromhex(self.digest)).decode()}}), self.digest)
+        self.assertEqual(token.code_checksum({"checksum": base64.b64encode(bytes.fromhex(self.digest)).decode()}), self.digest)
+
+    def test_a_missing_local_checksum_is_not_compensated_by_the_mainnet_download_hash(self):
+        value = copy.deepcopy(self.local_context())
+        del value["settlement_token"]["code_info"]["checksum"]
+        self.assertIn("checksum is missing", self.verify_local(value))
 
     def test_binary_and_both_code_observations_are_bound_to_the_contract_identity(self):
         result = token.verify_mainnet_assets(self.root)

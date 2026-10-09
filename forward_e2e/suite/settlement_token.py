@@ -66,10 +66,11 @@ def validate_selection(environment: Mapping[str, str], scenarios: list[str]) -> 
 
 def code_checksum(observation: Mapping[str, Any]) -> str:
     """Accept the CLI's hex or protobuf JSON bytes encoding, never guess a hash."""
-    value = observation.get("code_info", observation)
-    if not isinstance(value, Mapping):
+    if not isinstance(observation, Mapping):
         raise SettlementTokenError("local code observation is malformed")
-    raw = value.get("data_hash")
+    # QueryCodeInfoResponse uses checksum. CodeResponse's nested data_hash is
+    # a different RPC response (used only by the saved mainnet download).
+    raw = observation.get("checksum")
     if not isinstance(raw, str):
         raise SettlementTokenError("local code checksum is missing")
     if re.fullmatch(r"[0-9a-fA-F]{64}", raw):
@@ -216,7 +217,7 @@ def verify_local_token_evidence(
             return "local USDT deployment does not prove the pinned Wasm"
         info = deployment["contract_info"]
         info = info.get("contract_info", info)
-        code = receipt["code_info"].get("code_info", receipt["code_info"])
+        code = receipt["code_info"]
         if (
             str(info.get("code_id")) != str(payload["code_ids"]["cw20"])
             or str(code.get("code_id")) != str(payload["code_ids"]["cw20"])
