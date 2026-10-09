@@ -317,3 +317,34 @@ the re-derived verdict is written beside it as
   (`SIGTERM` followed by `SIGKILL` after grace period), perform container
   ownership cleanup, export partial evidence, and record the run outcome as
   `CANCELLED`.
+
+## 6. Exact mainnet USDT in an isolated chain
+
+Set `E2E_SETTLEMENT_TOKEN=mainnet-usdt` when creating a **new** plan. This is a
+semantic input frozen in `run.lock.json`; replay restores the locked value.
+Without that variable the runner uses its existing test CW20 mode.
+
+The native bootstrap stores the pinned Wasm from `harness/settlement_token`,
+queries the local code checksum, initializes fresh local Buyer balances and
+sets display metadata through the local controller. Foreign-asset scenarios
+keep a separate test CW20. No mainnet balances or wallets enter this process.
+The local token has no Wasm migration admin and requests no minter; the
+receipt explicitly records these differences from mainnet.
+
+Every mainnet-token bootstrap proves included rejection of wrong-amount and
+duplicate CW20 Sends with unchanged token balances and Deal state. The
+`terminal-release-repeat` scenario additionally requires positive Host, fee
+and Buyer USDT payouts, three rejected repeat withdrawals, independent native
+reward accounting and the completed GNK release lifecycle.
+
+`funded-claim`, `usdt-withdrawal-failure-recovery` and
+`funded-routing-refunds` require test-CW20 transfer-fault commands and are
+refused in mainnet-USDT mode, rather than skipped or credited as executed.
+Their existing test-CW20 coverage stays separate. A mainnet-token run can
+select `terminal-release-repeat`, `claim-expiry-positive`, `network-unconfirmed`
+and the other compatible tasks explicitly; `--profile all` is refused in this
+mode because it includes those three incompatible scenarios.
+
+The token fixture identifies a historical mainnet binary. It does not prove
+source-to-binary equivalence or that governance has not migrated mainnet since
+the observation. Recheck mainnet code identity before a pilot deployment.

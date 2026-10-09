@@ -1,0 +1,15 @@
+{
+  "address": "gonka15ggwj9un6qrmu4nj5ev6l7kpdcr00td03ff2mmj4cyhl8u8vjd2qnl3hgk",
+  "contract_info": {
+    "code_id": "114",
+    "creator": "gonka1jftn8khawsmfn7shgzfjn27myu5d4zd6ns09y8",
+    "admin": "gonka10d07y265gmmuvt4z0w9aw880jnsr700j2h5m33",
+    "label": "Bridged Token ethereum:0xdac17f958d2ee523a2206206994597c13d831ec7",
+    "created": {
+      "block_height": "4273544",
+      "tx_index": "4825094"
+    },
+    "ibc_port_id": "",
+    "extension": null
+  }
+}

@@ -18,6 +18,7 @@ import re
 from typing import Any, Dict, List, Mapping, Optional, Sequence
 
 from ..suite import verifier as _verifier
+from ..suite import settlement_token
 
 #: How the harness names the production contracts inside
 #: ``source.a9_contract_sha256``, mapped to the build-manifest role of the same
@@ -45,6 +46,7 @@ def verify_deployed_artifacts(
     *,
     built_wasm: Sequence[Mapping[str, Any]],
     expected_manifest_sha256: Optional[str] = None,
+    expected_settlement_token_mode: Optional[str] = None,
 ) -> Dict[str, Any]:
     """Compare what a live context says it deployed with what the build produced.
 
@@ -67,6 +69,11 @@ def verify_deployed_artifacts(
     mismatches: List[Dict[str, Any]] = []
     missing: List[str] = []
     checked: Dict[str, str] = {}
+    token_error = settlement_token.verify_local_token_evidence(
+        payload, expected_mode=expected_settlement_token_mode,
+    )
+    if token_error is not None:
+        mismatches.append({"artefact": "settlement_token", "reason": token_error})
 
     reported_manifest_sha = source.get("a9_manifest_sha256")
     has_production_wasm = any(role in built for role in DEPLOYED_CONTRACT_ROLES.values())

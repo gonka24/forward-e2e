@@ -58,6 +58,25 @@ def _load_external_harness():
 
 external_harness = _load_external_harness()
 
+
+def _load_settlement_token():
+    # Testermint re-enters this standalone file without the package on sys.path.
+    path = HARNESS_SCRIPT_PATH.parent.parent / "forward_e2e/suite/settlement_token.py"
+    name = "a8_settlement_token"
+    if name in sys.modules:
+        return sys.modules[name]
+    spec = importlib.util.spec_from_file_location(name, path)
+    if spec is None or spec.loader is None:
+        raise SystemExit(f"cannot load {path}")
+    module = importlib.util.module_from_spec(spec)
+    sys.modules[name] = module
+    spec.loader.exec_module(module)
+    return module
+
+
+settlement_token = _load_settlement_token()
+SETTLEMENT_TOKEN_ASSETS = HARNESS_SCRIPT_PATH.parent.parent / "harness/settlement_token"
+
 # ---------------------------------------------------------------------------
 # Parameterised provenance expectations
 # ---------------------------------------------------------------------------
@@ -1078,6 +1097,33 @@ def recorded_withdrawals(gonka, path: Path, deal: str, payments: Mapping[str, An
     )
 
 
+def rejected_repeat_withdrawals(gonka, context: Mapping[str, Any]) -> list[dict[str, Any]]:
+    """Test all role withdrawals again after delivery, including pending ledgers."""
+    deal = context["contracts"]["deal"]
+    cw20 = context["contracts"]["cw20"]
+    def snapshot():
+        return {
+            "state": gonka.smart(deal, {"state": {}}),
+            "payments": gonka.smart(deal, {"usdt_payments": {}}),
+            "cw20": {
+                **{role: gonka.cw20_balance(cw20, context["accounts"][role]) for role in ("host", "fee_recipient", "buyer")},
+                "deal": gonka.cw20_balance(cw20, deal),
+            },
+        }
+    receipts = []
+    for role in ("host", "fee", "buyer"):
+        before = snapshot()
+        attempt = gonka.tx_attempt(DEFAULT_NODE, "genesis", "wasm", "execute", deal, compact_json({"withdraw_usdt": {"role": role}}), gas="2000000")
+        after = snapshot()
+        if (
+            not settlement_token._rejected(attempt, "no usdt remains payable for this role")
+            or before != after
+        ):
+            raise AcceptanceError("repeated USDT withdrawal does not prove native rejection with unchanged obligations")
+        receipts.append({"role": role, "attempt": attempt, "before": before, "after": after})
+    return receipts
+
+
 def verify_recorded_settlement(gonka, path: Path, name: str | None = None) -> None:
     """Resume the full balance oracle from durable pre-settlement evidence."""
     context = load_object(path)
@@ -1950,6 +1996,12 @@ def run_live(args: argparse.Namespace) -> None:
             "--manifest is required by the E2E runner; standalone A9 release build in run-live is not supported"
         )
     scenario = args.scenario
+    try:
+        token_mode = settlement_token.validate_selection(os.environ, [scenario])
+        if token_mode == settlement_token.MAINNET_MODE:
+            settlement_token.verify_mainnet_assets(SETTLEMENT_TOKEN_ASSETS)
+    except settlement_token.SettlementTokenError as exc:
+        raise _refusal_from(exc) from exc
     if scenario not in LIVE_SCENARIO_TESTS:
         raise AcceptanceError(f"unknown live scenario {args.scenario!r}")
     test_name = LIVE_SCENARIO_TESTS[scenario]
@@ -2052,6 +2104,10 @@ def run_live(args: argparse.Namespace) -> None:
     test_artifacts = test_target / "wasm32-unknown-unknown" / "release"
     caller = test_artifacts / "a8_caller.wasm"
     cw20 = test_artifacts / "a8_cw20.wasm"
+    settlement_wasm = (
+        SETTLEMENT_TOKEN_ASSETS / "mainnet-usdt.wasm"
+        if token_mode == settlement_token.MAINNET_MODE else cw20
+    )
     for artifact in (deal, factory, caller, cw20):
         if not artifact.is_file():
             raise AcceptanceError(f"required verified Wasm artifact missing: {artifact}")
@@ -2085,6 +2141,7 @@ def run_live(args: argparse.Namespace) -> None:
             "E2E_DEAL_WASM": str(deal),
             "E2E_FACTORY_WASM": str(factory),
             "E2E_CW20_WASM": str(cw20),
+            settlement_token.ENV_TOKEN_MODE: token_mode,
             "E2E_CALLER_WASM": str(caller),
             ENV_EXPECTED_GONKA_SHA: requested_gonka_sha,
             ENV_EXPECTED_PROTO_SHA: proto_sha,
@@ -2184,6 +2241,8 @@ def run_live(args: argparse.Namespace) -> None:
         source["a9_manifest_sha256"] = sha256_file(manifest_path)
         source["a9_contract_sha256"] = {"deal": sha256_file(deal), "factory": sha256_file(factory)}
         source["test_contract_sha256"] = {"caller": sha256_file(caller), "cw20": sha256_file(cw20)}
+        source["settlement_token_mode"] = token_mode
+        source["settlement_token_sha256"] = sha256_file(settlement_wasm)
         command_record = {
             "entrypoint": "python scripts/acceptance_harness.py run-live",
             "scenario": args.scenario,
@@ -2272,6 +2331,32 @@ def assert_chain(gonka: DockerGonka) -> dict[str, Any]:
     return status
 
 
+def rejected_token_send(
+    gonka, *, buyer_node: str, buyer_key: str, buyer: str, cw20: str,
+    deal: str, amount: int, hook: str, marker: str,
+) -> dict[str, Any]:
+    """A real failed Send must leave both token balances and Deal state intact.
+
+    Fixed gas ensures that the call reaches DeliverTx rather than failing in
+    simulation. GNK gas fees are intentionally outside the token rollback claim.
+    """
+    def snapshot():
+        return {
+            "state": gonka.smart(deal, {"state": {}}),
+            "cw20": {"buyer": gonka.cw20_balance(cw20, buyer), "deal": gonka.cw20_balance(cw20, deal)},
+        }
+    before = snapshot()
+    message = {"send": {"amount": str(amount), "contract": deal, "msg": hook}}
+    attempt = gonka.tx_attempt(buyer_node, buyer_key, "wasm", "execute", cw20, compact_json(message), gas="2000000")
+    after = snapshot()
+    if (
+        not settlement_token._rejected(attempt, marker)
+        or before != after
+    ):
+        raise AcceptanceError("USDT Send rejection does not prove the expected native atomic rollback")
+    return {"message": message, "sender": buyer, "contract": cw20, "attempt": attempt, "before": before, "after": after}
+
+
 def bootstrap(args: argparse.Namespace) -> None:
     gonka = DockerGonka(Runner(), args.chain_id)
     status = assert_chain(gonka)
@@ -2347,6 +2432,15 @@ def bootstrap(args: argparse.Namespace) -> None:
         "cw20": Path(args.cw20_wasm),
         "caller": Path(args.caller_wasm),
     }
+    try:
+        token_mode = settlement_token.token_mode(os.environ)
+        asset_identity = None
+        if token_mode == settlement_token.MAINNET_MODE:
+            asset_identity = settlement_token.verify_mainnet_assets(SETTLEMENT_TOKEN_ASSETS)
+            artifacts["foreign_cw20"] = Path(args.cw20_wasm)
+            artifacts["cw20"] = SETTLEMENT_TOKEN_ASSETS / "mainnet-usdt.wasm"
+    except settlement_token.SettlementTokenError as exc:
+        raise _refusal_from(exc) from exc
     stores: dict[str, Any] = {}
     code_ids: dict[str, str] = {}
     for label, path in artifacts.items():
@@ -2354,9 +2448,9 @@ def bootstrap(args: argparse.Namespace) -> None:
         code_ids[label] = code_id
         stores[label] = evidence
 
-    cw20, cw20_evidence = gonka.instantiate(
-        code_ids["cw20"],
-        {
+    cw20_message = (
+        settlement_token.local_instantiate_message(buyer, args.buyer_tokens, genesis_address)
+        if token_mode == settlement_token.MAINNET_MODE else {
             "decimals": 6,
             "initial_balances": [
                 {"address": buyer, "amount": str(args.buyer_tokens)}
@@ -2365,14 +2459,39 @@ def bootstrap(args: argparse.Namespace) -> None:
             "mint": None,
             "name": "A8 Local Test USDT",
             "symbol": TEST_CW20_SYMBOL,
-        },
+        }
+    )
+    cw20, cw20_evidence = gonka.instantiate(
+        code_ids["cw20"], cw20_message,
         f"a8-cw20-{run_id}",
     )
+    token_receipt = None
+    if token_mode == settlement_token.MAINNET_MODE:
+        metadata_tx = gonka.execute(DEFAULT_NODE, "genesis", cw20, {
+            "update_metadata": settlement_token.TOKEN_METADATA,
+        }, gas="auto")
+        code_info = gonka.query_json("wasm", "code-info", code_ids["cw20"])
+        if settlement_token.code_checksum(code_info) != settlement_token.MAINNET_WASM_SHA256:
+            raise AcceptanceError("local USDT code checksum differs from pinned mainnet Wasm")
+        token_receipt = {
+            "schema_version": "forward-usdt/local-token/1",
+            "asset_identity": asset_identity,
+            "local_differences": dict(settlement_token.LOCAL_DIFFERENCES),
+            "local_controller": genesis_address,
+            "instantiate_message": cw20_message,
+            "code_info": code_info,
+            "metadata_tx": filtered_tx(metadata_tx),
+            "bridge_info": gonka.smart(cw20, {"bridge_info": {}}),
+            "minter_query": gonka.query_json("wasm", "contract-state", "smart", cw20, compact_json({"minter": {}})),
+            "initial_buyer_balance": str(gonka.cw20_balance(cw20, buyer)),
+        }
     token_info = gonka.smart(cw20, {"token_info": {}})
+    if token_receipt is not None:
+        token_receipt["token_info"] = token_info
     if token_info.get("decimals") != 6:
         raise AcceptanceError(f"test CW20 decimals mismatch: {token_info}")
     foreign_cw20, foreign_cw20_evidence = gonka.instantiate(
-        code_ids["cw20"],
+        code_ids.get("foreign_cw20", code_ids["cw20"]),
         {
             "decimals": 6,
             "initial_balances": [{"address": buyer, "amount": "1000000"}],
@@ -2467,6 +2586,15 @@ def bootstrap(args: argparse.Namespace) -> None:
         "buyer": gonka.cw20_balance(cw20, buyer),
         "deal": gonka.cw20_balance(cw20, deal),
     }
+    funding_rejections = None
+    if token_mode == settlement_token.MAINNET_MODE:
+        funding_rejections = {
+            "wrong_amount": rejected_token_send(
+                gonka, buyer_node=args.buyer_node, buyer_key=buyer_key, buyer=buyer,
+                cw20=cw20, deal=deal, amount=args.budget - 1, hook=hook,
+                marker="funding amount must be exactly",
+            ),
+        }
     fund_tx = gonka.execute(
         args.buyer_node,
         buyer_key,
@@ -2491,6 +2619,12 @@ def bootstrap(args: argparse.Namespace) -> None:
     state = gonka.smart(deal, {"state": {}})
     if state.get("status") != "funded" or state.get("buyer") != buyer:
         raise AcceptanceError(f"Deal did not enter exact Funded state: {state}")
+    if funding_rejections is not None:
+        funding_rejections["duplicate"] = rejected_token_send(
+            gonka, buyer_node=args.buyer_node, buyer_key=buyer_key, buyer=buyer,
+            cw20=cw20, deal=deal, amount=args.budget, hook=hook,
+            marker="cannot fund deal in state",
+        )
 
     evidence = {
         "schema_version": "1.0.0",
@@ -2516,6 +2650,8 @@ def bootstrap(args: argparse.Namespace) -> None:
             "gonka_sha": expected_gonka_sha(),
             "protobuf_sha": expected_proto_sha(),
             "runtime": runtime_identity,
+            "settlement_token_mode": token_mode,
+            "settlement_token_sha256": sha256_file(artifacts["cw20"]),
             **(
                 {"native_test_configuration": native_test_configuration}
                 if native_test_configuration is not None
@@ -2572,9 +2708,15 @@ def bootstrap(args: argparse.Namespace) -> None:
             "cw20_before": balances_before,
             "cw20_after": balances_after,
             "deal_state": state,
+            **({"funding_rejections": funding_rejections} if funding_rejections is not None else {}),
         },
         "phases": [],
     }
+    if token_receipt is not None:
+        evidence["settlement_token"] = token_receipt
+        error = settlement_token.verify_local_token_evidence(evidence, expected_mode=token_mode)
+        if error is not None:
+            raise AcceptanceError(error)
     write_object(Path(args.context), evidence)
     print(compact_json({"context": str(Path(args.context)), "deal": deal}))
 
@@ -4200,6 +4342,8 @@ def configure_cw20_transfer_failure(
     context: Mapping[str, Any],
     rejected_recipient: str | None,
 ) -> dict[str, Any]:
+    if context.get("source", {}).get("settlement_token_mode") == settlement_token.MAINNET_MODE:
+        raise AcceptanceError("mainnet USDT does not expose test transfer-fault commands")
     cw20 = context["contracts"]["cw20"]
     return gonka.execute(
         DEFAULT_NODE,
@@ -5558,6 +5702,9 @@ def claim_settle(args: argparse.Namespace) -> None:
     }
     if repeat_after != {"deal_state": after["deal_state"], "cw20": after["cw20"]}:
         raise AcceptanceError("repeated settlement changed state or CW20 balances")
+    withdrawal_repeats = None
+    if context.get("source", {}).get("settlement_token_mode") == settlement_token.MAINNET_MODE:
+        withdrawal_repeats = rejected_repeat_withdrawals(gonka, context)
 
     append_phase(
         path,
@@ -5572,6 +5719,7 @@ def claim_settle(args: argparse.Namespace) -> None:
             "withdrawal_txs": withdrawal_txs,
             "settle_repeat": {"attempt": repeat_attempt, "proof": repeat_proof},
             "cw20_fault_rollbacks": fault_evidence,
+            **({"withdrawal_repeats": withdrawal_repeats} if withdrawal_repeats is not None else {}),
             "before": before,
             "after": after,
             "expected": expected,

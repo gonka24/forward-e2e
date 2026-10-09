@@ -133,6 +133,7 @@ the following runner-owned files into every `run.lock.json`:
   - `scripts/external_harness.py`
   - `forward_e2e/suite/source_snapshot.py`
   - `harness/container_control.py`
+  - `forward_e2e/suite/settlement_token.py`
 - **`VERIFIER_FILES` (`lock.runner.verifier_hash`):**
   - `forward_e2e/suite/verifier.py`
   - `forward_e2e/suite/collector.py`
@@ -150,6 +151,7 @@ the following runner-owned files into every `run.lock.json`:
   - `harness/network`
   - `harness/go_boundary`
   - `harness/wasm_query_allowlist`
+  - `harness/settlement_token` (pinned mainnet USDT binary and observations)
 - **`RUNNER_VERSION_FILE` (`lock.runner.runner_version`):**
   - `ops/runner/RUNNER_VERSION`
 

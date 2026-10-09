@@ -32,6 +32,7 @@ else:
 #: plus the removed overlay variables (which the harness refuses). Tests clear
 #: all of them so an ambient shell value can never decide a test's outcome.
 EXPECTATION_ENV_NAMES = (
+    a8.settlement_token.ENV_TOKEN_MODE,
     a8.ENV_EXPECTED_GONKA_SHA,
     a8.ENV_EXPECTED_PROTO_SHA,
     a8.ENV_EXPECTED_RUNTIME,
